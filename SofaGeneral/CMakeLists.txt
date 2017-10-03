@@ -3,8 +3,6 @@ project(SofaGeneral)
 
 ## Dependencies
 find_package(SofaCommon REQUIRED)
-find_package(Newmat)
-set(SOFA_HAVE_NEWMAT ${Newmat_FOUND})
 find_package(CSparse)
 set(SOFA_HAVE_CSPARSE ${CSparse_FOUND})
 find_package(Metis QUIET)
@@ -45,10 +43,6 @@ set(SOFAGENERAL_TARGETS
     SofaUserInteraction
     SofaValidation
 )
-
-if(SOFA_HAVE_NEWMAT)
-    list(APPEND SOFAGENERAL_TARGETS SofaDenseSolver)
-endif()
 
 if(NOT SOFA_NO_OPENGL)
     list(APPEND SOFAGENERAL_TARGETS SofaOpenglVisual)

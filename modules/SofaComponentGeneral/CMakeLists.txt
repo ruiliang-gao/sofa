@@ -18,9 +18,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_COMPONENT_GENERAL")
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
 
-if(SOFA_HAVE_NEWMAT)
-    target_link_libraries(${PROJECT_NAME} PUBLIC SofaDenseSolver)
-endif()
 if(NOT SOFA_NO_OPENGL)
     target_link_libraries(${PROJECT_NAME} PUBLIC SofaOpenglVisual)
 endif()
