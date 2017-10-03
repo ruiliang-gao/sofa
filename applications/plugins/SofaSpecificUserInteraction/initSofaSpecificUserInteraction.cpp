@@ -30,7 +30,7 @@ namespace component
 {
 
 
-void initSofaSpecificBoundaryConditions()
+void initSofaSpecificUserInteraction()
 {
     static bool first = true;
     if (first)

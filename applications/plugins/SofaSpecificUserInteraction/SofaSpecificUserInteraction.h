@@ -19,15 +19,15 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_SPECIFIC_BOUNDARY_CONDITIONS_H
-#define SOFA_SPECIFIC_BOUNDARY_CONDITIONS_H
+#ifndef SOFA_SPECIFIC_USER_INTERACTION_H
+#define SOFA_SPECIFIC_USER_INTERACTION_H
 
 #include <sofa/helper/system/config.h>
 
-#ifdef SOFA_BUILD_SOFA_SPECIFIC_BOUNDARY_CONDITIONS
-#  define SOFA_SPECIFIC_BOUNDARY_CONDITIONS_API SOFA_EXPORT_DYNAMIC_LIBRARY
+#ifdef SOFA_BUILD_SOFA_SPECIFIC_USER_INTERACTION
+#  define SOFA_SPECIFIC_USER_INTERACTION_API SOFA_EXPORT_DYNAMIC_LIBRARY
 #else
-#  define SOFA_SPECIFIC_BOUNDARY_CONDITIONS_API SOFA_IMPORT_DYNAMIC_LIBRARY
+#  define SOFA_SPECIFIC_USER_INTERACTION_API SOFA_IMPORT_DYNAMIC_LIBRARY
 #endif
 
-#endif // SOFA_SPECIFIC_BOUNDARY_CONDITIONS_H
+#endif // SOFA_SPECIFIC_USER_INTERACTION_H

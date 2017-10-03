@@ -19,10 +19,10 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_SOFA_SPECIFIC_BOUNDARY_CONDITIONS_INIT_H
-#define SOFA_COMPONENT_SOFA_SPECIFIC_BOUNDARY_CONDITIONS_INIT_H
+#ifndef SOFA_COMPONENT_SOFA_SPECIFIC_USER_INTERACTION_INIT_H
+#define SOFA_COMPONENT_SOFA_SPECIFIC_USER_INTERACTION_INIT_H
 
-#include "SofaSpecificBoundaryConditions.h"
+#include "SofaSpecificUserInteraction.h"
 
 namespace sofa
 {
@@ -30,11 +30,11 @@ namespace sofa
 namespace component
 {
 
-void SOFA_SPECIFIC_BOUNDARY_CONDITIONS_API initSofaSpecificBoundaryConditions();
+void SOFA_SPECIFIC_USER_INTERACTION_API initSofaSpecificUserInteraction();
 
 } // namespace component
 
 } // namespace sofa
 
-#endif // SOFA_COMPONENT_SOFA_SPECIFIC_BOUNDARY_CONDITIONS_INIT_H
+#endif // SOFA_COMPONENT_SOFA_SPECIFIC_USER_INTERACTION_INIT_H
 

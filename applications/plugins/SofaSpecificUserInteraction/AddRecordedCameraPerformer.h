@@ -41,7 +41,7 @@ namespace component
 namespace collision
 {
 
-    class SOFA_USER_INTERACTION_API AddRecordedCameraPerformer: public InteractionPerformer
+    class SOFA_SPECIFIC_USER_INTERACTION_API AddRecordedCameraPerformer: public InteractionPerformer
     {
     public:
         AddRecordedCameraPerformer(BaseMouseInteractor *i)

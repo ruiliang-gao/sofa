@@ -35,10 +35,10 @@ namespace component
 namespace collision
 {
 #ifndef SOFA_DOUBLE
-template class SOFA_USER_INTERACTION_API  SuturePointPerformer<defaulttype::Vec3fTypes>;
+template class SOFA_SPECIFIC_USER_INTERACTION_API  SuturePointPerformer<defaulttype::Vec3fTypes>;
 #endif
 #ifndef SOFA_FLOAT
-template class SOFA_USER_INTERACTION_API  SuturePointPerformer<defaulttype::Vec3dTypes>;
+template class SOFA_SPECIFIC_USER_INTERACTION_API  SuturePointPerformer<defaulttype::Vec3dTypes>;
 #endif
 
 #ifndef SOFA_DOUBLE

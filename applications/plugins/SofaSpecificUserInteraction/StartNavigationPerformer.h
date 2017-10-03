@@ -40,7 +40,7 @@ namespace component
 namespace collision
 {
 
-    class SOFA_USER_INTERACTION_API StartNavigationPerformer: public InteractionPerformer
+    class SOFA_SPECIFIC_USER_INTERACTION_API StartNavigationPerformer: public InteractionPerformer
     {
     public:
         StartNavigationPerformer(BaseMouseInteractor *i)
