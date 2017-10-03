@@ -86,7 +86,6 @@ std::map<std::string, std::vector<std::string>> deprecatedComponents =
     {"AddRecordedCameraPerformer", {"deprecated-17.12"}},
     {"ArticulatedHierarchyBVHController", {"deprecated-17.12"}},
     {"ArticulatedHierarchyController", {"deprecated-17.12"}},
-    {"CuttingPoint", {"deprecated-17.12"}},
     {"DisabledContact", {"deprecated-17.12"}},
     {"EdgeSetController", {"deprecated-17.12"}},
     {"FixParticlePerformer", {"deprecated-17.12"}},

@@ -76,7 +76,6 @@ if(SOFA_BUILD_DEPRECATEDCOMPONENTS)
     list(APPEND SOURCE_FILES
         ArticulatedHierarchyBVHController.cpp
         ArticulatedHierarchyController.cpp
-        CuttingPoint.cpp
         DisabledContact.cpp
         EdgeSetController.cpp
         GraspingManager.cpp
