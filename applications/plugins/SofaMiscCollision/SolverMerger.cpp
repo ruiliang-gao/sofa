@@ -30,7 +30,7 @@
 #include <SofaImplicitOdeSolver/EulerImplicitSolver.h>
 #include <SofaBaseLinearSolver/CGLinearSolver.h>
 #include <SofaConstraint/LCPConstraintSolver.h>
-#include <SofaConstraint/LMConstraintSolver.h>
+#include <SofaLMConstraint/LMConstraintSolver.h>
 namespace sofa
 {
 

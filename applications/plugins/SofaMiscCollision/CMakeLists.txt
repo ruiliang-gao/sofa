@@ -45,7 +45,6 @@ if(SOFA_BUILD_FULLSETCOMPONENTS)
         TetrahedronModel.cpp
         TetrahedronRayContact.cpp
         TriangleModelInRegularGrid.cpp
-        TetrahedronBarycentricDistanceLMConstraintContact.cpp
         )
     message(STATUS "SofaMiscModule: build all maintained sofa components.")
 
@@ -64,7 +63,6 @@ if(SOFA_BUILD_FULLSETCOMPONENTS)
 
     if(SOFA_HAVE_MINIFLOWVR)
         list(APPEND SOURCE_FILES FrictionContact_DistanceGrid.cpp)
-        list(APPEND SOURCE_FILES BarycentricDistanceLMConstraintContact_DistanceGrid.cpp)
     endif()
 
     if(NOT SOFA_NO_OPENGL)

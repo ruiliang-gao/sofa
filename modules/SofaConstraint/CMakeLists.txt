@@ -30,8 +30,6 @@ if(SOFA_BUILD_FULLSETCOMPONENTS)
         GenericConstraintCorrection.inl
         GenericConstraintSolver.h
         LCPConstraintSolver.h
-        LMDNewProximityIntersection.h
-        LMDNewProximityIntersection.inl
         LinearSolverConstraintCorrection.h
         LinearSolverConstraintCorrection.inl
         LocalMinDistance.h
@@ -42,24 +40,10 @@ if(SOFA_BUILD_FULLSETCOMPONENTS)
         SlidingConstraint.inl
         StickContactConstraint.h
         StickContactConstraint.inl
-        StopperConstraint.h
-        StopperConstraint.inl
         UncoupledConstraintCorrection.h
         UncoupledConstraintCorrection.inl
         UnilateralInteractionConstraint.h
         UnilateralInteractionConstraint.inl
-        BarycentricDistanceLMConstraintContact.h
-        BarycentricDistanceLMConstraintContact.inl
-        DOFBlockerLMConstraint.h
-        DOFBlockerLMConstraint.inl
-        FixedLMConstraint.h
-        FixedLMConstraint.inl
-        DistanceLMContactConstraint.h
-        DistanceLMContactConstraint.inl
-        DistanceLMConstraint.h
-        DistanceLMConstraint.inl
-        LMConstraintSolver.h
-        LMConstraintDirectSolver.h
         )
     list(APPEND SOURCE_FILES
         BilateralInteractionConstraint.cpp
@@ -71,22 +55,13 @@ if(SOFA_BUILD_FULLSETCOMPONENTS)
         GenericConstraintCorrection.cpp
         GenericConstraintSolver.cpp
         LCPConstraintSolver.cpp
-        LMDNewProximityIntersection.cpp
         LinearSolverConstraintCorrection.cpp
         LocalMinDistance.cpp
         PrecomputedConstraintCorrection.cpp
         SlidingConstraint.cpp
         StickContactConstraint.cpp
-        StopperConstraint.cpp
         UncoupledConstraintCorrection.cpp
         UnilateralInteractionConstraint.cpp
-        BarycentricDistanceLMConstraintContact.cpp
-        DOFBlockerLMConstraint.cpp
-        FixedLMConstraint.cpp
-        DistanceLMContactConstraint.cpp
-        DistanceLMConstraint.cpp
-        LMConstraintSolver.cpp
-        LMConstraintDirectSolver.cpp
         )
     message(STATUS "SofaConstraint: build all maintained sofa components.")
 else()
@@ -96,6 +71,16 @@ endif()
 ############################### COMPONENTS HERE ARE DEPRECATED ####################################
 if(SOFA_BUILD_DEPRECATEDCOMPONENTS)
     message(STATUS "SofaConstraint: build with deprecated components.")
+    list(APPEND HEADER_FILES
+        StopperConstraint.h
+        StopperConstraint.inl
+        DOFBlockerLMConstraint.h
+        DOFBlockerLMConstraint.inl
+        )
+    list(APPEND SOURCE_FILES
+        StopperConstraint.cpp
+        DOFBlockerLMConstraint.cpp
+        )
 else()
     message(STATUS "SofaConstraint: build without deprecated components.")
 endif()

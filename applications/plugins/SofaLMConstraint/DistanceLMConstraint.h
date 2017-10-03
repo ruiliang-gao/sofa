@@ -147,12 +147,12 @@ defaulttype::Rigid3fTypes::Deriv DistanceLMConstraint<defaulttype::Rigid3fTypes>
 
 #if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_CONSTRAINTSET_DISTANCELMCONSTRAINT_CPP)
 #ifndef SOFA_FLOAT
-extern template class SOFA_CONSTRAINT_API DistanceLMConstraint<defaulttype::Vec3dTypes>;
-extern template class SOFA_CONSTRAINT_API DistanceLMConstraint<defaulttype::Rigid3dTypes>;
+extern template class SOFA_LM_CONSTRAINT_API DistanceLMConstraint<defaulttype::Vec3dTypes>;
+extern template class SOFA_LM_CONSTRAINT_API DistanceLMConstraint<defaulttype::Rigid3dTypes>;
 #endif
 #ifndef SOFA_DOUBLE
-extern template class SOFA_CONSTRAINT_API DistanceLMConstraint<defaulttype::Vec3fTypes>;
-extern template class SOFA_CONSTRAINT_API DistanceLMConstraint<defaulttype::Rigid3fTypes>;
+extern template class SOFA_LM_CONSTRAINT_API DistanceLMConstraint<defaulttype::Vec3fTypes>;
+extern template class SOFA_LM_CONSTRAINT_API DistanceLMConstraint<defaulttype::Rigid3fTypes>;
 #endif
 #endif
 

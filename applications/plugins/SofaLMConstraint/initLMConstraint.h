@@ -19,12 +19,9 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_CONSTRAINTSET_LMCONSTRAINTDIRECTSOLVER_H
-#define SOFA_COMPONENT_CONSTRAINTSET_LMCONSTRAINTDIRECTSOLVER_H
+#ifndef SOFA_LM_CONSTRAINT_INIT_H
+#define SOFA_LM_CONSTRAINT_INIT_H
 #include "config.h"
-
-#include <SofaConstraint/LMConstraintSolver.h>
-#include <sofa/helper/OptionsGroup.h>
 
 namespace sofa
 {
@@ -32,40 +29,9 @@ namespace sofa
 namespace component
 {
 
-namespace constraintset
-{
-
-class SOFA_CONSTRAINT_API LMConstraintDirectSolver : public LMConstraintSolver
-{
-//	typedef Eigen::DynamicSparseMatrix<SReal,Eigen::ColMajor>    SparseColMajorMatrixEigen;
-    typedef Eigen::SparseMatrix<SReal,Eigen::ColMajor>    SparseColMajorMatrixEigen;
-
-    typedef helper::vector<linearsolver::LLineManipulator> JacobianRows;
-
-public:
-    SOFA_CLASS(LMConstraintDirectSolver, LMConstraintSolver);
-protected:
-    LMConstraintDirectSolver();
-public:
-    virtual bool buildSystem(const core::ConstraintParams *, MultiVecId res1, MultiVecId res2=MultiVecId::null());
-    virtual bool solveSystem(const core::ConstraintParams *, MultiVecId res1, MultiVecId res2=MultiVecId::null());
-
-protected:
-
-    void analyseConstraints(const helper::vector< sofa::core::behavior::BaseLMConstraint* > &LMConstraints, core::ConstraintParams::ConstOrder order,
-            JacobianRows &rowsL,JacobianRows &rowsLT, helper::vector< unsigned int > &rightHandElements) const;
-
-    void buildLeftRectangularMatrix(const DofToMatrix& invMassMatrix,
-            DofToMatrix& LMatrix, DofToMatrix& LTMatrix,
-            SparseColMajorMatrixEigen &LeftMatrix, DofToMatrix &invMass_Ltrans) const;
-
-    Data<sofa::helper::OptionsGroup> solverAlgorithm;
-};
-
-} // namespace constraintset
-
 } // namespace component
 
 } // namespace sofa
 
 #endif
+

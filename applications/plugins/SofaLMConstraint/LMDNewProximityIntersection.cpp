@@ -20,12 +20,12 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 #include <SofaBaseCollision/DiscreteIntersection.h>
-#include <SofaConstraint/LMDNewProximityIntersection.inl>
+#include "LMDNewProximityIntersection.inl"
 #include <SofaMeshCollision/LineLocalMinDistanceFilter.h>
 #include <SofaMeshCollision/PointLocalMinDistanceFilter.h>
 #include <SofaMeshCollision/TriangleLocalMinDistanceFilter.h>
-#include <SofaConstraint/LMDNewProximityIntersection.inl>
-#include <SofaConstraint/LMDNewProximityIntersection.inl>
+#include "LMDNewProximityIntersection.inl"
+#include "LMDNewProximityIntersection.inl"
 
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/core/collision/Intersection.inl>

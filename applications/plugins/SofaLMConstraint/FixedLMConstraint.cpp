@@ -20,7 +20,7 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 #define SOFA_COMPONENT_CONSTRAINTSET_FIXEDLMCONSTRAINT_CPP
-#include <SofaConstraint/FixedLMConstraint.inl>
+#include "FixedLMConstraint.inl"
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/defaulttype/Vec3Types.h>
 #include <sofa/defaulttype/RigidTypes.h>
@@ -52,12 +52,12 @@ int FixedLMConstraintClass = core::RegisterObject("Maintain a set of particle to
         ;
 
 #ifndef SOFA_FLOAT
-template class SOFA_CONSTRAINT_API FixedLMConstraint<Vec3dTypes>;
-template class SOFA_CONSTRAINT_API FixedLMConstraint<Rigid3dTypes>;
+template class SOFA_LM_CONSTRAINT_API FixedLMConstraint<Vec3dTypes>;
+template class SOFA_LM_CONSTRAINT_API FixedLMConstraint<Rigid3dTypes>;
 #endif
 #ifndef SOFA_DOUBLE
-template class SOFA_CONSTRAINT_API FixedLMConstraint<Vec3fTypes>;
-template class SOFA_CONSTRAINT_API FixedLMConstraint<Rigid3fTypes>;
+template class SOFA_LM_CONSTRAINT_API FixedLMConstraint<Vec3fTypes>;
+template class SOFA_LM_CONSTRAINT_API FixedLMConstraint<Rigid3fTypes>;
 #endif
 
 

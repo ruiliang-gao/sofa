@@ -42,7 +42,7 @@
 #include <sofa/helper/gl/Axis.h>
 #include <sofa/helper/Quater.h>
 
-#include <SofaConstraint/LMConstraintSolver.h>
+//#include <SofaLMConstraint/LMConstraintSolver.h>
 #include <sofa/simulation/Node.h>
 
 #include <fstream>

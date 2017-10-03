@@ -19,49 +19,16 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#define SOFA_COMPONENT_CONSTRAINTSET_DistanceLMContactConstraint_CPP
-#include <SofaConstraint/DistanceLMContactConstraint.inl>
+#ifndef SOFALMCONSTRAINT_CONFIG_H
+#define SOFALMCONSTRAINT_CONFIG_H
 
-#include <sofa/core/behavior/LMConstraint.inl>
-#include <sofa/core/ObjectFactory.h>
-#include <sofa/defaulttype/Vec3Types.h>
+#include <SofaBase/config.h>
 
-namespace sofa
-{
-
-namespace component
-{
-
-namespace constraintset
-{
-
-using namespace sofa::defaulttype;
-using namespace sofa::helper;
-
-SOFA_DECL_CLASS(DistanceLMContactConstraint)
-
-int DistanceLMContactConstraintClass = core::RegisterObject("Maintain a minimum contact distance between two objects")
-#ifndef SOFA_FLOAT
-        .add< DistanceLMContactConstraint<Vec3dTypes> >()
-#endif
-#ifndef SOFA_DOUBLE
-        .add< DistanceLMContactConstraint<Vec3fTypes> >()
-#endif
-        ;
-
-#ifndef SOFA_FLOAT
-template class SOFA_CONSTRAINT_API DistanceLMContactConstraint<Vec3dTypes>;
-#endif
-#ifndef SOFA_DOUBLE
-template class SOFA_CONSTRAINT_API DistanceLMContactConstraint<Vec3fTypes>;
+#ifdef SOFA_BUILD_LM_CONSTRAINT
+#  define SOFA_TARGET SofaLMConstraint
+#  define SOFA_LM_CONSTRAINT_API SOFA_EXPORT_DYNAMIC_LIBRARY
+#else
+#  define SOFA_LM_CONSTRAINT_API SOFA_IMPORT_DYNAMIC_LIBRARY
 #endif
 
-
-
-
-} // namespace constraintset
-
-} // namespace component
-
-} // namespace sofa
-
+#endif

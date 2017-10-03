@@ -42,7 +42,7 @@ namespace component
 namespace constraintset
 {
 
-class SOFA_CONSTRAINT_API LMConstraintSolver : public sofa::core::behavior::ConstraintSolver
+class SOFA_LM_CONSTRAINT_API LMConstraintSolver : public sofa::core::behavior::ConstraintSolver
 {
 protected:
     typedef sofa::core::VecId VecId;

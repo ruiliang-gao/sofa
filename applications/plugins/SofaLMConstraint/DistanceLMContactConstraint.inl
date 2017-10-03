@@ -25,7 +25,7 @@
 #include <sofa/core/topology/BaseMeshTopology.h>
 #include <sofa/core/behavior/BaseLMConstraint.h>
 #include <sofa/core/collision/Intersection.h>
-#include <SofaConstraint/DistanceLMContactConstraint.h>
+#include "DistanceLMContactConstraint.h"
 #include <sofa/core/visual/VisualParams.h>
 #include <sofa/simulation/Simulation.h>
 #include <sofa/simulation/Node.h>

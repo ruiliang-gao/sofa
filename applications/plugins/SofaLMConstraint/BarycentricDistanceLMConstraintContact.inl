@@ -22,7 +22,7 @@
 #ifndef SOFA_COMPONENT_COLLISION_BarycentricDistanceLMConstraintContact_INL
 #define SOFA_COMPONENT_COLLISION_BarycentricDistanceLMConstraintContact_INL
 
-#include <SofaConstraint/BarycentricDistanceLMConstraintContact.h>
+#include "BarycentricDistanceLMConstraintContact.h"
 #include <sofa/core/visual/VisualParams.h>
 
 namespace sofa

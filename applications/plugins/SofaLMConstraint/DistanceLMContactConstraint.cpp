@@ -19,12 +19,12 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#include <SofaConstraint/BarycentricDistanceLMConstraintContact.inl>
-#include <SofaMeshCollision/BarycentricContactMapper.h>
-#include <SofaMiscCollision/TetrahedronModel.h>
+#define SOFA_COMPONENT_CONSTRAINTSET_DistanceLMContactConstraint_CPP
+#include "DistanceLMContactConstraint.inl"
 
-using namespace sofa::defaulttype;
-using namespace sofa::core::collision;
+#include <sofa/core/behavior/LMConstraint.inl>
+#include <sofa/core/ObjectFactory.h>
+#include <sofa/defaulttype/Vec3Types.h>
 
 namespace sofa
 {
@@ -32,16 +32,34 @@ namespace sofa
 namespace component
 {
 
-namespace collision
+namespace constraintset
 {
 
-Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<TetrahedronModel, SphereModel> > TetrahedronSphereDistanceLMConstraintContactClass("distanceLMConstraint",true);
-Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<TetrahedronModel, PointModel> > TetrahedronPointDistanceLMConstraintContactClass("distanceLMConstraint",true);
-Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<TetrahedronModel, LineModel> > TetrahedronLineDistanceLMConstraintContactClass("distanceLMConstraint",true);
-Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<TetrahedronModel, TriangleModel> > TetrahedronTriangleDistanceLMConstraintContactClass("distanceLMConstraint",true);
-Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<TetrahedronModel, TetrahedronModel> > TetrahedronTetrahedronDistanceLMConstraintContactClass("distanceLMConstraint",true);
+using namespace sofa::defaulttype;
+using namespace sofa::helper;
 
-} // namespace collision
+SOFA_DECL_CLASS(DistanceLMContactConstraint)
+
+int DistanceLMContactConstraintClass = core::RegisterObject("Maintain a minimum contact distance between two objects")
+#ifndef SOFA_FLOAT
+        .add< DistanceLMContactConstraint<Vec3dTypes> >()
+#endif
+#ifndef SOFA_DOUBLE
+        .add< DistanceLMContactConstraint<Vec3fTypes> >()
+#endif
+        ;
+
+#ifndef SOFA_FLOAT
+template class SOFA_LM_CONSTRAINT_API DistanceLMContactConstraint<Vec3dTypes>;
+#endif
+#ifndef SOFA_DOUBLE
+template class SOFA_LM_CONSTRAINT_API DistanceLMContactConstraint<Vec3fTypes>;
+#endif
+
+
+
+
+} // namespace constraintset
 
 } // namespace component
 

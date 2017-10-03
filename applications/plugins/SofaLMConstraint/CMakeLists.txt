@@ -1,0 +1,72 @@
+cmake_minimum_required(VERSION 3.1)
+project(SofaLMConstraint)
+
+set(SOFALMCONSTRAINT_VERSION 1.0)
+set(SOFA_HAVE_SOFALMCONSTRAINT 1)
+
+
+message(STATUS "SofaLMConstraint:")
+################################ COMPONENTS HERE ARE THE NG-SET ####################################
+set(HEADER_FILES
+    config.h
+    initLMConstraint.h
+    )
+
+set(SOURCE_FILES
+    initLMConstraint.cpp
+    )
+
+############################## COMPONENTS HERE ARE THE FULL-SET ####################################
+if(SOFA_BUILD_FULLSETCOMPONENTS)
+    list(APPEND HEADER_FILES
+        # to deprecate or puginize...
+        BarycentricDistanceLMConstraintContact.h
+        BarycentricDistanceLMConstraintContact.inl
+        DistanceLMContactConstraint.h
+        DistanceLMContactConstraint.inl
+        DistanceLMConstraint.h
+        DistanceLMConstraint.inl
+        FixedLMConstraint.h
+        FixedLMConstraint.inl
+        LMConstraintSolver.h
+        LMConstraintDirectSolver.h
+        LMDNewProximityIntersection.h
+        LMDNewProximityIntersection.inl
+        )
+
+    list(APPEND SOURCE_FILES
+        # to deprecate or puginize...
+        BarycentricDistanceLMConstraintContact.cpp
+        DistanceLMContactConstraint.cpp
+        DistanceLMConstraint.cpp
+        FixedLMConstraint.cpp
+        LMConstraintSolver.cpp
+        LMConstraintDirectSolver.cpp
+        LMDNewProximityIntersection.cpp
+        TetrahedronBarycentricDistanceLMConstraintContact.cpp
+        )
+    message(STATUS "SofaLMConstraint: build all maintained sofa components.")
+
+    if(SOFA_HAVE_MINIFLOWVR)
+        list(APPEND SOURCE_FILES BarycentricDistanceLMConstraintContact_DistanceGrid.cpp)
+    endif()
+
+else()
+    message(STATUS "SofaLMConstraint: build with only the minimal set of components.")
+endif()
+
+############################### COMPONENTS HERE ARE DEPRECATED ####################################
+if(SOFA_BUILD_DEPRECATEDCOMPONENTS)
+    message(STATUS "   With deprecated components.")
+else()
+    message(STATUS "   Without deprecated components.")
+endif()
+
+add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
+target_link_libraries(${PROJECT_NAME} PUBLIC SofaBaseTopology SofaGeneralMeshCollision SofaGeneralDeformable SofaConstraint SofaExplicitOdeSolver SofaGeneralExplicitOdeSolver SofaImplicitOdeSolver SofaBaseCollision)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_LM_CONSTRAINT")
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
+
+target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
+sofa_create_package(SofaLMConstraint ${SOFALMCONSTRAINT_VERSION} ${PROJECT_NAME} SofaLMConstraint)
