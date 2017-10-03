@@ -8,7 +8,7 @@ if(NOT TARGET SofaLMConstraint)
         include("${CMAKE_CURRENT_LIST_DIR}/SofaLMConstraintTargets.cmake")
 endif()
 
-set(SOFA_HAVE_SOFAMISCCOLLISION "@SOFA_HAVE_SOFALMCONSTRAINT@")
+set(SOFA_HAVE_SOFALMCONSTRAINT "@SOFA_HAVE_SOFALMCONSTRAINT@")
 
 check_required_components(SofaLMConstraint)
 set(SofaLMConstraint_LIBRARIES SOFALMCONSTRAINT)

@@ -19,7 +19,7 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#include <SofaConstraint/BarycentricDistanceLMConstraintContact.inl>
+#include "BarycentricDistanceLMConstraintContact.inl"
 #include <SofaMeshCollision/BarycentricContactMapper.h>
 #include <SofaVolumetricData/RigidDistanceGridDiscreteIntersection.h>
 

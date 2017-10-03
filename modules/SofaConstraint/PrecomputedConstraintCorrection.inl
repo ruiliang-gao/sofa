@@ -42,7 +42,14 @@
 #include <sofa/helper/gl/Axis.h>
 #include <sofa/helper/Quater.h>
 
-//#include <SofaLMConstraint/LMConstraintSolver.h>
+/*
+ * 2017/10/03
+ * This code is commented because it creates a circular dependency
+ * with the deprecated SofaLMConstraint plugin
+ *
+    #include <SofaLMConstraint/LMConstraintSolver.h>
+*/
+
 #include <sofa/simulation/Node.h>
 
 #include <fstream>
@@ -275,6 +282,11 @@ void PrecomputedConstraintCorrection<DataTypes>::bwdInit()
             return;
         }
 
+/*
+ * 2017/10/03
+ * This code is commented because it creates a circular dependency
+ * with the deprecated SofaLMConstraint plugin
+ *
         helper::vector< sofa::component::constraintset::LMConstraintSolver* > listLMConstraintSolver;
         solvernode->get< sofa::component::constraintset::LMConstraintSolver >(&listLMConstraintSolver, core::objectmodel::BaseContext::SearchDown);
         helper::vector< ConstraintActivation > listConstraintActivation(listLMConstraintSolver.size());
@@ -289,6 +301,7 @@ void PrecomputedConstraintCorrection<DataTypes>::bwdInit()
             listConstraintActivation[i].pos=listLMConstraintSolver[i]->constraintPos.getValue();
             listLMConstraintSolver[i]->constraintPos.setValue(false);
         }
+*/
 
         // Change the solver parameters
         double buf_tolerance = 0, buf_threshold = 0;
@@ -402,12 +415,18 @@ void PrecomputedConstraintCorrection<DataTypes>::bwdInit()
         for (unsigned int i = 0; i < pos.size(); i++)
             pos[i] = prev_pos[i];
 
+/*
+ * 2017/10/03
+ * This code is commented because it creates a circular dependency
+ * with the deprecated SofaLMConstraint plugin
+ *
         for (unsigned int i=0; i<listLMConstraintSolver.size(); ++i)
         {
             listLMConstraintSolver[i]->constraintAcc.setValue(listConstraintActivation[i].acc);
             listLMConstraintSolver[i]->constraintVel.setValue(listConstraintActivation[i].vel);
             listLMConstraintSolver[i]->constraintPos.setValue(listConstraintActivation[i].pos);
         }
+*/
     }
 
     appCompliance = invM->data;

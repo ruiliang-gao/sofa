@@ -22,7 +22,7 @@
 #ifndef SOFA_COMPONENT_CONSTRAINTSET_DOFBLOCKERLMCONSTRAINT_INL
 #define SOFA_COMPONENT_CONSTRAINTSET_DOFBLOCKERLMCONSTRAINT_INL
 
-#include <SofaConstraint/DOFBlockerLMConstraint.h>
+#include "DOFBlockerLMConstraint.h"
 #include <sofa/core/visual/VisualParams.h>
 #include <sofa/simulation/Simulation.h>
 #include <sofa/helper/gl/Axis.h>

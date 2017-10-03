@@ -84,6 +84,13 @@ add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${EXTRA_FILES
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaBaseTopology SofaGeneralMeshCollision SofaGeneralDeformable SofaConstraint SofaExplicitOdeSolver SofaGeneralExplicitOdeSolver SofaImplicitOdeSolver SofaBaseCollision)
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaEigen2Solver)
 
+find_package(SofaLMConstraint QUIET)
+if(SofaLMConstraint_FOUND)
+    add_definitions("-DSOFA_HAVE_SOFALMCONSTRAINT")
+    target_link_libraries(${PROJECT_NAME} PUBLIC SofaLMConstraint)
+endif()
+
+
 if(NOT SOFA_NO_OPENGL)
      target_link_libraries(${PROJECT_NAME} PUBLIC SofaOpenglVisual)
 endif()

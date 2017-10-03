@@ -68,7 +68,7 @@ const char* getModuleDescription()
 
 const char* getModuleComponentList()
 {
-    return "";
+    return "BarycentricDistanceLMConstraintContact DOFBlockerLMConstraint FixedLMConstraint DistanceLMContactConstraint DistanceLMConstraint LMConstraintSolver LMConstraintDirectSolver";
 }
 
 } /// component

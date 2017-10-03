@@ -5,6 +5,8 @@ add_subdirectory(../../extlibs/CImg extlibs/CImg)
 
 find_package(SofaFramework)
 
+
+sofa_add_plugin(SofaLMConstraint SofaLMConstraint) # LM should be dropped as soon as possible...
 sofa_add_plugin(SofaEulerianFluid SofaEulerianFluid)
 sofa_add_plugin(SofaSpecificUserInteraction SofaSpecificUserInteraction ON) #mandatory for SofaGuiQt
 sofa_add_plugin(SofaSphFluid SofaSphFluid ON)
@@ -45,7 +47,7 @@ sofa_add_plugin(RigidScale RigidScale)
 sofa_add_plugin(LeapMotion LeapMotion)
 sofa_add_plugin(Geomagic Geomagic)
 sofa_add_plugin(CImgPlugin CImgPlugin ON) # ON by default
-sofa_add_plugin(SofaLMConstraint SofaLMConstraint ON) # ON by default
+
 
 #if((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU") AND (${CMAKE_SYSTEM_NAME} MATCHES "Linux"))
 #    sofa_add_plugin(SofaPardisoSolver SofaPardisoSolver) # SofaPardisoSolver is only available under linux with gcc

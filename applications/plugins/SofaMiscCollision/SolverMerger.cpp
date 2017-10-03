@@ -30,7 +30,9 @@
 #include <SofaImplicitOdeSolver/EulerImplicitSolver.h>
 #include <SofaBaseLinearSolver/CGLinearSolver.h>
 #include <SofaConstraint/LCPConstraintSolver.h>
-#include <SofaLMConstraint/LMConstraintSolver.h>
+#ifdef SOFA_HAVE_SOFALMCONSTRAINT
+    #include <SofaLMConstraint/LMConstraintSolver.h>
+#endif
 namespace sofa
 {
 
@@ -72,15 +74,19 @@ ConstraintSolver::SPtr createConstraintSolver(OdeSolver* solver1, OdeSolver* sol
     {
         if (constraintset::LCPConstraintSolver* cs=dynamic_cast<constraintset::LCPConstraintSolver*>(csolver2))
             return copySolver<constraintset::LCPConstraintSolver>(*cs);
+#ifdef SOFA_HAVE_SOFALMCONSTRAINT
         else if (constraintset::LMConstraintSolver* cs=dynamic_cast<constraintset::LMConstraintSolver*>(csolver2))
             return copySolver<constraintset::LMConstraintSolver>(*cs);
+#endif
     }
     else if (!csolver2)
     {
         if (constraintset::LCPConstraintSolver* cs=dynamic_cast<constraintset::LCPConstraintSolver*>(csolver1))
             return copySolver<constraintset::LCPConstraintSolver>(*cs);
+#ifdef SOFA_HAVE_SOFALMCONSTRAINT
         else if (constraintset::LMConstraintSolver* cs=dynamic_cast<constraintset::LMConstraintSolver*>(csolver1))
             return copySolver<constraintset::LMConstraintSolver>(*cs);
+#endif
     }
     else
     {
@@ -97,6 +103,7 @@ ConstraintSolver::SPtr createConstraintSolver(OdeSolver* solver1, OdeSolver* sol
             newSolver->mu.setValue((lcp1->mu.getValue() + lcp2->mu.getValue())*0.5);
             return newSolver;
         }
+#ifdef SOFA_HAVE_SOFALMCONSTRAINT
         else if (dynamic_cast<constraintset::LMConstraintSolver*>(csolver2) && dynamic_cast<constraintset::LMConstraintSolver*>(csolver1))
         {
             constraintset::LMConstraintSolver* lm1=dynamic_cast<constraintset::LMConstraintSolver*>(csolver1);
@@ -110,6 +117,7 @@ ConstraintSolver::SPtr createConstraintSolver(OdeSolver* solver1, OdeSolver* sol
             newSolver->constraintPos.setValue(lm1->constraintPos.getValue() | lm2->constraintPos.getValue());
             return newSolver;
         }
+#endif
     }
 
     return NULL;

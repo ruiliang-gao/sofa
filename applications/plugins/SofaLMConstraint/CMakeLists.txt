@@ -5,7 +5,6 @@ set(SOFALMCONSTRAINT_VERSION 1.0)
 set(SOFA_HAVE_SOFALMCONSTRAINT 1)
 
 
-message(STATUS "SofaLMConstraint:")
 ################################ COMPONENTS HERE ARE THE NG-SET ####################################
 set(HEADER_FILES
     config.h
@@ -19,7 +18,6 @@ set(SOURCE_FILES
 ############################## COMPONENTS HERE ARE THE FULL-SET ####################################
 if(SOFA_BUILD_FULLSETCOMPONENTS)
     list(APPEND HEADER_FILES
-        # to deprecate or puginize...
         BarycentricDistanceLMConstraintContact.h
         BarycentricDistanceLMConstraintContact.inl
         DistanceLMContactConstraint.h
@@ -30,40 +28,41 @@ if(SOFA_BUILD_FULLSETCOMPONENTS)
         FixedLMConstraint.inl
         LMConstraintSolver.h
         LMConstraintDirectSolver.h
-        LMDNewProximityIntersection.h
-        LMDNewProximityIntersection.inl
+        DOFBlockerLMConstraint.h
+        DOFBlockerLMConstraint.inl
         )
 
     list(APPEND SOURCE_FILES
-        # to deprecate or puginize...
         BarycentricDistanceLMConstraintContact.cpp
+        DOFBlockerLMConstraint.cpp
+        FixedLMConstraint.cpp
         DistanceLMContactConstraint.cpp
         DistanceLMConstraint.cpp
-        FixedLMConstraint.cpp
         LMConstraintSolver.cpp
         LMConstraintDirectSolver.cpp
-        LMDNewProximityIntersection.cpp
-        TetrahedronBarycentricDistanceLMConstraintContact.cpp
+        #TetrahedronBarycentricDistanceLMConstraintContact.cpp
         )
-    message(STATUS "SofaLMConstraint: build all maintained sofa components.")
+    #message(STATUS "SofaLMConstraint: build all maintained sofa components.")
 
     if(SOFA_HAVE_MINIFLOWVR)
         list(APPEND SOURCE_FILES BarycentricDistanceLMConstraintContact_DistanceGrid.cpp)
     endif()
 
 else()
-    message(STATUS "SofaLMConstraint: build with only the minimal set of components.")
+    #message(STATUS "SofaLMConstraint: build with only the minimal set of components.")
 endif()
 
 ############################### COMPONENTS HERE ARE DEPRECATED ####################################
 if(SOFA_BUILD_DEPRECATEDCOMPONENTS)
-    message(STATUS "   With deprecated components.")
+    #message(STATUS "   With deprecated components.")
 else()
-    message(STATUS "   Without deprecated components.")
+    #message(STATUS "   Without deprecated components.")
 endif()
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} PUBLIC SofaBaseTopology SofaGeneralMeshCollision SofaGeneralDeformable SofaConstraint SofaExplicitOdeSolver SofaGeneralExplicitOdeSolver SofaImplicitOdeSolver SofaBaseCollision)
+#target_link_libraries(${PROJECT_NAME} PUBLIC SofaBaseTopology SofaGeneralMeshCollision SofaGeneralDeformable SofaConstraint SofaMeshCollision SofaExplicitOdeSolver SofaGeneralExplicitOdeSolver SofaImplicitOdeSolver SofaBaseCollision)
+target_link_libraries(${PROJECT_NAME} PUBLIC SofaMeshCollision SofaSimpleFem SofaImplicitOdeSolver SofaUserInteraction SofaBaseLinearSolver)
+target_link_libraries(${PROJECT_NAME} PUBLIC SofaEigen2Solver)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_LM_CONSTRAINT")
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")

@@ -32,6 +32,8 @@ if(SOFA_BUILD_FULLSETCOMPONENTS)
         LCPConstraintSolver.h
         LinearSolverConstraintCorrection.h
         LinearSolverConstraintCorrection.inl
+        LMDNewProximityIntersection.h
+        LMDNewProximityIntersection.inl
         LocalMinDistance.h
         LocalMinDistance.inl
         PrecomputedConstraintCorrection.h
@@ -56,6 +58,7 @@ if(SOFA_BUILD_FULLSETCOMPONENTS)
         GenericConstraintSolver.cpp
         LCPConstraintSolver.cpp
         LinearSolverConstraintCorrection.cpp
+        LMDNewProximityIntersection.cpp
         LocalMinDistance.cpp
         PrecomputedConstraintCorrection.cpp
         SlidingConstraint.cpp
@@ -74,17 +77,13 @@ if(SOFA_BUILD_DEPRECATEDCOMPONENTS)
     list(APPEND HEADER_FILES
         StopperConstraint.h
         StopperConstraint.inl
-        DOFBlockerLMConstraint.h
-        DOFBlockerLMConstraint.inl
         )
     list(APPEND SOURCE_FILES
         StopperConstraint.cpp
-        DOFBlockerLMConstraint.cpp
         )
 else()
     message(STATUS "SofaConstraint: build without deprecated components.")
 endif()
-
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaMeshCollision SofaSimpleFem SofaImplicitOdeSolver SofaUserInteraction SofaBaseLinearSolver)
