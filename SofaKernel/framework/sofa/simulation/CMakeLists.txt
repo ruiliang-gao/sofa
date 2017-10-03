@@ -119,12 +119,7 @@ set(SOURCE_FILES
     MechanicalComputeEnergyVisitor.cpp
 )
 
-if(SOFA-MISC_SMP)
-    list(APPEND HEADER_FILES ChangeListener.h)
-    list(APPEND HEADER_FILES ParallelMechanicalVisitor.h)
-    list(APPEND SOURCE_FILES ChangeListener.cpp)
-    list(APPEND SOURCE_FILES ParallelMechanicalVisitor.cpp)
-endif()
+
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaCore)
