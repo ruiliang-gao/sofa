@@ -29,6 +29,14 @@ using sofa::core::objectmodel::Base ;
 #include <sofa/helper/system/PluginManager.h>
 #include <sofa/helper/system/FileRepository.h>
 
+#include <sofa/helper/deprecatedcomponents.h>
+using sofa::helper::deprecatedcomponents::components ;
+using sofa::helper::deprecatedcomponents::messages ;
+using sofa::helper::deprecatedcomponents::indexName ;
+using sofa::helper::deprecatedcomponents::indexMessage ;
+
+
+
 #include "SceneCheckAPIChanges.h"
 #include "RequiredPlugin.h"
 
@@ -152,19 +160,19 @@ void SceneCheckAPIChange::installDefaultChangeSets()
     }) ;
 
     addHookInChangeSet("17.06", [](Base* o){
-        if( deprecatedComponents.find( o->getClassName() ) != deprecatedComponents.end() )
+        if( components.find( o->getClassName() ) != components.end() )
         {
-            auto& msg = deprecatedComponents[o->getClassName()] ;
-            std::string str = msg[DEPMSG];
+            auto& msg = components[o->getClassName()] ;
+            std::string str = msg[indexName];
 
             /// Replace the string by the default one.
-            if( s_commonMessages.find( str ) != s_commonMessages.end() ){
-                str = s_commonMessages[str] ;
+            if( messages.find( str ) != messages.end() ){
+                str = messages[str] ;
             }
 
             msg_warning(o) << o->getClassName()
                                << str
-                               << msg[DEPREP] ;
+                               << msg[indexMessage] ;
         }
     }) ;
 }

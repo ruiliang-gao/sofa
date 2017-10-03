@@ -19,61 +19,33 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#include <sofa/simulation/InitVisitor.h>
-#include <sofa/simulation/MechanicalVisitor.h>
-#include <sofa/simulation/Simulation.h>
-#include <sofa/core/BaseMapping.h>
-#include <sofa/core/visual/VisualModel.h>
-#include <sofa/defaulttype/BoundingBox.h>
+#ifndef SOFA_HELPER_DEPRECATEDCOMPONENTS_H
+#define SOFA_HELPER_DEPRECATEDCOMPONENTS_H
 
-//#include "MechanicalIntegration.h"
+#include <string>
+#include <vector>
+#include <map>
+#include "helper.h"
 
 namespace sofa
 {
 
-namespace simulation
+namespace helper
 {
 
-
-Visitor::Result InitVisitor::processNodeTopDown(simulation::Node* node)
+namespace deprecatedcomponents
 {
-    if (!rootNode) rootNode=node;
 
-    node->initialize();
+constexpr int indexName {0};
+constexpr int indexMessage {1};
 
-    sofa::defaulttype::BoundingBox* nodeBBox = node->f_bbox.beginEdit(params);
-    nodeBBox->invalidate();
+extern SOFA_HELPER_API std::map<std::string, std::string>  messages ;
+extern SOFA_HELPER_API std::map<std::string, std::vector<std::string>> components ;
 
-    for(unsigned int i=0; i<node->object.size(); ++i)
-    {
-        node->object[i]->init();
-        node->object[i]->computeBBox(params, true);
-        nodeBBox->include(node->object[i]->f_bbox.getValue(params));
-    }
-    node->f_bbox.endEdit(params);
-    return RESULT_CONTINUE;
-}
+} /// namespace deprecatedcomponents
 
+} /// namespace helper
 
-void InitVisitor::processNodeBottomUp(simulation::Node* node)
-{
-    // init all the components in reverse order
-    node->setDefaultVisualContextValue();
-    sofa::defaulttype::BoundingBox* nodeBBox = node->f_bbox.beginEdit(params);
+} /// namespace sofa
 
-    for(unsigned int i=node->object.size(); i>0; --i)
-    {
-        node->object[i-1]->bwdInit();
-        nodeBBox->include(node->object[i-1]->f_bbox.getValue(params));
-    }
-
-    node->f_bbox.endEdit(params);
-    node->bwdInit();
-}
-
-
-
-} // namespace simulation
-
-} // namespace sofa
-
+#endif
