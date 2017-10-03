@@ -19,12 +19,15 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_COLLISION_REMOVEPRIMITIVEPERFORMER_CPP
-#define SOFA_COMPONENT_COLLISION_REMOVEPRIMITIVEPERFORMER_CPP
+#ifndef SOFA_COMPONENT_COLLISION_FIXPARTICLEPERFORMER_H
+#define SOFA_COMPONENT_COLLISION_FIXPARTICLEPERFORMER_H
 
-#include <SofaUserInteraction/RemovePrimitivePerformer.inl>
-#include <sofa/defaulttype/Vec3Types.h>
-#include <sofa/helper/Factory.inl>
+#include "SofaSpecificUserInteraction.h"
+
+#include <SofaUserInteraction/InteractionPerformer.h>
+
+#include <SofaDeformable/StiffSpringForceField.h>
+#include <SofaUserInteraction/MouseInteractor.h>
 
 namespace sofa
 {
@@ -35,21 +38,48 @@ namespace component
 namespace collision
 {
 
+class FixParticlePerformerConfiguration
+{
+public:
+    void setStiffness(SReal s) {stiffness=s;}
+protected:
+    SReal stiffness;
+};
+
+template <class DataTypes>
+class FixParticlePerformer: public TInteractionPerformer<DataTypes>, public FixParticlePerformerConfiguration
+{
+public:
+    typedef sofa::component::interactionforcefield::StiffSpringForceField< DataTypes >   MouseForceField;
+    typedef sofa::component::container::MechanicalObject< DataTypes >         MouseContainer;
+    typedef typename DataTypes::Coord Coord;
+    typedef typename DataTypes::VecCoord VecCoord;
+
+    FixParticlePerformer(BaseMouseInteractor *i);
+
+    void start();
+    void execute();
+    void draw(const core::visual::VisualParams* vparams);
+
+protected:
+    MouseContainer* getFixationPoints(const BodyPicked &b, helper::vector<unsigned int> &points, typename DataTypes::Coord &fixPoint);
+
+    std::vector< simulation::Node * > fixations;
+};
+
+
+#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_COLLISION_FIXPARTICLEPERFORMER_CPP)
 #ifndef SOFA_DOUBLE
-template class SOFA_USER_INTERACTION_API RemovePrimitivePerformer<defaulttype::Vec3fTypes>;
+extern template class SOFA_USER_INTERACTION_API FixParticlePerformer<defaulttype::Vec3fTypes>;
 #endif
 #ifndef SOFA_FLOAT
-template class SOFA_USER_INTERACTION_API RemovePrimitivePerformer<defaulttype::Vec3dTypes>;
+extern template class SOFA_USER_INTERACTION_API FixParticlePerformer<defaulttype::Vec3dTypes>;
+#endif
 #endif
 
-#ifndef SOFA_DOUBLE
-helper::Creator<InteractionPerformer::InteractionPerformerFactory, RemovePrimitivePerformer<defaulttype::Vec3fTypes> >  RemovePrimitivePerformerVec3fClass("RemovePrimitive",true);
-#endif
-#ifndef SOFA_FLOAT
-helper::Creator<InteractionPerformer::InteractionPerformerFactory, RemovePrimitivePerformer<defaulttype::Vec3dTypes> >  RemovePrimitivePerformerVec3dClass("RemovePrimitive",true);
-#endif
 
 }
 }
 }
+
 #endif

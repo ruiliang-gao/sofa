@@ -19,46 +19,44 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#define SOFA_COMPONENT_COLLISION_STARTNAVIGATIONPERFORMER_CPP
+#ifndef SOFA_COMPONENT_COLLISION_ADDRECORDEDCAMERAPERFORMER_H
+#define SOFA_COMPONENT_COLLISION_ADDRECORDEDCAMERAPERFORMER_H
 
-#include <SofaUserInteraction/StartNavigationPerformer.h>
-#include <SofaGeneralVisual/RecordedCamera.h>
-#include <sofa/defaulttype/Vec3Types.h>
-#include <sofa/defaulttype/RigidTypes.h>
-#include <sofa/helper/Factory.inl>
-#include <SofaRigid/JointSpringForceField.inl>
-#include <SofaDeformable/SpringForceField.inl>
-#include <SofaDeformable/StiffSpringForceField.inl>
-#include <sofa/helper/cast.h>
+#include "SofaSpecificUserInteraction.h"
 
+#include <SofaUserInteraction/MouseInteractor.h>
+#include <SofaUserInteraction/InteractionPerformer.h>
+#include <SofaBaseCollision/BaseContactMapper.h>
+#include <sofa/core/behavior/BaseForceField.h>
+#include <SofaDeformable/SpringForceField.h>
+#include <SofaDeformable/StiffSpringForceField.h>
+#include <SofaGraphComponent/AddRecordedCameraButtonSetting.h>
+#include <sofa/core/visual/DisplayFlags.h>
 
-using namespace sofa::component::interactionforcefield;
-using namespace sofa::core::objectmodel;
 namespace sofa
 {
+namespace component
+{
 
-    namespace component
+namespace collision
+{
+
+    class SOFA_USER_INTERACTION_API AddRecordedCameraPerformer: public InteractionPerformer
     {
+    public:
+        AddRecordedCameraPerformer(BaseMouseInteractor *i)
+            : InteractionPerformer(i) {};
 
-        namespace collision
-        {
-            helper::Creator<InteractionPerformer::InteractionPerformerFactory, StartNavigationPerformer> StartNavigationPerformerClass("StartNavigation");
+        ~AddRecordedCameraPerformer(){};
 
-            void StartNavigationPerformer::start()
-            {
-                sofa::simulation::Node::SPtr root = down_cast<sofa::simulation::Node>( interactor->getContext()->getRootContext() );
-                if(root)
-                {
-                    sofa::component::visualmodel::RecordedCamera* currentCamera = root->getNodeObject<sofa::component::visualmodel::RecordedCamera>();
+        // Save the current camera's position and orientation in the appropriate Data of Recorded Camera for navigation. 
+        void start();
+        void execute(){};
 
-                    if(currentCamera)
-                    {
-                        // The navigation mode of Recorded Camera is set to true
-                        currentCamera->m_navigationMode.setValue(!currentCamera->m_navigationMode.getValue());
-                    }
-                }
-            }
+    };
 
-        }// namespace collision
-    }// namespace component
-}// namespace sofa
+}
+}
+}
+
+#endif

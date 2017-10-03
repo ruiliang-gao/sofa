@@ -19,43 +19,37 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_COLLISION_ADDRECORDEDCAMERAPERFORMER_H
-#define SOFA_COMPONENT_COLLISION_ADDRECORDEDCAMERAPERFORMER_H
-#include "config.h"
+#ifndef SOFA_COMPONENT_COLLISION_REMOVEPRIMITIVEPERFORMER_CPP
+#define SOFA_COMPONENT_COLLISION_REMOVEPRIMITIVEPERFORMER_CPP
 
-#include <SofaUserInteraction/MouseInteractor.h>
-#include <SofaUserInteraction/InteractionPerformer.h>
-#include <SofaBaseCollision/BaseContactMapper.h>
-#include <sofa/core/behavior/BaseForceField.h>
-#include <SofaDeformable/SpringForceField.h>
-#include <SofaDeformable/StiffSpringForceField.h>
-#include <SofaGraphComponent/AddRecordedCameraButtonSetting.h>
-#include <sofa/core/visual/DisplayFlags.h>
+#include <SofaSpecificUserInteraction/RemovePrimitivePerformer.inl>
+#include <sofa/defaulttype/Vec3Types.h>
+#include <sofa/helper/Factory.inl>
 
 namespace sofa
 {
+
 namespace component
 {
 
 namespace collision
 {
 
-    class SOFA_USER_INTERACTION_API AddRecordedCameraPerformer: public InteractionPerformer
-    {
-    public:
-        AddRecordedCameraPerformer(BaseMouseInteractor *i)
-            : InteractionPerformer(i) {};
+#ifndef SOFA_DOUBLE
+template class SOFA_USER_INTERACTION_API RemovePrimitivePerformer<defaulttype::Vec3fTypes>;
+#endif
+#ifndef SOFA_FLOAT
+template class SOFA_USER_INTERACTION_API RemovePrimitivePerformer<defaulttype::Vec3dTypes>;
+#endif
 
-        ~AddRecordedCameraPerformer(){};
-
-        // Save the current camera's position and orientation in the appropriate Data of Recorded Camera for navigation. 
-        void start();
-        void execute(){};
-
-    };
+#ifndef SOFA_DOUBLE
+helper::Creator<InteractionPerformer::InteractionPerformerFactory, RemovePrimitivePerformer<defaulttype::Vec3fTypes> >  RemovePrimitivePerformerVec3fClass("RemovePrimitive",true);
+#endif
+#ifndef SOFA_FLOAT
+helper::Creator<InteractionPerformer::InteractionPerformerFactory, RemovePrimitivePerformer<defaulttype::Vec3dTypes> >  RemovePrimitivePerformerVec3dClass("RemovePrimitive",true);
+#endif
 
 }
 }
 }
-
 #endif

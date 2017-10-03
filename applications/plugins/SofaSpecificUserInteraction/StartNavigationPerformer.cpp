@@ -19,32 +19,46 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
+#define SOFA_COMPONENT_COLLISION_STARTNAVIGATIONPERFORMER_CPP
 
-#ifndef SOFA_COMPONENT_COLLISION_FIXPARTICLEPERFORMER_CPP
-#define SOFA_COMPONENT_COLLISION_FIXPARTICLEPERFORMER_CPP
-
-#include <SofaUserInteraction/FixParticlePerformer.inl>
+#include <SofaSpecificUserInteraction/StartNavigationPerformer.h>
+#include <SofaGeneralVisual/RecordedCamera.h>
 #include <sofa/defaulttype/Vec3Types.h>
+#include <sofa/defaulttype/RigidTypes.h>
 #include <sofa/helper/Factory.inl>
+#include <SofaRigid/JointSpringForceField.inl>
+#include <SofaDeformable/SpringForceField.inl>
+#include <SofaDeformable/StiffSpringForceField.inl>
+#include <sofa/helper/cast.h>
 
+
+using namespace sofa::component::interactionforcefield;
+using namespace sofa::core::objectmodel;
 namespace sofa
 {
 
-namespace component
-{
+    namespace component
+    {
 
-namespace collision
-{
-#ifndef SOFA_DOUBLE
-template class SOFA_USER_INTERACTION_API FixParticlePerformer<defaulttype::Vec3fTypes>;
-helper::Creator<InteractionPerformer::InteractionPerformerFactory, FixParticlePerformer<defaulttype::Vec3fTypes> >  FixParticlePerformerVec3fClass("FixParticle",true);
-#endif
-#ifndef SOFA_FLOAT
-template class SOFA_USER_INTERACTION_API FixParticlePerformer<defaulttype::Vec3dTypes>;
-helper::Creator<InteractionPerformer::InteractionPerformerFactory, FixParticlePerformer<defaulttype::Vec3dTypes> >  FixParticlePerformerVec3dClass("FixParticle",true);
-#endif
-}
-}
-}
+        namespace collision
+        {
+            helper::Creator<InteractionPerformer::InteractionPerformerFactory, StartNavigationPerformer> StartNavigationPerformerClass("StartNavigation");
 
-#endif
+            void StartNavigationPerformer::start()
+            {
+                sofa::simulation::Node::SPtr root = down_cast<sofa::simulation::Node>( interactor->getContext()->getRootContext() );
+                if(root)
+                {
+                    sofa::component::visualmodel::RecordedCamera* currentCamera = root->getNodeObject<sofa::component::visualmodel::RecordedCamera>();
+
+                    if(currentCamera)
+                    {
+                        // The navigation mode of Recorded Camera is set to true
+                        currentCamera->m_navigationMode.setValue(!currentCamera->m_navigationMode.getValue());
+                    }
+                }
+            }
+
+        }// namespace collision
+    }// namespace component
+}// namespace sofa

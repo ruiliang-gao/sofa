@@ -20,7 +20,7 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 
-#include <SofaUserInteraction/FixParticlePerformer.h>
+#include <SofaSpecificUserInteraction/FixParticlePerformer.h>
 #include <sofa/core/visual/VisualParams.h>
 #include <SofaBoundaryCondition/FixedConstraint.h>
 

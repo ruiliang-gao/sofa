@@ -25,12 +25,12 @@
 
 #include <SofaUserInteraction/ComponentMouseInteraction.h>
 #include <SofaUserInteraction/AttachBodyPerformer.h>
-#include <SofaUserInteraction/FixParticlePerformer.h>
-#include <SofaUserInteraction/RemovePrimitivePerformer.h>
-#include <SofaUserInteraction/InciseAlongPathPerformer.h>
-#include <SofaUserInteraction/AddRecordedCameraPerformer.h>
-#include <SofaUserInteraction/StartNavigationPerformer.h>
-#include <SofaUserInteraction/SuturePointPerformer.h>
+#include <SofaSpecificUserInteraction/FixParticlePerformer.h>
+#include <SofaSpecificUserInteraction/RemovePrimitivePerformer.h>
+#include <SofaSpecificUserInteraction/InciseAlongPathPerformer.h>
+#include <SofaSpecificUserInteraction/AddRecordedCameraPerformer.h>
+#include <SofaSpecificUserInteraction/StartNavigationPerformer.h>
+#include <SofaSpecificUserInteraction/SuturePointPerformer.h>
 #ifdef SOFA_HAVE_ARPLUGIN
 #include "./../../../applications-dev/plugins/ARPlugin/ARPSAttachPerformer.h"
 #endif

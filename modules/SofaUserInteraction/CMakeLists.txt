@@ -60,46 +60,30 @@ endif()
 ############################### COMPONENTS HERE ARE DEPRECATED ####################################
 if(SOFA_BUILD_DEPRECATEDCOMPONENTS)
     list(APPEND HEADER_FILES
-        AddRecordedCameraPerformer.h
         ArticulatedHierarchyBVHController.h
         ArticulatedHierarchyController.h
-        CuttingPoint.h
         DisabledContact.h
         EdgeSetController.h
         EdgeSetController.inl
-        FixParticlePerformer.h
-        FixParticlePerformer.inl
         GraspingManager.h
-        InciseAlongPathPerformer.h
         InterpolationController.h
         InterpolationController.inl
         MechanicalStateControllerOmni.h
         MechanicalStateControllerOmni.inl
         NodeToggleController.h
-        RemovePrimitivePerformer.h
-        RemovePrimitivePerformer.inl
         SleepController.h
-        StartNavigationPerformer.h
-        SuturePointPerformer.h
-        SuturePointPerformer.inl
         )
     list(APPEND SOURCE_FILES
-        AddRecordedCameraPerformer.cpp
         ArticulatedHierarchyBVHController.cpp
         ArticulatedHierarchyController.cpp
         CuttingPoint.cpp
         DisabledContact.cpp
         EdgeSetController.cpp
-        FixParticlePerformer.cpp
         GraspingManager.cpp
-        InciseAlongPathPerformer.cpp
         InterpolationController.cpp
         MechanicalStateControllerOmni.cpp
         NodeToggleController.cpp
-        RemovePrimitivePerformer.cpp
         SleepController.cpp
-        StartNavigationPerformer.cpp
-        SuturePointPerformer.cpp
         )
     message(STATUS "   With deprecated components.")
 else()

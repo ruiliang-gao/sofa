@@ -21,7 +21,7 @@
 ******************************************************************************/
 #define SOFA_COMPONENT_COLLISION_ADDRECORDEDCAMERAPERFORMER_CPP
 
-#include <SofaUserInteraction/AddRecordedCameraPerformer.h>
+#include <SofaSpecificUserInteraction/AddRecordedCameraPerformer.h>
 #include <SofaGeneralVisual/RecordedCamera.h>
 #include <sofa/defaulttype/Vec3Types.h>
 #include <sofa/defaulttype/RigidTypes.h>

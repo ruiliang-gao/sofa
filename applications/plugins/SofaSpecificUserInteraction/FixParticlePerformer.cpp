@@ -19,16 +19,13 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_COLLISION_SUTUREPOINTPERFORMER_H
-#define SOFA_COMPONENT_COLLISION_SUTUREPOINTPERFORMER_H
-#include "config.h"
 
-#include <SofaUserInteraction/InteractionPerformer.h>
-#include <SofaDeformable/StiffSpringForceField.h>
-#include <SofaDeformable/SpringForceField.h>
-#include <SofaBoundaryCondition/FixedConstraint.h>
+#ifndef SOFA_COMPONENT_COLLISION_FIXPARTICLEPERFORMER_CPP
+#define SOFA_COMPONENT_COLLISION_FIXPARTICLEPERFORMER_CPP
 
-#include <SofaUserInteraction/MouseInteractor.h>
+#include <SofaSpecificUserInteraction/FixParticlePerformer.inl>
+#include <sofa/defaulttype/Vec3Types.h>
+#include <sofa/helper/Factory.inl>
 
 namespace sofa
 {
@@ -38,54 +35,14 @@ namespace component
 
 namespace collision
 {
-
-class SuturePointPerformerConfiguration
-{
-public:
-    void setStiffness (double f) {stiffness=f;}
-    void setDamping (double f) {damping=f;}
-
-protected:
-    double stiffness;
-    double damping;
-};
-
-
-template <class DataTypes>
-class SOFA_USER_INTERACTION_API SuturePointPerformer: public TInteractionPerformer<DataTypes>, public SuturePointPerformerConfiguration
-{
-public:
-    typedef typename DataTypes::Real Real;
-    typedef sofa::component::interactionforcefield::LinearSpring<Real> Spring;
-    typedef sofa::component::interactionforcefield::StiffSpringForceField<DataTypes> SpringObjectType;
-    typedef sofa::component::projectiveconstraintset::FixedConstraint<DataTypes> FixObjectType;
-
-    SuturePointPerformer(BaseMouseInteractor *i);
-    ~SuturePointPerformer();
-
-    void start();
-    void execute() {}
-
-protected:
-    bool first;
-    unsigned int fixedIndex;
-
-    sofa::helper::vector <Spring> addedSprings;
-
-    BodyPicked firstPicked;
-    SpringObjectType *SpringObject;
-    FixObjectType *FixObject;
-};
-
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_COLLISION_SUTUREPOINTPERFORMER_CPP)
 #ifndef SOFA_DOUBLE
-extern template class SOFA_USER_INTERACTION_API  SuturePointPerformer<defaulttype::Vec3fTypes>;
+template class SOFA_USER_INTERACTION_API FixParticlePerformer<defaulttype::Vec3fTypes>;
+helper::Creator<InteractionPerformer::InteractionPerformerFactory, FixParticlePerformer<defaulttype::Vec3fTypes> >  FixParticlePerformerVec3fClass("FixParticle",true);
 #endif
 #ifndef SOFA_FLOAT
-extern template class SOFA_USER_INTERACTION_API  SuturePointPerformer<defaulttype::Vec3dTypes>;
+template class SOFA_USER_INTERACTION_API FixParticlePerformer<defaulttype::Vec3dTypes>;
+helper::Creator<InteractionPerformer::InteractionPerformerFactory, FixParticlePerformer<defaulttype::Vec3dTypes> >  FixParticlePerformerVec3dClass("FixParticle",true);
 #endif
-#endif
-
 }
 }
 }

@@ -19,13 +19,15 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_COLLISION_INCISEALONGPATHPERFORMER_H
-#define SOFA_COMPONENT_COLLISION_INCISEALONGPATHPERFORMER_H
-#include "config.h"
+#ifndef SOFA_COMPONENT_COLLISION_SUTUREPOINTPERFORMER_H
+#define SOFA_COMPONENT_COLLISION_SUTUREPOINTPERFORMER_H
+#include "SofaSpecificUserInteraction.h"
 
 #include <SofaUserInteraction/InteractionPerformer.h>
+#include <SofaDeformable/StiffSpringForceField.h>
+#include <SofaDeformable/SpringForceField.h>
+#include <SofaBoundaryCondition/FixedConstraint.h>
 
-#include <SofaUserInteraction/TopologicalChangeManager.h>
 #include <SofaUserInteraction/MouseInteractor.h>
 
 namespace sofa
@@ -36,65 +38,54 @@ namespace component
 
 namespace collision
 {
-class InciseAlongPathPerformerConfiguration
+
+class SuturePointPerformerConfiguration
 {
 public:
-    void setIncisionMethod (int m) {currentMethod=m;}
-    void setSnapingBorderValue (int m) {snapingBorderValue = m;}
-    void setSnapingValue (int m) {snapingValue = m;}
-    void setCompleteIncision (bool m) {finishIncision = m;}
-    void setKeepPoint (bool m) {keepPoint = m;}
-
+    void setStiffness (double f) {stiffness=f;}
+    void setDamping (double f) {damping=f;}
 
 protected:
-    int currentMethod;
-    int snapingBorderValue;
-    int snapingValue;
-    bool finishIncision;
-    bool keepPoint;
-
+    double stiffness;
+    double damping;
 };
 
 
-class SOFA_USER_INTERACTION_API InciseAlongPathPerformer: public InteractionPerformer, public InciseAlongPathPerformerConfiguration
+template <class DataTypes>
+class SOFA_USER_INTERACTION_API SuturePointPerformer: public TInteractionPerformer<DataTypes>, public SuturePointPerformerConfiguration
 {
 public:
-    InciseAlongPathPerformer(BaseMouseInteractor *i)
-        : InteractionPerformer(i)
-        , cpt(0)
-        , fullcut(0)
-        , initialNbTriangles(0)
-        , initialNbPoints(0) {};
+    typedef typename DataTypes::Real Real;
+    typedef sofa::component::interactionforcefield::LinearSpring<Real> Spring;
+    typedef sofa::component::interactionforcefield::StiffSpringForceField<DataTypes> SpringObjectType;
+    typedef sofa::component::projectiveconstraintset::FixedConstraint<DataTypes> FixObjectType;
 
-    ~InciseAlongPathPerformer();
+    SuturePointPerformer(BaseMouseInteractor *i);
+    ~SuturePointPerformer();
 
     void start();
-
-    void execute();
-
-    void draw(const core::visual::VisualParams* vparams);
-
-    BodyPicked& getFirstIncisionBodyPicked() {return firstIncisionBody;}
-
-    BodyPicked& getLastBodyPicked() {return firstBody;}
-
-    void setPerformerFreeze();
+    void execute() {}
 
 protected:
-    /// Incision will be perfomed between firstIncisionBody (first point clicked) and firstBody (last point clicked in memory)
-    void PerformCompleteIncision( );
+    bool first;
+    unsigned int fixedIndex;
 
-    TopologicalChangeManager topologyChangeManager;
-    BodyPicked startBody;
-    BodyPicked firstBody;
-    BodyPicked secondBody;
-    BodyPicked firstIncisionBody;
+    sofa::helper::vector <Spring> addedSprings;
 
-    int cpt;
-    bool fullcut;
-    unsigned int initialNbTriangles;
-    unsigned int initialNbPoints;
+    BodyPicked firstPicked;
+    SpringObjectType *SpringObject;
+    FixObjectType *FixObject;
 };
+
+#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_COLLISION_SUTUREPOINTPERFORMER_CPP)
+#ifndef SOFA_DOUBLE
+extern template class SOFA_USER_INTERACTION_API  SuturePointPerformer<defaulttype::Vec3fTypes>;
+#endif
+#ifndef SOFA_FLOAT
+extern template class SOFA_USER_INTERACTION_API  SuturePointPerformer<defaulttype::Vec3dTypes>;
+#endif
+#endif
+
 }
 }
 }

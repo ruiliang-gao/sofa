@@ -19,13 +19,14 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_COLLISION_FIXPARTICLEPERFORMER_H
-#define SOFA_COMPONENT_COLLISION_FIXPARTICLEPERFORMER_H
-#include "config.h"
+#ifndef SOFA_COMPONENT_COLLISION_INCISEALONGPATHPERFORMER_H
+#define SOFA_COMPONENT_COLLISION_INCISEALONGPATHPERFORMER_H
+
+#include "SofaSpecificUserInteraction.h"
 
 #include <SofaUserInteraction/InteractionPerformer.h>
 
-#include <SofaDeformable/StiffSpringForceField.h>
+#include <SofaUserInteraction/TopologicalChangeManager.h>
 #include <SofaUserInteraction/MouseInteractor.h>
 
 namespace sofa
@@ -36,47 +37,65 @@ namespace component
 
 namespace collision
 {
-
-class FixParticlePerformerConfiguration
+class InciseAlongPathPerformerConfiguration
 {
 public:
-    void setStiffness(SReal s) {stiffness=s;}
+    void setIncisionMethod (int m) {currentMethod=m;}
+    void setSnapingBorderValue (int m) {snapingBorderValue = m;}
+    void setSnapingValue (int m) {snapingValue = m;}
+    void setCompleteIncision (bool m) {finishIncision = m;}
+    void setKeepPoint (bool m) {keepPoint = m;}
+
+
 protected:
-    SReal stiffness;
+    int currentMethod;
+    int snapingBorderValue;
+    int snapingValue;
+    bool finishIncision;
+    bool keepPoint;
+
 };
 
-template <class DataTypes>
-class FixParticlePerformer: public TInteractionPerformer<DataTypes>, public FixParticlePerformerConfiguration
+
+class SOFA_USER_INTERACTION_API InciseAlongPathPerformer: public InteractionPerformer, public InciseAlongPathPerformerConfiguration
 {
 public:
-    typedef sofa::component::interactionforcefield::StiffSpringForceField< DataTypes >   MouseForceField;
-    typedef sofa::component::container::MechanicalObject< DataTypes >         MouseContainer;
-    typedef typename DataTypes::Coord Coord;
-    typedef typename DataTypes::VecCoord VecCoord;
+    InciseAlongPathPerformer(BaseMouseInteractor *i)
+        : InteractionPerformer(i)
+        , cpt(0)
+        , fullcut(0)
+        , initialNbTriangles(0)
+        , initialNbPoints(0) {};
 
-    FixParticlePerformer(BaseMouseInteractor *i);
+    ~InciseAlongPathPerformer();
 
     void start();
+
     void execute();
+
     void draw(const core::visual::VisualParams* vparams);
 
+    BodyPicked& getFirstIncisionBodyPicked() {return firstIncisionBody;}
+
+    BodyPicked& getLastBodyPicked() {return firstBody;}
+
+    void setPerformerFreeze();
+
 protected:
-    MouseContainer* getFixationPoints(const BodyPicked &b, helper::vector<unsigned int> &points, typename DataTypes::Coord &fixPoint);
+    /// Incision will be perfomed between firstIncisionBody (first point clicked) and firstBody (last point clicked in memory)
+    void PerformCompleteIncision( );
 
-    std::vector< simulation::Node * > fixations;
+    TopologicalChangeManager topologyChangeManager;
+    BodyPicked startBody;
+    BodyPicked firstBody;
+    BodyPicked secondBody;
+    BodyPicked firstIncisionBody;
+
+    int cpt;
+    bool fullcut;
+    unsigned int initialNbTriangles;
+    unsigned int initialNbPoints;
 };
-
-
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_COLLISION_FIXPARTICLEPERFORMER_CPP)
-#ifndef SOFA_DOUBLE
-extern template class SOFA_USER_INTERACTION_API FixParticlePerformer<defaulttype::Vec3fTypes>;
-#endif
-#ifndef SOFA_FLOAT
-extern template class SOFA_USER_INTERACTION_API FixParticlePerformer<defaulttype::Vec3dTypes>;
-#endif
-#endif
-
-
 }
 }
 }
