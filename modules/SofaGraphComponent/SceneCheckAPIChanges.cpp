@@ -85,7 +85,11 @@ std::map<std::string, std::vector<std::string>> deprecatedComponents =
     {"GraspingManager", {"deprecated-17.12"}},
     {"InciseAlongPathPerformer", {"deprecated-17.12"}},
     {"InterpolationController", {"deprecated-17.12"}},
-    {"NodeToggleController", {"deprecated-17.12"}}
+    {"NodeToggleController", {"deprecated-17.12"}},
+    {"RemovePrimitivePerformer", {"deprecated-17.12"}},
+    {"SleepController", {"deprecated-17.12"}},
+    {"StartNavigationPerformer", {"deprecated-17.12"}},
+    {"SuturePointPerformer", {"deprecated-17.12"}}
 };
 
 const std::string SceneCheckAPIChange::getName()
