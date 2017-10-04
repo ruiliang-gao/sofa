@@ -22,9 +22,9 @@
 #include <SofaSpecificBoundaryConditions/SofaSpecificBoundaryConditions.h>
 #include <sofa/core/Plugin.h>
 
-class SofaSpecificBoundaryConditions: public sofa::core::Plugin {
+class SofaSpecificUserInteraction: public sofa::core::Plugin {
 public:
-    SofaSpecificBoundaryConditions(): Plugin("SofaSpecificBoundaryConditions") {
+    SofaSpecificUserInteraction(): Plugin("SofaSpecificUserInteraction") {
         setDescription("");
         setVersion("");
         setLicense("LGPL");
@@ -32,4 +32,4 @@ public:
     }
 };
 
-SOFA_PLUGIN(SofaSpecificBoundaryConditions);
+SOFA_PLUGIN(SofaSpecificUserInteraction);
