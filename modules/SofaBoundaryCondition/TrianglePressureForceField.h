@@ -22,7 +22,7 @@
 
 #ifndef SOFA_COMPONENT_FORCEFIELD_TRIANGLEPRESSUREFORCEFIELD_H
 #define SOFA_COMPONENT_FORCEFIELD_TRIANGLEPRESSUREFORCEFIELD_H
-#include "SofaSpecificBoundaryConditions.h".h"
+#include "config.h"
 
 
 #include <sofa/core/behavior/ForceField.h>
@@ -153,10 +153,10 @@ protected :
 #if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_FORCEFIELD_TrianglePressureForceField_CPP)
 
 #ifndef SOFA_FLOAT
-extern template class SOFA_SPECIFIC_BOUNDARY_CONDITIONS_API TrianglePressureForceField<sofa::defaulttype::Vec3dTypes>;
+extern template class SOFA_BOUNDARY_CONDITION_API TrianglePressureForceField<sofa::defaulttype::Vec3dTypes>;
 #endif
 #ifndef SOFA_DOUBLE
-extern template class SOFA_SPECIFIC_BOUNDARY_CONDITIONS_API TrianglePressureForceField<sofa::defaulttype::Vec3fTypes>;
+extern template class SOFA_BOUNDARY_CONDITION_API TrianglePressureForceField<sofa::defaulttype::Vec3fTypes>;
 #endif
 
 #endif // defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_FORCEFIELD_TrianglePressureForceField_CPP)

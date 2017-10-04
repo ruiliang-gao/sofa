@@ -6,8 +6,6 @@ set(SOFATEST_VERSION 0.1)
 set(HEADER_FILES
     BroadPhase_test.h
     DataEngine_test.h
-    Elasticity_test.h
-    Elasticity_test.inl
     ForceField_test.h
     InitPlugin_test.h
     Mapping_test.h
@@ -16,14 +14,16 @@ set(HEADER_FILES
     PrimitiveCreation.h
     Sofa_test.h
     TestMessageHandler.h
+    Elasticity_test.h
+    Elasticity_test.inl
     #LogMessage.h
 )
 
 set(SOURCE_FILES
-    Elasticity_test.cpp
     InitPlugin_test.cpp
     PrimitiveCreation.cpp
     TestMessageHandler.cpp
+    Elasticity_test.cpp
     Sofa_test.cpp
 )
 
@@ -52,6 +52,9 @@ sofa_set_python_directory(${PROJECT_NAME} "python")
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${PYTHON_FILES})
 if(SofaPython_FOUND)
     target_link_libraries(${PROJECT_NAME} SofaPython)
+endif()
+if(SofaSpecificBoundaryConditions_FOUND)
+    target_link_libraries(${PROJECT_NAME} SofaSpecificBoundaryConditions)
 endif()
 target_link_libraries(${PROJECT_NAME} SceneCreator SofaComponentBase SofaComponentCommon SofaComponentGeneral SofaComponentAdvanced SofaComponentMisc)
 target_link_libraries(${PROJECT_NAME} gtest)

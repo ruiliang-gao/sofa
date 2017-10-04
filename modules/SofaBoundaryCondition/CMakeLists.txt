@@ -28,6 +28,8 @@ if(SOFA_BUILD_FULLSETCOMPONENTS)
         SurfacePressureForceField.inl
         TaitSurfacePressureForceField.h
         TaitSurfacePressureForceField.inl
+        TrianglePressureForceField.h
+        TrianglePressureForceField.inl
 
         )
 
@@ -38,6 +40,7 @@ if(SOFA_BUILD_FULLSETCOMPONENTS)
         PlaneForceField.cpp
         SurfacePressureForceField.cpp
         TaitSurfacePressureForceField.cpp
+        TrianglePressureForceField.cpp
         )
     message(STATUS "   With all maintained sofa components.")
 else()

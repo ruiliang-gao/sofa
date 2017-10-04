@@ -61,8 +61,6 @@ set(HEADER_FILES
     ProjectToPointConstraint.inl
     ProjectDirectionConstraint.h
     ProjectDirectionConstraint.inl
-    TrianglePressureForceField.h
-    TrianglePressureForceField.inl
 )
 
 set(SOURCE_FILES
@@ -95,7 +93,6 @@ set(SOURCE_FILES
     ProjectToPlaneConstraint.cpp
     ProjectToPointConstraint.cpp
     ProjectDirectionConstraint.cpp
-    TrianglePressureForceField.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})

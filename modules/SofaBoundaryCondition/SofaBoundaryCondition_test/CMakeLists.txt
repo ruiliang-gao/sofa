@@ -9,17 +9,9 @@ set(SOURCE_FILES)
 ############################## COMPONENTS HERE ARE THE FULL-SET ####################################
 if(SOFA_BUILD_FULLSETCOMPONENTS)
     list(APPEND SOURCE_FILES
-        AffineMovementConstraint_test.cpp
         FixedConstraint_test.cpp
         PartialFixedConstraint.cpp
         PlaneForceField_test.cpp
-        PointConstraint_test.cpp
-        ProjectDirectionConstraint_test.cpp
-        ProjectToLineConstraint_test.cpp
-        ProjectToPlaneConstraint_test.cpp
-        ProjectToPointConstraint_test.cpp
-        QuadPressureForceField_test.cpp
-        SkeletalMotionConstraint_test.cpp
         TrianglePressureForceField_test.cpp
         ConstantForceField_test.cpp
         )

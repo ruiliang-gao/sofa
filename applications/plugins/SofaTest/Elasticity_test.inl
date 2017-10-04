@@ -35,10 +35,14 @@
 #include <SofaGeneralEngine/GenerateCylinder.h>
 
 // Constraint
-#include <SofaBoundaryCondition/ProjectToLineConstraint.h>
 #include <SofaBoundaryCondition/FixedConstraint.h>
+
+#ifdef SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
+#include <SofaBoundaryCondition/ProjectToLineConstraint.h>
 #include <SofaBoundaryCondition/AffineMovementConstraint.h>
 #include <SofaBoundaryCondition/FixedPlaneConstraint.h>
+#endif // SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
+
 
 // ForceField
 #include <SofaBoundaryCondition/TrianglePressureForceField.h>
@@ -92,9 +96,11 @@ Elasticity_test<DataTypes>::createRegularGridScene(
     typedef component::topology::RegularGridTopology RegularGridTopology;
     typedef typename component::engine::BoxROI<DataTypes> BoxRoi;
     typedef typename sofa::component::engine::PairBoxROI<DataTypes> PairBoxRoi;
-    typedef typename component::projectiveconstraintset::AffineMovementConstraint<DataTypes> AffineMovementConstraint;
     typedef component::linearsolver::CGLinearSolver<component::linearsolver::GraphScatteredMatrix, component::linearsolver::GraphScatteredVector> CGLinearSolver;
 
+#ifdef SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
+    typedef typename component::projectiveconstraintset::AffineMovementConstraint<DataTypes> AffineMovementConstraint;
+#endif
     // Root node
     root->setGravity( Coord(0,0,0) );
     root->setAnimate(false);
@@ -136,10 +142,12 @@ Elasticity_test<DataTypes>::createRegularGridScene(
     pairBoxRoi->inclusiveBox.setValue(inclusiveBox);
     pairBoxRoi->includedBox.setValue(includedBox);
 
+#ifdef SOFA_TEST_ELASTICITY_AFFINEMOVEMENT
     //Affine constraint
     patchStruct.affineConstraint  = modeling::addNew<AffineMovementConstraint>(SquareNode,"affineConstraint");
     modeling::setDataLink(&boxRoi->d_indices,&patchStruct.affineConstraint->m_meshIndices);
     modeling::setDataLink(&pairBoxRoi->f_indices,& patchStruct.affineConstraint->m_indices);
+#endif // SOFA_TEST_ELASTICITY_AFFINEMOVEMENT
 
     patchStruct.SquareNode = SquareNode;
     return patchStruct;
@@ -211,12 +219,15 @@ CylinderTractionStruct<DataTypes>  Elasticity_test<DataTypes>::createCylinderTra
     typename component::projectiveconstraintset::FixedConstraint<DataTypes>::SPtr fc=
         modeling::addNew<typename component::projectiveconstraintset::FixedConstraint<DataTypes> >(root);
     sofa::modeling::setDataLink(&boxRoi1->d_indices,&fc->f_indices);
+
+#ifdef SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
     // FixedPlaneConstraint
     typename component::projectiveconstraintset::FixedPlaneConstraint<DataTypes>::SPtr fpc=
         modeling::addNew<typename component::projectiveconstraintset::FixedPlaneConstraint<DataTypes> >(root);
     fpc->dmin= -0.01;
     fpc->dmax= 0.01;
     fpc->direction=Coord(0,0,1);
+#endif // SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
     /// box pressure
     box[0]= -0.2;box[1]= -0.2;box[2]= 0.99;box[3]= 0.2;box[4]= 0.2;box[5]= 1.01;
     vecBox[0]=box;
@@ -228,6 +239,8 @@ CylinderTractionStruct<DataTypes>  Elasticity_test<DataTypes>::createCylinderTra
         modeling::addNew<typename component::forcefield::TrianglePressureForceField<DataTypes> >(root);
     tractionStruct.forceField=tpff;
     sofa::modeling::setDataLink(&boxRoi2->d_triangleIndices,&tpff->triangleList);
+
+#ifdef SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
     // ProjectToLineConstraint
     typename component::projectiveconstraintset::ProjectToLineConstraint<DataTypes>::SPtr ptlc=
         modeling::addNew<typename component::projectiveconstraintset::ProjectToLineConstraint<DataTypes> >(root);
@@ -236,6 +249,7 @@ CylinderTractionStruct<DataTypes>  Elasticity_test<DataTypes>::createCylinderTra
     sofa::helper::vector<unsigned> vArray;
     vArray.push_back(resolutionCircumferential*(resolutionRadial-1)+1);
     ptlc->f_indices.setValue(vArray);
+#endif // SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
 
     return tractionStruct;
 }

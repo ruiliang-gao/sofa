@@ -22,7 +22,7 @@
 #ifndef SOFA_COMPONENT_FORCEFIELD_TrianglePressureForceField_INL
 #define SOFA_COMPONENT_FORCEFIELD_TrianglePressureForceField_INL
 
-#include <SofaSpecificBoundaryConditions/TrianglePressureForceField.h>
+#include <SofaBoundaryCondition//TrianglePressureForceField.h>
 #include <SofaBaseTopology/TriangleSetTopologyContainer.h>
 #include <SofaBaseTopology/CommonAlgorithms.h>
 #include <SofaBaseTopology/TopologySparseData.inl>

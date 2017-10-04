@@ -23,6 +23,9 @@
 #define SOFA_Elasticity_test_H
 
 
+#pragma message("Elasticity_test: TODO check if SpecificBoundary has been built !")
+//#define SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS 1
+
 #include "Sofa_test.h"
 #include <SceneCreator/SceneCreator.h>
 #include <sofa/defaulttype/VecTypes.h>
@@ -32,8 +35,11 @@
 
 #include <SofaBaseTopology/TopologySparseData.inl>
 #include <SofaBoundaryCondition/TrianglePressureForceField.h>
-#include <SofaBoundaryCondition/AffineMovementConstraint.h>
 #include <SofaBaseMechanics/MechanicalObject.h>
+
+#ifdef SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
+#include <SofaSpecificBoundaryConditions/AffineMovementConstraint.h>
+#endif // SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
 
 namespace sofa {
 
@@ -42,7 +48,9 @@ template<class T>
 struct PatchTestStruct
 {
    simulation::Node::SPtr SquareNode;
+#ifdef SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
    typename component::projectiveconstraintset::AffineMovementConstraint<T>::SPtr affineConstraint;
+#endif // SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
    typename component::container::MechanicalObject<T>::SPtr dofs;
 };
 

@@ -1,18 +1,22 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(SofaGeneralSimpleFem_test)
+project(SofaSpecificBoundaryConditions_test)
 
-message(STATUS "SofaGeneralSimpleFem_test:")
+message(STATUS "SofaSpecificBoundaryConditions_test:")
 ################################ COMPONENTS HERE ARE THE NG-SET ####################################
-set(SOURCE_FILES
-)
-
+set(SOURCE_FILES)
 
 ############################## COMPONENTS HERE ARE THE FULL-SET ####################################
 if(SOFA_BUILD_FULLSETCOMPONENTS)
     list(APPEND SOURCE_FILES
-        #AffinePatch_test.cpp
-        LinearElasticity_test.cpp
+        AffineMovementConstraint_test.cpp
+        PointConstraint_test.cpp
+        ProjectDirectionConstraint_test.cpp
+        ProjectToLineConstraint_test.cpp
+        ProjectToPlaneConstraint_test.cpp
+        ProjectToPointConstraint_test.cpp
+        QuadPressureForceField_test.cpp
+        SkeletalMotionConstraint_test.cpp
         )
     message(STATUS "   With all maintained sofa components.")
 else()
@@ -21,12 +25,12 @@ endif()
 
 ############################### COMPONENTS HERE ARE DEPRECATED ####################################
 if(SOFA_BUILD_DEPRECATEDCOMPONENTS)
-    message(STATUS "   With deprecated components.")
+    message(STATUS "  With deprecated components.")
 else()
-    message(STATUS "   Without deprecated components.")
+    message(STATUS "  Without deprecated components.")
 endif()
 
-add_definitions("-DSOFAGENERALSIMPLEFEM_TEST_SCENES_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/scenes\"")
+add_definitions("-DSOFABOUNDARYCONDITION_TEST_SCENES_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/scenes\"")
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} SofaGTestMain SofaTest)
 

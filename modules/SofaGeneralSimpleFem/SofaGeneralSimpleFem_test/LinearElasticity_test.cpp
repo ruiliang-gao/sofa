@@ -30,11 +30,9 @@
 #include <SofaGeneralSimpleFem/TetrahedralCorotationalFEMForceField.h>
 #include <SofaBaseTopology/TopologySparseData.inl>
 #include <SofaBoundaryCondition/TrianglePressureForceField.h>
-#include <SofaBoundaryCondition/AffineMovementConstraint.h>
 #include <SofaBaseLinearSolver/CGLinearSolver.h>
 #include <SofaGeneralEngine/PairBoxRoi.h>
 #include <SofaImplicitOdeSolver/StaticSolver.h>
-#include <SofaBoundaryCondition/ProjectToLineConstraint.h>
 #include <SofaMiscForceField/MeshMatrixMass.h>
 
 namespace sofa {

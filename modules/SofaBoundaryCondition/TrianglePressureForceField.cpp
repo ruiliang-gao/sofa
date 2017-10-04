@@ -21,7 +21,7 @@
 ******************************************************************************/
 #define SOFA_COMPONENT_FORCEFIELD_TRIANGLEPRESSUREFORCEFIELD_CPP
 
-#include <SofaSpecificBoundaryConditions/TrianglePressureForceField.inl>
+#include <SofaBoundaryCondition/TrianglePressureForceField.inl>
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/defaulttype/Vec3Types.h>
 
@@ -52,10 +52,10 @@ int TrianglePressureForceFieldClass = core::RegisterObject("TrianglePressure")
         ;
 
 #ifndef SOFA_FLOAT
-template class SOFA_SPECIFIC_BOUNDARY_CONDITIONS_API TrianglePressureForceField<Vec3dTypes>;
+template class SOFA_BOUNDARY_CONDITION_API TrianglePressureForceField<Vec3dTypes>;
 #endif
 #ifndef SOFA_DOUBLE
-template class SOFA_SPECIFIC_BOUNDARY_CONDITIONS_API TrianglePressureForceField<Vec3fTypes>;
+template class SOFA_BOUNDARY_CONDITION_API TrianglePressureForceField<Vec3fTypes>;
 #endif
 
 
