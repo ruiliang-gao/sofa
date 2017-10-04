@@ -19,22 +19,17 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_DENSE_SOLVER_INIT_H
-#define SOFA_COMPONENT_DENSE_SOLVER_INIT_H
-#include "config.h"
+#include <SofaDenseSolver/SofaDenseSolver.h>
+#include <sofa/core/Plugin.h>
 
-namespace sofa
-{
+class SofaDenseSolver: public sofa::core::Plugin {
+public:
+    SofaDenseSolver(): Plugin("SofaDenseSolver") {
+        setDescription("");
+        setVersion("");
+        setLicense("LGPL");
+        setAuthors("The SOFA Team");
+    }
+};
 
-namespace component
-{
-
-
-void SOFA_DENSE_SOLVER_API initDenseSolver();
-
-} // namespace component
-
-} // namespace sofa
-
-#endif
-
+SOFA_PLUGIN(SofaDenseSolver);

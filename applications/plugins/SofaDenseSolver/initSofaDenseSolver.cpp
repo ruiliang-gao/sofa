@@ -20,7 +20,7 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 #include <sofa/helper/system/config.h>
-#include <SofaDenseSolver/initDenseSolver.h>
+#include <SofaDenseSolver/initSofaDenseSolver.h>
 
 
 

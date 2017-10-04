@@ -21,7 +21,7 @@
 ******************************************************************************/
 #ifndef SOFA_COMPONENT_LINEARSOLVER_NEWMATMATRIX_H
 #define SOFA_COMPONENT_LINEARSOLVER_NEWMATMATRIX_H
-#include "config.h"
+#include "SofaDenseSolver.h"
 
 #include <sofa/defaulttype/BaseMatrix.h>
 #include <SofaBaseLinearSolver/MatrixLinearSolver.h>
