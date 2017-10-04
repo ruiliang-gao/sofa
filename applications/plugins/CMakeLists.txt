@@ -5,6 +5,8 @@ add_subdirectory(../../extlibs/CImg extlibs/CImg)
 
 find_package(SofaFramework)
 
+sofa_add_plugin(SofaOpenglShapes SofaOpenglShapes)
+sofa_add_plugin(SofaOpenglAdvanced SofaOpenglAdvanced)
 sofa_add_plugin(SofaEulerianFluid SofaEulerianFluid)
 sofa_add_plugin(SofaSpecificUserInteraction SofaSpecificUserInteraction ON) #mandatory for SofaGuiQt
 sofa_add_plugin(SofaSphFluid SofaSphFluid ON)

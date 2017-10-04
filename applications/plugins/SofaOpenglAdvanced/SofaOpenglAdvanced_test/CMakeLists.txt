@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(SofaOpenglVisual_test)
+project(SofaOpenGLAdvanced_test)
 
 
 message(STATUS "SofaOpenglVisual:")
@@ -11,13 +11,8 @@ set(SOURCE_FILES)
 
 ############################## COMPONENTS HERE ARE THE FULL-SET ####################################
 if(SOFA_BUILD_FULLSETCOMPONENTS)
-    ## MAC-OS crash when we are testing opengl feature.
-    if(NOT CMAKE_SYSTEM_NAME STREQUAL Darwin)
-        list(APPEND SOURCE_FILES
-                  Light_test.cpp
-                  LightManager_test.cpp
-                  ClipPlane_test.cpp)
-     endif()
+    list(APPEND SOURCE_FILES
+            OglLabel_test.cpp )
 
     message(STATUS "   With all maintained sofa components.")
 else()
