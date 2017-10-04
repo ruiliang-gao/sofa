@@ -19,12 +19,8 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#define SOFA_COMPONENT_FORCEFIELD_NONUNIFORMHEXAHEDRONFEMFORCEFIELDANDMASS_CPP
-
-#include "NonUniformHexahedronFEMForceFieldAndMass.inl"
-#include <sofa/defaulttype/VecTypes.h>
-#include <sofa/core/ObjectFactory.h>
-//#include <typeinfo>
+#include <sofa/helper/system/config.h>
+#include <SofaSpecificNonUniformFem/initSofaSpecificNonUniformFEM.h>
 
 
 namespace sofa
@@ -33,33 +29,16 @@ namespace sofa
 namespace component
 {
 
-namespace forcefield
+
+void initSofaSpecificNonUniformFem()
 {
-
-using namespace sofa::defaulttype;
-
-SOFA_DECL_CLASS(NonUniformHexahedronFEMForceFieldAndMass)
-
-// Register in the Factory
-int NonUniformHexahedronFEMForceFieldAndMassClass = core::RegisterObject("Non uniform Hexahedral finite elements")
-#ifndef SOFA_FLOAT
-        .add< NonUniformHexahedronFEMForceFieldAndMass<Vec3dTypes> >()
-#endif
-#ifndef SOFA_DOUBLE
-        .add< NonUniformHexahedronFEMForceFieldAndMass<Vec3fTypes> >()
-#endif
-        ;
-
-#ifndef SOFA_FLOAT
-template class SOFA_NON_UNIFORM_FEM_API NonUniformHexahedronFEMForceFieldAndMass<Vec3dTypes>;
-#endif
-#ifndef SOFA_DOUBLE
-template class SOFA_NON_UNIFORM_FEM_API NonUniformHexahedronFEMForceFieldAndMass<Vec3fTypes>;
-#endif
-
-} // namespace forcefield
+    static bool first = true;
+    if (first)
+    {
+        first = false;
+    }
+}
 
 } // namespace component
 
 } // namespace sofa
-

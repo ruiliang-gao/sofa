@@ -48,6 +48,7 @@ sofa_add_plugin(LeapMotion LeapMotion)
 sofa_add_plugin(Geomagic Geomagic)
 sofa_add_plugin(CImgPlugin CImgPlugin ON) # ON by default
 sofa_add_plugin(SofaDenseSolver SofaDenseSolver ON)
+sofa_add_plugin(SofaSpecificNonUniformFem SofaSpecificNonUniformFem ON) # Depends on SofaDenseSolver
 
 
 #if((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU") AND (${CMAKE_SYSTEM_NAME} MATCHES "Linux"))

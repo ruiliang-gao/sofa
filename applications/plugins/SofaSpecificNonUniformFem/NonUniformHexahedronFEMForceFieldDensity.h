@@ -21,10 +21,10 @@
 ******************************************************************************/
 #ifndef SOFA_COMPONENT_FORCEFIELD_NONUNIFORMHEXAHEDRONFEMFORCEFIELDDENSITY_H
 #define SOFA_COMPONENT_FORCEFIELD_NONUNIFORMHEXAHEDRONFEMFORCEFIELDDENSITY_H
-#include "config.h"
+#include "SofaSpecificNonUniformFem.h"
 
 
-#include <SofaNonUniformFem/NonUniformHexahedronFEMForceFieldAndMass.h>
+#include <SofaSpecificNonUniformFem/NonUniformHexahedronFEMForceFieldAndMass.h>
 #include <sofa/core/objectmodel/DataFileName.h>
 
 namespace sofa
@@ -112,10 +112,10 @@ using sofa::defaulttype::Vec3fTypes;
 #if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_FORCEFIELD_NONUNIFORMHEXAHEDRONFEMFORCEFIELDDENSITY_CPP)
 
 #ifndef SOFA_FLOAT
-extern template class SOFA_NON_UNIFORM_FEM_API NonUniformHexahedronFEMForceFieldDensity<Vec3dTypes>;
+extern template class SOFA_SPECIFIC_NON_UNIFORM_FEM_API NonUniformHexahedronFEMForceFieldDensity<Vec3dTypes>;
 #endif
 #ifndef SOFA_DOUBLE
-extern template class SOFA_NON_UNIFORM_FEM_API NonUniformHexahedronFEMForceFieldDensity<Vec3fTypes>;
+extern template class SOFA_SPECIFIC_NON_UNIFORM_FEM_API NonUniformHexahedronFEMForceFieldDensity<Vec3fTypes>;
 #endif
 
 #endif // defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_FORCEFIELD_NONUNIFORMHEXAHEDRONFEMFORCEFIELDDENSITY_CPP)

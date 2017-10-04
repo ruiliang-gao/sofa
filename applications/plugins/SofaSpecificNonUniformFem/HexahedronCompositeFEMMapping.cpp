@@ -20,7 +20,7 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 #define SOFA_COMPONENT_MAPPING_HEXAHEDRONCOMPOSITEFEMMAPPING_CPP
-#include <SofaNonUniformFem/HexahedronCompositeFEMMapping.inl>
+#include <SofaSpecificNonUniformFem/HexahedronCompositeFEMMapping.inl>
 #include <sofa/core/ObjectFactory.h>
 //#include <sofa/core/behavior/MappedModel.h>
 #include <sofa/core/behavior/MechanicalState.h>

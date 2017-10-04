@@ -22,7 +22,7 @@
 #ifndef SOFA_COMPONENT_FORCEFIELD_NONUNIFORMHEXAHEDRALFEMFORCEFIELDANDMASS_INL
 #define SOFA_COMPONENT_FORCEFIELD_NONUNIFORMHEXAHEDRALFEMFORCEFIELDANDMASS_INL
 
-#include <SofaNonUniformFem/NonUniformHexahedralFEMForceFieldAndMass.h>
+#include <SofaSpecificNonUniformFem/NonUniformHexahedralFEMForceFieldAndMass.h>
 #include <sofa/core/visual/VisualParams.h>
 #include <SofaNonUniformFem/MultilevelHexahedronSetTopologyContainer.h>
 #include <SofaBaseTopology/TopologyData.inl>

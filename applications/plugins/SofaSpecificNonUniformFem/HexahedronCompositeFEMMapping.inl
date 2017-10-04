@@ -22,7 +22,7 @@
 #ifndef SOFA_COMPONENT_MAPPING_HexahedronCompositeFEMMapping_INL
 #define SOFA_COMPONENT_MAPPING_HexahedronCompositeFEMMapping_INL
 
-#include <SofaNonUniformFem/HexahedronCompositeFEMMapping.h>
+#include <SofaSpecificNonUniformFem/HexahedronCompositeFEMMapping.h>
 #include <sofa/core/visual/VisualParams.h>
 #include <sofa/simulation/Simulation.h>
 #include <sofa/defaulttype/VecTypes.h>

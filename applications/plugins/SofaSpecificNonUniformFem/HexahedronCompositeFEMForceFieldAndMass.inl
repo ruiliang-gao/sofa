@@ -22,7 +22,7 @@
 #ifndef SOFA_COMPONENT_FORCEFIELD_HEXAHEDRONCOMPOSITEFEMFORCEFIELD_INL
 #define SOFA_COMPONENT_FORCEFIELD_HEXAHEDRONCOMPOSITEFEMFORCEFIELD_INL
 
-#include <SofaNonUniformFem/HexahedronCompositeFEMForceFieldAndMass.h>
+#include <SofaSpecificNonUniformFem/HexahedronCompositeFEMForceFieldAndMass.h>
 #include <sofa/core/visual/VisualParams.h>
 
 
