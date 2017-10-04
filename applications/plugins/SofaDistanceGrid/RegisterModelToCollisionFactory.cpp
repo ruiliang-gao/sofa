@@ -35,8 +35,9 @@ using sofa::core::collision::Contact ;
 #include <SofaMeshCollision/IdentityContactMapper.h>
 
 #include <SofaConstraint/FrictionContact.inl>
-#include <SofaConstraint/BarycentricDistanceLMConstraintContact.inl>
-
+#ifdef SOFA_HAVE_SOFALMCONSTRAINT
+#include <SofaLMConstraint/BarycentricDistanceLMConstraintContact.inl>
+#endif
 #include <SofaMiscCollision/BarycentricStickContact.inl>
 
 #include "components/collision/DistanceGridCollisionModel.h"
@@ -86,6 +87,7 @@ Creator<Contact::Factory, FrictionContact<FFDDistanceGridCollisionModel, Triangl
 
 
 /////////////////////////////////////// BarycentricDistanceLMConstraint ///////////////////////////////////
+#ifdef SOFA_HAVE_SOFALMCONSTRAINT
 Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<RigidDistanceGridCollisionModel, RigidDistanceGridCollisionModel> > DistanceGridDistanceGridDistanceLMConstraintContactClass("distanceLMConstraint",true);
 Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<RigidDistanceGridCollisionModel, PointModel> > DistanceGridPointDistanceLMConstraintContactClass("distanceLMConstraint",true);
 Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<RigidDistanceGridCollisionModel, SphereModel> > DistanceGridSphereDistanceLMConstraintContactClass("distanceLMConstraint",true);
@@ -96,7 +98,7 @@ Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<FFDDistanceGrid
 Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<FFDDistanceGridCollisionModel, PointModel> > FFDDistanceGridPointDistanceLMConstraintContactClass("distanceLMConstraint",true);
 Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<FFDDistanceGridCollisionModel, SphereModel> > FFDDistanceGridSphereDistanceLMConstraintContactClass("distanceLMConstraint",true);
 Creator<Contact::Factory, BarycentricDistanceLMConstraintContact<FFDDistanceGridCollisionModel, TriangleModel> > FFDDistanceGridTriangleDistanceLMConstraintContactClass("distanceLMConstraint",true);
-
+#endif
 
 } /// collision
 } /// component

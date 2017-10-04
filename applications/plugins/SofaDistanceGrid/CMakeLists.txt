@@ -47,6 +47,12 @@ add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${EXTRA_FILES
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaMeshCollision SofaMiscCollision ${SOFAADVANCED_DEPENDENCY_LINK})
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaUserInteraction)
 
+find_package(SofaLMConstraint QUIET)
+if(SofaLMConstraint_FOUND)
+    add_definitions("-DSOFA_HAVE_SOFALMCONSTRAINT")
+    target_link_libraries(${PROJECT_NAME} PUBLIC SofaLMConstraint)
+endif()
+
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_HAVE_SOFADISTANCEGRID")
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
 
