@@ -22,7 +22,7 @@
 ******************************************************************************/
 
 #include <SofaTest/Sofa_test.h>
-#include <SofaBoundaryCondition/PointConstraint.h>
+#include <SofaSpecificBoundaryConditions/PointConstraint.h>
 #include <sofa/defaulttype/VecTypes.h>
 #include <sofa/simulation/Simulation.h>
 #include <SofaSimulationGraph/DAGSimulation.h>

@@ -19,10 +19,13 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
+
+#define SOFA_TEST_SPECIFIC_BOUNDARY_CONDITIONS
+
 // Base class
 #include <SofaTest/ForceField_test.h>
 //Force field
-#include <SofaBoundaryCondition/QuadPressureForceField.h>
+#include <SofaSpecificBoundaryConditions/QuadPressureForceField.h>
 #include <SofaBaseTopology/TopologySparseData.inl>
 
 #include <SofaTest/TestMessageHandler.h>
