@@ -14,7 +14,18 @@ if(SOFA_HAVE_QT_LIBRARIES)
         sofa_add_application(Modeler Modeler ON)
 endif()
 
-sofa_add_application(GenerateRigid GenerateRigid)
+############################## COMPONENTS HERE ARE THE FULL-SET ####################################
 sofa_add_application(meshconv meshconv OFF)
-sofa_add_application(runSofa runSofa ON)
-sofa_add_application(SofaPhysicsAPI SofaPhysicsAPI)
+if(SOFA_BUILD_FULLSETCOMPONENTS)
+    sofa_add_application(GenerateRigid GenerateRigid)
+    sofa_add_application(meshconv meshconv OFF)
+    sofa_add_application(SofaPhysicsAPI SofaPhysicsAPI)
+endif()
+
+############################### COMPONENTS HERE ARE DEPRECATED ####################################
+if(SOFA_BUILD_DEPRECATEDCOMPONENTS)
+    message(STATUS "   With deprecated components.")
+    sofa_add_application(runSofa runSofa ON)
+else()
+    message(STATUS "   Without deprecated components.")
+endif()
