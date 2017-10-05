@@ -11,7 +11,7 @@ set(SOURCE_FILES
 )
 
 
-message(STATUS "SofaMisc:")
+message(STATUS "SofaValidation:")
 ################################ COMPONENTS HERE ARE THE NG-SET ####################################
 set(HEADER_FILES
     config.h
