@@ -6,36 +6,57 @@ set(SOFASPECIFICNONUNIFORMFEM_VERSION 1.0)
 # Dependencies
 find_package(SofaDenseSolver)
 
+
+message(STATUS "SofaMisc:")
+################################ COMPONENTS HERE ARE THE NG-SET ####################################
 set(HEADER_FILES
     SofaSpecificNonUniformFem.h
     initSofaSpecificNonUniformFem.h
-    HexahedronCompositeFEMMapping.h
-    HexahedronCompositeFEMMapping.inl
-    NonUniformHexahedralFEMForceFieldAndMass.h
-    NonUniformHexahedralFEMForceFieldAndMass.inl
-    NonUniformHexahedronFEMForceFieldAndMass.h
-    NonUniformHexahedronFEMForceFieldAndMass.inl
-    # NonUniformHexahedronFEMForceFieldDensity.h
-    # NonUniformHexahedronFEMForceFieldDensity.inl
 )
 
 set(SOURCE_FILES
     initSofaSpecificNonUniformFem.cpp
-    HexahedronCompositeFEMMapping.cpp
-    NonUniformHexahedralFEMForceFieldAndMass.cpp
-    NonUniformHexahedronFEMForceFieldAndMass.cpp
-    # NonUniformHexahedronFEMForceFieldDensity.cpp
 )
 
-if(${SofaDenseSolver_FOUND})
+############################## COMPONENTS HERE ARE THE FULL-SET ####################################
+if(SOFA_BUILD_FULLSETCOMPONENTS)
     list(APPEND HEADER_FILES
-         HexahedronCompositeFEMForceFieldAndMass.h
-         HexahedronCompositeFEMForceFieldAndMass.inl
-    )
+       HexahedronCompositeFEMMapping.h
+        HexahedronCompositeFEMMapping.inl
+        NonUniformHexahedralFEMForceFieldAndMass.h
+        NonUniformHexahedralFEMForceFieldAndMass.inl
+        NonUniformHexahedronFEMForceFieldAndMass.h
+        NonUniformHexahedronFEMForceFieldAndMass.inl
+        )
     list(APPEND SOURCE_FILES
-         HexahedronCompositeFEMForceFieldAndMass.cpp
-    )
+        HexahedronCompositeFEMMapping.cpp
+        NonUniformHexahedralFEMForceFieldAndMass.cpp
+        NonUniformHexahedronFEMForceFieldAndMass.cpp
+        )
+
+    if(${SofaDenseSolver_FOUND})
+        list(APPEND HEADER_FILES
+             HexahedronCompositeFEMForceFieldAndMass.h
+             HexahedronCompositeFEMForceFieldAndMass.inl
+        )
+        list(APPEND SOURCE_FILES
+             HexahedronCompositeFEMForceFieldAndMass.cpp
+        )
+    endif()
+
+    message(STATUS "   With all maintained sofa components.")
+else()
+    message(STATUS "   With only a minimal set of components.")
 endif()
+
+############################### COMPONENTS HERE ARE DEPRECATED ####################################
+if(SOFA_BUILD_DEPRECATEDCOMPONENTS)
+    message(STATUS "   With deprecated components.")
+else()
+    message(STATUS "   Without deprecated components.")
+
+endif()
+
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 if(${SofaDenseSolver_FOUND})
