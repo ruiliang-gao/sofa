@@ -1,0 +1,4 @@
+# CMake package configuration file for @PROJECT_NAME@
+@PACKAGE_INIT@
+
+
