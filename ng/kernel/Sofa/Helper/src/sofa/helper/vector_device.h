@@ -24,7 +24,7 @@
 
 #ifndef PS3
 #include "system/gl.h"
-#include <sofa/helper/vector.h>
+#include <sofa/helper/types/vector.h>
 
 // maximum number of bytes we allow to increase the size when of a vector in a single step when we reserve on the host or device
 #define SOFA_VECTOR_HOST_STEP_SIZE 32768
@@ -52,7 +52,7 @@ namespace sofa
 namespace helper
 {
 
-DEBUG_OUT_V(extern SOFA_HELPER_API int cptid;)
+DEBUG_OUT_V(extern SOFA_HELPER_TYPES_API int cptid;)
 
 template <class T, class MemoryManager >
 class vector

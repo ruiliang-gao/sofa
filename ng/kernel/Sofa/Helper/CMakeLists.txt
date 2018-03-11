@@ -5,6 +5,7 @@ find_package(nlohmann_json)
 find_package(Eigen)
 find_package(Sofa.Config)
 find_package(Sofa.Messaging)
+find_package(Sofa.Helper.Types)
 
 set(HEADER_FILES
     src/sofa/helper/ArgumentParser.h
@@ -21,13 +22,12 @@ set(HEADER_FILES
     src/sofa/helper/LCPSolver.inl
     src/sofa/helper/LCPcalc.h
     src/sofa/helper/MatEigen.h
-    src/sofa/helper/OptionsGroup.h
     src/sofa/helper/OwnershipSPtr.h
     src/sofa/helper/StateMask.h
-    src/sofa/helper/Polynomial_LD.h            # Compatibility layer
+    #src/sofa/helper/Polynomial_LD.h            # Compatibility layer
     #src/sofa/helper/Quater.h                   # Compatibility layer
     src/sofa/helper/RandomGenerator.h
-    src/sofa/helper/SVector.h
+    #src/sofa/helper/SVector.h
     src/sofa/helper/SimpleTimer.h
     src/sofa/helper/SortedPermutation.h
     src/sofa/helper/StringUtils.h
@@ -36,20 +36,20 @@ set(HEADER_FILES
     src/sofa/helper/config.h
     src/sofa/helper/decompose.h
     src/sofa/helper/deprecatedcomponents.h
-    src/sofa/helper/hash.h
+    #src/sofa/helper/hash.h
     src/sofa/helper/helper.h
     src/sofa/helper/init.h
-    src/sofa/helper/integer_id.h
+    #src/sofa/helper/integer_id.h
     src/sofa/helper/io/BaseFileAccess.h
     src/sofa/helper/io/FileAccess.h
     src/sofa/helper/io/File.h
     src/sofa/helper/json.h
-    src/sofa/helper/list.h
-    src/sofa/helper/map.h
-    src/sofa/helper/map_ptr_stable_compare.h
+    #src/sofa/helper/list.h
+    #src/sofa/helper/map.h
+    #src/sofa/helper/map_ptr_stable_compare.h
     src/sofa/helper/polygon_cube_intersection/polygon_cube_intersection.h
     src/sofa/helper/polygon_cube_intersection/vec.h
-    src/sofa/helper/stable_vector.h
+    #src/sofa/helper/stable_vector.h
     src/sofa/helper/system/DynamicLibrary.h
     src/sofa/helper/system/FileSystem.h
     src/sofa/helper/system/Locale.h
@@ -69,9 +69,9 @@ set(HEADER_FILES
     src/sofa/helper/system/thread/thread_specific_ptr.h
     src/sofa/helper/system/FileMonitor.h
     src/sofa/helper/system/FileRepository.h
-    src/sofa/helper/vectorData.h
-    src/sofa/helper/vectorLinks.h
-    src/sofa/helper/vector_algebra.h
+    #src/sofa/helper/vectorData.h
+    #src/sofa/helper/vectorLinks.h
+    #src/sofa/helper/vector_algebra.h
     src/sofa/helper/vector_device.h
     src/sofa/helper/logging/Messaging.h
     src/sofa/helper/logging/Message.h
@@ -93,7 +93,7 @@ set(HEADER_FILES
     src/sofa/helper/logging/ExceptionMessageHandler.h
     src/sofa/helper/system/thread/TimeoutWatchdog.h
     src/sofa/helper/system/FileRepository.h
-    src/sofa/helper/types/Material.h
+    #src/sofa/helper/types/Material.h
 )
 
 set(SOURCE_FILES
@@ -102,8 +102,7 @@ set(SOURCE_FILES
     src/sofa/helper/BackTrace.cpp
     src/sofa/helper/Factory.cpp
     src/sofa/helper/LCPcalc.cpp
-    src/sofa/helper/OptionsGroup.cpp
-    src/sofa/helper/SVector.cpp
+    #src/sofa/helper/SVector.cpp
     src/sofa/helper/RandomGenerator.cpp
     src/sofa/helper/TagFactory.cpp
     src/sofa/helper/Utils.cpp
@@ -112,7 +111,7 @@ set(SOURCE_FILES
     src/sofa/helper/io/BaseFileAccess.cpp
     src/sofa/helper/io/FileAccess.cpp
     src/sofa/helper/io/File.cpp
-    src/sofa/helper/types/Material.cpp
+    #src/sofa/helper/types/Material.cpp
     src/sofa/helper/polygon_cube_intersection/fast_polygon_cube_intersection.cpp
     src/sofa/helper/polygon_cube_intersection/polygon_cube_intersection.cpp
     src/sofa/helper/system/DynamicLibrary.cpp
@@ -144,7 +143,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL Windows)
 endif()
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SHADER_FILES} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} PUBLIC Sofa.Config Sofa.Messaging nlohmann_json Eigen)
+target_link_libraries(${PROJECT_NAME} PUBLIC Sofa.Config Sofa.Messaging Sofa.Helper.Types nlohmann_json Eigen)
 target_compile_definitions(${PROJECT_NAME} PRIVATE "-DBUILD_TARGET_SOFA_HELPER")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>")
 

@@ -26,7 +26,7 @@
 #include <sofa/helper/system/thread/thread_specific_ptr.h>
 #include <sofa/helper/system/atomic.h>
 #include <sofa/helper/vector.h>
-#include <sofa/helper/map.h>
+#include <sofa/helper/types/map.h>
 #include <sofa/helper/json.h>
 
 
