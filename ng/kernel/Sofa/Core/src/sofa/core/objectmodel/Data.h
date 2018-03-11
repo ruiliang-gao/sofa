@@ -606,6 +606,8 @@ extern template class SOFA_CORE_API Data< bool >;
 namespace helper
 {
 
+namespace types
+{
 
 /// @warning the Data is updated (if needed) only by the Accessor constructor
 template<class T>
@@ -717,7 +719,7 @@ inline ReadAccessor<core::objectmodel::Data<T> > read(core::objectmodel::Data<T>
 template<class T>
 inline WriteOnlyAccessor<core::objectmodel::Data<T> > writeOnly(core::objectmodel::Data<T>& data) { return WriteOnlyAccessor<core::objectmodel::Data<T> >(data); }
 
-
+} // namespace types
 } // namespace helper
 
 // the Data class is used everywhere

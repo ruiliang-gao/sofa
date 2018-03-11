@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 add_subdirectory(Config)
 add_subdirectory(Messaging)
+add_subdirectory(Helper.Types)
 add_subdirectory(Helper)
 add_subdirectory(DefaultType)
 add_subdirectory(Helper.Image)
@@ -10,4 +11,3 @@ add_subdirectory(Helper.BVH)
 add_subdirectory(Helper.Mesh)
 add_subdirectory(Core)
 add_subdirectory(Simulation)
-

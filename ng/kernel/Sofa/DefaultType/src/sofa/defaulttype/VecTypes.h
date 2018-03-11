@@ -691,6 +691,7 @@ struct DataTypeInfo< sofa::defaulttype::ResizableExtVector<T> > : public VectorT
 
 namespace helper
 {
+namespace types {
 
 template<class T>
 class ReadAccessor< defaulttype::ExtVector<T> > : public ReadAccessorVector< defaulttype::ExtVector<T> >
@@ -727,6 +728,8 @@ public:
     typedef typename Inherit::container_type container_type;
     WriteAccessor(container_type& c) : Inherit(c) {}
 };
+
+} // namespace types
 
 } // namespace helper
 
