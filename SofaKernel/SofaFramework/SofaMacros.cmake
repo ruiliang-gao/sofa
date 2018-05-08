@@ -162,7 +162,7 @@ endmacro()
 macro(sofa_add_generic directory name type)
 
     if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/${directory}" AND IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${directory}")
-
+        message(STATUS "sofa_add_generic: Adding ${name} of type ${type} in directory ${directory}")
         string(TOUPPER ${type}_${name} option)
 
         # optional parameter to activate/desactivate the option
@@ -170,7 +170,10 @@ macro(sofa_add_generic directory name type)
         set(active OFF)
         if(${ARGV3})
             if( ${ARGV3} STREQUAL ON )
+                message(STATUS "Setting ${name} to ON")
                 set(active ON)
+            else()
+                message(STATUS "Setting ${name} to OFF (default)")
             endif()
         endif()
 
@@ -239,6 +242,7 @@ macro(sofa_set_python_directory plugin_name directory)
 endmacro()
 
 macro(sofa_add_plugin directory plugin_name)
+    message(STATUS "Adding plugin ${plugin_name} in directory ${directory}")
     sofa_add_generic( ${directory} ${plugin_name} "Plugin" ${ARGV2} )
 endmacro()
 
