@@ -47,6 +47,16 @@
 #include <SofaBaseTopology/TopologyData.inl>
 #endif // SOFA_HAVE_NEW_TOPOLOGYCHANGES
 
+//Zykl.io begin
+#ifdef _WIN32
+#include <gl/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#include <SofaBoundaryCondition/ConstantForceField.h>
+//Zykl.io end
+
 namespace
 {
 
@@ -113,6 +123,20 @@ MechanicalObject<DataTypes>::MechanicalObject()
     , f_reserve(initData(&f_reserve, 0, "reserve", "Size to reserve when creating vectors. (default=0)"))
     , m_gnuplotFileX(NULL)
     , m_gnuplotFileV(NULL)
+    //Zykl.io begin
+    , forceVisualScale(initData(&forceVisualScale, 1.0, "forceVisualScale", "Scale for force display."))
+    , drawVertexInformation(initData(&drawVertexInformation, -1, "drawVertexInformation", "Draw vertex information. -1 = off; >0: index of the vertex to draw"))
+    //, storedX(initData(&storedX, VecCoord(), "tst", "tst"))
+    , storedX()
+    , extentX(0.0), extentY(0.0), extentZ(0.0)
+    , extentDataWritten(false)
+    , extentChangeWriteThreshold(initData(&extentChangeWriteThreshold, 0.0001, "extentChangeWriteThreshold", "Extent data is only written to file when the average movement since the last step falls below this value."))
+    , extentTimeWriteThreshold(initData(&extentTimeWriteThreshold, 1.0, "extentTimeWriteThreshold", "Extent data is only written to file when the simulation time is above this value."))
+    , lastExtent()
+    , lastIterationsExtent()
+    , currentlyAddedExtent(0.0)
+    , numberOfIterationsToAdd(60)
+    //Zykl.io end
 {
     m_initialized = false;
 
@@ -1160,6 +1184,9 @@ void MechanicalObject<DataTypes>::init()
         if (l_topology && l_topology->hasPos() )
         {
             int nbp = l_topology->getNbPoints();
+            // Zykl.io begin
+            if (nbp < 0) nbp = 0;	 // HACK (BE)
+            // Zykl.io end
 
           // copy the last specified velocity to all points
             if (v_wA.size() >= 1 && v_wA.size() < (unsigned)nbp)
@@ -2713,6 +2740,20 @@ SReal MechanicalObject<DataTypes>::getConstraintJacobianTimesVecDeriv(unsigned i
     return result;
 }
 
+// Zykl.io begin
+template <class DataTypes>
+void MechanicalObject<DataTypes>::resetTransformations()
+{
+    const Vector3 zero(0,0,0);
+    translation.setValue(zero);
+    rotation.setValue(zero);
+    rotationQuat.setValue(Quaternion(0,0,0,1));
+    scale.setValue(Vector3(1,1,1));
+    translation2.setValue(zero);
+    rotation2.setValue(zero);
+}
+// Zykl.io end
+
 template <class DataTypes>
 inline void MechanicalObject<DataTypes>::drawIndices(const core::visual::VisualParams* vparams)
 {
@@ -2811,6 +2852,96 @@ inline void MechanicalObject<DataTypes>::draw(const core::visual::VisualParams* 
             break;
         }
     }
+
+    //Zykl.io begin
+    if (drawVertexInformation.getValue() >= 0)
+    {
+        int vertexIndex = this->drawVertexInformation.getValue();
+        glColor3f(1.0, 1.0, 1.0);
+        //float scale = (float)( ( vparams->sceneBBox().maxBBox() - vparams->sceneBBox().minBBox() ).norm() * showIndicesScale.getValue() );
+        float scale = (float)((this->f_bbox.getValue().maxBBox() - this->f_bbox.getValue().minBBox()).norm() * showIndicesScale.getValue() * 0.1); // last factor could probably be replaced by different standard value for showIndicesScale
+
+        Mat<4, 4, GLfloat> modelviewM;
+
+        std::ostringstream oss;
+        //oss << vertexIndex;
+        //oss << "Banaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaane!";
+
+        VecDeriv frc = getForce();
+        Vec3d vertexForce(frc[vertexIndex][0] * forceVisualScale.getValue(), frc[vertexIndex][1] * forceVisualScale.getValue(), frc[vertexIndex][2] * forceVisualScale.getValue());
+
+        oss << vertexIndex << ": " << vertexForce.norm() << " (" << vertexForce[0] << ", " << vertexForce[1] << ", " << vertexForce[2] << ")";
+        std::string tmp = oss.str();
+        const char* s = tmp.c_str();
+        //glVertex3f(getPX(i),getPY(i),getPZ(i) );
+        glPushMatrix();
+
+        glTranslatef((float)getPX(vertexIndex), (float)getPY(vertexIndex), (float)getPZ(vertexIndex));
+        glScalef(scale, scale, scale);
+
+        // Makes text always face the viewer by removing the scene rotation
+        // get the current modelview matrix
+        glGetFloatv(GL_MODELVIEW_MATRIX, modelviewM.ptr());
+        modelviewM.transpose();
+
+        Vec3d temp(getPX(vertexIndex), getPY(vertexIndex), getPZ(vertexIndex));
+        temp = modelviewM.transform(temp);
+
+        //glLoadMatrixf(modelview);
+        glLoadIdentity();
+
+        glTranslatef((float)temp[0] * 0.05, (float)temp[1] * 0.05, (float)temp[2] * 0.05);
+        //glTranslatef(0.1, 0.1, 0.1);
+        glScalef(scale, scale, scale);
+
+        while (*s)
+        {
+            glutStrokeCharacter(GLUT_STROKE_ROMAN, *s);
+            s++;
+        }
+
+        glPopMatrix();
+
+        GLUquadricObj* GLUquad = gluNewQuadric();
+        if (GLUquad != NULL)
+        {
+            double radius = 0.05;
+            Vec4f sphereColor(1.0, 1.0, 1.0, 1.0);
+
+            glPushMatrix();
+            /*
+            bool glBlendDisabled = false;
+            if (!glIsEnabled(GL_BLEND))
+            {
+            glBlendDisabled = true;
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            }
+            */
+
+            glColor4d(sphereColor.x(), sphereColor.y(), sphereColor.z(), sphereColor.w());
+
+            //gluSphere(GLUquad,radius,numSlices,numStacks);
+
+            unsigned int numSlices = 24;
+            unsigned int numStacks = 8;
+
+            glTranslatef((float)getPX(vertexIndex), (float)getPY(vertexIndex), (float)getPZ(vertexIndex));
+            gluSphere(GLUquad, radius, numSlices, numStacks);
+
+            /*
+            if (glBlendDisabled)
+            {
+            glDisable(GL_BLEND);
+            }
+            */
+
+            glPopMatrix();
+        }
+
+    }
+    // Zykl.io end
+
     vparams->drawTool()->restoreLastState();
 }
 
@@ -2893,6 +3024,201 @@ bool MechanicalObject<DataTypes>::isIndependent() const
     return static_cast<const simulation::Node*>(this->getContext())->mechanicalMapping.empty();
 }
 
+// Zykl.io begin
+template <class DataTypes>
+void MechanicalObject<DataTypes>::find3DExtents(defaulttype::Vector3& extents)
+{
+    /*
+    if (m_topology != NULL && m_topology->hasPos() && m_topology->getContext() == this->getContext())
+    {
+    int nbp = m_topology->getNbPoints();
+
+    sofa::helper::vector<double> xPositions, yPositions, zPositions;
+
+    for (int i=0; i<nbp; i++)
+    {
+    xPositions.push_back(m_topology->getPX(i));
+    yPositions.push_back(m_topology->getPY(i));
+    zPositions.push_back(m_topology->getPZ(i));
+    }
+
+    std::sort(xPositions.begin(), xPositions.end());
+    std::sort(yPositions.begin(), yPositions.end());
+    std::sort(zPositions.begin(), zPositions.end());
+
+    extentX = std::abs(xPositions.front() - xPositions.back());
+    extentY = std::abs(yPositions.front() - yPositions.back());
+    extentZ = std::abs(zPositions.front() - zPositions.back());
+    }
+    */
+
+    sofa::helper::vector<double> xPositions, yPositions, zPositions;
+
+    int nbPoints = getPosition().size();
+    for (int i = 0; i<nbPoints; i++)
+    {
+        xPositions.push_back(getPX(i));
+        yPositions.push_back(getPY(i));
+        zPositions.push_back(getPZ(i));
+    }
+
+    std::sort(xPositions.begin(), xPositions.end());
+    std::sort(yPositions.begin(), yPositions.end());
+    std::sort(zPositions.begin(), zPositions.end());
+
+    //extentX = std::abs(xPositions.front() - xPositions.back());
+    //extentY = std::abs(yPositions.front() - yPositions.back());
+    //extentZ = std::abs(zPositions.front() - zPositions.back());
+
+    double tmp1 = 0.0;
+    double tmp2 = 0.0;
+    double tmp3 = 0.0;
+    if (xPositions.size() > 0)
+    {
+        tmp1 = std::abs(xPositions.front() - xPositions.back());
+    }
+
+    if (yPositions.size() > 0)
+    {
+        tmp2 = std::abs(yPositions.front() - yPositions.back());
+    }
+
+    if (zPositions.size() > 0)
+    {
+        tmp3 = std::abs(zPositions.front() - zPositions.back());
+    }
+
+    extents.elems[0] = tmp1;
+    extents.elems[1] = tmp2;
+    extents.elems[2] = tmp3;
+}
+// Zykl.io end
+
+// Zykl.io begin
+template <class DataTypes>
+void MechanicalObject<DataTypes>::compareCurrentXtoStoredX(const sofa::core::objectmodel::DataFileName& fileNameBase)
+{
+    if (this->getContext()->getTime() == this->getContext()->getDt())
+    {
+        // probably not the best way to do this, but it works
+        // (it's not possible to put it into the init method, because an initial
+        // translation that is given in a mechanical object on a higher level is
+        // not yet applied there)
+        storedX = getPosition();
+
+        Vector3 tmp;
+        find3DExtents(tmp);
+        extentX = tmp.x();
+        extentY = tmp.y();
+        extentZ = tmp.z();
+        std::cout << "extents of " << this->getName() << " are: " << extentX << ", " << extentY << ", " << extentZ << std::endl;
+    }
+
+    const VecCoord& currentX = getPosition();
+
+    //std::cout << "stored x of " << getName() << ": " << storedX << std::endl;
+    //std::cout << "current x of " << getName() << ": " << currentX << std::endl;
+
+    double averageMovedDistance = 0.0;
+
+    if ((storedX.size() > 0) && (currentX.size() > 0))
+    {
+        if ((storedX[0].size() == 3) && (currentX[0].size() == 3))
+        {   // I only see a use for this in 3D, atm
+            for (unsigned int i = 0; i<currentX.size(); i++)
+            {
+
+                Vector3 a(storedX[i][0], storedX[i][1], storedX[i][2]);
+                Vector3 b(currentX[i][0], currentX[i][1], currentX[i][2]);
+
+                Vector3 subVec = a - b;
+                averageMovedDistance += subVec.norm();
+
+            }
+        }
+    }
+
+    averageMovedDistance = averageMovedDistance / currentX.size();
+
+    Vector3 currentExtent;
+    find3DExtents(currentExtent);
+
+    // sum up the extent change of the last numberOfIterationsToAdd iterations
+    if ((this->getContext()->getTime() / this->getContext()->getDt()) < numberOfIterationsToAdd)
+    {
+        double extentChange = (lastExtent - currentExtent).norm();
+        /*double extentChange = std::abs(
+        std::max(lastExtent.x(),std::max(lastExtent.y(),lastExtent.z()))
+        - std::max(currentExtent.x(),std::max(currentExtent.y(),currentExtent.z()))
+        );*/ // TODO: improve this to be less wonky
+        lastIterationsExtent.push_front(extentChange);
+        currentlyAddedExtent += extentChange;
+    }
+    else
+    {
+        double extentChangeFromLongAgo = lastIterationsExtent.back();
+        lastIterationsExtent.pop_back();
+
+        double extentChange = (lastExtent - currentExtent).norm();
+        /*double extentChange = std::abs(
+        std::max(lastExtent.x(),std::max(lastExtent.y(),lastExtent.z()))
+        - std::max(currentExtent.x(),std::max(currentExtent.y(),currentExtent.z()))
+        );*/ // TODO: improve this to be less wonky
+        lastIterationsExtent.push_front(extentChange);
+        currentlyAddedExtent = currentlyAddedExtent + extentChange - extentChangeFromLongAgo;
+    }
+
+    std::cout << "currentlyAddedExtent: " << currentlyAddedExtent << std::endl;
+
+    /// TODO: Get this to compile on Linux?
+    sofa::helper::vector< sofa::component::forcefield::ConstantForceField<Vec3dTypes>* > m_temp;
+#ifdef _WIN32
+    this->getContext()->get< sofa::component::forcefield::ConstantForceField<Vec3dTypes> >(&m_temp, sofa::core::objectmodel::BaseContext::SearchDown);
+#endif
+
+    double xForce = 0.0;
+    if (m_temp.size() > 0)
+    {
+        //xForce = m_temp.at(0)->forces.getValue().at(0).at(0); // forces fot renamed to d_forces
+        xForce = m_temp.at(0)->d_forces.getValue().at(0).at(0);
+    }
+
+    if (!(fileNameBase.getValue().empty()))
+    {
+        if (!extentDataWritten)
+        {
+            if (
+                (currentlyAddedExtent < extentChangeWriteThreshold.getValue())
+                && (this->getContext()->getTime() > extentTimeWriteThreshold.getValue())
+                )
+            {
+                std::string fileToWrite = fileNameBase.getValue() + "_" + this->getName() + ".dat";
+
+                std::ofstream outputStream;
+#ifndef _WIN32
+                outputStream.open(fileToWrite.c_str(), std::ofstream::out | std::ofstream::app);
+#else
+                outputStream.open(fileToWrite, std::ofstream::out | std::ofstream::app);
+#endif
+
+                /*
+                outputStream << "t = " << getContext()->getTime() << std::endl;
+                outputStream << "xF = " << xForce << std::endl;
+                outputStream << "extents of " << getName() << " are: " << currentExtent.x() << ", " << currentExtent.y() << ", " << currentExtent.z() << std::endl;
+                outputStream << "difference to initial extent: " << std::abs(extentX - currentExtent.x()) << ", " << std::abs(extentY - currentExtent.y()) << ", " << std::abs(extentZ - currentExtent.z()) << std::endl;
+                outputStream << "average moved distance of vertices: " << averageMovedDistance << std::endl;
+                */
+                outputStream << xForce << " " << std::abs(extentX - currentExtent.x()) << " " << std::abs(extentY - currentExtent.y()) << " " << std::abs(extentZ - currentExtent.z()) << " " << currentExtent.x() << " " << currentExtent.y() << " " << currentExtent.z() << " " << averageMovedDistance << " " << std::endl;
+                outputStream.close();
+
+                extentDataWritten = true;
+            }
+        }
+    }
+
+    lastExtent = currentExtent;
+}
+// Zykl.io end
 
 } // namespace container
 

@@ -27,6 +27,7 @@
 #include <sofa/core/CollisionElement.h>
 
 #include <sofa/defaulttype/RGBAColor.h>
+#include <sofa/defaulttype/Quat.h>
 
 namespace sofa
 {
@@ -445,6 +446,126 @@ public:
     /// Get user data
     void* GetUserData() { return userData; }
 
+    // Zykl.io begin
+    public:
+
+        /// Zyklio: returns a reference to the collision model blacklist.
+        const helper::vector<std::string>& getCollisionModelBlacklist() const
+        {
+            return collisionModelBlacklist.getValue();
+        }
+
+        /// Zyklio: adds a collision model's name to the collision model blacklist.
+        void addToCollisionModelBlacklist(std::string newCollisionModel)
+        {
+            addToList(newCollisionModel, collisionModelBlacklist);
+        }
+
+        /// Zyklio: removes a collision model's name from the collision model blacklist.
+        /// assumes that a name should only be removed once
+        void removeFromCollisionModelBlacklist(std::string remCollisionModel)
+        {
+             removeFromList(remCollisionModel, collisionModelBlacklist);
+        }
+
+        /// Zyklio: empties the collision model blacklist.
+        void clearCollisionModelBlacklist()
+         {
+            collisionModelBlacklist.beginEdit()->clear();
+            collisionModelBlacklist.endEdit();
+        }
+
+        /// Zyklio: returns a reference to the collision model whitelist.
+        const helper::vector<std::string>& getCollisionModelWhitelist() const
+        {
+            return collisionModelWhitelist.getValue();
+        }
+
+        /// Zyklio: adds a collision model's name to the collision model whitelist.
+        void addToCollisionModelWhitelist(std::string newCollisionModel)
+        {
+            addToList(newCollisionModel, collisionModelWhitelist);
+        }
+
+        /// Zyklio: removes a collision model's name from the collision model whitelist.
+        /// assumes that a name should only be removed once
+        void removeFromCollisionModelWhitelist(std::string remCollisionModel)
+        {
+            removeFromList(remCollisionModel, collisionModelWhitelist);
+        }
+
+        /// Zyklio: empties the collision model whitelist.
+        void clearCollisionModelWhitelist()
+        {
+            collisionModelWhitelist.beginEdit()->clear();
+            collisionModelWhitelist.endEdit();
+        }
+
+        /// Zyklio: adds a collision model's name to the collision model graylist.
+        void addToCollisionModelGraylist(std::string newCollisionModel)
+        {
+            addToList(newCollisionModel, collisionModelGraylist);
+        }
+
+        /// Zyklio: removes a collision model's name from the collision model graylist.
+        /// assumes that a name should only be removed once
+        void removeFromCollisionModelGraylist(std::string remCollisionModel)
+        {
+            removeFromList(remCollisionModel, collisionModelGraylist);
+        }
+
+        /// Zyklio: empties the collision model graylist.
+        void clearCollisionModelGraylist()
+        {
+            collisionModelGraylist.beginEdit()->clear();
+            collisionModelGraylist.endEdit();
+        }
+
+        /// Zyklio: removes a collision model's name from the given list
+        /// assumes that a name should only be removed once
+        void removeFromList(std::string remCollisionModel, Data<helper::vector<std::string> >& list);
+
+        /// Zyklio: Internal model data update hook; does nothing for SOFA's own models
+        virtual void updateInternalGeometry() {}
+
+        /// Zyklio: contact manifold things
+        const bool& getUseContactManifolds() const { return useContactManifolds.getValue(); }
+        void setUseContactManifolds(bool on) { useContactManifolds.setValue(on); }
+        const unsigned int& getMaxNumberOfManifolds() const { return maxNumberOfManifolds.getValue(); }
+        void setMaxNumberOfManifolds(unsigned int num) { maxNumberOfManifolds.setValue(num); }
+
+        virtual defaulttype::Vec3d getCachedPosition() const;
+
+        virtual void setCachedPosition(const defaulttype::Vec3d& position)
+        {
+            m_cachedPosition = position;
+        }
+
+        virtual defaulttype::Quaternion getCachedOrientation() const
+        {
+            return m_cachedOrientation;
+        }
+
+        virtual void setCachedOrientation(const defaulttype::Quaternion& orientation)
+        {
+            m_cachedOrientation = orientation;
+        }
+
+        void setGhostObject(bool on);
+        void setGhostObjectTolerance(double tol);
+
+        virtual bool isGhostObject()
+        {
+            return m_ghostObject.getValue();
+        }
+
+        virtual SReal getGhostObjectTolerance()
+        {
+            return m_ghostObjectTolerance.getValue();
+        }
+    // Zykl.io end
+
+
 protected:
 
     /// flag indicating if this collision model is active and should be included in default
@@ -493,6 +614,31 @@ protected:
     int enum_type;
 
     void* userData;
+
+    // Zykl.io begin
+    /// Zyklio: Contains the names of collision models. The current collision model does not collide with the collision models on the list.
+    Data<helper::vector<std::string> > collisionModelBlacklist;
+
+    /// Zyklio: Contains the names of collision models. The current collision model does only collide with the collision models on the list.
+    Data<helper::vector<std::string> > collisionModelWhitelist;
+
+    /// Zyklio: Contains the names of collision models. The current collision model does only collide BUT the collision is not propagated to the solver (in contrast to the whitelist)
+    Data<helper::vector<std::string> > collisionModelGraylist;
+
+    /// Cached position and orientation; not used by built-in SOFA models
+    mutable defaulttype::Vec3d m_cachedPosition;
+    mutable defaulttype::Quaternion m_cachedOrientation;
+
+    // If true, this CollisionModel does not create contact points
+    Data<bool> m_ghostObject;
+    Data<SReal> m_ghostObjectTolerance;
+
+    /// Zyklio: contact manifold stuff
+    Data<bool> useContactManifolds;
+    Data<unsigned int> maxNumberOfManifolds;
+
+    void addToList(std::string newCollisionModel, Data<helper::vector<std::string> > &list);
+    // Zykl.io end
 
 public:
 

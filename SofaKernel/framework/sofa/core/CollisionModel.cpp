@@ -84,7 +84,42 @@ bool CollisionModel::removeInNode( objectmodel::BaseNode* node )
     return true;
 }
 
+// Zykl.io begin
+void CollisionModel::setGhostObject(bool on) {
+    this->m_ghostObject.setValue(on);
+}
 
+void CollisionModel::setGhostObjectTolerance(double tol) {
+    this->m_ghostObjectTolerance.setValue(tol);
+}
+
+void CollisionModel::removeFromList(std::string remCollisionModel, Data<helper::vector<std::string> > &list)
+{
+    {
+        helper::vector<std::string>* modelVector = list.beginEdit();
+
+        for (helper::vector<std::string>::iterator it = modelVector->begin(); it != modelVector->end(); it++) {
+            if (*it == remCollisionModel) { modelVector->erase(it); break;}
+        }
+
+        list.endEdit();
+    }
+}
+
+void CollisionModel::addToList(std::string newCollisionModel, Data<helper::vector<std::string> > &list)
+{
+    helper::vector<std::string> *l = list.beginEdit();
+    if ( std::find(l->begin(), l->end(), newCollisionModel) == l->end() ) {
+        l->push_back(newCollisionModel);
+    }
+    list.endEdit();
+}
+
+defaulttype::Vec3d CollisionModel::getCachedPosition() const
+{
+    return m_cachedPosition;
+}
+// Zykl.io end
 
 } // namespace core
 

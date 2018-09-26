@@ -89,7 +89,6 @@ public:
     Data<SReal> d_drawSize; ///< 0 -> point based rendering, >0 -> radius of spheres
     Data<bool> d_projectVelocity; ///< activate project velocity to set velocity
 
-
 protected:
     FixedConstraintInternalData<DataTypes>* data;
     friend class FixedConstraintInternalData<DataTypes>;

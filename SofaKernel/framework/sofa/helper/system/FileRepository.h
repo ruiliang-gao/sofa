@@ -134,6 +134,10 @@ public:
 
     void displayPaths() {std::cout<<(*this)<<std::endl;}
 
+    // Zykl.io begin
+    std::string getTempPath();
+    // Zykl.io end
+
 protected:
 
     /// A protocol like http: or file: which will bypass the file search if found in the filename of the findFile* functions that directly returns the path as if the function succeeded

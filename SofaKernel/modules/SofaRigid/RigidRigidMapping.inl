@@ -215,11 +215,19 @@ void RigidRigidMapping<TIn, TOut>::apply(const core::MechanicalParams * /*mparam
     case 0 : //no value specified : simple rigid mapping
         if (!indexFromEnd.getValue())
         {
-            in[index.getValue()].writeRotationMatrix(rotation);
-            for(unsigned int i=0; i<points.getValue().size(); i++)
+            std::size_t in_size = dIn.getValue().size();
+            if (index.getValue() < in_size)
             {
-                pointsR0[i].getCenter() = rotation*(points.getValue()[i]).getCenter();
-                out[i] = in[index.getValue()].mult(points.getValue()[i]);
+                in[index.getValue()].writeRotationMatrix(rotation);
+                for(unsigned int i=0; i<points.getValue().size(); i++)
+                {
+                    pointsR0[i].getCenter() = rotation*(points.getValue()[i]).getCenter();
+                    out[i] = in[index.getValue()].mult(points.getValue()[i]);
+                }
+            }
+            else
+            {
+              msg_error("RigidRigidMapping") << "Invalid index in apply: index given = " << index.getValue() << ", size of vector = " << in_size << sendl;
             }
         }
         else
@@ -287,8 +295,36 @@ void RigidRigidMapping<TIn, TOut>::applyJ(const core::MechanicalParams * /*mpara
     case 0:
         if (!indexFromEnd.getValue())
         {
-            v = getVCenter(parentVelocities[index.getValue()]);
-            omega = getVOrientation(parentVelocities[index.getValue()]);
+            // Zyklio begin
+            if (!indexFromEnd.getValue())
+            {
+                if (index.getValue() < parentVelocities.size())
+                {
+                    v = getVCenter(parentVelocities[index.getValue()]);
+                    omega = getVOrientation(parentVelocities[index.getValue()]);
+                    for (unsigned int i = 0; i < points.getValue().size(); i++)
+                    {
+                        getVCenter(childVelocities[i]) = v + cross(omega, pointsR0[i].getCenter());
+                        getVOrientation(childVelocities[i]) = omega;
+                    }
+                }
+            }
+            else
+            {
+                if (parentVelocities.size() - 1 - index.getValue() < parentVelocities.size())
+                {
+                    v = getVCenter(parentVelocities[parentVelocities.size() - 1 - index.getValue()]);
+                    omega = getVOrientation(parentVelocities[parentVelocities.size() - 1 - index.getValue()]);
+
+                    for (unsigned int i = 0; i < points.getValue().size(); i++)
+                    {
+                        getVCenter(childVelocities[i]) = v + cross(omega, pointsR0[i].getCenter());
+                        getVOrientation(childVelocities[i]) = omega;
+                    }
+                }
+            }
+            break;
+            // Zyklio end
 
             for( size_t i=0 ; i<this->maskTo->size() ; ++i)
             {

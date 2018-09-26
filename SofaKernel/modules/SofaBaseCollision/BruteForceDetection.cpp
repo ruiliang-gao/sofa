@@ -167,6 +167,88 @@ void BruteForceDetection::addCollisionModel(core::CollisionModel *cm)
 
 bool BruteForceDetection::keepCollisionBetween(core::CollisionModel *cm1, core::CollisionModel *cm2)
 {
+    // Zykl.io begin
+
+    core::CollisionModel * cm1Root = cm1->getLast();
+    core::CollisionModel * cm2Root = cm2->getLast();
+
+    const std::string& m1Name = cm1Root->getName();
+    const std::string& m2Name = cm2Root->getName();
+
+    const helper::vector<std::string>& m1Blacklist = cm1Root->getCollisionModelBlacklist();
+    const helper::vector<std::string>& m2Blacklist = cm2Root->getCollisionModelBlacklist();
+    const helper::vector<std::string>& m1Whitelist = cm1Root->getCollisionModelWhitelist();
+    const helper::vector<std::string>& m2Whitelist = cm2Root->getCollisionModelWhitelist();
+
+    bool onCollisionWhitelist = false;
+    bool onCollisionBlacklist = false;
+    bool whitelistRelevant = ((m1Whitelist.size() > 0) || (m2Whitelist.size() > 0));
+    bool blacklistRelevant = ((m1Blacklist.size() > 0) || (m2Blacklist.size() > 0));
+
+    if (whitelistRelevant && blacklistRelevant)
+    {
+        sout << "WARNING: There exists at least one non-empty whitelist and one non-empty blacklist for the contact " << cm1Root->getName() << "-" << cm2Root->getName() << ". The blacklists are ignored." << std::endl;
+        blacklistRelevant = false;
+    }
+
+    // checks if (at least) one collision model's name appears in the whitelist of the other
+    // (but not if both whitelists are empty - in that case, check the blacklists)
+    if (whitelistRelevant)
+    {
+        for (helper::vector<std::string>::const_iterator m1_it = m1Whitelist.begin(); m1_it != m1Whitelist.end(); ++m1_it)
+        {
+            if (m2Name.compare(*m1_it) == 0)
+            {
+                onCollisionWhitelist = true;
+                break;
+            }
+        }
+        for (helper::vector<std::string>::const_iterator m2_it = m2Whitelist.begin(); m2_it != m2Whitelist.end(); ++m2_it)
+        {
+            if (m1Name.compare(*m2_it) == 0)
+            {
+                onCollisionWhitelist = true;
+                break;
+            }
+        }
+
+    }
+    // The blacklists are ignored if the at least one whitelist is not empty
+    else
+    {
+        // checks if (at least) one collision model's name appears in the blacklist of the other
+        // (but not if both blacklists are empty)
+        if (blacklistRelevant)
+        {
+            for (helper::vector<std::string>::const_iterator m1_it = m1Blacklist.begin(); m1_it != m1Blacklist.end(); ++m1_it)
+            {
+                if (m2Name.compare(*m1_it) == 0)
+                {
+                    onCollisionBlacklist = true;
+                    break;
+                }
+            }
+            for (helper::vector<std::string>::const_iterator m2_it = m2Blacklist.begin(); m2_it != m2Blacklist.end(); ++m2_it)
+            {
+                if (m1Name.compare(*m2_it) == 0)
+                {
+                    onCollisionBlacklist = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    if  ((whitelistRelevant && onCollisionWhitelist)
+         || (blacklistRelevant && !onCollisionBlacklist)
+         || (!blacklistRelevant && !whitelistRelevant))
+    {
+        //noop;
+    } else {
+        return false;
+    }
+    // Zykl.io end
+
     if (!cm1->canCollideWith(cm2) || !cm2->canCollideWith(cm1))
     {
         return false;

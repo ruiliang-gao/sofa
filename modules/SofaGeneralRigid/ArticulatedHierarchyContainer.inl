@@ -122,80 +122,84 @@ void ArticulatedHierarchyContainer::buildCenterArticulationsTree(sofa::helper::i
 
     Articulation::SPtr a;
 
-    for (unsigned int j=0; j<channels->channels.size(); j++)
-    {
-        switch(channels->channels[j])
+    // Zykl.io begin
+    if (channels) {
+        for (unsigned int j = 0; j < channels->channels.size(); j++)
         {
-        case sofa::helper::io::bvh::BVHChannels::NOP:
-            break;
-        case sofa::helper::io::bvh::BVHChannels::Xposition:
-            a = sofa::core::objectmodel::New<Articulation>();
-            nodeOfArticulations->addObject(a);
-            ac->articulations.push_back(a.get());
-            a->axis.setValue(defaulttype::Vector3(1,0,0));
-            a->translation.setValue(true);
-            a->articulationIndex.setValue(id);
-            for (int k=0; k<motion->frameCount; k++)
-                a->motion.push_back(motion->frames[k][j]);
-            id++;
-            break;
-        case sofa::helper::io::bvh::BVHChannels::Yposition:
-            a = sofa::core::objectmodel::New<Articulation>();
-            nodeOfArticulations->addObject(a);
-            ac->articulations.push_back(a.get());
-            a->axis.setValue(defaulttype::Vector3(0,1,0));
-            a->translation.setValue(true);
-            a->articulationIndex.setValue(id);
-            for (int k=0; k<motion->frameCount; k++)
-                a->motion.push_back(motion->frames[k][j]);
-            id++;
-            break;
-        case sofa::helper::io::bvh::BVHChannels::Zposition:
-            a = sofa::core::objectmodel::New<Articulation>();
-            nodeOfArticulations->addObject(a);
-            ac->articulations.push_back(a.get());
-            a->axis.setValue(defaulttype::Vector3(0,0,1));
-            a->translation.setValue(true);
-            a->articulationIndex.setValue(id);
-            for (int k=0; k<motion->frameCount; k++)
-                a->motion.push_back(motion->frames[k][j]);
-            id++;
-            break;
-        case sofa::helper::io::bvh::BVHChannels::Xrotation:
-            a = sofa::core::objectmodel::New<Articulation>();
-            nodeOfArticulations->addObject(a);
-            ac->articulations.push_back(a.get());
-            a->axis.setValue(defaulttype::Vector3(1,0,0));
-            a->rotation.setValue(true);
-            a->articulationIndex.setValue(id);
-            for (int k=0; k<motion->frameCount; k++)
-                a->motion.push_back(motion->frames[k][j]);
-            id++;
-            break;
-        case sofa::helper::io::bvh::BVHChannels::Yrotation:
-            a = sofa::core::objectmodel::New<Articulation>();
-            nodeOfArticulations->addObject(a);
-            ac->articulations.push_back(a.get());
-            a->axis.setValue(defaulttype::Vector3(0,1,0));
-            a->rotation.setValue(true);
-            a->articulationIndex.setValue(id);
-            for (int k=0; k<motion->frameCount; k++)
-                a->motion.push_back(motion->frames[k][j]);
-            id++;
-            break;
-        case sofa::helper::io::bvh::BVHChannels::Zrotation:
-            a = sofa::core::objectmodel::New<Articulation>();
-            nodeOfArticulations->addObject(a);
-            ac->articulations.push_back(a.get());
-            a->axis.setValue(defaulttype::Vector3(0,0,1));
-            a->rotation.setValue(true);
-            a->articulationIndex.setValue(id);
-            for (int k=0; k<motion->frameCount; k++)
-                a->motion.push_back(motion->frames[k][j]);
-            id++;
-            break;
+            switch (channels->channels[j])
+            {
+            case sofa::helper::io::bvh::BVHChannels::NOP:
+                break;
+            case sofa::helper::io::bvh::BVHChannels::Xposition:
+                a = sofa::core::objectmodel::New<Articulation>();
+                nodeOfArticulations->addObject(a);
+                ac->articulations.push_back(a.get());
+                a->axis.setValue(defaulttype::Vector3(1, 0, 0));
+                a->translation.setValue(true);
+                a->articulationIndex.setValue(id);
+                for (int k = 0; k < motion->frameCount; k++)
+                    a->motion.push_back(motion->frames[k][j]);
+                id++;
+                break;
+            case sofa::helper::io::bvh::BVHChannels::Yposition:
+                a = sofa::core::objectmodel::New<Articulation>();
+                nodeOfArticulations->addObject(a);
+                ac->articulations.push_back(a.get());
+                a->axis.setValue(defaulttype::Vector3(0, 1, 0));
+                a->translation.setValue(true);
+                a->articulationIndex.setValue(id);
+                for (int k = 0; k < motion->frameCount; k++)
+                    a->motion.push_back(motion->frames[k][j]);
+                id++;
+                break;
+            case sofa::helper::io::bvh::BVHChannels::Zposition:
+                a = sofa::core::objectmodel::New<Articulation>();
+                nodeOfArticulations->addObject(a);
+                ac->articulations.push_back(a.get());
+                a->axis.setValue(defaulttype::Vector3(0, 0, 1));
+                a->translation.setValue(true);
+                a->articulationIndex.setValue(id);
+                for (int k = 0; k < motion->frameCount; k++)
+                    a->motion.push_back(motion->frames[k][j]);
+                id++;
+                break;
+            case sofa::helper::io::bvh::BVHChannels::Xrotation:
+                a = sofa::core::objectmodel::New<Articulation>();
+                nodeOfArticulations->addObject(a);
+                ac->articulations.push_back(a.get());
+                a->axis.setValue(defaulttype::Vector3(1, 0, 0));
+                a->rotation.setValue(true);
+                a->articulationIndex.setValue(id);
+                for (int k = 0; k < motion->frameCount; k++)
+                    a->motion.push_back(motion->frames[k][j]);
+                id++;
+                break;
+            case sofa::helper::io::bvh::BVHChannels::Yrotation:
+                a = sofa::core::objectmodel::New<Articulation>();
+                nodeOfArticulations->addObject(a);
+                ac->articulations.push_back(a.get());
+                a->axis.setValue(defaulttype::Vector3(0, 1, 0));
+                a->rotation.setValue(true);
+                a->articulationIndex.setValue(id);
+                for (int k = 0; k < motion->frameCount; k++)
+                    a->motion.push_back(motion->frames[k][j]);
+                id++;
+                break;
+            case sofa::helper::io::bvh::BVHChannels::Zrotation:
+                a = sofa::core::objectmodel::New<Articulation>();
+                nodeOfArticulations->addObject(a);
+                ac->articulations.push_back(a.get());
+                a->axis.setValue(defaulttype::Vector3(0, 0, 1));
+                a->rotation.setValue(true);
+                a->articulationIndex.setValue(id);
+                for (int k = 0; k < motion->frameCount; k++)
+                    a->motion.push_back(motion->frames[k][j]);
+                id++;
+                break;
+            }
         }
     }
+    // Zykl.io end
 
     for(unsigned int i=0; i<jointChildren.size(); i++)
     {
@@ -253,10 +257,30 @@ void ArticulatedHierarchyContainer::init ()
 
         }
     }
+    // Zykl.io begin
+    initGlobalRotations();
+    // Zykl.io end
 }
 
+// Zykl.io begin
+void ArticulatedHierarchyContainer::initGlobalRotations() {
+    simulation::Node* context = dynamic_cast<simulation::Node *>(this->getContext()); // access to current node
 
+    context->getTreeObjects<ArticulationCenter>(&articulationCenters);
 
+    std::vector<ArticulationCenter*>::const_iterator ac = articulationCenters.begin();
+    std::vector<ArticulationCenter*>::const_iterator acEnd = articulationCenters.end();
+
+    for (; ac != acEnd; ac++)
+    {
+        size_t childIndex = (size_t)(*ac)->childIndex.getValue();
+        if (globalRotQuat.size() >= childIndex) // globalRotQuat can be empty
+        {
+            (*ac)->globalOrientation.setValue(globalRotQuat.at(childIndex));
+        }
+    }
+}
+// Zykl.io end
 
 } // namespace container
 

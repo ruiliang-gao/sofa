@@ -179,6 +179,10 @@ public:
 
     defaulttype::Vec<3,Real> toEulerVector() const;
 
+    // Zykl.io begin
+    defaulttype::Vec<3, Real> toTruEulerVector() const;
+    defaulttype::Vec<3, Real> toEulerAngles() const;
+    // Zykl.io end
 
     /*! Returns the slerp interpolation of Quaternions \p a and \p b, at time \p t.
 

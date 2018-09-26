@@ -28,7 +28,10 @@
 #include <fstream>
 #include <sofa/helper/system/config.h>
 
+#include <sofa/core/objectmodel/Base.h>
+
 using sofa::helper::Utils;
+using sofa::core::objectmodel::Base;
 
 namespace sofa
 {
@@ -204,10 +207,12 @@ bool PluginManager::loadPlugin(const std::string& plugin, const std::string& suf
 {
     if (FileSystem::isFile(plugin))
     {
+        msg_info("PluginManager") << "Loading plugin from path: " << plugin << "\n";
         return loadPluginByPath(plugin,  errlog);
     }
     else
     {
+        msg_info("PluginManager") << "Loading plugin by name: " << plugin << "\n";
         return loadPluginByName(plugin, suffix, ignoreCase, errlog);
     }
 }
@@ -292,20 +297,27 @@ void PluginManager::init(const std::string& pluginPath)
 
 std::string PluginManager::findPlugin(const std::string& pluginName, const std::string& suffix, bool ignoreCase)
 {
+    msg_info("PluginManager") << "Find plugin: " << pluginName << " with suffix " << suffix << "; ignore case: " << ignoreCase << msgendl;
     std::string name(pluginName);
     name  += suffix;
     const std::string libName = DynamicLibrary::prefix + name + "." + DynamicLibrary::extension;
 
+    msg_info("PluginManager") << "Searching for dynamic library file named: " << libName << msgendl;
     // First try: case sensitive
     for (std::vector<std::string>::iterator i = m_searchPaths.begin(); i!=m_searchPaths.end(); i++)
     {
         const std::string path = *i + "/" + libName;
+        msg_info("PluginManager") << "Checking if file exists: " << path << msgendl;
         if (FileSystem::isFile(path))
+        {
+            msg_info("PluginManager") << "File exists: " << path << msgendl;
             return path;
+        }
     }
     // Second try: case insensitive
     if (ignoreCase)
     {
+        msg_info("PluginManager") << "Continue with case-insensitive search." << msgendl;
         for (std::vector<std::string>::iterator i = m_searchPaths.begin(); i!=m_searchPaths.end(); i++)
         {
             const std::string& dir = *i;
@@ -313,11 +325,14 @@ std::string PluginManager::findPlugin(const std::string& pluginName, const std::
             const std::string downcaseLibName = Utils::downcaseString(libName);
             std::vector<std::string> files;
             FileSystem::listDirectory(dir, files);
+            msg_info("PluginManager") << "Looking in search path " << *i << " for file named " << downcaseLibName << msgendl;
             for(std::vector<std::string>::iterator j = files.begin(); j != files.end(); j++)
             {
                 const std::string& filename = *j;
                 const std::string downcaseFilename = Utils::downcaseString(filename);
+                msg_info("PluginManager") << "Examining file: " << downcaseFilename << msgendl;
                 if (downcaseFilename == downcaseLibName) {
+                    msg_info("PluginManager") << "Found a case-insensitive match: " << (dir + "/" + filename) << msgendl;
                     return dir + "/" + filename;
                 }
             }

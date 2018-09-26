@@ -50,6 +50,7 @@ namespace component
 namespace container
 {
 
+using namespace sofa::defaulttype;
 
 /// This class can be overridden if needed for additionnal storage within template specializations.
 template <class DataTypes>
@@ -306,6 +307,25 @@ public:
     virtual Vector3 getRotation() const {return rotation.getValue();}
     virtual Vector3 getScale() const override {return scale.getValue();}
 
+    // Zykl.io begin
+    void setRotationQuat(double qx, double qy, double qz, double qw) { rotationQuat.setValue(Quaternion(qx,qy,qz,qw)); }
+    void setRotationQuat(const Quaternion &q) { rotationQuat.setValue(q);}
+
+    virtual void resetTransformations();
+
+    virtual Quaternion getRotationQuat() const { return rotationQuat.getValue(); }
+
+    virtual const VecCoord& getPosition() const { return x.getValue(); }
+    virtual void setPosition(const VecCoord& p) { x.setValue(p); }
+    virtual const VecCoord& getFreePosition() const { return xfree.getValue(); }
+    virtual void setFreePosition(const VecCoord& p) { xfree.setValue(p); }
+
+    virtual const VecDeriv& getVelocity() const { return v.getValue(); }
+    virtual const VecDeriv& getFreeVelocity() const { return vfree.getValue(); }
+
+    virtual const VecDeriv& getForce() const { return f.getValue(); }
+    // Zykl.io end
+
     /// @}
 
     /// Renumber the constraint ids with the given permutation vector
@@ -417,6 +437,10 @@ protected :
     Data< Vector3 > translation2; ///< Translation of the DOFs, applied after the rest position has been computed
     Data< Vector3 > rotation2; ///< Rotation of the DOFs, applied the after the rest position has been computed
 
+    // Zykl.io begin
+    Data< Quaternion > rotationQuat;
+    // Zykl.io end
+
     /// @}
 
     //int vsize; ///< Number of elements to allocate in vectors
@@ -472,6 +496,26 @@ protected :
 
     std::ofstream* m_gnuplotFileX;
     std::ofstream* m_gnuplotFileV;
+
+    //Zykl.io begin
+private:
+    Data<int> drawVertexInformation;
+    Data<double> forceVisualScale;
+    Data<double> extentChangeWriteThreshold;
+    Data<double> extentTimeWriteThreshold;
+
+    typename DataTypes::VecCoord storedX;
+    double extentX, extentY, extentZ;
+    std::deque< double > lastIterationsExtent;
+    double currentlyAddedExtent;
+    unsigned int numberOfIterationsToAdd;
+    bool extentDataWritten;
+    Vector3 lastExtent;
+public:
+    void setDrawVertexInformation(int vertexToDraw) { drawVertexInformation.setValue(vertexToDraw); }
+    void compareCurrentXtoStoredX(const sofa::core::objectmodel::DataFileName& fileNameBase = sofa::core::objectmodel::DataFileName());
+    void find3DExtents(defaulttype::Vector3& extents);
+    //Zykl.io end
 
 };
 

@@ -32,7 +32,9 @@ set(SOURCE_FILES
     initBaseMechanics.cpp
 )
 
-
+# Zykl.io begin
+include_directories(${CMAKE_SOURCE_DIR}/modules)
+# Zykl.io end
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} SofaBaseTopology)
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_BASE_MECHANICS")

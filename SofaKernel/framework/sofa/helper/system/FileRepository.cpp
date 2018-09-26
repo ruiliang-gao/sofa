@@ -314,6 +314,42 @@ std::string FileRepository::relativeToPath(std::string path, std::string refPath
     return path;
 }
 
+// Zykl.io begin
+std::string FileRepository::getTempPath()
+{
+    std::string retval;
+
+#ifdef _WIN32
+    TCHAR wbuf [255];
+    GetTempPath (255, wbuf);
+
+    // conversion
+    char buf[255] = {0};
+    if ( !WideCharToMultiByte(CP_UTF8, 0, wbuf, -1, buf, 255, 0, 0) ) {
+        std::cerr << "widechar to multibyte encoding failed\n";
+        throw "FileRepository::getTempPath(): widechar to multibyte encoding failed";
+    }
+    retval = std::string(buf);
+#else
+
+//#ifdef __GCC__
+    char const *folder = getenv("TMPDIR");
+    if (folder == 0)
+        folder = "/tmp/";
+    retval = std::string(folder);
+
+//#else
+    /*std::cerr << "FileRepository::getTempPath() NOT DEFINED ON THIS PLATFORM\n";
+    throw "FileRepository::getTempPath() NOT DEFINED ON THIS PLATFORM";*/
+//#endif
+
+#endif
+
+    return retval;
+}
+// Zykl.io end
+
+
 } // namespace system
 
 } // namespace helper

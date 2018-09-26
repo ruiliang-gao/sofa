@@ -57,6 +57,12 @@ public:
     typedef core::objectmodel::Data<VecDeriv>		DataVecDeriv;
     typedef core::objectmodel::Data<MatrixDeriv>    DataMatrixDeriv;
 
+    // Zykl.io begin
+    void setM2b(int i) {
+        m2b.setValue(i);
+    }
+    // Zykl.io end
+
 protected:
 
     bool yetIntegrated;

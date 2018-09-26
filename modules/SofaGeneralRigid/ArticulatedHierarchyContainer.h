@@ -31,6 +31,8 @@
 #include <sofa/defaulttype/SolidTypes.h>
 #include <sofa/core/objectmodel/DataFileName.h>
 
+#include <sofa/defaulttype/Quat.h>
+
 namespace sofa
 {
 
@@ -39,6 +41,8 @@ namespace component
 
 namespace container
 {
+
+using namespace sofa::defaulttype;
 
 class ArticulationCenter;
 class Articulation;
@@ -66,6 +70,10 @@ public:
 
     void setFilename(std::string f) {filename.setValue(f);}
 
+    // Zykl.io begin
+    void setGlobalRotations(std::map<int, Quat> &globalRot) { this->globalRotQuat = globalRot; }
+    // Zykl.io end
+
     helper::vector<ArticulationCenter*> getArticulationCenters() { return articulationCenters; }
     ArticulationCenter* getArticulationCenterAsChild(int index);
     helper::vector<ArticulationCenter*> getAcendantList(int index);
@@ -79,8 +87,15 @@ public:
 
 protected:
     sofa::core::objectmodel::DataFileName filename;
-private:
 
+    // Zykl.io begin
+    std::map<int, Quat> globalRotQuat;
+    // Zykl.io end
+
+private:
+    // Zykl.io begin
+    void initGlobalRotations();
+    // Zykl.io end
 
     unsigned int id;
     sofa::helper::io::bvh::BVHJoint* joint;
@@ -158,6 +173,9 @@ public:
     */
     ArticulatedHierarchyContainer::Transform H_p_pLc, H_c_cLp, H_pLc_cLp;
 
+    // Zykl.io begin
+    Data<defaulttype::Quat> globalOrientation;
+    // Zykl.io end
 
     helper::vector<Articulation*> articulations;
 

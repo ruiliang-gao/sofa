@@ -120,6 +120,8 @@ if (NOT WIN32)
 
     set(ROS_FOUND False)
     if(ROS_CONFIG)
+        find_program(ROSPACK_EXE NAMES rospack DOC "rospack executable" PATHS ${ROS_ROOT}/bin)
+        message(STATUS "rospack: ${ROSPACK_EXE}")
         include(${ROS_CONFIG})
         set(ROS_FOUND True)
         set(ROS_INCLUDE_DIR ${ROS_ROOT}/include)

@@ -551,12 +551,81 @@ defaulttype::Vec<3,Real> Quater<Real>::toEulerVector() const
 
     Quater<Real> q = *this;
         q.normalize();
+
+        // Zykl.io begin
+        if(q[0]*q[0]+q[1]*q[1]==0.5 || q[1]*q[1]+q[2]*q[2]==0.5) {q[3]+=10-3; q.normalize();} // HACK to avoid singularities
+        // Zykl.io end
+
         defaulttype::Vec<3,Real> vEuler;
         vEuler[0] = atan2(2*(q[3]*q[0] + q[1]*q[2]) , (1-2*(q[0]*q[0] + q[1]*q[1])));   //roll
         vEuler[1] = asin(2*(q[3]*q[1] - q[2]*q[0]));                                    //pitch
         vEuler[2] = atan2(2*(q[3]*q[2] + q[0]*q[1]) , (1-2*(q[1]*q[1] + q[2]*q[2])));   //yaw
         return vEuler;
 }
+
+// Zykl.io begin
+template<class Real>
+defaulttype::Vec<3, Real> Quater<Real>::toTruEulerVector() const
+{
+
+    Quater<Real> q = *this;
+    q.normalize();
+
+    Real m[4][4];
+    q.buildRotationMatrix(m);
+
+    // Inspired by http://nghiaho.com/?page_id=846
+    double X = std::atan2(m[2][1], m[2][2]);
+    double Y = std::atan2(-m[2][0], sqrt(m[2][1] * m[2][1] + m[2][2] * m[2][2]));
+    double Z = std::atan2(m[1][0], m[0][0]);
+
+
+    defaulttype::Vec<3, Real> v(X, Y, Z);
+    return v;
+}
+
+template<class Real>
+defaulttype::Vec<3, Real> Quater<Real>::toEulerAngles() const
+{
+    // Store the Euler angles in radians
+    defaulttype::Vec<3, Real> pitchYawRoll;
+
+    Quater<Real> q = *this;
+    q.normalize();
+
+    double sqw = q[3] * q[3];
+    double sqx = q[0] * q[0];
+    double sqy = q[1] * q[1];
+    double sqz = q[2] * q[2];
+
+    // If quaternion is normalised the unit is one, otherwise it is the correction factor
+    double unit = sqx + sqy + sqz + sqw;
+    double test = q[0] * q[1] + q[2] * q[3];
+
+    if (test > 0.499f * unit)
+    {
+        // Singularity at north pole
+        pitchYawRoll[1] = 2.0f * (float)atan2(q[0], q[3]);  // Yaw
+        pitchYawRoll[0] = M_PI * 0.5f;                         // Pitch
+        pitchYawRoll[2] = 0.0f;                                // Roll
+        return pitchYawRoll;
+    }
+    else if (test < -0.499f * unit)
+    {
+        // Singularity at south pole
+        pitchYawRoll[1] = -2.0f * (float)atan2(q[0], q[3]); // Yaw
+        pitchYawRoll[0] = -M_PI * 0.5f;                        // Pitch
+        pitchYawRoll[2] = 0.0f;                                // Roll
+        return pitchYawRoll;
+    }
+
+    pitchYawRoll[1] = (float)atan2(2 * q[1] * q[3] - 2 * q[0] * q[2], sqx - sqy - sqz + sqw);       // Yaw
+    pitchYawRoll[0] = (float)asin(2 * test / unit);                                             // Pitch
+    pitchYawRoll[2] = (float)atan2(2 * q[0] * q[3] - 2 * q[1] * q[2], -sqx + sqy - sqz + sqw);      // Roll
+
+    return pitchYawRoll;
+}
+// Zykl.io end
 
 /*! Returns the slerp interpolation of Quaternions \p a and \p b, at time \p t.
 

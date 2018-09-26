@@ -66,7 +66,7 @@ list(APPEND SOURCE_FILES
     SuturePointPerformer.cpp
     )
 
-if(SOFA_WITH_DEPRECATED_COMPONENTS)
+# if(SOFA_WITH_DEPRECATED_COMPONENTS)
     list(APPEND HEADER_FILES
         ArticulatedHierarchyBVHController.h
         ArticulatedHierarchyController.h
@@ -90,7 +90,7 @@ if(SOFA_WITH_DEPRECATED_COMPONENTS)
         MechanicalStateControllerOmni.cpp
         NodeToggleController.cpp
         )
-endif()
+# endif()
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaMeshCollision SofaGeneralMeshCollision SofaGeneralRigid SofaGeneralVisual SofaTopologyMapping SofaDeformable SofaBoundaryCondition SofaGraphComponent SofaBaseVisual)

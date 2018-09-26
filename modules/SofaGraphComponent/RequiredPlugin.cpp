@@ -91,18 +91,22 @@ void RequiredPlugin::loadPlugin()
     helper::vector< std::string > loaded;
     helper::vector< std::string > failed;
     std::ostringstream errmsg;
+
+    msg_info("RequiredPlugin") << "Loading " << name << " with nameVec size of " << nameVecCopy.size() << sendl;
     for (std::size_t nameIndex = 0; nameIndex < nameVecCopy.size(); ++nameIndex)
     {
         const std::string& name = nameVecCopy[nameIndex];
-        //sout << "Loading " << name << sendl;
+        msg_info("RequiredPlugin") << "Loading " << name << sendl;
         bool nameLoaded = false;
         for (std::size_t suffixIndex = 0; suffixIndex < suffixVec.size(); ++suffixIndex)
         {
             const std::string& suffix = suffixVec[suffixIndex];
             std::string pluginPath = pluginManager->findPlugin(name, suffix, false);
             bool result = !pluginPath.empty();
+            msg_info("RequiredPlugin") << "findPlugin result for " << name << ": " << result << sendl;
             if (result && !pluginManager->pluginIsLoaded(pluginPath))
             {
+                msg_info("RequiredPlugin") << "Asking plugin manager to load from  " << pluginPath << sendl;
                 result = pluginManager->loadPlugin(pluginPath, suffix, false, &errmsg);
             }
             if (result)
