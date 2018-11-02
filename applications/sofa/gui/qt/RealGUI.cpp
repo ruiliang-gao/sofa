@@ -804,8 +804,10 @@ void RealGUI::fileOpen ( std::string filename, bool temporaryFile, bool reload )
     }
     if(reload)
         setSceneWithoutMonitor(mSimulation, filename.c_str(), temporaryFile);
-    else
+    else{
         setScene(mSimulation, filename.c_str(), temporaryFile);
+        m_docbrowser->loadHtml( filename ) ;
+    }
 
     configureGUI(mSimulation.get());
 
@@ -823,7 +825,20 @@ void RealGUI::fileOpen ( std::string filename, bool temporaryFile, bool reload )
     /// But we don't want that to happen each reload in interactive mode.
     if(!reload)
     {
-        checker.validate(mSimulation.get());
+        SceneCheckerVisitor checker(ExecParams::defaultInstance()) ;
+        checker.addCheck(simulation::scenechecking::SceneCheckAPIChange::newSPtr());
+        checker.addCheck(simulation::scenechecking::SceneCheckDuplicatedName::newSPtr());
+        checker.addCheck(simulation::scenechecking::SceneCheckMissingRequiredPlugin::newSPtr());
+        checker.validate(mSimulation.get()) ;
+
+        //Check the validity of the BBox
+        const sofa::defaulttype::BoundingBox& nodeBBox = mSimulation.get()->getContext()->f_bbox.getValue();
+        if(nodeBBox.isNegligeable())
+        {
+            msg_error("RealGUI") << "Global Bounding Box seems invalid ; please implement updateBBox in your components "
+                                    << "or force a value by adding the parameter bbox=\"minX minY minZ maxX maxY maxZ\" in your root node \n";
+            msg_error("RealGUI") << "Your viewer settings (based on the bbox) are likely invalid.";
+        }
     }
 }
 
@@ -1015,7 +1030,8 @@ void RealGUI::setScene(Node::SPtr root, const char* filename, bool temporaryFile
         FileMonitor::removeListener(m_filelistener);
         FileMonitor::addFile(filename, m_filelistener);
     }
-    setSceneWithoutMonitor(root, filename, temporaryFile);
+    setSceneWithoutMonitor(root, filename, temporaryFile) ;
+    m_docbrowser->loadHtml( filename ) ;
 }
 
 //------------------------------------
