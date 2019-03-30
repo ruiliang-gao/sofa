@@ -263,7 +263,26 @@ macro(sofa_install_get_libraries library)
     install(FILES ${ABS_LIB} DESTINATION lib)
 endmacro()
 
+##########################################################
+################ Pkg-Config helper macros ################
+##########################################################
 
+MACRO(sofa_generate_pkgconfig_file)
+    message(STATUS "Generating pkg-config file for SOFA library.")
+    set(options)
+    set(oneValueArgs SOFA_LIBRARY_NAME SOFA_LIBRARY_DESCRIPTION SOFA_LIBRARY_SO_NAME)
+    set(multiValueArgs SOFA_LIBRARY_INCLUDE_FLAGS)
+    cmake_parse_arguments(SOFA_GENERATE_PKGCONFIG_FILE "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    message(STATUS "SOFA library_name: ${SOFA_GENERATE_PKGCONFIG_FILE_SOFA_LIBRARY_NAME}, library description: ${SOFA_GENERATE_PKGCONFIG_FILE_SOFA_LIBRARY_DESCRIPTION}, library file name: ${SOFA_GENERATE_PKGCONFIG_FILE_SOFA_LIBRARY_SO_NAME}")
+
+    set(SOFA_LIBRARY_NAME ${SOFA_GENERATE_PKGCONFIG_FILE_SOFA_LIBRARY_NAME})
+    set(SOFA_LIBRARY_DESCRIPTION ${SOFA_GENERATE_PKGCONFIG_FILE_SOFA_LIBRARY_DESCRIPTION})
+    set(SOFA_LIBRARY_SO_NAME ${SOFA_GENERATE_PKGCONFIG_FILE_SOFA_LIBRARY_SO_NAME})
+    set(SOFA_LIBRARY_INCLUDE_FLAGS "")
+
+    CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/cmake/templates/sofa_lib.pc.in" "${CMAKE_BINARY_DIR}/share/pkgconfig/${SOFA_LIBRARY_NAME}.pc" @ONLY)
+
+ENDMACRO(sofa_generate_pkgconfig_file)
 
 
 ##########################################################

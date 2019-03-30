@@ -1,0 +1,11 @@
+prefix=@DEST_DIR@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: @SOFA_LIBRARY_NAME@
+Description: @SOFA_LIBRARY_DESCRIPTION@
+Version: 1.0
+
+Libs: -L${libdir} -l@SOFA_LIBRARY_SO_NAME@
+Cflags: -I${includedir} @SOFA_LIBRARY_INCLUDE_FLAGS@

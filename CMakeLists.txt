@@ -362,6 +362,18 @@ set(EXAMPLES_DIR "../share/sofa/examples")
 configure_file(${SOFA_KERNEL_SOURCE_DIR}/etc/sofa.ini.in "${CMAKE_BINARY_DIR}/etc/installedSofa.ini")
 install(FILES "${CMAKE_BINARY_DIR}/etc/installedSofa.ini" DESTINATION etc RENAME sofa.ini)
 
+# Install generated pkgconfig files
+message(STATUS "Installing pkgconfig files to: ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+file(GLOB PKGCONFIG_FILES "${CMAKE_BINARY_DIR}/share/pkgconfig/*")
+foreach(ITEM ${PKGCONFIG_FILES})
+   IF(NOT IS_DIRECTORY "${ITEM}")
+      message(STATUS "Adding pkgconfig file: ${ITEM}")
+      install(FILES ${ITEM} DESTINATION lib/pkgconfig)
+   ENDIF()
+endforeach()
+
+# install(FILES ${PKGCONFIG_FILES_TO_DEPLOY} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+
 option(SOFA_INSTALL_RESOURCES_FILES "Copy resources files (etc/, share/, examples/) when installing" ON)
 ## Install resource files
 if(SOFA_INSTALL_RESOURCES_FILES)
