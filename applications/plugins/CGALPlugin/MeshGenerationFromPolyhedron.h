@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -29,7 +29,8 @@
 #ifndef CGALPLUGIN_MESHGENERATIONFROMPOLYHEDRON_H
 #define CGALPLUGIN_MESHGENERATIONFROMPOLYHEDRON_H
 
-#define CGAL_MESH_3_VERBOSE
+#define CGAL_MESH_3_VERBOSE 0
+
 
 #include <sofa/defaulttype/Vec.h>
 #include <sofa/core/DataEngine.h>
@@ -75,7 +76,7 @@ public:
     void init();
     void reinit();
 
-    void update();
+    void doUpdate();
 
     void draw(const sofa::core::visual::VisualParams* vparams);
 
@@ -201,13 +202,9 @@ public:
 
 };
 
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(CGALPLUGIN_MESHGENERATIONFROMPOLYHEDRON_CPP)
-#ifndef SOFA_FLOAT
-extern template class SOFA_CGALPLUGIN_API MeshGenerationFromPolyhedron<sofa::defaulttype::Vec3dTypes>;
-#endif //SOFA_FLOAT
-#ifndef SOFA_DOUBLE
-extern template class SOFA_CGALPLUGIN_API MeshGenerationFromPolyhedron<sofa::defaulttype::Vec3fTypes>;
-#endif //SOFA_DOUBLE
+#if  !defined(CGALPLUGIN_MESHGENERATIONFROMPOLYHEDRON_CPP)
+extern template class SOFA_CGALPLUGIN_API MeshGenerationFromPolyhedron<sofa::defaulttype::Vec3Types>;
+ 
 #endif
 
 } //cgal

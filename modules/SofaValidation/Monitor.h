@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -54,26 +54,26 @@ public:
 
 protected:
     Monitor ();
-    ~Monitor ();
+    ~Monitor () override;
 public:
     /// init data
-    virtual void init () override;
+    void init () override;
 
     /// reset Monitored values
-    virtual void reset () override;
+    void reset () override;
 
     /** initialize gnuplot files
         * called when ExportGnuplot box is checked
     */
-    virtual void reinit() override;
+    void reinit() override;
 
     /** function called at every step of simulation;
         * store mechanical state vectors (forces, positions, velocities) into
         * the MonitorData nested class. The filter (which position(s), velocity(ies) or *force(s) are displayed) is made in the gui
     */
-    virtual void handleEvent( core::objectmodel::Event* ev ) override;
+    void handleEvent( core::objectmodel::Event* ev ) override;
 
-    virtual void draw (const core::visual::VisualParams* vparams) override;
+    void draw (const core::visual::VisualParams* vparams) override;
 
     /// create gnuplot files
     virtual void initGnuplot ( const std::string path );
@@ -132,17 +132,11 @@ protected:
     sofa::helper::vector < sofa::helper::vector<Coord> > m_savedPos; ///< store all the monitored positions, for trajectories display
 };
 
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_MISC_MONITOR_CPP)
-#ifndef SOFA_FLOAT
-extern template class SOFA_VALIDATION_API Monitor<defaulttype::Vec3dTypes>;
-extern template class SOFA_VALIDATION_API Monitor<defaulttype::Vec6dTypes>;
-extern template class SOFA_VALIDATION_API Monitor<defaulttype::Rigid3dTypes>;
-#endif
-#ifndef SOFA_DOUBLE
-extern template class SOFA_VALIDATION_API Monitor<defaulttype::Vec3fTypes>;
-extern template class SOFA_VALIDATION_API Monitor<defaulttype::Vec6fTypes>;
-extern template class SOFA_VALIDATION_API Monitor<defaulttype::Rigid3fTypes>;
-#endif
+#if  !defined(SOFA_COMPONENT_MISC_MONITOR_CPP)
+extern template class SOFA_VALIDATION_API Monitor<defaulttype::Vec3Types>;
+extern template class SOFA_VALIDATION_API Monitor<defaulttype::Vec6Types>;
+extern template class SOFA_VALIDATION_API Monitor<defaulttype::Rigid3Types>;
+
 #endif
 
 

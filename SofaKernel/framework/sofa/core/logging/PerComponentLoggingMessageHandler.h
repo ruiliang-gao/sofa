@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -27,8 +27,6 @@
 #define PERCOMPONENTLOGGINGMESSAGEHANDLER_H
 
 #include <sofa/helper/logging/MessageHandler.h>
-#include <sofa/helper/logging/Message.h>
-#include <vector>
 
 namespace sofa
 {
@@ -61,10 +59,10 @@ class SOFA_CORE_API PerComponentLoggingMessageHandler : public MessageHandler
 {
 public:
     PerComponentLoggingMessageHandler() ;
-    virtual ~PerComponentLoggingMessageHandler() {}
+    ~PerComponentLoggingMessageHandler() override {}
 
     /// Inherited from MessageHandler
-    virtual void process(Message& m) ;
+    void process(Message& m) override ;
 } ;
 
 ///

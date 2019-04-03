@@ -22,10 +22,6 @@ option(SOFA_NO_OPENGL
 "Compile Sofa with no OpenGL support. (This will define the SOFA_NO_OPENGL
 macro.)" OFF)
 
-option(SOFA_NO_EXTERN_TEMPLATE
-"Compile Sofa without using the extern templates mechanism. (This will prevent
-the SOFA_EXTERN_TEMPLATE macro from being defined.)" OFF)
-
 option(SOFA_NO_UPDATE_BBOX
 "Compile Sofa with the SOFA_NO_UPDATE_BBOX macro defined." OFF)
 
@@ -42,16 +38,16 @@ else()
     set(SOFA_WITH_THREADING_ "0")
 endif()
 
-if(SOFA_WITH_EXPERIMENTAL_FEATURES)
-    set(SOFA_WITH_EXPERIMENTAL_FEATURES_ "1")
-else()
-    set(SOFA_WITH_EXPERIMENTAL_FEATURES_ "0")
-endif()
-
 if(SOFA_WITH_DEPRECATED_COMPONENTS)
     set(SOFA_WITH_DEPRECATED_COMPONENTS_ "1")
 else()
     set(SOFA_WITH_DEPRECATED_COMPONENTS_ "0")
+endif()
+
+if(SOFA_NO_UPDATE_BBOX)
+    set(SOFA_NO_UPDATE_BBOX_ "1")
+else()
+    set(SOFA_NO_UPDATE_BBOX_ "0")
 endif()
 
 ### Dependencies
@@ -64,7 +60,6 @@ find_package(GTest CONFIG QUIET)
 set(SOFA_HAVE_GTEST ${GTest_FOUND})
 
 if(NOT SOFA_NO_OPENGL)
-
     # OpenGL (glu)
     find_package(OpenGL REQUIRED)
     # no target support for OpenGL on windows yet see
@@ -74,6 +69,11 @@ if(NOT SOFA_NO_OPENGL)
     list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${OPENGL_LIBRARIES})
     list(APPEND SOFAFRAMEWORK_DEPENDENCY_INCLUDE_DIRECTORIES ${OPENGL_INCLUDE_DIR})
 
+    if(OPENGL_GLU_FOUND AND UNIX AND NOT APPLE AND SOFA_BUILD_RELEASE_PACKAGE)
+        # Add GLU to Linux binaries
+        sofa_install_libraries_from_targets(OpenGL::GLU)
+    endif()
+
     ## GLEW
     find_package(GLEW)
     if(GLEW_FOUND)
@@ -81,30 +81,14 @@ if(NOT SOFA_NO_OPENGL)
         list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${GLEW_Target})
         list(APPEND SOFAFRAMEWORK_DEPENDENCY_INCLUDE_DIRECTORIES ${GLEW_INCLUDE_DIRS})
 
-        sofa_install_get_libraries(${GLEW_LIBRARIES})
+        if(WIN32)
+            sofa_copy_libraries_from_targets(${GLEW_Target}) # Windows dependency pack
+        endif()
+        sofa_install_libraries_from_targets(${GLEW_Target})
     else()
         message("OpenGL advanced functions (e.g shaders, FBO) are disabled.")
     endif()
     set(SOFA_HAVE_GLEW ${GLEW_FOUND})
-
-    ## GLUT
-    find_package(GLUT)
-    if(GLUT_FOUND)
-        if(NOT APPLE)
-            sofa_create_target(GLUT SofaFramework "${GLUT_glut_LIBRARY}" "${GLUT_INCLUDE_DIR}")
-            list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${GLUT_Target})
-        else()
-            # Workaround: on OS X, "${GLUT_glut_LIBRARY}" is not a target (it is
-            # actually "-framework GLUT"), so we use find_library to find
-            # something better (like /System/Library/Frameworks/GLUT.framework.)
-            # (Fun fact: FindGLUT.cmake litterally reads "These values for Apple
-            # could probably do with improvement.)"
-            find_library(ACTUAL_GLUT_LIBRARIES "GLUT")
-            list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK "${ACTUAL_GLUT_LIBRARIES}")
-        endif()
-    endif()
-    set(SOFA_HAVE_GLUT ${GLUT_FOUND})
-
 endif()
 
 ## tinyxml
@@ -119,25 +103,29 @@ if(ZLIB_FOUND)
     sofa_create_target(ZLIB SofaFramework "${ZLIB_LIBRARIES}" "${ZLIB_INCLUDE_DIRS}")
     list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${ZLIB_Target})
 
-    sofa_install_get_libraries(${ZLIB_LIBRARIES})
+    if(WIN32)
+        sofa_copy_libraries_from_targets(${ZLIB_Target}) # Windows dependency pack
+        sofa_install_libraries_from_targets(${ZLIB_Target})
+    endif()
 endif()
 set(SOFA_HAVE_ZLIB ${ZLIB_FOUND})
 
 ## Boost
 # required boost libraries
 find_package(Boost
-    REQUIRED system filesystem locale program_options
+    REQUIRED system filesystem locale program_options chrono atomic
     OPTIONAL_COMPONENTS thread date_time
     )
 
 set(SOFA_HAVE_BOOST_SYSTEM ${Boost_SYSTEM_FOUND})
 set(SOFA_HAVE_BOOST_FILESYSTEM ${Boost_FILESYSTEM_FOUND})
 set(SOFA_HAVE_BOOST_LOCALE ${Boost_LOCALE_FOUND})
-set(SOFA_HAVE_BOOST_PROGRAM_OPTIONS ${Boost_PROGRAM_OPTIONS})
+set(SOFA_HAVE_BOOST_PROGRAM_OPTIONS ${Boost_PROGRAM_OPTIONS_FOUND})
 set(SOFA_HAVE_BOOST_THREAD ${Boost_THREAD_FOUND})
 set(SOFA_HAVE_BOOST_DATE_TIME ${Boost_DATE_TIME_FOUND})
 
 list(APPEND Boost_INCLUDE_DIRS ${Boost_INCLUDE_DIR})
+list(APPEND SOFAFRAMEWORK_DEPENDENCY_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
 
 if(SOFA_HAVE_BOOST_SYSTEM
    AND SOFA_HAVE_BOOST_FILESYSTEM
@@ -150,30 +138,29 @@ if(SOFA_HAVE_BOOST_SYSTEM
     sofa_create_target(BoostLocale SofaFramework "${Boost_LOCALE_LIBRARY}" "${Boost_INCLUDE_DIRS}")
     sofa_create_target(BoostProgramOptions SofaFramework "${Boost_PROGRAM_OPTIONS_LIBRARY}" "${Boost_INCLUDE_DIRS}")
 
-    list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${BoostSystem_Target})
-    list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${BoostFileSystem_Target})
-    list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${BoostLocale_Target})
-    list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${BoostProgramOptions_Target})
-
-    sofa_install_get_libraries(${Boost_SYSTEM_LIBRARY})
-    sofa_install_get_libraries(${Boost_LOCALE_LIBRARY})
-    sofa_install_get_libraries(${Boost_FILESYSTEM_LIBRARY})
-    sofa_install_get_libraries(${Boost_PROGRAM_OPTIONS_LIBRARY})
+    set(BOOST_TARGETS
+        ${BoostSystem_Target}
+        ${BoostFileSystem_Target}
+        ${BoostLocale_Target}
+        ${BoostProgramOptions_Target})
 
     if(SOFA_HAVE_BOOST_DATE_TIME)
         sofa_create_target(BoostDateTime SofaFramework "${Boost_DATE_TIME_LIBRARY}" "${Boost_INCLUDE_DIRS}")
-        list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${BoostDateTime_Target})
-        sofa_install_get_libraries(${Boost_DATE_TIME_LIBRARY})
+        list(APPEND BOOST_TARGETS ${BoostDateTime_Target})
     endif()
 
     if(SOFA_HAVE_BOOST_THREAD)
         sofa_create_target(BoostThread SofaFramework "${Boost_THREAD_LIBRARY}" "${Boost_INCLUDE_DIRS}")
-        list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${BoostThread_Target})
-        sofa_install_get_libraries(${Boost_THREAD_LIBRARY})
+        list(APPEND BOOST_TARGETS ${BoostThread_Target})
     endif()
 
-else()
-    list(APPEND SOFAFRAMEWORK_DEPENDENCY_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
+    list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${BOOST_TARGETS})
+    sofa_install_libraries_from_targets(${BOOST_TARGETS})
+    sofa_install_libraries(${Boost_CHRONO_LIBRARY} ${Boost_ATOMIC_LIBRARY})
+    if(WIN32)
+        sofa_copy_libraries_from_targets(${BOOST_TARGETS})
+        sofa_copy_libraries(${Boost_CHRONO_LIBRARY} ${Boost_ATOMIC_LIBRARY})
+    endif()
 endif()
 
 ## Eigen
@@ -189,30 +176,28 @@ set(SOFA_BUILD_OPTIONS_SRC
         sharedlibrary_defines.h
         build_option_deprecated_components.h
         build_option_dump_visitor.h
-        build_option_experimental_features.h
         build_option_opengl.h
         build_option_threading.h
+        build_option_bbox.h
     )
 foreach(NAME ${SOFA_BUILD_OPTIONS_SRC})
     configure_file("${NAME}.in" "${CMAKE_BINARY_DIR}/include/sofa/config/${NAME}")
-    install(FILES "${CMAKE_BINARY_DIR}/include/sofa/config/${NAME}" DESTINATION "include/sofa/config")
+    install(FILES "${CMAKE_BINARY_DIR}/include/sofa/config/${NAME}" DESTINATION "include/sofa/config" COMPONENT headers)
 endforeach()
 
 configure_file("config.h.in" "${CMAKE_BINARY_DIR}/include/sofa/config.h")
-install(FILES "${CMAKE_BINARY_DIR}/include/sofa/config.h" DESTINATION "include/sofa/")
+install(FILES "${CMAKE_BINARY_DIR}/include/sofa/config.h" DESTINATION "include/sofa" COMPONENT headers)
 
 # make sure everyone in the build tree can see <sofa/config.h>
 #list(APPEND SOFAFRAMEWORK_DEPENDENCY_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_BINARY_DIR})
 list(REMOVE_DUPLICATES SOFAFRAMEWORK_DEPENDENCY_INCLUDE_DIRECTORIES)
 
 ## Version
-set(SOFAFRAMEWORK_VERSION "18.06.dev")
-
-## sofa/version.h
-set(SOFA_VERSION "180699")
-set(SOFA_VERSION_STR "\"18.06.dev\"")
+set(SOFAFRAMEWORK_VERSION "${Sofa_VERSION}")
+set(SOFA_VERSION_STR "\"${Sofa_VERSION}\"")
+set(SOFA_VERSION "${Sofa_VERSION_MAJOR}${Sofa_VERSION_MINOR}${Sofa_VERSION_PATCH}")
 configure_file(../framework/sofa/version.h.in "${CMAKE_BINARY_DIR}/include/sofa/version.h")
-install(FILES "${CMAKE_BINARY_DIR}/include/sofa/version.h" DESTINATION include/sofa)
+install(FILES "${CMAKE_BINARY_DIR}/include/sofa/version.h" DESTINATION include/sofa COMPONENT headers)
 
 
 ## Subdirectories
@@ -237,7 +222,7 @@ elseif(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
     target_compile_definitions(SofaHelper PUBLIC "NDEBUG")
 endif()
 
-if(WIN32 OR XBOX)
+if(WIN32)
     # Increase Number of Sections in .Obj file
     target_compile_options(SofaHelper PUBLIC "/bigobj")
 endif()
@@ -258,10 +243,10 @@ sofa_write_package_config_files(SofaFramework ${SOFAFRAMEWORK_VERSION})
 # Build tree
 configure_file(CMakeParseLibraryList.cmake ${CMAKE_BINARY_DIR}/cmake/CMakeParseLibraryList.cmake COPYONLY)
 # Install tree
-install(FILES CMakeParseLibraryList.cmake DESTINATION lib/cmake/SofaFramework)
+install(FILES CMakeParseLibraryList.cmake DESTINATION lib/cmake/SofaFramework COMPONENT headers)
 
 ## SofaMacros.cmake
 # Build tree
 configure_file(SofaMacros.cmake ${CMAKE_BINARY_DIR}/cmake/SofaMacros.cmake COPYONLY)
 # Install tree
-install(FILES SofaMacros.cmake DESTINATION lib/cmake/SofaFramework)
+install(FILES SofaMacros.cmake DESTINATION lib/cmake/SofaFramework COMPONENT headers)

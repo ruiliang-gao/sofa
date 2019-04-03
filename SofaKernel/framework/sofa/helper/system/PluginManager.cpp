@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -23,12 +23,15 @@
 #include <sofa/helper/system/FileRepository.h>
 #include <sofa/helper/system/SetDirectory.h>
 #include <sofa/helper/system/FileSystem.h>
+using sofa::helper::system::FileSystem;
 #include <sofa/helper/Utils.h>
 #include <sofa/helper/logging/Messaging.h>
-#include <fstream>
 #include <sofa/helper/system/config.h>
 
 #include <sofa/core/objectmodel/Base.h>
+
+#include <boost/filesystem.hpp>
+#include <fstream>
 
 using sofa::helper::Utils;
 using sofa::core::objectmodel::Base;
@@ -77,7 +80,6 @@ PluginManager & PluginManager::getInstance()
 
 PluginManager::PluginManager()
 {
-    m_searchPaths = PluginRepository.getPaths();
 }
 
 PluginManager::~PluginManager()
@@ -185,9 +187,9 @@ bool PluginManager::loadPluginByPath(const std::string& pluginPath, std::ostream
     return true;
 }
 
-bool PluginManager::loadPluginByName(const std::string& pluginName, const std::string& suffix, bool ignoreCase, std::ostream* errlog)
+bool PluginManager::loadPluginByName(const std::string& pluginName, const std::string& suffix, bool ignoreCase, bool recursive, std::ostream* errlog)
 {
-    std::string pluginPath = findPlugin(pluginName, suffix, ignoreCase);
+    std::string pluginPath = findPlugin(pluginName, suffix, ignoreCase, recursive);
 
     if (!pluginPath.empty())
     {
@@ -203,7 +205,7 @@ bool PluginManager::loadPluginByName(const std::string& pluginName, const std::s
     }
 }
 
-bool PluginManager::loadPlugin(const std::string& plugin, const std::string& suffix, bool ignoreCase, std::ostream* errlog)
+bool PluginManager::loadPlugin(const std::string& plugin, const std::string& suffix, bool ignoreCase, bool recursive, std::ostream* errlog)
 {
     if (FileSystem::isFile(plugin))
     {
@@ -213,7 +215,7 @@ bool PluginManager::loadPlugin(const std::string& plugin, const std::string& suf
     else
     {
         msg_info("PluginManager") << "Loading plugin by name: " << plugin << "\n";
-        return loadPluginByName(plugin, suffix, ignoreCase, errlog);
+        return loadPluginByName(plugin, suffix, ignoreCase, recursive, errlog);
     }
 }
 
@@ -233,7 +235,7 @@ bool PluginManager::unloadPlugin(const std::string &pluginPath, std::ostream* er
     }
 }
 
-Plugin* PluginManager::getPlugin(const std::string& plugin, const std::string& suffix, bool ignoreCase)
+Plugin* PluginManager::getPlugin(const std::string& plugin, const std::string& /*suffix*/, bool /*ignoreCase*/)
 {
     std::string pluginPath = plugin;
 
@@ -295,16 +297,18 @@ void PluginManager::init(const std::string& pluginPath)
 
 
 
-std::string PluginManager::findPlugin(const std::string& pluginName, const std::string& suffix, bool ignoreCase)
+std::string PluginManager::findPlugin(const std::string& pluginName, const std::string& suffix, bool ignoreCase, bool recursive, int maxRecursiveDepth)
 {
     msg_info("PluginManager") << "Find plugin: " << pluginName << " with suffix " << suffix << "; ignore case: " << ignoreCase << msgendl;
+    std::vector<std::string> searchPaths = PluginRepository.getPaths();
+
     std::string name(pluginName);
     name  += suffix;
     const std::string libName = DynamicLibrary::prefix + name + "." + DynamicLibrary::extension;
 
     msg_info("PluginManager") << "Searching for dynamic library file named: " << libName << msgendl;
     // First try: case sensitive
-    for (std::vector<std::string>::iterator i = m_searchPaths.begin(); i!=m_searchPaths.end(); i++)
+    for (std::vector<std::string>::iterator i = searchPaths.begin(); i!=searchPaths.end(); i++)
     {
         const std::string path = *i + "/" + libName;
         msg_info("PluginManager") << "Checking if file exists: " << path << msgendl;
@@ -314,26 +318,43 @@ std::string PluginManager::findPlugin(const std::string& pluginName, const std::
             return path;
         }
     }
-    // Second try: case insensitive
+    // Second try: case insensitive and recursive
     if (ignoreCase)
     {
         msg_info("PluginManager") << "Continue with case-insensitive search." << msgendl;
-        for (std::vector<std::string>::iterator i = m_searchPaths.begin(); i!=m_searchPaths.end(); i++)
+        if(!recursive) maxRecursiveDepth = 0;
+        const std::string downcaseLibName = Utils::downcaseString(libName);
+
+        for (std::vector<std::string>::iterator i = searchPaths.begin(); i!=searchPaths.end(); i++)
         {
             const std::string& dir = *i;
-            const std::string path = dir + "/" + libName;
-            const std::string downcaseLibName = Utils::downcaseString(libName);
-            std::vector<std::string> files;
-            FileSystem::listDirectory(dir, files);
-            msg_info("PluginManager") << "Looking in search path " << *i << " for file named " << downcaseLibName << msgendl;
-            for(std::vector<std::string>::iterator j = files.begin(); j != files.end(); j++)
+
+            boost::filesystem::recursive_directory_iterator iter(dir);
+            boost::filesystem::recursive_directory_iterator end;
+
+            while (iter != end)
             {
-                const std::string& filename = *j;
-                const std::string downcaseFilename = Utils::downcaseString(filename);
-                msg_info("PluginManager") << "Examining file: " << downcaseFilename << msgendl;
-                if (downcaseFilename == downcaseLibName) {
-                    msg_info("PluginManager") << "Found a case-insensitive match: " << (dir + "/" + filename) << msgendl;
-                    return dir + "/" + filename;
+                if ( iter.level() > maxRecursiveDepth )
+                {
+                    iter.no_push(); // skip
+                }
+                else if ( !boost::filesystem::is_directory(iter->path()) )
+                {
+                    const std::string path = iter->path().string();
+                    const std::string filename = iter->path().filename().string();
+                    const std::string downcaseFilename = Utils::downcaseString(filename);
+
+                    if (downcaseFilename == downcaseLibName)
+                    {
+                        return FileSystem::cleanPath(path);
+                    }
+                }
+
+                boost::system::error_code ec;
+                iter.increment(ec);
+                if (ec)
+                {
+                    msg_error("PluginManager") << "Error while accessing " << iter->path().string() << ": " << ec.message();
                 }
             }
         }

@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -23,9 +23,7 @@
 #define SOFA_CORE_MULTIMAPPING_H
 
 #include <sofa/core/BaseMapping.h>
-#include <sofa/core/State.h>
 #include <sofa/core/core.h>
-#include <sofa/core/VecId.h>
 
 namespace sofa
 {
@@ -83,7 +81,7 @@ protected:
     /// Constructor
     MultiMapping();
     /// Destructor
-    virtual ~MultiMapping() {}
+    ~MultiMapping() override {}
 public:
 
     void addInputModel(BaseState* model, const std::string& path = "" );
@@ -110,7 +108,7 @@ public:
     ///
     /// If the Mapping can be represented as a matrix \f$ J \f$, this method computes
     /// \f$ out = J in \f$
-    virtual void apply (const MechanicalParams* mparams, MultiVecCoordId outPos, ConstMultiVecCoordId inPos ) override;
+    void apply (const MechanicalParams* mparams, MultiVecCoordId outPos, ConstMultiVecCoordId inPos ) override;
 
     /// This method must be reimplemented by all mappings.
     /// InPos and OutPos by default contains VecIds of type V_COORD.
@@ -122,7 +120,7 @@ public:
     /// Apply the mapping to derived (velocity, displacement) vectors.
     /// \f$ out = J in \f$
     /// where \f$ J \f$ is the tangent operator (the linear approximation) of the mapping
-    virtual void applyJ (const MechanicalParams* mparams, MultiVecDerivId outVel, ConstMultiVecDerivId inVel ) override;
+    void applyJ (const MechanicalParams* mparams, MultiVecDerivId outVel, ConstMultiVecDerivId inVel ) override;
 
     /// This method must be reimplemented by all mappings.
     /// InDeriv and OutDeriv by default contains VecIds of type V_DERIV.
@@ -134,7 +132,7 @@ public:
     /// Apply the reverse mapping to force vectors.
     /// \f$ out += J^t in \f$
     /// where \f$ J \f$ is the tangent operator (the linear approximation) of the mapping
-    virtual void applyJT (const MechanicalParams* mparams, MultiVecDerivId inForce, ConstMultiVecDerivId outForce ) override;
+    void applyJT (const MechanicalParams* mparams, MultiVecDerivId inForce, ConstMultiVecDerivId outForce ) override;
 
     /// This method must be reimplemented by all mappings.
     /// InDeriv and OutDeriv by default contains VecIds of type V_DERIV.
@@ -143,7 +141,7 @@ public:
     virtual void applyJT(const MechanicalParams* mparams, const helper::vector<InDataVecDeriv*>& dataVecOutForce, const helper::vector<const OutDataVecDeriv*>& dataVecInForce) = 0;
 
     /// ApplyJT (Constraint)///
-    virtual void applyJT(const ConstraintParams* cparams, MultiMatrixDerivId inConst, ConstMultiMatrixDerivId outConst ) override
+    void applyJT(const ConstraintParams* cparams, MultiMatrixDerivId inConst, ConstMultiMatrixDerivId outConst ) override
     {
         helper::vector<InDataMatrixDeriv*> matOutConst;
         getMatInDeriv(inConst, matOutConst);
@@ -159,7 +157,7 @@ public:
     }
 
     /// computeAccFromMapping
-    virtual void computeAccFromMapping(const MechanicalParams* mparams, MultiVecDerivId outAcc, ConstMultiVecDerivId inVel, ConstMultiVecDerivId inAcc) override
+    void computeAccFromMapping(const MechanicalParams* mparams, MultiVecDerivId outAcc, ConstMultiVecDerivId inVel, ConstMultiVecDerivId inAcc) override
     {
         helper::vector<OutDataVecDeriv*> vecOutAcc;
         getVecOutDeriv(outAcc, vecOutAcc);
@@ -179,7 +177,7 @@ public:
     }
 
 
-    virtual void init() override;
+    void init() override;
 
     ///<TO REMOVE>
     /// Apply the mapping to position and velocity vectors.
@@ -191,7 +189,7 @@ public:
     /// Disable the mapping to get the original coordinates of the mapped model.
     ///
     /// It is for instance used in RigidMapping to get the local coordinates of the object.
-    virtual void disable() override;
+    void disable() override;
 
 
 
@@ -278,7 +276,7 @@ protected:
     ///
     /// That way, we can optimize Jacobian sparsity.
     /// Every Dofs are inserted by default. The mappings using only a subset of dofs should only insert these dofs in the mask.
-    virtual void updateForceMask() override;
+    void updateForceMask() override;
 
     /// keep pointers on the masks
     helper::vector<helper::StateMask*> maskFrom, maskTo;
@@ -286,51 +284,22 @@ protected:
 };
 
 
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_CORE_MULTIMAPPING_CPP)
+#if !defined(SOFA_CORE_MULTIMAPPING_CPP)
 
-#ifndef SOFA_FLOAT
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec1dTypes, defaulttype::Vec1dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec2dTypes, defaulttype::Vec3dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3dTypes, defaulttype::Vec3dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3dTypes, defaulttype::Vec2dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3dTypes, defaulttype::Vec1dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec6dTypes, defaulttype::Vec1dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3dTypes, defaulttype::Vec1dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3dTypes, defaulttype::Vec3dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3dTypes, defaulttype::Vec6dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3dTypes, defaulttype::Rigid3dTypes >;
-#endif
+template class SOFA_CORE_API MultiMapping< sofa::defaulttype::Vec1Types, sofa::defaulttype::Vec1Types >;
+template class SOFA_CORE_API MultiMapping< sofa::defaulttype::Vec2Types, sofa::defaulttype::Vec1Types >;
+template class SOFA_CORE_API MultiMapping< sofa::defaulttype::Vec3Types, sofa::defaulttype::Vec3Types >;
+template class SOFA_CORE_API MultiMapping< sofa::defaulttype::Vec3Types, sofa::defaulttype::Vec2Types >;
+template class SOFA_CORE_API MultiMapping< sofa::defaulttype::Vec3Types, sofa::defaulttype::Vec1Types >;
+template class SOFA_CORE_API MultiMapping< sofa::defaulttype::Vec6Types, sofa::defaulttype::Vec1Types >;
+template class SOFA_CORE_API MultiMapping< sofa::defaulttype::Rigid3Types, sofa::defaulttype::Vec1Types >;
+template class SOFA_CORE_API MultiMapping< sofa::defaulttype::Rigid3Types, sofa::defaulttype::Vec3Types >;
+template class SOFA_CORE_API MultiMapping< sofa::defaulttype::Rigid3Types, sofa::defaulttype::Vec6Types >;
+template class SOFA_CORE_API MultiMapping< sofa::defaulttype::Rigid3Types, sofa::defaulttype::Rigid3Types >;
 
 
-#ifndef SOFA_DOUBLE
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec1fTypes, defaulttype::Vec1fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec2fTypes, defaulttype::Vec1fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3fTypes, defaulttype::Vec3fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3fTypes, defaulttype::Vec2fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3fTypes, defaulttype::Vec1fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec6fTypes, defaulttype::Vec1fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3fTypes, defaulttype::Vec1fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3fTypes, defaulttype::Vec3fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3fTypes, defaulttype::Vec6fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3fTypes, defaulttype::Rigid3fTypes >;
-#endif
 
-#ifndef SOFA_FLOAT
-#ifndef SOFA_DOUBLE
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec1dTypes, defaulttype::Vec1fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec1fTypes, defaulttype::Vec1dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3dTypes, defaulttype::Vec3fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3fTypes, defaulttype::Vec3dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3dTypes, defaulttype::Vec2fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3fTypes, defaulttype::Vec2dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3dTypes, defaulttype::Vec1fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Vec3fTypes, defaulttype::Vec1dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3dTypes, defaulttype::Vec3fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3fTypes, defaulttype::Vec3dTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3dTypes, defaulttype::Vec6fTypes >;
-extern template class SOFA_CORE_API MultiMapping< defaulttype::Rigid3fTypes, defaulttype::Vec6dTypes >;
-#endif
-#endif
+
 
 #endif
 

@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -23,9 +23,7 @@
 #define SelectLabelROI_H_
 #include "config.h"
 
-#if !defined(__GNUC__) || (__GNUC__ > 3 || (_GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#pragma once
-#endif
+
 
 #include <sofa/core/DataEngine.h>
 #include <SofaBaseMechanics/MechanicalObject.h>
@@ -64,7 +62,7 @@ public:
     virtual std::string getTemplateName() const    override {        return templateName(this);    }
     static std::string templateName(const SelectLabelROI* = NULL)    {       return sofa::defaulttype::DataTypeName<T>::name();    }
 
-    virtual void init() override
+    void init() override
     {
         addInput(&d_labels);
         addInput(&d_selectLabels);
@@ -72,7 +70,7 @@ public:
         setDirtyValue();
     }
 
-    virtual void reinit() override
+    void reinit() override
     {
         update();
     }
@@ -86,9 +84,9 @@ protected:
     {
     }
 
-    virtual ~SelectLabelROI() {}
+    ~SelectLabelROI() override {}
 
-    virtual void update() override
+    void doUpdate() override
     {
         helper::ReadAccessor< Data< helper::vector<T>  > > selectLabels = d_selectLabels;
         // convert to set for efficient look-up
@@ -108,8 +106,6 @@ protected:
                     break;
                 }
         }
-
-        cleanDirty();
     }
 
 };

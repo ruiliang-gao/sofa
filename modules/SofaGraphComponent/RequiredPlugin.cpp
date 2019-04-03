@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -23,6 +23,8 @@
 #include "RequiredPlugin.h"
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/helper/system/PluginManager.h>
+#include <sofa/helper/system/FileSystem.h>
+using sofa::helper::system::FileSystem;
 #include <sofa/helper/logging/Messaging.h>
 
 using sofa::helper::system::PluginManager;
@@ -35,8 +37,6 @@ namespace component
 
 namespace misc
 {
-
-SOFA_DECL_CLASS(RequiredPlugin)
 
 int RequiredPluginClass = core::RegisterObject("Load the required plugins")
         .add< RequiredPlugin >();
@@ -86,7 +86,7 @@ void RequiredPlugin::loadPlugin()
     }
 
     const helper::vector<std::string>& nameVec = d_pluginName.getValue();
-    helper::vector<std::string> nameVecCopy=nameVec;
+    helper::vector<std::string> nameVecCopy = nameVec;
 
     helper::vector< std::string > loaded;
     helper::vector< std::string > failed;
@@ -95,24 +95,20 @@ void RequiredPlugin::loadPlugin()
     msg_info("RequiredPlugin") << "Loading " << name << " with nameVec size of " << nameVecCopy.size() << sendl;
     for (std::size_t nameIndex = 0; nameIndex < nameVecCopy.size(); ++nameIndex)
     {
-        const std::string& name = nameVecCopy[nameIndex];
+        const std::string& name = FileSystem::cleanPath( nameVecCopy[nameIndex] ); // name is not necessarily a path
         msg_info("RequiredPlugin") << "Loading " << name << sendl;
         bool nameLoaded = false;
         for (std::size_t suffixIndex = 0; suffixIndex < suffixVec.size(); ++suffixIndex)
         {
             const std::string& suffix = suffixVec[suffixIndex];
-            std::string pluginPath = pluginManager->findPlugin(name, suffix, false);
-            bool result = !pluginPath.empty();
-            msg_info("RequiredPlugin") << "findPlugin result for " << name << ": " << result << sendl;
-            if (result && !pluginManager->pluginIsLoaded(pluginPath))
+            if ( pluginManager->pluginIsLoaded(name) )
             {
-                msg_info("RequiredPlugin") << "Asking plugin manager to load from  " << pluginPath << sendl;
-                result = pluginManager->loadPlugin(pluginPath, suffix, false, &errmsg);
+                nameLoaded = true;
+                if (d_stopAfterFirstSuffixFound.getValue()) break;
             }
-            if (result)
+            else if ( pluginManager->loadPlugin(name, suffix, true, true, &errmsg) )
             {
-                msg_info("RequiredPlugin") << "Loaded " << pluginPath;
-                loaded.push_back(pluginPath);
+                loaded.push_back(name);
                 nameLoaded = true;
                 if (d_stopAfterFirstSuffixFound.getValue()) break;
             }
@@ -121,30 +117,27 @@ void RequiredPlugin::loadPlugin()
         {
             failed.push_back(name);
         }
-        else
+        else if (d_stopAfterFirstNameFound.getValue())
         {
-            if (d_stopAfterFirstNameFound.getValue()) break;
+            break;
         }
     }
     if (!failed.empty())
     {
         if ((d_requireAll.getValue() || (d_requireOne.getValue() && loaded.empty())))
         {
-            msg_error("RequiredPlugin") << errmsg.str();
-            msg_error("RequiredPlugin") <<(failed.size()>1?"s":"")<<" failed to load: " << failed ;
+            msg_error() << errmsg.str() << msgendl
+                        << "Failed to load: " << failed ;
         }
         else
         {
-            msg_warning("RequiredPlugin") << errmsg.str();
-            msg_warning("RequiredPlugin") << "Optional/alternate plugin"<<(failed.size()>1?"s":"")<<" failed to load: " << failed;
+            msg_warning() << errmsg.str() << msgendl
+                          << "Failed to load optional: " << failed;
         }
     }
     pluginManager->init();
-
 }
 
-}
-
-}
-
-}
+} // namespace misc
+} // namespace component
+} // namespace sofa

@@ -66,6 +66,7 @@ list(APPEND SOURCE_FILES
     SuturePointPerformer.cpp
     )
 
+<<<<<<< HEAD
 # if(SOFA_WITH_DEPRECATED_COMPONENTS)
     list(APPEND HEADER_FILES
         ArticulatedHierarchyBVHController.h

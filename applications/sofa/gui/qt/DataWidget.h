@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU General Public License as published by the Free  *
@@ -136,7 +136,7 @@ public:
 
     DataWidget(QWidget* parent,const char* name, MyData* d);
 
-    virtual ~DataWidget();
+    ~DataWidget() override;
 
     virtual void setData( MyData* d);
 
@@ -232,7 +232,7 @@ class QPushButtonUpdater: public QPushButton
     Q_OBJECT
 public:
 
-    QPushButtonUpdater( const QString & text, QWidget * parent = 0 ): QPushButton(text,parent) {};
+    QPushButtonUpdater( const QString & text, QWidget * parent = nullptr ): QPushButton(text,parent) {};
 
 public Q_SLOTS:
     void setDisplayed(bool b);
@@ -281,7 +281,7 @@ typedef sofa::helper::Factory<std::string, DataWidget, DataWidget::CreatorArgume
 } // namespace gui
 
 //MOC_SKIP_BEGIN
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_BUILD_SOFAGUIQT)
+#if  !defined(SOFA_BUILD_SOFAGUIQT)
 namespace helper
 {
 //delay load of the specialized Factory class. unique definition reside in the cpp file

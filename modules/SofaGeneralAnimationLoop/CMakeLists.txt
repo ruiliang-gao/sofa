@@ -12,14 +12,17 @@ set(SOURCE_FILES
 
 list(APPEND HEADER_FILES
     MultiStepAnimationLoop.h
-    MultiTagAnimationLoop.h )
+    MultiTagAnimationLoop.h
+    MechanicalMatrixMapper.h
+    MechanicalMatrixMapper.inl)
 
 list(APPEND SOURCE_FILES
     MultiStepAnimationLoop.cpp
-    MultiTagAnimationLoop.cpp )
+    MultiTagAnimationLoop.cpp
+    MechanicalMatrixMapper.cpp)
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} PUBLIC SofaSimulationCommon)
+target_link_libraries(${PROJECT_NAME} PUBLIC SofaSimulationCommon SofaBaseLinearSolver)
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_GENERAL_ANIMATION_LOOP")
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
 
@@ -29,4 +32,4 @@ else()
     sofa_generate_pkgconfig_file(SOFA_LIBRARY_NAME ${PROJECT_NAME} SOFA_LIBRARY_DESCRIPTION "The ${PROJECT_NAME} library." SOFA_LIBRARY_SO_NAME "${PROJECT_NAME}_d" SOFA_LIBRARY_INCLUDE_FLAGS "")
 endif()
 
-sofa_install_targets(SofaBase ${PROJECT_NAME} ${PROJECT_NAME})
+sofa_install_targets(SofaGeneral ${PROJECT_NAME} ${PROJECT_NAME})

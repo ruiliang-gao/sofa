@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -23,11 +23,7 @@
 #include <sofa/helper/io/ImageDDS.h>
 #include <sofa/helper/system/FileRepository.h>
 #include <iostream>
-#ifdef PS3
-#include <stdio.h>
-#else
 #include <cstdio>		// fopen and friends
-#endif
 
 #define _FOURCC(a, b, c, d) (a | (b << 8) | (c << 16) | (d << 24))
 
@@ -97,8 +93,6 @@ namespace helper
 {
 namespace io
 {
-SOFA_DECL_CLASS(ImageDDS)
-
 Creator<Image::FactoryImage,ImageDDS> ImageDDSClass("dds");
 
 #pragma pack (push, 1)
@@ -269,7 +263,7 @@ bool ImageDDS::load(std::string filename)
         case 24:
             if (header.ddpfPixelFormat.dwRBitMask == 0x0000FF &&
                 header.ddpfPixelFormat.dwGBitMask == 0x00FF00 &&
-                header.ddpfPixelFormat.dwGBitMask == 0xFF0000)
+                header.ddpfPixelFormat.dwBBitMask == 0xFF0000)
             {
                 type = Image::UNORM8;
                 channels = Image::RGB;

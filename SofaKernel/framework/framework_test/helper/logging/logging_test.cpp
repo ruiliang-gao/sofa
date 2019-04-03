@@ -69,7 +69,7 @@ class MyMessageHandler : public MessageHandler
 {
     vector<Message> m_messages ;
 public:
-    virtual void process(Message& m){
+    void process(Message& m) override{
         m_messages.push_back(m);
     }
 
@@ -584,7 +584,7 @@ TEST(LoggingTest, checkRoutingMessageHandler)
     std::vector<Message::Type> errortypes = {Message::Error, Message::Warning, Message::Info,
                                              Message::Advice, Message::Deprecated, Message::Fatal} ;
 
-    RichConsoleStyleMessageFormatter* fmt = new RichConsoleStyleMessageFormatter();
+    RichConsoleStyleMessageFormatter* fmt = &RichConsoleStyleMessageFormatter::getInstance();
     ConsoleMessageHandler* consolehandler = new ConsoleMessageHandler(fmt) ;
 
     /// Install a simple message filter that always call the ConsoleMessageHandler.

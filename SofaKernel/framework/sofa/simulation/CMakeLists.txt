@@ -62,6 +62,12 @@ set(HEADER_FILES
     init.h
     MechanicalGetMomentumVisitor.h
     BaseSimulationExporter.h
+    TaskScheduler.h
+    DefaultTaskScheduler.h
+    Task.h
+    InitTasks.h
+    Locks.h
+    VisitorAsync.h
 )
 
 set(SOURCE_FILES
@@ -119,9 +125,11 @@ set(SOURCE_FILES
     init.cpp
     MechanicalComputeEnergyVisitor.cpp
     BaseSimulationExporter.cpp
+    TaskScheduler.cpp
+    DefaultTaskScheduler.cpp
+    Task.cpp
+    InitTasks.cpp
 )
-
-
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaCore)
@@ -134,7 +142,4 @@ else()
     sofa_generate_pkgconfig_file(SOFA_LIBRARY_NAME ${PROJECT_NAME} SOFA_LIBRARY_DESCRIPTION "The ${PROJECT_NAME} library." SOFA_LIBRARY_SO_NAME "${PROJECT_NAME}_d" SOFA_LIBRARY_INCLUDE_FLAGS "")
 endif()
 
-sofa_install_targets(SofaSimulation ${PROJECT_NAME} ${PROJECT_NAME})
-
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/" DESTINATION "include/sofa/simulation"
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
+sofa_install_targets(SofaSimulation ${PROJECT_NAME} "sofa/simulation")

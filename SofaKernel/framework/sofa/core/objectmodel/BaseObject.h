@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -22,10 +22,7 @@
 #ifndef SOFA_CORE_OBJECTMODEL_BASEOBJECT_H
 #define SOFA_CORE_OBJECTMODEL_BASEOBJECT_H
 
-#include <sofa/core/objectmodel/Base.h>
 #include <sofa/core/objectmodel/BaseContext.h>
-#include <sofa/core/objectmodel/BaseObjectDescription.h>
-#include <sofa/core/objectmodel/Link.h>
 
 namespace sofa
 {
@@ -78,7 +75,7 @@ public:
 protected:
     BaseObject();
 
-    virtual ~BaseObject();
+    ~BaseObject() override;
 
 public:
 
@@ -104,7 +101,7 @@ public:
     }
 
     /// Parse the given description to assign values to this object's fields and potentially other parameters
-    virtual void parse ( BaseObjectDescription* arg ) override;
+    void parse ( BaseObjectDescription* arg ) override;
 
     /// Initialization method called at graph creation and modification, during top-down traversal.
     virtual void init();
@@ -157,9 +154,9 @@ public:
 
     virtual void removeSlave(BaseObject::SPtr s);
 
-    virtual void copyAspect(int destAspect, int srcAspect) override;
+    void copyAspect(int destAspect, int srcAspect) override;
 
-    virtual void releaseAspect(int aspect) override;
+    void releaseAspect(int aspect) override;
 
     /// @}
 
@@ -441,11 +438,11 @@ public:
     virtual void computeBBox(const core::ExecParams* /* params */, bool /*onlyVisible*/=false) {}
 
     /// Sets a source Object and parses it to collect dependent Data
-    void setSrc(const std::string &v, std::vector< std::string > *attributeList=0);
+    void setSrc(const std::string &v, std::vector< std::string > *attributeList=nullptr);
 
     /// Sets a source Object and parses it to collect dependent Data
     /// Use it before scene graph insertion
-    void setSrc(const std::string &v, const BaseObject *loader, std::vector< std::string > *attributeList=0);
+    void setSrc(const std::string &v, const BaseObject *loader, std::vector< std::string > *attributeList=nullptr);
 
     void* findLinkDestClass(const BaseClass* destType, const std::string& path, const BaseLink* link) override;
 

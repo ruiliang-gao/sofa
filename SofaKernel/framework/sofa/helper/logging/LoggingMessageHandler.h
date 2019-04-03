@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -66,7 +66,7 @@ class SOFA_HELPER_API LoggingMessageHandler : public MessageHandler
 {
 public:
     LoggingMessageHandler() ;
-    virtual ~LoggingMessageHandler() {}
+    ~LoggingMessageHandler() override {}
 
     //TODO(dmarchal): there is several defect in the design of this class:
     //   - no maximum buffer size (we should implement a circular buffer approach)
@@ -75,12 +75,12 @@ public:
     //   - counting the number of activate/deactivate is a weak form of tracking the
     //     client of this class.
     void reset() ;
-    int activate() ;
-    int deactivate() ;
+    size_t activate() ;
+    size_t deactivate() ;
     const vector<Message>& getMessages() const ;
 
     /// Inherited from MessageHandler
-    virtual void process(Message& m) ;
+    void process(Message& m) override ;
 
 private:
     int             m_activationCount    {0};
@@ -97,8 +97,8 @@ class SOFA_HELPER_API MainLoggingMessageHandler
 {
 public:
     static LoggingMessageHandler& getInstance() ;
-    static int activate() ;
-    static int deactivate() ;
+    static size_t activate() ;
+    static size_t deactivate() ;
     static const vector<Message>& getMessages() ;
 };
 
@@ -126,7 +126,7 @@ public:
         return messages.end() ;
     }
 
-    int size()
+    size_t size()
     {
         const std::vector<Message>& messages = MainLoggingMessageHandler::getMessages() ;
 
@@ -134,7 +134,7 @@ public:
     }
 
 private:
-    unsigned int m_firstMessage      {0} ;
+    size_t m_firstMessage      {0} ;
 };
 
 

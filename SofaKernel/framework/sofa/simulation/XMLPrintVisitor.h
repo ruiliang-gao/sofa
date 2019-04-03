@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -22,9 +22,7 @@
 #ifndef SOFA_SIMULATION_XMLPRINTACTION_H
 #define SOFA_SIMULATION_XMLPRINTACTION_H
 
-#if !defined(__GNUC__) || (__GNUC__ > 3 || (_GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#pragma once
-#endif
+
 
 #include <sofa/simulation/Visitor.h>
 #include <string>
@@ -53,12 +51,12 @@ public:
 
     void processBaseObject(core::objectmodel::BaseObject* obj);
 
-    virtual Result processNodeTopDown(simulation::Node* node);
-    virtual void processNodeBottomUp(simulation::Node* node);
-    virtual const char* getClassName() const { return "XMLPrintVisitor"; }
+    Result processNodeTopDown(simulation::Node* node) override;
+    void processNodeBottomUp(simulation::Node* node) override;
+    const char* getClassName() const override { return "XMLPrintVisitor"; }
     int getLevel() const {return level;}
     void setLevel(int l) {level=l;}
-	virtual bool treeTraversal(TreeTraversalRepetition& repeat);
+	bool treeTraversal(TreeTraversalRepetition& repeat) override;
 };
 
 } // namespace simulation

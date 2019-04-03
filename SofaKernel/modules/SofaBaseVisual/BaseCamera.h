@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -28,12 +28,11 @@
 #include <sofa/defaulttype/Mat.h>
 #include <sofa/helper/Quater.h>
 
-#include <sofa/core/objectmodel/KeypressedEvent.h>
-#include <sofa/core/objectmodel/KeyreleasedEvent.h>
-#include <sofa/core/objectmodel/MouseEvent.h>
 #include <sofa/core/visual/VisualParams.h>
 #include <sofa/helper/system/config.h>
 #include <sofa/helper/OptionsGroup.h>
+
+#include "BackgroundSetting.h"
 
 namespace sofa
 {
@@ -50,7 +49,6 @@ public:
     SOFA_CLASS(BaseCamera, core::objectmodel::BaseObject);
 
     typedef sofa::core::visual::VisualParams::CameraType CameraType;
-    typedef defaulttype::Vec3Types::Real Real;
     typedef defaulttype::Vector3 Vec3;
     typedef defaulttype::Matrix3 Mat3;
     typedef defaulttype::Matrix4 Mat4;
@@ -98,12 +96,15 @@ public:
     Data<helper::vector<float> > p_modelViewMatrix; ///< ModelView Matrix
     Data<helper::vector<float> > p_projectionMatrix; ///< Projection Matrix
 
-    BaseCamera();
-    virtual ~BaseCamera();
+    SingleLink<BaseCamera, sofa::component::configurationsetting::BackgroundSetting,
+               BaseLink::FLAG_STOREPATH> l_background ;
 
-    virtual void init() override;
-    virtual void reinit() override;
-    virtual void bwdInit() override;
+    BaseCamera();
+    ~BaseCamera() override;
+
+    void init() override;
+    void reinit() override;
+    void bwdInit() override;
 
     void activate();
     void desactivate();
@@ -197,7 +198,7 @@ public:
     Vec3 getLookAtFromOrientation(const Vec3 &pos, const double &distance,const Quat & orientation);
     Vec3 getPositionFromOrientation(const Vec3 &lookAt, const double &distance, const Quat& orientation);
 
-    virtual void manageEvent(core::objectmodel::Event* e)=0;
+    virtual void manageEvent(core::objectmodel::Event* event) = 0 ;
     virtual void internalUpdate() {}
 
     void handleEvent(sofa::core::objectmodel::Event* event) override;
@@ -247,6 +248,8 @@ public:
     {
         return 1.0;
     }
+
+    void draw(const core::visual::VisualParams*) override ;
 
 protected:
     void updateOutputData();

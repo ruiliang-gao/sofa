@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -60,7 +60,7 @@ protected:
     SingleLink<VisualManagerSecondaryPass, OglShader, BaseLink::FLAG_STOREPATH | BaseLink::FLAG_STRONGLINK> l_shader;
 
     VisualManagerSecondaryPass();
-    virtual ~VisualManagerSecondaryPass();
+    ~VisualManagerSecondaryPass() override;
 
     virtual void traceFullScreenQuad();
 
@@ -74,9 +74,9 @@ public:
     void bindInput(core::visual::VisualParams* /*vp*/);
     void unbindInput();
 
-    helper::gl::FrameBufferObject* getFBO() override {return fbo;};
+    helper::gl::FrameBufferObject& getFBO() override {return *fbo;}
 
-    const sofa::core::objectmodel::TagSet& getOutputTags() {return output_tags.getValue();};
+    const sofa::core::objectmodel::TagSet& getOutputTags() {return output_tags.getValue();}
 
 private:
 

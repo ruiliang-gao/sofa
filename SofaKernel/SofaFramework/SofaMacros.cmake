@@ -1,69 +1,5 @@
 include(CMakePackageConfigHelpers)
-
-# sofa_write_package_config_files(Foo <version> <build-include-dirs>)
-#
-# Create CMake package configuration files
-# - In the build tree:
-#   - ${CMAKE_BINARY_DIR}/cmake/FooConfig.cmake
-#   - ${CMAKE_BINARY_DIR}/cmake/FooConfigVersion.cmake
-# - In the install tree:
-#   - lib/cmake/Foo/FooConfigVersion.cmake
-#   - lib/cmake/Foo/FooConfig.cmake
-#   - lib/cmake/Foo/FooTargets.cmake
-#
-# This macro factorizes boilerplate CMake code for the different
-# packages in Sofa.  It assumes that there is a FooConfig.cmake.in
-# file template in the same directory.  For example, if a package Foo
-# depends on Bar and Baz, and creates the targets Foo and Qux, here is
-# a typical FooConfig.cmake.in:
-#
-# @PACKAGE_INIT@
-#
-# find_package(Bar REQUIRED)
-# find_package(Baz REQUIRED)
-#
-# if(NOT TARGET Qux)
-# 	include("${CMAKE_CURRENT_LIST_DIR}/FooTargets.cmake")
-# endif()
-#
-# check_required_components(Foo Qux)
-
-macro(sofa_install_targets package_name the_targets install_include_subdir)
-
-    install(TARGETS ${the_targets}
-            EXPORT ${package_name}Targets
-            RUNTIME DESTINATION bin COMPONENT Runtime
-            LIBRARY DESTINATION lib COMPONENT Runtime
-            ARCHIVE DESTINATION lib COMPONENT Runtime
-            PUBLIC_HEADER DESTINATION include/${install_include_subdir} COMPONENT Development)
-endmacro()
-
-macro(sofa_write_package_config_files package_name version)
-
-    ## <package_name>Targets.cmake
-    install(EXPORT ${package_name}Targets DESTINATION lib/cmake/${package_name})
-
-    ## <package_name>ConfigVersion.cmake
-    set(filename ${package_name}ConfigVersion.cmake)
-    write_basic_package_version_file(${filename} VERSION ${version} COMPATIBILITY ExactVersion)
-    configure_file("${CMAKE_CURRENT_BINARY_DIR}/${filename}"
-                   "${CMAKE_BINARY_DIR}/cmake/${filename}" COPYONLY)
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${filename}" DESTINATION lib/cmake/${package_name})
-
-    ### <package_name>Config.cmake
-    configure_package_config_file(${package_name}Config.cmake.in
-                                  "${CMAKE_BINARY_DIR}/cmake/${package_name}Config.cmake"
-                                  INSTALL_DESTINATION lib/cmake/${package_name})
-    install(FILES "${CMAKE_BINARY_DIR}/cmake/${package_name}Config.cmake"
-            DESTINATION lib/cmake/${package_name})
-
-endmacro()
-
-macro(sofa_create_package package_name version the_targets include_subdir)
-    sofa_install_targets("${package_name}" "${the_targets}" "${include_subdir}")
-    sofa_write_package_config_files("${package_name}" "${version}")
-endmacro()
-
+include(CMakeParseLibraryList)
 
 
 # - Create an imported target from a library path and an include dir path.
@@ -103,9 +39,6 @@ endmacro()
 # sofa_create_target( PNG MyNamespace "${PNG_LIBRARY}" "${PNG_INCLUDE_DIRS}" )
 # target_link_libraries( myLib PUBLIC ${PNG_Target} )
 #
-
-include(CMakeParseLibraryList)
-
 macro(sofa_create_target TARGETNAME NAMESPACE LIBRARY_PATH INCLUDE_DIRS)
     # message("TARGETNAME ${TARGETNAME}")
     set(NAMESPACE_TARGETNAME "${NAMESPACE}::${TARGETNAME}")
@@ -158,9 +91,7 @@ endmacro()
 
 
 
-
 macro(sofa_add_generic directory name type)
-
     if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/${directory}" AND IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${directory}")
         message(STATUS "sofa_add_generic: Adding ${name} of type ${type} in directory ${directory}")
         string(TOUPPER ${type}_${name} option)
@@ -208,6 +139,129 @@ macro(sofa_add_generic directory name type)
     endif()
 endmacro()
 
+
+macro(sofa_add_plugin directory plugin_name)
+    sofa_add_generic( ${directory} ${plugin_name} "Plugin" ${ARGV2} )
+endmacro()
+
+
+macro(sofa_add_plugin_experimental directory plugin_name)
+    sofa_add_generic( ${directory} ${plugin_name} "Plugin" ${ARGV2} )
+    message("-- ${plugin_name} is an experimental feature, use it at your own risk.")
+endmacro()
+
+
+macro(sofa_add_module directory module_name)
+    sofa_add_generic( ${directory} ${module_name} "Module" ${ARGV2} )
+endmacro()
+
+macro(sofa_add_module_experimental directory module_name)
+    sofa_add_generic( ${directory} ${module_name} "Module" ${ARGV2} )
+    message("-- ${module_name} is an experimental feature, use it at your own risk.")
+endmacro()
+
+macro(sofa_add_application directory app_name)
+    sofa_add_generic( ${directory} ${app_name} "Application" ${ARGV2} )
+endmacro()
+
+
+### External projects management
+# Thanks to http://crascit.com/2015/07/25/cmake-gtest/
+#
+# Use this macro (subdirectory or plugin version) to add out-of-repository projects.
+# Usage:
+# Add repository configuration in MyProjectDir/ExternalProjectConfig.cmake.in
+# Call sofa_add_subdirectory_external(MyProjectDir MyProjectName)
+# Or sofa_add_plugin_external(MyProjectDir MyProjectName [ON,OFF])
+# See plugins/SofaHighOrder for example
+#
+macro(sofa_add_generic_external directory name type)
+    if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/${directory}" OR NOT IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${directory}")
+        message("(${CMAKE_CURRENT_LIST_DIR}/${location}) does not exist and will be ignored.")
+        return()
+    endif()
+
+    set(location "${CMAKE_CURRENT_LIST_DIR}/${directory}")
+
+    string(TOUPPER ${type}_${name} option)
+
+    # optional parameter to activate/desactivate the option
+    set(active OFF)
+    if(${ARGV3})
+        set(active ON)
+    endif()
+
+    if("${type}" STREQUAL "Subdirectory")
+        string(TOUPPER MODULE_${PROJECT_NAME} module_name)
+        string(TOUPPER plugin_${PROJECT_NAME} plugin_name)
+        string(TOUPPER ${name} uppername)
+        if(DEFINED ${module_name})
+            set(option ${module_name}_FETCH_${uppername})
+        elseif(DEFINED ${plugin_name})
+            set(option ${plugin_name}_FETCH_${uppername})
+        else()
+            set(option SOFA_FETCH_${uppername})
+        endif()
+        option(${option} "Fetch ${name} repository." ${active})
+    else()
+        option(${option} "Fetch and build the ${name} ${type}." ${active})
+    endif()
+
+    # Setup temporary directory
+    set(${name}_TEMP_DIR "${CMAKE_BINARY_DIR}/external_directories/fetched/${name}/" )
+
+    # Fetch
+    if(${option})
+        message("Fetching ${type} ${name}")
+
+        message("Checking for ${${name}_TEMP_DIR}")
+        if(NOT EXISTS ${${name}_TEMP_DIR})
+            message("Creating ${${name}_TEMP_DIR}")
+            file(MAKE_DIRECTORY ${${name}_TEMP_DIR})
+        endif()
+
+        # Download and unpack  at configure time
+        configure_file(${location}/ExternalProjectConfig.cmake.in ${${name}_TEMP_DIR}/CMakeLists.txt)
+        file(COPY ${location}/ExternalProjectConfig.cmake.in DESTINATION ${${name}_TEMP_DIR})
+
+        #execute script to get src
+        message("Pulling ${name}... ")
+        execute_process(COMMAND "${CMAKE_COMMAND}" -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -G "${CMAKE_GENERATOR}" .
+            WORKING_DIRECTORY "${${name}_TEMP_DIR}/" )
+        execute_process(COMMAND "${CMAKE_COMMAND}" --build .
+            WORKING_DIRECTORY  "${${name}_TEMP_DIR}/" )
+
+        if(EXISTS "${location}/.git")
+            message("... Done")
+            # add .gitignore for Sofa
+            file(WRITE "${location}/.gitignore" "*")
+            file(COPY ${${name}_TEMP_DIR}/ExternalProjectConfig.cmake.in DESTINATION ${location})
+        else()
+            message("... error while pulling ${name}")
+        endif()
+    endif()
+
+    # Add
+    if(EXISTS "${location}/.git" AND IS_DIRECTORY "${location}/.git")
+        configure_file(${location}/ExternalProjectConfig.cmake.in ${${name}_TEMP_DIR}/CMakeLists.txt)
+        if("${type}" STREQUAL "Subdirectory")
+            add_subdirectory("${location}" "${name}")
+        elseif("${type}" STREQUAL "Plugin")
+            sofa_add_plugin("${name}" "${name}" ${active})
+        endif()
+    endif()
+endmacro()
+
+macro(sofa_add_subdirectory_external directory name)
+    sofa_add_generic_external(${directory} ${name} "Subdirectory" ${ARGV2})
+endmacro()
+
+macro(sofa_add_plugin_external directory name)
+    sofa_add_generic_external(${directory} ${name} "Plugin" ${ARGV2})
+endmacro()
+
+
+
 # Declare a (unique, TODO?) directory containing the python scripts of
 # a plugin.  This macro:
 # - creates rules to install all the .py scripts in ${directory} to
@@ -227,40 +281,343 @@ macro(sofa_set_python_directory plugin_name directory)
         file(RELATIVE_PATH script "${CMAKE_CURRENT_SOURCE_DIR}/${directory}" "${python_file}")
         get_filename_component(path ${script} DIRECTORY)
         install(FILES ${directory}/${script}
-                DESTINATION "lib/python2.7/site-packages/${path}")
+                DESTINATION "lib/python2.7/site-packages/${path}"
+                COMPONENT headers)
     endforeach()
 
     ## Python configuration file (build tree)
     file(WRITE "${CMAKE_BINARY_DIR}/etc/sofa/python.d/${plugin_name}"
-         "${CMAKE_CURRENT_SOURCE_DIR}/python")
+         "${CMAKE_CURRENT_SOURCE_DIR}/${directory}")
     ## Python configuration file (install tree)
      file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/installed-SofaPython-config"
          "lib/python2.7/site-packages")
      install(FILES "${CMAKE_CURRENT_BINARY_DIR}/installed-SofaPython-config"
              DESTINATION "etc/sofa/python.d"
-             RENAME "${plugin_name}")
+             RENAME "${plugin_name}"
+             COMPONENT headers)
 endmacro()
 
-macro(sofa_add_plugin directory plugin_name)
-    message(STATUS "Adding plugin ${plugin_name} in directory ${directory}")
-    sofa_add_generic( ${directory} ${plugin_name} "Plugin" ${ARGV2} )
+# - Create a target for a python binding module relying on pybind11
+#
+# sofa_add_pybind11_module(TARGET OUTPUT SOURCES DEPENDS CYTHONIZE)
+#  TARGET             - (input) the name of the generated target.
+#  OUTPUT             - (input) the output location.
+#  SOURCES            - (input) list of input files. It can be .cpp, .h ...
+#  DEPENDS            - (input) set of target the generated target will depends on.
+#  NAME               - (input) The actual name of the generated .so file
+#                       (most commonly equals to TARGET, without the "python" prefix)
+#
+# The typical usage scenario is to build a python module out of cython binding.
+#
+# Example:
+# find_package(pybind11)
+# set(SOURCES_FILES
+#       ${CMAKE_CURRENT_SOURCE_DIR}/ModuleDir/initbindings.cpp
+#       ${CMAKE_CURRENT_SOURCE_DIR}/ModuleDir/binding1.cpp
+#       ${CMAKE_CURRENT_SOURCE_DIR}/ModuleDir/binding2.cpp
+#       [...]
+#    )
+# sofa_add_pybind11_module( TARGET MyModule SOURCES ${SOURCE_FILES}
+#                           DEPENDS Deps1 Deps2  OUTPUT ${CMAKE_CURRENT_BIN_DIR}
+#                           NAME python_module_name)
+function(sofa_add_pybind11_module)
+    set(options)
+    set(oneValueArgs TARGET OUTPUT NAME)
+    set(multiValueArgs SOURCES DEPENDS)
+    cmake_parse_arguments("" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+    set(PYBIND11_CPP_STANDARD -std=c++11)
+    pybind11_add_module(${_TARGET} SHARED ${_SOURCES} NO_EXTRAS)
+    target_link_libraries(${_TARGET} PRIVATE ${_DEPENDS} ${PYTHON_LIBRARIES} pybind11::module)
+    set_target_properties(${_TARGET} PROPERTIES
+      ARCHIVE_OUTPUT_DIRECTORY ${_OUTPUT}
+      LIBRARY_OUTPUT_DIRECTORY ${_OUTPUT}
+      RUNTIME_OUTPUT_DIRECTORY ${_OUTPUT}
+      OUTPUT_NAME ${_NAME})
+endfunction()
+
+
+# - Create a target for a mixed python module composed of .py and binding code (in .cpp or .pyx)
+#
+# sofa_add_python_module(TARGET OUTPUT SOURCES DEPENDS CYTHONIZE)
+#  TARGET             - (input) the name of the generated target.
+#  OUTPUT             - (input) the output location, if not provided ${CMAKE_CURRENT_SOURCE_DIR} will be used. 
+#  SOURCES            - (input) list of input files. It can be .py, .pyx, .pxd, .cpp
+#                               .cpp are compiled, .pyx can generate .cpp if CYTHONIZE param is set to true
+#  DEPENDS            - (input) set of target the generated target will depends on.
+#  CYTHONIZE          - (input) boolean indicating wether or not
+#                               we need to call cython on the .pyx file to re-generate the .cpp file.
+#
+# The typical usage scenario is to build a python module out of cython binding.
+#
+# Example:
+# find_package(Cython QUIET)
+# set(SOURCES_FILES
+#       ${CMAKE_CURRENT_SOURCE_DIR}/ModuleDir/__init__.py
+#       ${CMAKE_CURRENT_SOURCE_DIR}/ModuleDir/purepython.py
+#       ${CMAKE_CURRENT_SOURCE_DIR}/ModuleDir/binding_withCython.pyx
+#       ${CMAKE_CURRENT_SOURCE_DIR}/ModuleDir/binding_withCython.pxd
+#       ${CMAKE_CURRENT_SOURCE_DIR}/ModuleDir/binding_withCPython.cpp
+#    )
+# sofa_add_python_module( TARGET MyModule SOURCES ${SOURCE_FILES} DEPENDS Deps1 Deps2 CYTHONIZE True OUTPUT ${CMAKE_CURRENT_BIN_DIR})
+function(sofa_add_python_module)
+    set(options)
+    set(oneValueArgs TARGET OUTPUT CYTHONIZE DIRECTORY)
+    set(multiValueArgs SOURCES DEPENDS)
+    cmake_parse_arguments("" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+
+    set(INCLUDE_DIRS)
+    set(LIB_DIRS)
+
+    add_custom_target(${_TARGET}
+                       ALL
+                       SOURCES ${_SOURCES}
+                       DEPENDS ${_DEPENDS})
+
+    if(NOT PYTHON_BINDING_VERSION)
+        set(PYTHON_BINDING_VERSION 3)
+    endif()
+
+    set(_DIRECTORY ${_OUTPUT})
+
+    foreach( source ${_SOURCES} )
+        unset(cppfile)
+        get_filename_component(pathdir ${source} DIRECTORY)
+        get_filename_component(filename ${source} NAME_WE)
+        get_filename_component(ext ${source} EXT)
+
+        if((${ext} STREQUAL ".cpp"))
+            set(cppfile "${pathdir}/${filename}.cpp")
+        endif()
+
+        if(_CYTHONIZE AND (${ext} STREQUAL ".pyx"))
+            set(pyxfile "${pathdir}/${filename}.pyx")
+            set(cppfile "${pathdir}/${filename}.cpp")
+
+            # Build the .cpp out of the .pyx
+            add_custom_command(
+                COMMAND cython ${pathdir}/${filename}${ext} --cplus -${PYTHON_BINDING_VERSION} --fast-fail --force # Execute this command,
+                DEPENDS ${_SOURCES} ${_DEPENDS}                                                     # The target depens on these files...
+                WORKING_DIRECTORY ${_DIRECTORY}                                   # In this working directory
+                OUTPUT ${cppfile}
+            )
+
+            message("-- ${_TARGET} cython generated '${cppfile}' from '${filename}${ext}'" )
+        endif()
+
+        if(cppfile)
+            set(pyxtarget "${_TARGET}_${filename}")
+            add_library(${pyxtarget} SHARED ${cppfile})
+
+            # The implementation of Python deliberately breaks strict-aliasing rules, so we
+            # compile with -fno-strict-aliasing to prevent the compiler from relying on
+            # those rules to optimize the code.
+            if(${CMAKE_COMPILER_IS_GNUCC})
+                set(SOFACYTHON_COMPILER_FLAGS "-fno-strict-aliasing")
+            endif()
+
+            target_link_libraries(${pyxtarget} ${_DEPENDS} ${PYTHON_LIBRARIES})
+            target_include_directories(${pyxtarget} PRIVATE ${PYTHON_INCLUDE_DIRS})
+            target_compile_options(${pyxtarget} PRIVATE ${SOFACYTHON_COMPILER_FLAGS})
+            set_target_properties(${pyxtarget}
+                PROPERTIES
+                ARCHIVE_OUTPUT_DIRECTORY "${_OUTPUT}"
+                LIBRARY_OUTPUT_DIRECTORY "${_OUTPUT}"
+                RUNTIME_OUTPUT_DIRECTORY "${_OUTPUT}"
+                )
+
+            set_target_properties(${pyxtarget} PROPERTIES PREFIX "")
+            set_target_properties(${pyxtarget} PROPERTIES OUTPUT_NAME "${filename}")
+
+            add_dependencies(${_TARGET} ${pyxtarget})
+        endif()
+    endforeach()
+endfunction()
+
+
+
+##########################################################
+#################### INSTALL MACROS ######################
+##########################################################
+
+
+macro(sofa_install_targets package_name the_targets include_install_dir)
+    install(TARGETS ${the_targets}
+            EXPORT ${package_name}Targets
+            RUNTIME DESTINATION bin COMPONENT applications
+            LIBRARY DESTINATION lib COMPONENT libraries
+            ARCHIVE DESTINATION lib COMPONENT libraries
+            PUBLIC_HEADER DESTINATION include/${include_install_dir} COMPONENT headers)
+
+    # non-flat headers install (if no PUBLIC_HEADER and include_install_dir specified)
+    foreach(target ${the_targets})
+        get_target_property(public_header ${target} PUBLIC_HEADER)
+        if("${public_header}" STREQUAL "public_header-NOTFOUND" AND NOT "${include_install_dir}" STREQUAL "")
+            set(optional_argv3 "${ARGV3}")
+            if(optional_argv3)
+                # ARGV3 is a non-breaking additional argument to handle INCLUDE_SOURCE_DIR (see sofa_generate_package)
+                # TODO: add a real argument "include_source_dir" to this macro
+                set(include_source_dir "${ARGV3}")
+            endif()
+            if(NOT EXISTS "${include_source_dir}" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${include_source_dir}")
+                # will be true if include_source_dir is empty
+                set(include_source_dir "${CMAKE_CURRENT_SOURCE_DIR}/${include_source_dir}")
+            endif()
+            #message("${target}: ${include_source_dir} -> include/${include_install_dir}")
+            file(GLOB_RECURSE header_files "${include_source_dir}/*.h" "${include_source_dir}/*.inl")
+            foreach(header ${header_files})
+                file(RELATIVE_PATH path_from_package "${include_source_dir}" "${header}")
+                get_filename_component(dir_from_package ${path_from_package} DIRECTORY)
+                install(FILES ${header}
+                        DESTINATION "include/${include_install_dir}/${dir_from_package}"
+                        COMPONENT headers)
+            endforeach()
+        endif()
+    endforeach()
+
+    ## Default install rules for resources
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples")
+        install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION share/sofa/${package_name}/examples COMPONENT resources)
+    endif()
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/scenes")
+        install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scenes/ DESTINATION share/sofa/${package_name}/examples COMPONENT resources)
+    endif()
 endmacro()
 
-macro(sofa_add_plugin_experimental directory plugin_name)
-    sofa_add_generic( ${directory} ${plugin_name} "Plugin" ${ARGV2} )
-    message("-- ${plugin_name} is an experimental feature, use it at your own risk.")
+
+# sofa_write_package_config_files(Foo <version> <build-include-dirs>)
+#
+# Create CMake package configuration files
+# - In the build tree:
+#   - ${CMAKE_BINARY_DIR}/cmake/FooConfig.cmake
+#   - ${CMAKE_BINARY_DIR}/cmake/FooConfigVersion.cmake
+# - In the install tree:
+#   - lib/cmake/Foo/FooConfigVersion.cmake
+#   - lib/cmake/Foo/FooConfig.cmake
+#   - lib/cmake/Foo/FooTargets.cmake
+#
+# This macro factorizes boilerplate CMake code for the different
+# packages in Sofa.  It assumes that there is a FooConfig.cmake.in
+# file template in the same directory.  For example, if a package Foo
+# depends on Bar and Baz, and creates the targets Foo and Qux, here is
+# a typical FooConfig.cmake.in:
+#
+# @PACKAGE_INIT@
+#
+# find_package(Bar REQUIRED)
+# find_package(Baz REQUIRED)
+#
+# if(NOT TARGET Qux)
+# 	include("${CMAKE_CURRENT_LIST_DIR}/FooTargets.cmake")
+# endif()
+#
+# check_required_components(Foo Qux)
+macro(sofa_write_package_config_files package_name version)
+
+    ## <package_name>Targets.cmake
+    install(EXPORT ${package_name}Targets DESTINATION lib/cmake/${package_name} COMPONENT headers)
+
+    ## <package_name>ConfigVersion.cmake
+    set(filename ${package_name}ConfigVersion.cmake)
+    write_basic_package_version_file(${filename} VERSION ${version} COMPATIBILITY ExactVersion)
+    configure_file("${CMAKE_CURRENT_BINARY_DIR}/${filename}"
+                   "${CMAKE_BINARY_DIR}/cmake/${filename}" COPYONLY)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${filename}" DESTINATION lib/cmake/${package_name} COMPONENT headers)
+
+    ### <package_name>Config.cmake
+    configure_package_config_file(${package_name}Config.cmake.in
+                                  "${CMAKE_BINARY_DIR}/cmake/${package_name}Config.cmake"
+                                  INSTALL_DESTINATION lib/cmake/${package_name})
+    install(FILES "${CMAKE_BINARY_DIR}/cmake/${package_name}Config.cmake"
+            DESTINATION lib/cmake/${package_name} COMPONENT headers)
+
 endmacro()
 
 
-macro(sofa_add_application directory app_name)
-    sofa_add_generic( ${directory} ${app_name} "Application" ${ARGV2} )
+
+# - Create a target for SOFA plugin or module
+# - write the package Config, Version & Target files
+# - Deploy the headers, resources, scenes & examples
+# - Replaces the now deprecated sofa_create_package macro
+#
+# sofa_generate_package(NAME VERSION TARGETS INCLUDE_INSTALL_DIR INCLUDE_SOURCE_DIR)
+#  NAME                - (input) the name of the generated package (usually ${PROJECT_NAME}).
+#  VERSION             - (input) the package version (usually ${PROJECT_VERSION}).
+#  TARGETS             - (input) list of targets to install. For standard plugins & modules, ${PROJECT_NAME}
+#  INCLUDE_INSTALL_DIR - (input) [OPTIONAL] include directory (for Multi-dir install of header files).
+#  INCLUDE_SOURCE_DIR  - (input) [OPTIONAL] install headers with same tree structure as source starting from this dir (defaults to ${CMAKE_CURRENT_SOURCE_DIR})
+#
+# Example:
+# project(ExamplePlugin VERSION 1.0)
+# find_package(SofaFramework)
+# set(SOURCES_FILES  initExamplePlugin.cpp myComponent.cpp )
+# set(HEADER_FILES   initExamplePlugin.h myComponent.h )
+# add_library( ${PROJECT_NAME} SHARED ${SOURCE_FILES})
+# target_link_libraries(${PROJECT_NAME} SofaCore)
+# sofa_generate_package(NAME ${PROJECT_NAME} VERSION ${PROJECT_VERSION} TARGETS ${PROJECT_NAME} INCLUDE_INSTALL_DIR "sofa/custom/install/dir" INCLUDE_SOURCE_DIR src/${PROJECT_NAME} )
+#
+function(sofa_generate_package)
+    set(oneValueArgs NAME VERSION INCLUDE_ROOT_DIR INCLUDE_INSTALL_DIR INCLUDE_SOURCE_DIR)
+    set(multiValueArgs TARGETS)
+    cmake_parse_arguments("" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+    set(include_install_dir "${_INCLUDE_INSTALL_DIR}")
+    if(_INCLUDE_ROOT_DIR AND NOT _INCLUDE_INSTALL_DIR)
+        set(include_install_dir "${_INCLUDE_ROOT_DIR}")
+        message(WARNING "sofa_generate_package(${_NAME}): INCLUDE_ROOT_DIR is deprecated. Please use INCLUDE_INSTALL_DIR instead.")
+    endif()
+    sofa_install_targets("${_NAME}" "${_TARGETS}" "${include_install_dir}" "${_INCLUDE_SOURCE_DIR}")
+    sofa_write_package_config_files("${_NAME}" "${_VERSION}")
+endfunction()
+
+macro(sofa_create_package package_name version the_targets include_install_dir)
+    message(WARNING "Deprecated macro. Use the keyword argument function 'sofa_generate_package' instead")
+    # ARGV4 is a non-breaking additional argument to handle INCLUDE_SOURCE_DIR (see sofa_generate_package)
+    # TODO: add a real argument "include_source_dir" to this macro
+    sofa_generate_package(NAME "${package_name}" VERSION "${version}" TARGETS "${the_targets}" INCLUDE_INSTALL_DIR "${include_install_dir}" INCLUDE_SOURCE_DIR "${ARGV4}")
 endmacro()
+
 
 
 # Get path of all library versions (involving symbolic links) for a specified library
+macro(sofa_install_libraries)
+    foreach(library ${ARGN})
+        if(EXISTS ${library})
+            get_filename_component(LIBREAL ${library} REALPATH)
+            get_filename_component(LIBREAL_NAME ${LIBREAL} NAME_WE)
+            get_filename_component(LIBREAL_PATH ${LIBREAL} PATH)
+
+            # In "${LIBREAL_NAME}." the dot is a real dot, not a regex symbol
+            # CMAKE_*_LIBRARY_SUFFIX also start with a dot
+            # So regex is:
+            # <library_path> <slash> <library_name> <dot> <dll/so/dylib/...>
+            # or:
+            # <library_path> <slash> <library_name> <dot> <anything> <dot> <dll/so/dylib/...>
+            file(GLOB_RECURSE SHARED_LIBS
+                "${LIBREAL_PATH}/${LIBREAL_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX}*" # libtiff.dll
+                "${LIBREAL_PATH}/${LIBREAL_NAME}[0-9]${CMAKE_SHARED_LIBRARY_SUFFIX}*"
+                "${LIBREAL_PATH}/${LIBREAL_NAME}[0-9][0-9]${CMAKE_SHARED_LIBRARY_SUFFIX}*" # libpng16.dll
+                "${LIBREAL_PATH}/${LIBREAL_NAME}.*${CMAKE_SHARED_LIBRARY_SUFFIX}*" # libpng.16.dylib
+            )
+            file(GLOB_RECURSE STATIC_LIBS
+                "${LIBREAL_PATH}/${LIBREAL_NAME}${CMAKE_STATIC_LIBRARY_SUFFIX}*"
+                "${LIBREAL_PATH}/${LIBREAL_NAME}[0-9]${CMAKE_STATIC_LIBRARY_SUFFIX}*"
+                "${LIBREAL_PATH}/${LIBREAL_NAME}[0-9][0-9]${CMAKE_STATIC_LIBRARY_SUFFIX}*"
+                "${LIBREAL_PATH}/${LIBREAL_NAME}.*${CMAKE_STATIC_LIBRARY_SUFFIX}*"
+            )
+
+            if(WIN32)
+                install(FILES ${SHARED_LIBS} DESTINATION bin COMPONENT applications)
+            else()
+                install(FILES ${SHARED_LIBS} DESTINATION lib COMPONENT applications)
+            endif()
+            install(FILES ${STATIC_LIBS} DESTINATION lib COMPONENT libraries)
+        endif()
+    endforeach()
+endmacro()
+
 macro(sofa_install_get_libraries library)
-    file(GLOB ABS_LIB "${library}*")
-    install(FILES ${ABS_LIB} DESTINATION lib)
+    message(WARNING "sofa_install_get_libraries() is deprecated. Please use sofa_install_libraries() instead.")
+    sofa_install_libraries(${library})
 endmacro()
 
 ##########################################################
@@ -284,11 +641,50 @@ MACRO(sofa_generate_pkgconfig_file)
 
 ENDMACRO(sofa_generate_pkgconfig_file)
 
+macro(sofa_install_libraries_from_targets)
+    foreach(target ${ARGN})
+        get_target_property(target_location ${target} LOCATION_${CMAKE_BUILD_TYPE})
+        sofa_install_libraries(${target_location})
+    endforeach()
+endmacro()
 
-##########################################################
-#################### INSTALL MACROS ######################
-##########################################################
-# move them in a specific file?
+macro(sofa_copy_libraries)
+    foreach(library ${ARGN})
+        if(EXISTS ${library})
+            get_filename_component(LIB_NAME ${library} NAME_WE)
+            get_filename_component(LIB_PATH ${library} PATH)
+
+            file(GLOB SHARED_LIB
+                "${LIB_PATH}/${LIB_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX}"
+                "${LIB_PATH}/${LIB_NAME}[0-9]${CMAKE_SHARED_LIBRARY_SUFFIX}"
+                "${LIB_PATH}/${LIB_NAME}[0-9][0-9]${CMAKE_SHARED_LIBRARY_SUFFIX}")
+
+            if(CMAKE_CONFIGURATION_TYPES) # Multi-config generator (MSVC)
+                foreach(CONFIG ${CMAKE_CONFIGURATION_TYPES})
+                    file(COPY ${SHARED_LIB} DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CONFIG}")
+                endforeach()
+            else()                      # Single-config generator (nmake)
+                file(COPY ${SHARED_LIB} DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+            endif()
+        endif()
+    endforeach()
+endmacro()
+
+
+macro(sofa_copy_libraries_from_targets)
+    foreach(target ${ARGN})
+        if(CMAKE_CONFIGURATION_TYPES) # Multi-config generator (MSVC)
+            foreach(CONFIG ${CMAKE_CONFIGURATION_TYPES})
+                get_target_property(target_location ${target} LOCATION_${CONFIG})
+                sofa_copy_libraries(${target_location})
+            endforeach()
+        else() # Single-config generator (nmake)
+            get_target_property(target_location ${target} LOCATION_${CMAKE_BUILD_TYPE})
+            sofa_copy_libraries(${target_location})
+        endif()
+    endforeach()
+endmacro()
+
 
 
 ## to store which sources have been used for installed binaries

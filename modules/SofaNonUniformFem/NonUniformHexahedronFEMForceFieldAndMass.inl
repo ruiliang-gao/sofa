@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -51,26 +51,22 @@ void NonUniformHexahedronFEMForceFieldAndMass<DataTypes>::init()
 
     if( this->getContext()->getMeshTopology()==NULL )
     {
-        serr << "ERROR(NonUniformHexahedronFEMForceFieldDensity): object must have a Topology."<<sendl;
+        msg_error() << "NonUniformHexahedronFEMForceFieldDensity: object must have a Topology.";
         return;
     }
 
     this->_mesh = this->getContext()->getMeshTopology();
     if ( this->_mesh==NULL)
     {
-        serr << "ERROR(NonUniformHexahedronFEMForceFieldDensity): object must have a MeshTopology."<<sendl;
+        msg_error() << "NonUniformHexahedronFEMForceFieldDensity: object must have a MeshTopology.";
         return;
     }
-#ifdef SOFA_NEW_HEXA
     else if( this->_mesh->getNbHexahedra()<=0 )
-#else
-    else if( this->_mesh->getNbCubes()<=0 )
-#endif
     {
-        serr << "ERROR(NonUniformHexahedronFEMForceFieldDensity): object must have a hexahedric MeshTopology."<<sendl;
-        serr << this->_mesh->getName()<<sendl;
-        serr << this->_mesh->getTypeName()<<sendl;
-        serr<<this->_mesh->getNbPoints()<<sendl;
+        msg_error() << "NonUniformHexahedronFEMForceFieldDensity: object must have a hexahedric MeshTopology.\n"
+                    << this->_mesh->getName() << "\n"
+                    << this->_mesh->getTypeName() << "\n"
+                    <<this->_mesh->getNbPoints() << "\n";
         return;
     }
 
@@ -92,17 +88,17 @@ void NonUniformHexahedronFEMForceFieldAndMass<DataTypes>::init()
     // verify if it is wanted and possible to compute non-uniform stiffness
     if( !this->_nbVirtualFinerLevels.getValue() )
     {
-        serr<<"ForceField "<<this->getName()<<" need 0 VirtualFinerLevels -> classical uniform properties are used." << sendl;
+        msg_error()<<"ForceField "<<this->getName()<<" need 0 VirtualFinerLevels -> classical uniform properties are used." ;
     }
     else if( !this->_sparseGrid )
     {
         this->_nbVirtualFinerLevels.setValue(0);
-        serr<<"ForceField "<<this->getName()<<" must be used with a SparseGrid in order to handle VirtualFinerLevels -> classical uniform properties are used.." << sendl;
+        msg_error()<<"ForceField "<<this->getName()<<" must be used with a SparseGrid in order to handle VirtualFinerLevels -> classical uniform properties are used..";
     }
     else if( this->_sparseGrid->getNbVirtualFinerLevels() < this->_nbVirtualFinerLevels.getValue()  )
     {
         this->_nbVirtualFinerLevels.setValue(0);
-        serr<<"Conflict in nb of virtual levels between ForceField "<<this->getName()<<" and SparseGrid "<<this->_sparseGrid->getName()<<" -> classical uniform properties are used" << sendl;
+        msg_error()<<"Conflict in nb of virtual levels between ForceField "<<this->getName()<<" and SparseGrid "<<this->_sparseGrid->getName()<<" -> classical uniform properties are used";
     }
 
 
@@ -124,11 +120,7 @@ void NonUniformHexahedronFEMForceFieldAndMass<DataTypes>::init()
     {
         sofa::defaulttype::Vec<8,Coord> nodes;
         for(int w=0; w<8; ++w)
-#ifndef SOFA_NEW_HEXA
-            nodes[w] = this->_initialPoints.getValue()[(*this->getIndexedElements())[i][this->_indices[w]]];
-#else
             nodes[w] = this->_initialPoints.getValue()[(*this->getIndexedElements())[i][w]];
-#endif
 
 
         // compute initial configuration in order to compute corotationnal deformations
@@ -143,11 +135,7 @@ void NonUniformHexahedronFEMForceFieldAndMass<DataTypes>::init()
         else
             this->computeRotationPolar( this->_rotations[i], nodes);
         for(int w=0; w<8; ++w)
-#ifndef SOFA_NEW_HEXA
-            this->_rotatedInitialElements[i][w] = this->_rotations[i]*this->_initialPoints.getValue()[(*this->getIndexedElements())[i][this->_indices[w]]];
-#else
             this->_rotatedInitialElements[i][w] = this->_rotations[i]*this->_initialPoints.getValue()[(*this->getIndexedElements())[i][w]];
-#endif
     }
     //////////////////////
 
@@ -182,11 +170,7 @@ void NonUniformHexahedronFEMForceFieldAndMass<DataTypes>::init()
         {
             sofa::defaulttype::Vec<8,Coord> nodes;
             for(int w=0; w<8; ++w)
-#ifndef SOFA_NEW_HEXA
-                nodes[w] = this->_initialPoints.getValue()[(*it)[this->_indices[w]]];
-#else
                 nodes[w] = this->_initialPoints.getValue()[(*it)[w]];
-#endif
 
             // volume of a element
             Real volume = (nodes[1]-nodes[0]).norm()*(nodes[3]-nodes[0]).norm()*(nodes[4]-nodes[0]).norm();
@@ -231,7 +215,7 @@ void NonUniformHexahedronFEMForceFieldAndMass<DataTypes>::init()
                 for(int k=0; k<3; ++k)
                     if( this->_lumpedMasses[j][k] < 0 )
                     {
-                        // 					  serr<<"WARNING lumped mass"<<sendl;
+                        // 					  msg_warning<<" lumped mass";
                         this->_lumpedMasses[ j ][k] = -this->_lumpedMasses[ j ][k];
                     }
             }
@@ -331,13 +315,8 @@ void NonUniformHexahedronFEMForceFieldAndMass<T>::computeClassicalMechanicalMatr
     //Get the 8 points of the coarser Hexa
     helper::fixed_array<Coord,8> nodes;
 
-#ifndef SOFA_NEW_HEXA
-    //           for (unsigned int k=0;k<8;++k) nodes[k] =  this->_sparseGrid->_virtualFinerLevels[level]->getPointPos(points[this->_indices[k]]);
-    for (unsigned int k=0; k<8; ++k) nodes[k] =  this->_sparseGrid->_virtualFinerLevels[level]->getPointPos(points[this->_indices[k]]).linearProduct(this->mstate->getScale());
-#else
     //           for (unsigned int k=0;k<8;++k) nodes[k] =  this->_sparseGrid->_virtualFinerLevels[level]->getPointPos(points[k]);
     for (unsigned int k=0; k<8; ++k) nodes[k] =  this->_sparseGrid->_virtualFinerLevels[level]->getPointPos(points[k]).linearProduct(this->mstate->getScale());
-#endif
 
     //       //given an elementIndice, find the 8 others from the sparse grid
     //       //compute MaterialStiffness

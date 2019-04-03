@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -215,11 +215,7 @@ public:
 
     typedef typename Inherit::ForceMask ForceMask;
 
-
-
     ///@brief Update \see f_index_parentToChild from \see f_index
-//    void updateIndex();
-//    void updateIndex(const size_t parentSize, const size_t childSize);
     void resizeOut(); /// automatic resizing (of output model and jacobian blocks) when input samples have changed. Recomputes weights from shape function component.
     virtual void resizeOut(const helper::vector<Coord>& position0, helper::vector<helper::vector<unsigned int> > index,helper::vector<helper::vector<Real> > w, helper::vector<helper::vector<defaulttype::Vec<spatial_dimensions,Real> > > dw, helper::vector<helper::vector<defaulttype::Mat<spatial_dimensions,spatial_dimensions,Real> > > ddw, helper::vector<defaulttype::Mat<spatial_dimensions,spatial_dimensions,Real> > F0); /// resizing given custom positions and weights
 
@@ -266,16 +262,14 @@ public:
     //@}
 
     ///@brief Get parent state size
-    virtual size_t getFromSize() const { return this->fromModel->getSize(); }
+    size_t getFromSize() const override { return this->fromModel->getSize(); }
     ///@brief Get child state size
-    virtual size_t getToSize()  const { return this->toModel->getSize(); }
+    size_t getToSize()  const override { return this->toModel->getSize(); }
     ///@brief Get child to parent indices as a const reference
     virtual const VecVRef& getChildToParentIndex() { return  f_index.getValue(); }
     ///@brief Get parent indices of the i-th child
         virtual const VRef& getChildToParentIndex( int i) { return  f_index.getValue()[i]; }
     ///@brief Get a structure storing parent to child indices as a const reference
-//    ///@see f_index_parentToChild to know how to properly use it
-//    virtual const vector<VRef>& getParentToChildIndex() { return f_index_parentToChild; }
     ///@brief Get a pointer to the shape function where the weights are computed
     virtual BaseShapeFunction* getShapeFunction() { return _shapeFunction; }
     ///@brief Get parent's influence weights on each child
@@ -316,10 +310,6 @@ public:
     BaseShapeFunction* _shapeFunction;      ///< Where the weights are computed
     engine::BaseGaussPointSampler* _sampler;
     Data<VecVRef > f_index;            ///< Store child to parent relationship. index[i][j] is the index of the j-th parent influencing child i.
-//    vector<VRef> f_index_parentToChild;     ///< Store parent to child relationship.
-//                                            /**< @warning For each parent i, child index <b>and parent index (again)</b> are stored.
-//                                                 @warning Therefore to get access to parent's child index only you have to perform a loop over index[i] with an offset of size 2.
-//                                             */
     Data<VecVReal >       f_w;         ///< Influence weights of the parents for each child
     Data<VecVGradient >   f_dw;        ///< Influence weight gradients
     Data<VecVHessian >    f_ddw;       ///< Influence weight hessians
@@ -336,7 +326,7 @@ public:
 
 protected:
     BaseDeformationMappingT (core::State<In>* from = NULL, core::State<Out>* to= NULL);
-    virtual ~BaseDeformationMappingT() { }
+    ~BaseDeformationMappingT() override { }
 
 public:
 
@@ -363,8 +353,6 @@ protected :
     SparseMatrixEigen eigenJacobian/*, maskedEigenJacobian*/;  ///< Assembled Jacobian matrix
     helper::vector<defaulttype::BaseMatrix*> baseMatrices;      ///< Vector of jacobian matrices, for the Compliant plugin API
     void updateJ();
-//    void updateMaskedJ();
-//    size_t previousMaskHash; ///< storing previous dof maskTo to check if it changed from last time step to updateJ in consequence
 
     SparseKMatrixEigen K;  ///< Assembled geometric stiffness matrix
 

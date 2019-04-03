@@ -118,6 +118,7 @@ set(HEADER_FILES
     objectmodel/IdleEvent.h
     objectmodel/Link.h
     objectmodel/MouseEvent.h
+    objectmodel/ScriptEvent.h
     objectmodel/SPtr.h
     objectmodel/Tag.h
     topology/BaseMeshTopology.h
@@ -162,6 +163,8 @@ set(SOURCE_FILES
     SofaLibrary.cpp
     State.cpp
     behavior/BaseAnimationLoop.cpp
+    behavior/BaseConstraint.cpp
+    behavior/BaseConstraintCorrection.cpp
     behavior/BaseConstraintSet.cpp
     behavior/BaseForceField.cpp
     behavior/BaseInteractionForceField.cpp
@@ -218,6 +221,7 @@ set(SOURCE_FILES
     objectmodel/KeypressedEvent.cpp
     objectmodel/KeyreleasedEvent.cpp
     objectmodel/MouseEvent.cpp
+    objectmodel/ScriptEvent.cpp
     objectmodel/IdleEvent.cpp
     objectmodel/Tag.cpp
     topology/BaseMeshTopology.cpp
@@ -254,13 +258,6 @@ endif()
 #     list(APPEND HEADER_FILES behavior/InertiaForce.h)
 # endif()
 
-if(PS3)
-    list(APPEND HEADER_FILES ps3/cxa_demangle.h)
-    list(APPEND HEADER_FILES ps3/cxxabi.h)
-    list(APPEND SOURCE_FILES ps3/cxa_demangle.cpp)
-endif()
-
-
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaHelper SofaDefaultType)
 target_include_directories(${PROJECT_NAME} PUBLIC "$<INSTALL_INTERFACE:include>")
@@ -275,7 +272,16 @@ else()
     sofa_generate_pkgconfig_file(SOFA_LIBRARY_NAME ${PROJECT_NAME} SOFA_LIBRARY_DESCRIPTION "The ${PROJECT_NAME} library." SOFA_LIBRARY_SO_NAME "${PROJECT_NAME}_d" SOFA_LIBRARY_INCLUDE_FLAGS "")
 endif()
 
-sofa_install_targets(SofaFramework SofaCore "")
+sofa_install_targets(SofaFramework ${PROJECT_NAME} "sofa/core")
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/" DESTINATION "include/sofa/core"
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
+if(UNIX AND NOT APPLE)
+	# Installing ICU libraries the hard way (dirty)
+	file(GLOB ICU_LIBRARIES
+		"/usr/lib/x86_64-linux-gnu/libicudata${CMAKE_SHARED_LIBRARY_SUFFIX}"
+		"/usr/lib/x86_64-linux-gnu/libicui18n${CMAKE_SHARED_LIBRARY_SUFFIX}"
+		"/usr/lib/x86_64-linux-gnu/libicuuc${CMAKE_SHARED_LIBRARY_SUFFIX}"
+		)
+	message("ICU_LIBRARIES = ${ICU_LIBRARIES}")
+	sofa_install_libraries(${ICU_LIBRARIES})
+	target_link_libraries(${PROJECT_NAME} PRIVATE ${ICU_LIBRARIES}) # force link with ICU
+endif()

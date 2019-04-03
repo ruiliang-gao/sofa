@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -33,9 +33,7 @@
 #ifndef SOFA_SIMULATION_GetVectorVisitor_H
 #define SOFA_SIMULATION_GetVectorVisitor_H
 
-#if !defined(__GNUC__) || (__GNUC__ > 3 || (_GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#pragma once
-#endif
+
 
 #include <SceneCreator/config.h>
 #include <sofa/simulation/Visitor.h>
@@ -60,10 +58,10 @@ public:
 //    typedef Eigen::Matrix<SReal, Eigen::Dynamic, 1> Vector;
     typedef defaulttype::BaseVector Vector;
     GetVectorVisitor( const sofa::core::ExecParams* params, Vector* vec, core::ConstVecId src );
-    virtual ~GetVectorVisitor();
+    ~GetVectorVisitor() override;
 
-    virtual Result processNodeTopDown( simulation::Node*  );
-    virtual const char* getClassName() const { return "GetVectorVisitor"; }
+    Result processNodeTopDown( simulation::Node*  ) override;
+    const char* getClassName() const override { return "GetVectorVisitor"; }
 
     /// If true, process the independent nodes only
     void setIndependentOnly( bool );

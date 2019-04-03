@@ -53,7 +53,7 @@ public:
     }
 
     // Update the engine
-    void update();
+    void doUpdate() override;
 
     // First position
     Data< VecCoord > d_x0; ///< Rest position

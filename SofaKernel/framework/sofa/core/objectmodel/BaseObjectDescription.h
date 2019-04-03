@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -23,8 +23,6 @@
 #define SOFA_CORE_OBJECTMODEL_BASEOBJECTDESCRIPTION_H
 
 #include <sofa/helper/vector.h>
-#include <string>
-#include <list>
 #include <map>
 
 #include <sofa/core/core.h>
@@ -68,7 +66,7 @@ public:
 
     typedef std::map<std::string,Attribute> AttributeMap;
 
-    BaseObjectDescription(const char* name=NULL, const char* type=NULL);
+    BaseObjectDescription(const char* name=nullptr, const char* type=nullptr);
 
     virtual ~BaseObjectDescription();
 
@@ -105,7 +103,7 @@ public:
     virtual Base* findObject(const char* nodeName);
 
     /// Get an attribute given its name (return defaultVal if not present)
-    virtual const char* getAttribute(const std::string& attr, const char* defaultVal=NULL);
+    virtual const char* getAttribute(const std::string& attr, const char* defaultVal=nullptr);
 
     /// Get an attribute converted to a float given its name.
     /// returns defaultVal if not present or in case the attribute cannot be parsed totally
@@ -117,8 +115,11 @@ public:
     /// adds a message in the logError if the attribute cannot be totally parsed.
     virtual int getAttributeAsInt(const std::string& attr, const int defaultVal=0.0) ;
 
-    /// Set an attribute. Override any existing value
+    [[deprecated("since 18.12, replaced by a pure c++ version with similar name. Will be removed in 19.12")]]
     virtual void setAttribute(const std::string& attr, const char* val);
+
+    /// Set an attribute. Override any existing value
+    virtual void setAttribute(const std::string& attr, const std::string& val);
 
     /// Remove an attribute given its name
     virtual bool removeAttribute(const std::string& attr);

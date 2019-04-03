@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -24,7 +24,7 @@
 
 #include <SofaGeneralDeformable/VectorSpringForceField.h>
 #include <sofa/core/visual/VisualParams.h>
-#include <sofa/helper/io/MassSpringLoader.h>
+#include <sofa/helper/io/XspLoader.h>
 #include <sofa/core/objectmodel/KeypressedEvent.h>
 #include <SofaBaseTopology/TopologyData.inl>
 #include <sofa/helper/system/config.h>
@@ -80,7 +80,7 @@ void VectorSpringForceField<DataTypes>::EdgeDataHandler::applyCreateFunction(uns
 }
 
 template <class DataTypes>
-class VectorSpringForceField<DataTypes>::Loader : public sofa::helper::io::MassSpringLoader
+class VectorSpringForceField<DataTypes>::Loader : public sofa::helper::io::XspLoaderDataHook
 {
 public:
     typedef typename DataTypes::Real Real;
@@ -91,11 +91,6 @@ public:
     {
         dest->addSpring(m1,m2,ks,kd,Coord((Real)restx,(Real)resty,(Real)restz));
     }
-    virtual void setNumSprings(int /*n*/)
-    {
-        //dest->resizeArray((unsigned int )n);
-    }
-
 };
 
 template <class DataTypes>
@@ -104,7 +99,7 @@ bool VectorSpringForceField<DataTypes>::load(const char *filename)
     if (filename && filename[0])
     {
         Loader loader(this);
-        return loader.load(filename);
+        return helper::io::XspLoader::Load(filename, loader);
     }
     else return false;
 }
@@ -124,8 +119,8 @@ void VectorSpringForceField<DataTypes>::addSpring(int m1, int m2, SReal ks, SRea
 
     if (useTopology && _topology)
     {
-        int e=_topology->getEdgeIndex((unsigned int)m1,(unsigned int)m2);
-        if (e>=0)
+        topology::EdgeSetTopologyContainer::EdgeID e = _topology->getEdgeIndex((unsigned int)m1,(unsigned int)m2);
+        if (e != sofa::defaulttype::InvalidID)
             springArrayData[e]=Spring((Real)ks,(Real)kd,restVector);
     }
     else
@@ -240,7 +235,7 @@ void VectorSpringForceField<DataTypes>::createDefaultSprings()
     //EdgeLengthArrayInterface<Real,DataTypes> elai(springArray);
     //edgeGEO->computeEdgeLength(elai);
     const VecCoord& x0 = this->mstate1->read(core::ConstVecCoordId::restPosition())->getValue();
-    int i;
+    unsigned int i;
     for (i=0; i<_topology->getNbEdges(); ++i)
     {
         springArrayData[i].ks=(Real)m_stiffness.getValue();
@@ -301,7 +296,7 @@ void VectorSpringForceField<DataTypes>::addForce(const core::MechanicalParams* /
     {
 
         Deriv force;
-        for (int i=0; i<_topology->getNbEdges(); i++)
+        for (unsigned int i=0; i<_topology->getNbEdges(); i++)
         {
             const core::topology::BaseMeshTopology::Edge &e=_topology->getEdge(i);
             const Spring &s=springArrayData[i];
@@ -359,7 +354,7 @@ void VectorSpringForceField<DataTypes>::addDForce(const core::MechanicalParams* 
     if(useTopology)
     {
 
-        for (int i=0; i<_topology->getNbEdges(); i++)
+        for (unsigned int i=0; i<_topology->getNbEdges(); i++)
         {
             const core::topology::BaseMeshTopology::Edge &e=_topology->getEdge(i);
             const Spring &s=springArrayData[i];
@@ -436,7 +431,7 @@ void VectorSpringForceField<DataTypes>::updateForceMask()
 {
     if(useTopology)
     {
-        for (int i=0; i<_topology->getNbEdges(); i++)
+        for (unsigned int i=0; i<_topology->getNbEdges(); i++)
         {
             const core::topology::BaseMeshTopology::Edge &e=_topology->getEdge(i);
             this->mstate1->forceMask.insertEntry(e[0]);

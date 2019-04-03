@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -23,13 +23,8 @@
 #define SOFA_CORE_BEHAVIOR_BASEFORCEFIELD_H
 
 #include <sofa/core/core.h>
-#include <sofa/core/MultiVecId.h>
-#include <sofa/core/MechanicalParams.h>
 #include <sofa/core/objectmodel/BaseObject.h>
 #include <sofa/core/behavior/MultiMatrixAccessor.h>
-#include <sofa/defaulttype/BaseMatrix.h>
-#include <sofa/defaulttype/BaseVector.h>
-#include <sofa/defaulttype/Vec.h>
 
 namespace sofa
 {
@@ -62,7 +57,7 @@ public:
     SOFA_BASE_CAST_IMPLEMENTATION(BaseForceField)
 protected:
     BaseForceField();
-    virtual ~BaseForceField() {}
+    ~BaseForceField() override {}
 	
 private:
 	BaseForceField(const BaseForceField& n) ;
@@ -202,7 +197,7 @@ public:
 
     /// Return a pointer to the compliance matrix C
     /// $ C = K^{-1} $
-    virtual const sofa::defaulttype::BaseMatrix* getComplianceMatrix(const MechanicalParams*) { return NULL; }
+    virtual const sofa::defaulttype::BaseMatrix* getComplianceMatrix(const MechanicalParams*) { return nullptr; }
 
     /// \brief Accumulate the contribution of the C compliant matrix multiplied
     /// by the given Lagrange multipliers lambda vector with the given cFactor coefficient.
@@ -239,8 +234,8 @@ public:
 
 
 
-    virtual bool insertInNode( objectmodel::BaseNode* node ) override;
-    virtual bool removeInNode( objectmodel::BaseNode* node ) override;
+    bool insertInNode( objectmodel::BaseNode* node ) override;
+    bool removeInNode( objectmodel::BaseNode* node ) override;
 };
 
 } // namespace behavior

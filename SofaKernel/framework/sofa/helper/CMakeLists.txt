@@ -12,6 +12,7 @@ set(HEADER_FILES
     DualQuat.inl
     Factory.h
     Factory.inl
+    TypeInfo.h
     FnDispatcher.h
     FnDispatcher.inl
     GenerateRigid.h
@@ -54,13 +55,11 @@ set(HEADER_FILES
     io/Image.h
     io/ImageDDS.h
     io/ImageRAW.h
-    io/MassSpringLoader.h
+    io/XspLoader.h
     io/Mesh.h
     io/MeshOBJ.h
-    io/MeshSTL.h
+    io/MeshGmsh.h
     io/MeshTopologyLoader.h
-    io/MeshTrian.h
-    io/MeshVTK.h
     io/SphereLoader.h
     io/TriangleLoader.h
     io/bvh/BVHChannels.h
@@ -91,6 +90,7 @@ set(HEADER_FILES
     system/atomic.h
     system/config.h
     system/console.h
+    system/console_internal.h
     system/gl.h
     system/glu.h
     system/thread/CTime.h
@@ -125,6 +125,7 @@ set(HEADER_FILES
     logging/ClangStyleMessageFormatter.h
     logging/DefaultStyleMessageFormatter.h
     logging/ExceptionMessageHandler.h
+    messaging/FileMessage.h
 )
 
 set(SOURCE_FILES
@@ -144,6 +145,7 @@ set(SOURCE_FILES
     Polynomial_LD.cpp
     Quater.cpp
     RandomGenerator.cpp
+    StringUtils.cpp
     TagFactory.cpp
     UnitTest.cpp
     Utils.cpp
@@ -157,15 +159,13 @@ set(SOURCE_FILES
     io/Image.cpp
     io/ImageDDS.cpp
     io/ImageRAW.cpp
-    io/MassSpringLoader.cpp
     io/Mesh.cpp
     io/MeshOBJ.cpp
-    io/MeshSTL.cpp
+    io/MeshGmsh.cpp
     io/MeshTopologyLoader.cpp
-    io/MeshTrian.cpp
-    io/MeshVTK.cpp
     io/SphereLoader.cpp
     io/TriangleLoader.cpp
+    io/XspLoader.cpp
     io/bvh/BVHJoint.cpp
     io/bvh/BVHLoader.cpp
     io/bvh/BVHMotion.cpp
@@ -191,6 +191,7 @@ set(SOURCE_FILES
     types/Material.cpp
     logging/Message.cpp
     logging/MessageDispatcher.cpp
+    logging/MessageFormatter.cpp
     logging/ComponentInfo.cpp
     logging/ClangMessageHandler.cpp
     logging/ClangStyleMessageFormatter.cpp
@@ -202,6 +203,7 @@ set(SOURCE_FILES
     logging/LoggingMessageHandler.cpp
     logging/RoutingMessageHandler.cpp
     logging/ExceptionMessageHandler.cpp
+    messaging/FileMessage.cpp
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL Linux)
@@ -297,13 +299,6 @@ endif()
         include_directories(${SOFA-EXTERNAL_FFMPEG_PATH}/include)
 endif()
 
-
-if(PS3)
-    list(APPEND HEADER_FILES gl/ps3gl_compat.h)
-    list(APPEND SOURCE_FILES gl/ps3gl_compat.cpp)
-endif()
-
-
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SHADER_FILES} ${SOURCE_FILES})
 if(WIN32)
     # Windows library, used in system::FileSystem
@@ -341,32 +336,32 @@ if(SOFA-EXTERNAL_FFMPEG)
                         "libswresample.a"
                         "/usr/lib/libiconv.dylib"
                         )
-                                                find_library(FOUNDATION CoreFoundation)
-                        find_library(VIDEO CoreVideo)
-                        find_library(VIDEO_DECOD_ACC VideoDecodeAcceleration)
-                        find_library(ICONV iconv)
-                        target_link_libraries(${PROJECT_NAME}  ${FFMPEG_LIBS} ${FOUNDATION} ${VIDEO} ${VIDEO_DECOD_ACC})
+                find_library(FOUNDATION CoreFoundation)
+                ind_library(VIDEO CoreVideo)
+                find_library(VIDEO_DECOD_ACC VideoDecodeAcceleration)
+                target_link_libraries(${PROJECT_NAME}  ${FFMPEG_LIBS} ${FOUNDATION} ${VIDEO} ${VIDEO_DECOD_ACC})
         elseif (UNIX)
             AddLinkerDependencies(avcodec)
-                    AddLinkerDependencies(avformat)
-                        AddLinkerDependencies(avutil)
-                        AddLinkerDependencies(swscale)
-                        AddLinkerDependencies(avdevice)
-                        AddLinkerDependencies(avfilter)
-                        AddLinkerDependencies(swresample)
-                endif()
+            AddLinkerDependencies(avformat)
+            AddLinkerDependencies(avutil)
+            AddLinkerDependencies(swscale)
+            AddLinkerDependencies(avdevice)
+            AddLinkerDependencies(avfilter)
+            AddLinkerDependencies(swresample)
+        endif()
 
 endif()
 if(APPLE)
+    find_library(ICONV iconv)
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${ICONV})
     # on macOS, -framework CoreServices is needed for FileMonitor
     list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK "-framework CoreServices")
 endif()
-target_link_libraries(${PROJECT_NAME} PUBLIC ${SOFAFRAMEWORK_DEPENDENCY_LINK} ${Boost_LIBRARIES} )
 
 if(SOFA_BUILD_TESTS)
     target_link_libraries(${PROJECT_NAME} PUBLIC ${SOFAFRAMEWORK_DEPENDENCY_LINK} ${Boost_LIBRARIES} gtest)
 else()
-    target_link_libraries(${PROJECT_NAME} PUBLIC ${SOFAFRAMEWORK_DEPENDENCY_LINK} ${Boost_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${SOFAFRAMEWORK_DEPENDENCY_LINK})
 endif()
 
 
@@ -393,7 +388,4 @@ else()
     sofa_generate_pkgconfig_file(SOFA_LIBRARY_NAME ${PROJECT_NAME} SOFA_LIBRARY_DESCRIPTION "The ${PROJECT_NAME} library." SOFA_LIBRARY_SO_NAME "${PROJECT_NAME}_d" SOFA_LIBRARY_INCLUDE_FLAGS "")
 endif()
 
-sofa_install_targets(SofaFramework SofaHelper "")
-
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/" DESTINATION "include/sofa/helper"
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
+sofa_install_targets(SofaFramework ${PROJECT_NAME} "sofa/helper")

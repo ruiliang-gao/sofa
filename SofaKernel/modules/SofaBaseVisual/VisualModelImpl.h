@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -46,40 +46,9 @@ namespace component
 namespace visualmodel
 {
 
-//class SOFA_BASE_VISUAL_API RigidState : public core::State< sofa::defaulttype::Rigid3fTypes >
-//{
-//public:
-//    VecCoord xforms;
-//    bool xformsModified;
+using sofa::core::objectmodel::Data ;
 
-//    RigidState()
-//        : xformsModified(false)
-//    {
-//    }
-
-//    virtual void resize(int vsize) { xformsModified = true; xforms.resize( vsize); }
-//    virtual int getSize() const { return 0; }
-
-//    const VecCoord* getX()  const { return &xforms; }
-//    const VecDeriv* getV()  const { return NULL; }
-
-//    VecCoord* getX()  { xformsModified = true; return &xforms;   }
-//    VecDeriv* getV()  { return NULL; }
-
-//    const VecCoord* getRigidX()  const { return getX(); }
-//    VecCoord* getRigidX()  { return getX(); }
-
-//    virtual       Data<VecCoord>* write(     core::VecCoordId /* v */) { return NULL; }
-//    virtual const Data<VecCoord>*  read(core::ConstVecCoordId /* v */) const { return NULL; }
-
-//    virtual       Data<VecDeriv>* write(     core::VecDerivId /* v */) { return NULL; }
-//    virtual const Data<VecDeriv>*  read(core::ConstVecDerivId /* v */) const { return NULL; }
-
-//    virtual       Data<MatrixDeriv>* write(     core::MatrixDerivId /* v */) { return NULL; }
-//    virtual const Data<MatrixDeriv>*  read(core::ConstMatrixDerivId /* v */) const {  return NULL; }
-//};
-
-class SOFA_BASE_VISUAL_API ExtVec3fState : public core::State< sofa::defaulttype::ExtVec3fTypes >
+class SOFA_BASE_VISUAL_API ExtVec3State : public core::State< sofa::defaulttype::ExtVec3Types >
 {
 public:
     topology::PointData< sofa::defaulttype::ResizableExtVector<Coord> > m_positions; ///< Vertices coordinates
@@ -87,73 +56,19 @@ public:
     topology::PointData< sofa::defaulttype::ResizableExtVector<Deriv> > m_vnormals; ///< Normals of the model
     bool modified; ///< True if input vertices modified since last rendering
 
-    ExtVec3fState()
-        : m_positions(initData(&m_positions, "position", "Vertices coordinates"))
-        , m_restPositions(initData(&m_restPositions, "restPosition", "Vertices rest coordinates"))
-        , m_vnormals (initData (&m_vnormals, "normal", "Normals of the model"))
-        , modified(false)
-    {
-        m_positions.setGroup("Vector");
-        m_restPositions.setGroup("Vector");
-        m_vnormals.setGroup("Vector");
-    }
+    ExtVec3State() ;
 
-    virtual void resize(size_t vsize)
-    {
-        helper::WriteOnlyAccessor< Data<sofa::defaulttype::ResizableExtVector<Coord> > > positions = m_positions;
-        if( positions.size() == vsize ) return;
-        helper::WriteOnlyAccessor< Data<sofa::defaulttype::ResizableExtVector<Coord> > > restPositions = m_restPositions;
-        helper::WriteOnlyAccessor< Data<sofa::defaulttype::ResizableExtVector<Deriv> > > normals = m_vnormals;
-
-        positions.resize(vsize);
-        restPositions.resize(vsize); // todo allocate restpos only when it is necessary
-        normals.resize(vsize);
-
-        modified = true;
-    }
-
-    virtual size_t getSize() const { return m_positions.getValue().size(); }
+    virtual void resize(size_t vsize) ;
+    virtual size_t getSize() const ;
 
     //State API
-    virtual       Data<VecCoord>* write(     core::VecCoordId  v )
-    {
-        modified = true;
+    virtual       Data<VecCoord>* write(core::VecCoordId  v ) ;
+    virtual const Data<VecCoord>* read(core::ConstVecCoordId  v )  const ;
+    virtual Data<VecDeriv>*	write(core::VecDerivId v ) ;
+    virtual const Data<VecDeriv>* read(core::ConstVecDerivId v ) const ;
 
-        if( v == core::VecCoordId::position() )
-            return &m_positions;
-        if( v == core::VecCoordId::restPosition() )
-            return &m_restPositions;
-
-        return NULL;
-    }
-    virtual const Data<VecCoord>*  read(core::ConstVecCoordId  v )  const
-    {
-        if( v == core::VecCoordId::position() )
-            return &m_positions;
-        if( v == core::VecCoordId::restPosition() )
-            return &m_restPositions;
-
-        return NULL;
-    }
-
-    virtual Data<VecDeriv>*	write(core::VecDerivId v )
-    {
-        if( v == core::VecDerivId::normal() )
-            return &m_vnormals;
-
-        return NULL;
-    }
-
-    virtual const Data<VecDeriv>* read(core::ConstVecDerivId v ) const
-    {
-        if( v == core::VecDerivId::normal() )
-            return &m_vnormals;
-
-        return NULL;
-    }
-
-    virtual       Data<MatrixDeriv>*	write(     core::MatrixDerivId /* v */) { return NULL; }
-    virtual const Data<MatrixDeriv>*	read(core::ConstMatrixDerivId /* v */) const {  return NULL; }
+    virtual       Data<MatrixDeriv>*	write(core::MatrixDerivId /* v */) { return nullptr; }
+    virtual const Data<MatrixDeriv>*	read(core::ConstMatrixDerivId /* v */) const {  return nullptr; }
 };
 
 /**
@@ -166,30 +81,24 @@ public:
  *
  */
 
-class SOFA_BASE_VISUAL_API VisualModelImpl : public core::visual::VisualModel, public ExtVec3fState //, public RigidState
+class SOFA_BASE_VISUAL_API VisualModelImpl : public core::visual::VisualModel, public ExtVec3State //, public RigidState
 {
 public:
-    SOFA_CLASS2(VisualModelImpl, core::visual::VisualModel, ExtVec3fState);
-//    SOFA_CLASS3(VisualModelImpl, core::visual::VisualModel, ExtVec3fState , RigidState);
+    SOFA_CLASS2(VisualModelImpl, core::visual::VisualModel, ExtVec3State);
 
     typedef sofa::defaulttype::Vec<2, float> TexCoord;
-    //typedef helper::vector<TexCoord> VecTexCoord;
     typedef sofa::defaulttype::ResizableExtVector<TexCoord> VecTexCoord;
     
     typedef sofa::core::topology::BaseMeshTopology::Edge Edge;
     typedef sofa::core::topology::BaseMeshTopology::Triangle Triangle;
     typedef sofa::core::topology::BaseMeshTopology::Quad Quad;
 
-//protected:
-
-    typedef sofa::defaulttype::ExtVec3fTypes DataTypes;
+    typedef ExtVec3State::DataTypes DataTypes;
     typedef DataTypes::Real Real;
     typedef DataTypes::Coord Coord;
     typedef DataTypes::VecCoord VecCoord;
     typedef DataTypes::Deriv Deriv;
     typedef DataTypes::VecDeriv VecDeriv;
-
-    //ResizableExtVector<Coord>* inputVertices;
 
     bool useTopology; ///< True if list of facets should be taken from the attached topology
     int lastMeshRev; ///< Time stamps from the last time the mesh was updated from the topology
@@ -214,7 +123,6 @@ public:
     Data< sofa::defaulttype::ResizableExtVector< Triangle > > m_triangles; ///< triangles of the model
     Data< sofa::defaulttype::ResizableExtVector< Quad > > m_quads; ///< quads of the model
   
-
     /// If vertices have multiple normals/texcoords, then we need to separate them
     /// This vector store which input position is used for each vertex
     /// If it is empty then each vertex correspond to one position
@@ -245,14 +153,14 @@ public:
     Data< TexCoord > m_scaleTex; ///< Scale of the texture
     Data< TexCoord > m_translationTex; ///< Translation of the texture
 
-    virtual void applyTranslation(const SReal dx, const SReal dy, const SReal dz) override;
+    void applyTranslation(const SReal dx, const SReal dy, const SReal dz) override;
 
     /// Apply Rotation from Euler angles (in degree!)
-    virtual void applyRotation (const SReal rx, const SReal ry, const SReal rz) override;
+    void applyRotation (const SReal rx, const SReal ry, const SReal rz) override;
 
-    virtual void applyRotation(const sofa::defaulttype::Quat q) override;
+    void applyRotation(const sofa::defaulttype::Quat q) override;
 
-    virtual void applyScale(const SReal sx, const SReal sy, const SReal sz) override;
+    void applyScale(const SReal sx, const SReal sy, const SReal sz) override;
 
     virtual void applyUVTransformation();
 
@@ -320,17 +228,17 @@ protected:
     VisualModelImpl();
 
     /// Default destructor.
-    ~VisualModelImpl();
+    ~VisualModelImpl() override;
 
 public:
-    virtual void parse(core::objectmodel::BaseObjectDescription* arg) override;
+    void parse(core::objectmodel::BaseObjectDescription* arg) override;
 
     virtual bool hasTransparent();
     bool hasOpaque();
 
-    virtual void drawVisual(const core::visual::VisualParams* vparams) override;
-    virtual void drawTransparent(const core::visual::VisualParams* vparams) override;
-    virtual void drawShadow(const core::visual::VisualParams* vparams) override;
+    void drawVisual(const core::visual::VisualParams* vparams) override;
+    void drawTransparent(const core::visual::VisualParams* vparams) override;
+    void drawShadow(const core::visual::VisualParams* vparams) override;
 
     virtual bool loadTextures() {return false;}
     virtual bool loadTexture(const std::string& /*filename*/) { return false; }
@@ -425,7 +333,6 @@ public:
 
     void setVertices(sofa::defaulttype::ResizableExtVector<Coord> * x)
     {
-        //m_vertices2.setValue(*x);
         this->m_positions.setValue(*x);
     }
 
@@ -468,32 +375,33 @@ public:
     virtual void computeMesh();
     virtual void computeNormals();
     virtual void computeTangents();
-    virtual void computeBBox(const core::ExecParams* params, bool=false) override;
+    void computeBBox(const core::ExecParams* params, bool=false) override;
+    virtual void computeUVSphereProjection();
 
     virtual void updateBuffers() {}
 
-    virtual void updateVisual() override;
+    void updateVisual() override;
 
-    // Handle topological changes
-    virtual void handleTopologyChange() override;
+    /// Handle topological changes
+    void handleTopologyChange() override;
 
-    virtual void init() override;
+    void init() override;
 
-    virtual void initVisual() override;
+    void initVisual() override;
 
     /// Append this mesh to an OBJ format stream.
     /// The number of vertices position, normal, and texture coordinates already written is given as parameters
     /// This method should update them
-    virtual void exportOBJ(std::string name, std::ostream* out, std::ostream* mtl, int& vindex, int& nindex, int& tindex, int& count) override;
+    void exportOBJ(std::string name, std::ostream* out, std::ostream* mtl, int& vindex, int& nindex, int& tindex, int& count) override;
 
     virtual std::string getTemplateName() const override
     {
-        return ExtVec3fState::getTemplateName();
+        return ExtVec3State::getTemplateName();
     }
 
     static std::string templateName(const VisualModelImpl* p = NULL)
     {
-        return ExtVec3fState::templateName(p);
+        return ExtVec3State::templateName(p);
     }
 
     /// Utility method to compute tangent from vertices and texture coordinates.
@@ -509,8 +417,8 @@ public:
     bool xformsModified;
 
 
-    virtual bool insertInNode( core::objectmodel::BaseNode* node ) override { Inherit1::insertInNode(node); Inherit2::insertInNode(node); return true; }
-    virtual bool removeInNode( core::objectmodel::BaseNode* node ) override { Inherit1::removeInNode(node); Inherit2::removeInNode(node); return true; }
+    bool insertInNode( core::objectmodel::BaseNode* node ) override { Inherit1::insertInNode(node); Inherit2::insertInNode(node); return true; }
+    bool removeInNode( core::objectmodel::BaseNode* node ) override { Inherit1::removeInNode(node); Inherit2::removeInNode(node); return true; }
 };
 
 

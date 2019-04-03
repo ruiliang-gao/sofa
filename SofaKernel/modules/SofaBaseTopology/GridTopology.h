@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -25,6 +25,8 @@
 
 #include <SofaBaseTopology/MeshTopology.h>
 #include <sofa/core/DataEngine.h>
+#include <sofa/defaulttype/VecTypes.h>
+
 namespace sofa
 {
 
@@ -71,7 +73,7 @@ private:
         typedef MeshTopology::Hexa Hexa;
         SOFA_CLASS(GridUpdate,sofa::core::DataEngine);
         GridUpdate(GridTopology* t);
-        virtual void update() override;
+        void doUpdate() override;
     protected:
         void updateEdges();
         void updateQuads();
@@ -111,10 +113,10 @@ protected:
 
 public:
     /// BaseObject method should be overwritten by children
-    virtual void init() override;
+    void init() override;
 
     /// BaseObject method should be overwritten by children
-    virtual void reinit() override;
+    void reinit() override;
 
 
     /** \brief Set grid resolution in the 3 directions
@@ -147,7 +149,7 @@ public:
     unsigned getIndex( int i, int j, int k ) const;
 
     /// Overwrite from @sa MeshTopology::hasPos always @return bool true
-    virtual bool hasPos()  const override { return true; }
+    bool hasPos()  const override { return true; }
 
     /// Get Point in grid @return Vector3 given its @param id i. Will call @sa getPointInGrid. This method should be overwritten by children.
     virtual Vector3 getPoint(int i) const;
@@ -156,31 +158,17 @@ public:
     virtual Vector3 getPointInGrid(int i, int j, int k) const;
 
     /// get X from Point index @param i, will call @sa getPoint
-    virtual SReal getPX(int i)  const override { return getPoint(i)[0]; }
+    SReal getPX(int i)  const override { return getPoint(i)[0]; }
     /// get Y from Point index @param i, will call @sa getPoint
-    virtual SReal getPY(int i) const override { return getPoint(i)[1]; }
+    SReal getPY(int i) const override { return getPoint(i)[1]; }
     /// get Z from Point index @param i, will call @sa getPoint
-    virtual SReal getPZ(int i) const override { return getPoint(i)[2]; }
+    SReal getPZ(int i) const override { return getPoint(i)[2]; }
 
     /// Overload method from \sa BaseObject::parse . /// Parse the given description to assign values to this object's fields and potentially other parameters
-    virtual void parse(core::objectmodel::BaseObjectDescription* arg) override
-    {
-        this->MeshTopology::parse(arg);
-
-        if (arg->getAttribute("nx")!=NULL && arg->getAttribute("ny")!=NULL && arg->getAttribute("nz")!=NULL )
-        {
-            int nx = arg->getAttributeAsInt("nx", d_n.getValue().x());
-            int ny = arg->getAttributeAsInt("ny", d_n.getValue().y());
-            int nz = arg->getAttributeAsInt("nz", d_n.getValue().z());
-            d_n.setValue(Vec3i(nx,ny,nz));
-        }
-
-        this->setNbGridPoints();
-    }
-
+    void parse(core::objectmodel::BaseObjectDescription* arg) override ;
 
     /// Overload Method from @sa MeshTopology::getNbHexahedra
-    virtual int getNbHexahedra() override { return (d_n.getValue()[0]-1)*(d_n.getValue()[1]-1)*(d_n.getValue()[2]-1); }
+    size_t getNbHexahedra() override { return (d_n.getValue()[0]-1)*(d_n.getValue()[1]-1)*(d_n.getValue()[2]-1); }
     /// Overload Method from @sa MeshTopology::getQuad
     Quad getQuad(int x, int y, int z);
 
@@ -188,11 +176,6 @@ public:
     Hexa getHexahedron(int x, int y, int z);
     Hexa getHexaCopy(int i);
     Quad getQuadCopy(int i);
-
-#ifndef SOFA_NEW_HEXA
-    Cube getCubeCopy(int i) { return getHexaCopy(i); }
-    Cube getCube(int x, int y, int z) { return getHexahedron(x,y,z); }
-#endif
 
     /// Get Point index in Grid, will call method @sa getIndex
     int point(int x, int y, int z) const { return getIndex(x,y,z); }

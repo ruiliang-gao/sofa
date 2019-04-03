@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -127,8 +127,6 @@
 #define msg_error_withfile(emitter, file,line)      sofa::helper::logging::MessageDispatcher::error(sofa::helper::logging::Message::Runtime, sofa::helper::logging::getComponentInfo(emitter), SOFA_FILE_INFO_COPIED_FROM(file,line))
 #define msg_fatal_withfile(emitter, file,line)      sofa::helper::logging::MessageDispatcher::fatal(sofa::helper::logging::Message::Runtime, sofa::helper::logging::getComponentInfo(emitter), SOFA_FILE_INFO_COPIED_FROM(file,line))
 #define msg_advice_withfile(emitter, file,line)      sofa::helper::logging::MessageDispatcher::advice(sofa::helper::logging::Message::Runtime, sofa::helper::logging::getComponentInfo(emitter), SOFA_FILE_INFO_COPIED_FROM(file,line))
-
-#define FILEINFO(filename, line) sofa::helper::logging::FileInfo(filename, line)
 
 #define FILEINFO(filename, line) sofa::helper::logging::FileInfo(filename, line)
 

@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -35,7 +35,6 @@
 
 #ifdef SOFA_HAVE_GLEW
 #include <SofaOpenglVisual/OglShader.h>
-#include <sofa/helper/gl/FrameBufferObject.h>
 #include <SofaOpenglVisual/VisualManagerPass.h>
 #endif
 
@@ -73,13 +72,13 @@ private:
 protected:
     CompositingVisualLoop(simulation::Node* gnode = NULL);
 
-    virtual ~CompositingVisualLoop();
+    ~CompositingVisualLoop() override;
 
 public:
 
-    virtual void init() override;
-    virtual void initVisual() override;
-    virtual void drawStep(sofa::core::visual::VisualParams* vparams) override;
+    void init() override;
+    void initVisual() override;
+    void drawStep(sofa::core::visual::VisualParams* vparams) override;
 };
 
 } // namespace visualmodel

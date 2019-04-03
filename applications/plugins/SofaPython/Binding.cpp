@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -26,6 +26,7 @@
 #include "Binding_Data.h"
 #include "Binding_DisplayFlagsData.h"
 #include "Binding_OptionsGroupData.h"
+#include "Binding_BoundingBoxData.h"
 #include "Binding_DataFileName.h"
 #include "Binding_DataFileNameVector.h"
 #include "Binding_VectorLinearSpringData.h"
@@ -66,7 +67,15 @@ using sofa::PythonFactory;
 
 void bindSofaPythonModule()
 {
-    PythonFactory::s_sofaPythonModule = SP_INIT_MODULE(Sofa)
+    static std::string docstring=R"(
+            Sofa module.
+
+            This module is part of the SofaPython plugin and contains function and binding to the c++
+            objects.
+
+            )";
+
+    PythonFactory::s_sofaPythonModule = SP_INIT_MODULE(Sofa,docstring.c_str())
 
     /// non Base-Inherited types
     SP_ADD_CLASS_IN_SOFAMODULE(Data)
@@ -74,6 +83,7 @@ void bindSofaPythonModule()
     /// special Data cases
     SP_ADD_CLASS_IN_FACTORY(DisplayFlagsData,sofa::core::objectmodel::Data<sofa::core::visual::DisplayFlags>)
     SP_ADD_CLASS_IN_FACTORY(OptionsGroupData,sofa::core::objectmodel::Data<sofa::helper::OptionsGroup>)
+    SP_ADD_CLASS_IN_FACTORY(BoundingBox,sofa::core::objectmodel::Data<sofa::defaulttype::BoundingBox>)
     SP_ADD_CLASS_IN_FACTORY(DataFileName,sofa::core::objectmodel::DataFileName)
     SP_ADD_CLASS_IN_FACTORY(DataFileNameVector,sofa::core::objectmodel::DataFileNameVector)
     SP_ADD_CLASS_IN_SOFAMODULE(PointAncestorElem)
@@ -116,7 +126,7 @@ void bindSofaPythonModule()
     PyObject* PyExc_SofaException = PyErr_NewExceptionWithDoc(
         (char*) "Sofa.SofaException",
         (char*) "Base exception class for the SofaPython module.",
-        NULL, NULL);
+        nullptr, nullptr);
 
     if ( PyExc_SofaException )
         PyModule_AddObject(PythonFactory::s_sofaPythonModule, "SofaException", PyExc_SofaException);

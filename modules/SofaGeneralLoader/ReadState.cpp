@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -30,8 +30,6 @@ namespace component
 
 namespace misc
 {
-
-SOFA_DECL_CLASS(ReadState)
 
 using namespace defaulttype;
 
@@ -84,7 +82,7 @@ void ReadStateCreator::addReadState(sofa::core::behavior::BaseMechanicalState *m
 {
     sofa::core::objectmodel::BaseContext* context = gnode->getContext();
     sofa::core::BaseMapping *mapping; context->get(mapping);
-    if (createInMapping || mapping== NULL)
+    if (createInMapping || mapping== nullptr)
     {
         sofa::component::misc::ReadState::SPtr rs;
         context->get(rs, this->subsetsToManage, core::objectmodel::BaseContext::Local);
@@ -99,7 +97,7 @@ void ReadStateCreator::addReadState(sofa::core::behavior::BaseMechanicalState *m
         std::ostringstream ofilename;
         ofilename << sceneName << "_" << counterReadState << "_" << ms->getName()  << "_mstate" << extension ;
 
-        rs->f_filename.setValue(ofilename.str());  rs->f_listening.setValue(false); //Deactivated only called by extern functions
+        rs->d_filename.setValue(ofilename.str());  rs->f_listening.setValue(false); //Deactivated only called by extern functions
         if (init) rs->init();
 
         ++counterReadState;
@@ -110,7 +108,7 @@ void ReadStateCreator::addReadState(sofa::core::behavior::BaseMechanicalState *m
 simulation::Visitor::Result ReadStateActivator::processNodeTopDown( simulation::Node* gnode)
 {
     sofa::component::misc::ReadState *rs = gnode->get< sofa::component::misc::ReadState >(this->subsetsToManage);
-    if (rs != NULL) { changeStateReader(rs);}
+    if (rs != nullptr) { changeStateReader(rs);}
 
     return simulation::Visitor::RESULT_CONTINUE;
 }
@@ -128,7 +126,7 @@ simulation::Visitor::Result ReadStateModifier::processNodeTopDown( simulation::N
     using namespace sofa::defaulttype;
 
     sofa::component::misc::ReadState*rs = gnode->get< sofa::component::misc::ReadState>(this->subsetsToManage);
-    if (rs != NULL) {changeTimeReader(rs);}
+    if (rs != nullptr) {changeTimeReader(rs);}
 
     return simulation::Visitor::RESULT_CONTINUE;
 }
