@@ -57,5 +57,6 @@ else()
     sofa_add_plugin(VolumetricRendering VolumetricRendering) # VolumetricRendering plugin can't work without OPENGL
 endif()
 
+sofa_add_plugin(SoftRobots SoftRobots ON)
 sofa_add_plugin(SofaROSConnector ZyROSConnector ON)
 
