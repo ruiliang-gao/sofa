@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -22,14 +22,9 @@
 #ifndef SOFA_CORE_BEHAVIOR_ODESOLVER_H
 #define SOFA_CORE_BEHAVIOR_ODESOLVER_H
 
-#include <sofa/core/objectmodel/BaseObject.h>
-#include <sofa/core/ExecParams.h>
 #include <sofa/core/behavior/BaseMechanicalState.h>
 #include <sofa/core/behavior/MultiVec.h>
 #include <sofa/core/behavior/MultiMatrix.h>
-#include <sofa/core/behavior/ConstraintSolver.h>
-#include <sofa/defaulttype/BaseMatrix.h>
-#include <sofa/defaulttype/BaseVector.h>
 
 namespace sofa
 {
@@ -65,7 +60,7 @@ public:
 protected:
     OdeSolver();
 
-    virtual ~OdeSolver();
+    ~OdeSolver() override;
 	
 private:
 	OdeSolver(const OdeSolver& n) ;
@@ -135,8 +130,8 @@ public:
     }
 
 
-    virtual bool insertInNode( objectmodel::BaseNode* node ) override;
-    virtual bool removeInNode( objectmodel::BaseNode* node ) override;
+    bool insertInNode( objectmodel::BaseNode* node ) override;
+    bool removeInNode( objectmodel::BaseNode* node ) override;
 
 };
 

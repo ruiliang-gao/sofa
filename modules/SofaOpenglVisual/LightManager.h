@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -68,11 +68,7 @@ private:
     void makeShadowMatrix(unsigned int i);
 
 public:
-#ifndef __APPLE__
-    enum { MAX_NUMBER_OF_LIGHTS = /*GL_MAX_LIGHTS*/ 5 };
-#else
-    enum { MAX_NUMBER_OF_LIGHTS = /*GL_MAX_LIGHTS*/ 2 };
-#endif
+    enum { MAX_NUMBER_OF_LIGHTS = /*GL_MAX_LIGHTS*/ 8 };
 
     //TODO(dmarchal): sofa guidelines.
     Data<bool>                  d_shadowsEnabled; ///< Enable Shadow in the scene. (default=0)
@@ -82,7 +78,7 @@ public:
 
 protected:
     LightManager();
-    virtual ~LightManager();
+    ~LightManager() override;
 
 public:
     void init() override;

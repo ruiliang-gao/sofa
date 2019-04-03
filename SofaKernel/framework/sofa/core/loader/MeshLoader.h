@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -22,17 +22,21 @@
 #ifndef SOFA_CORE_LOADER_MESHLOADER_H
 #define SOFA_CORE_LOADER_MESHLOADER_H
 
-#include <sofa/defaulttype/Vec.h>
-#include <sofa/defaulttype/Mat.h>
 #include <sofa/defaulttype/Quat.h>
 #include <sofa/core/loader/BaseLoader.h>
 #include <sofa/core/loader/PrimitiveGroup.h>
 #include <sofa/core/topology/Topology.h>
-#include <sofa/helper/fixed_array.h>
 
 
 namespace sofa
 {
+    namespace helper
+    {
+        namespace io
+        {
+            class Mesh;
+        }
+    }
 
 namespace core
 {
@@ -40,8 +44,10 @@ namespace core
 namespace loader
 {
 
+//todo(dmarchal 05/02/2019): This mix of types is bad.
 using sofa::defaulttype::Vector3;
-
+using sofa::defaulttype::Vec3;
+using topology::Topology;
 
 class SOFA_CORE_API MeshLoader : public BaseLoader
 {
@@ -78,14 +84,14 @@ public:
 protected:
     MeshLoader();
 public:
-    virtual bool canLoad() override;
+    bool canLoad() override;
 
     //virtual void init();
-    virtual void parse ( sofa::core::objectmodel::BaseObjectDescription* arg ) override;
+    void parse ( sofa::core::objectmodel::BaseObjectDescription* arg ) override;
 
-    virtual void init() override;
+    void init() override;
 
-    virtual void reinit() override;
+    void reinit() override;
 
 
     /// Apply Homogeneous transformation to the positions
@@ -129,7 +135,7 @@ public:
     /// @}
 
     // Point coordinates in 3D in double.
-    Data< helper::vector<sofa::defaulttype::Vec<3,SReal> > > d_positions; ///< Vertices of the mesh loaded
+    Data< helper::vector< Vec3 > > d_positions; ///< Vertices of the mesh loaded
 
     //Tab of 1D elements
     Data< helper::vector< Polyline > > d_polylines; ///< Polylines of the mesh loaded
@@ -138,7 +144,7 @@ public:
     Data< helper::vector< Edge > > d_edges; ///< Edges of the mesh loaded
     Data< helper::vector< Triangle > > d_triangles; ///< Triangles of the mesh loaded
     Data< helper::vector< Quad > > d_quads; ///< Quads of the mesh loaded
-    Data< helper::vector< helper::vector <unsigned int> > > d_polygons; ///< Polygons of the mesh loaded
+    Data< helper::vector< helper::vector <Topology::ElemID> > > d_polygons; ///< Polygons of the mesh loaded
     Data< helper::vector< HighOrderEdgePosition > > d_highOrderEdgePositions; ///< High order edge points of the mesh loaded
     Data< helper::vector< HighOrderTrianglePosition > > d_highOrderTrianglePositions; ///< High order triangle points of the mesh loaded
     Data< helper::vector< HighOrderQuadPosition > > d_highOrderQuadPositions; ///< High order quad points of the mesh loaded
@@ -147,9 +153,9 @@ public:
     Data< helper::vector< Tetrahedron > > d_tetrahedra; ///< Tetrahedra of the mesh loaded
     Data< helper::vector< Hexahedron > > d_hexahedra; ///< Hexahedra of the mesh loaded
     Data< helper::vector< Pentahedron > > d_pentahedra; ///< Pentahedra of the mesh loaded
-    Data< helper::vector< Pyramid > > d_pyramids; ///< Pyramids of the mesh loaded
     Data< helper::vector< HighOrderTetrahedronPosition > > d_highOrderTetrahedronPositions; ///< High order tetrahedron points of the mesh loaded
     Data< helper::vector< HighOrderHexahedronPosition > > d_highOrderHexahedronPositions; ///< High order hexahedron points of the mesh loaded
+    Data< helper::vector< Pyramid > > d_pyramids; ///< Pyramids of the mesh loaded
 
     // polygons in 3D ?
 
@@ -194,32 +200,35 @@ protected:
     void addPolyline(helper::vector<Polyline>* pPolylines, Polyline p);
 
     void addEdge(helper::vector<Edge>* pEdges, const Edge& p);
-    void addEdge(helper::vector<Edge>* pEdges, unsigned int p0, unsigned int p1);
+    void addEdge(helper::vector<Edge>* pEdges, Topology::EdgeID p0, Topology::EdgeID p1);
 
     void addTriangle(helper::vector<Triangle>* pTriangles, const Triangle& p);
-    void addTriangle(helper::vector<Triangle>* pTriangles, unsigned int p0, unsigned int p1, unsigned int p2);
+    void addTriangle(helper::vector<Triangle>* pTriangles, Topology::TriangleID p0, Topology::TriangleID p1, Topology::TriangleID p2);
 
     void addQuad(helper::vector<Quad>* pQuads, const Quad& p);
-    void addQuad(helper::vector<Quad>* pQuads, unsigned int p0, unsigned int p1, unsigned int p2, unsigned int p3);
+    void addQuad(helper::vector<Quad>* pQuads, Topology::QuadID p0, Topology::QuadID p1, Topology::QuadID p2, Topology::QuadID p3);
 
-    void addPolygon(helper::vector< helper::vector <unsigned int> >* pPolygons, const helper::vector<unsigned int>& p);
+    void addPolygon(helper::vector< helper::vector <Topology::ElemID> >* pPolygons, const helper::vector<Topology::ElemID>& p);
 
     void addTetrahedron(helper::vector<Tetrahedron>* pTetrahedra, const Tetrahedron& p);
-    void addTetrahedron(helper::vector<Tetrahedron>* pTetrahedra, unsigned int p0, unsigned int p1, unsigned int p2, unsigned int p3);
+    void addTetrahedron(helper::vector<Tetrahedron>* pTetrahedra, Topology::TetrahedronID p0, Topology::TetrahedronID p1, Topology::TetrahedronID p2, Topology::TetrahedronID p3);
 
     void addHexahedron(helper::vector< Hexahedron>* pHexahedra, const Hexahedron& p);
     void addHexahedron(helper::vector< Hexahedron>* pHexahedra,
-                       unsigned int p0, unsigned int p1, unsigned int p2, unsigned int p3,
-                       unsigned int p4, unsigned int p5, unsigned int p6, unsigned int p7);
+                       Topology::HexahedronID p0, Topology::HexahedronID p1, Topology::HexahedronID p2, Topology::HexahedronID p3,
+                       Topology::HexahedronID p4, Topology::HexahedronID p5, Topology::HexahedronID p6, Topology::HexahedronID p7);
 
     void addPentahedron(helper::vector< Pentahedron>* pPentahedra, const Pentahedron& p);
     void addPentahedron(helper::vector< Pentahedron>* pPentahedra,
-                        unsigned int p0, unsigned int p1, unsigned int p2, unsigned int p3,
-                        unsigned int p4, unsigned int p5);
+                        Topology::ElemID p0, Topology::ElemID p1, Topology::ElemID p2, Topology::ElemID p3,
+                        Topology::ElemID p4, Topology::ElemID p5);
 
     void addPyramid(helper::vector< Pyramid>* pPyramids, const Pyramid& p);
     void addPyramid(helper::vector< Pyramid>* pPyramids,
-                    unsigned int p0, unsigned int p1, unsigned int p2, unsigned int p3, unsigned int p4);
+                    Topology::ElemID p0, Topology::ElemID p1, Topology::ElemID p2, Topology::ElemID p3, Topology::ElemID p4);
+
+    /// Temporary method that will copy all buffers from a io::Mesh into the corresponding Data. Will be removed as soon as work on unifying meshloader is finished
+    void copyMeshToData(helper::io::Mesh* _mesh);
 };
 
 

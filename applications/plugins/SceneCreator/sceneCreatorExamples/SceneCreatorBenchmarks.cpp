@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU General Public License as published by the Free  *
@@ -109,7 +109,7 @@ int main(int argc, char** argv)
     argParser->addArgument(po::value<bool>(&showHelp)->default_value(false)->implicit_value(true),                  "help,h", "Display this help message");
     argParser->addArgument(po::value<unsigned int>(&idExample)->default_value(0)->notifier([](unsigned int value)
     {
-        if (value < 0 || value > 9) {
+        if (value > 9) {
             std::cerr << "Example Number to enter from (0 - 9), current value: " << value << std::endl;
             exit( EXIT_FAILURE );
         }

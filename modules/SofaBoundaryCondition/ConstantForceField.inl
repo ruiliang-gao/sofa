@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -24,7 +24,7 @@
 
 #include <SofaBoundaryCondition/ConstantForceField.h>
 #include <sofa/helper/system/config.h>
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <sofa/simulation/Simulation.h>
 #include <sofa/core/visual/VisualParams.h>
@@ -259,15 +259,21 @@ void ConstantForceField<DataTypes>::draw(const core::visual::VisualParams* vpara
         std::vector<defaulttype::Vector3> points;
         for (unsigned int i=0; i<indices.size(); i++)
         {
-            Real xx,xy,xz,fx,fy,fz;
+            Real xx = 0.0, xy = 0.0, xz = 0.0, fx = 0.0, fy = 0.0, fz = 0.0;
 
             if (!d_indexFromEnd.getValue())
             {
-                DataTypes::get(xx,xy,xz,x[indices[i]]);
+                if (indices[i] < x.size())
+                {
+                    DataTypes::get(xx, xy, xz, x[indices[i]]);
+                }
             }
             else
             {
-                DataTypes::get(xx,xy,xz,x[x.size() - indices[i] - 1]);
+                if ((x.size() - indices[i] - 1) < x.size() && (x.size() - indices[i] - 1) >= 0)
+                {
+                    DataTypes::get(xx, xy, xz, x[x.size() - indices[i] - 1]);
+                }
             }
 
             DataTypes::get(fx,fy,fz,(i<f.size())? f[i] : f_end);
@@ -282,15 +288,21 @@ void ConstantForceField<DataTypes>::draw(const core::visual::VisualParams* vpara
         vparams->drawTool()->setLightingEnabled(true);
         for (unsigned int i=0; i<indices.size(); i++)
         {
-            Real xx,xy,xz,fx,fy,fz;
+            Real xx = 0.0, xy = 0.0, xz = 0.0, fx = 0.0, fy = 0.0, fz = 0.0;
 
             if (!d_indexFromEnd.getValue())
             {
-                DataTypes::get(xx,xy,xz,x[indices[i]]);
+                if (indices[i] < x.size())
+                {
+                    DataTypes::get(xx, xy, xz, x[indices[i]]);
+                }
             }
             else
             {
-                DataTypes::get(xx,xy,xz,x[x.size() - indices[i] - 1]);
+                if ((x.size() - indices[i] - 1) < x.size() && (x.size() - indices[i] - 1) >= 0)
+                {
+                    DataTypes::get(xx, xy, xz, x[x.size() - indices[i] - 1]);
+                }
             }
 
             DataTypes::get(fx,fy,fz,(i<f.size())? f[i] : f_end);

@@ -23,6 +23,7 @@ set(HEADER_FILES
     SolidTypes.inl
     # SparseConstraintTypes.h
     TemplatesAliases.h
+    TopologyTypes.h
     Vec.h
     Vec3Types.h
     VecTypes.h
@@ -64,5 +65,4 @@ endif()
 
 sofa_install_targets(SofaFramework SofaDefaultType "")
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/" DESTINATION "include/sofa/defaulttype"
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
+sofa_install_targets(SofaFramework ${PROJECT_NAME} "sofa/defaulttype")

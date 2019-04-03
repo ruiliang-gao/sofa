@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -63,13 +63,13 @@ using helper::vector;
 class LegacyVTKReader : public BaseVTKReader
 {
 public:
-    bool readFile(const char* filename);
+    bool readFile(const char* filename) override;
 };
 
 class XMLVTKReader : public BaseVTKReader
 {
 public:
-    bool readFile(const char* filename);
+    bool readFile(const char* filename) override;
 protected:
     bool loadUnstructuredGrid(TiXmlHandle datasetFormatHandle);
     bool loadPolydata(TiXmlHandle datasetFormatHandle);
@@ -933,7 +933,7 @@ bool LegacyVTKReader::readFile(const char* filename)
         }
         if (swapped)
         {
-            sout << "Binary data is byte-swapped." << sendl;
+            msg_info() << "Binary data is byte-swapped.";
             if (inputPoints)
             {
                 inputPoints->swap();
@@ -964,7 +964,7 @@ bool XMLVTKReader::readFile(const char* filename)
 
     TiXmlHandle hVTKDoc(&vtkDoc);
     TiXmlElement* pElem;
-    TiXmlHandle hVTKDocRoot(0);
+    TiXmlHandle hVTKDocRoot(nullptr);
 
     //block VTKFile
     pElem = hVTKDoc.FirstChildElement().ToElement();
@@ -1270,8 +1270,6 @@ bool XMLVTKReader::loadImageData(TiXmlHandle datasetFormatHandle)
 /// see: https://www.sofa-framework.org/community/doc/programming-with-sofa/components-api/the-objectfactory/
 /// 1-SOFA_DECL_CLASS(componentName) : Set the class name of the component
 /// 2-RegisterObject("description") + .add<> : Register the component
-SOFA_DECL_CLASS(MeshVTKLoader)
-
 int MeshVTKLoaderClass = core::RegisterObject("Mesh loader for the VTK/VTU file format.")
                          .add< MeshVTKLoader >()
                          ;

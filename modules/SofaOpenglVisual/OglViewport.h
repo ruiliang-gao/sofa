@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -62,11 +62,11 @@ public:
     Data<bool> p_swapMainView; ///< Swap this viewport with the main view
     Data<bool> p_drawCamera; ///< Draw a frame representing the camera (see it in main viewport)
 
-    helper::gl::FrameBufferObject fbo;
+    std::unique_ptr<helper::gl::FrameBufferObject> fbo;
 
 protected:
     OglViewport();
-    virtual ~OglViewport();
+    ~OglViewport() override;
 public:
     void init() override;
     void draw(const core::visual::VisualParams* vparams) override;

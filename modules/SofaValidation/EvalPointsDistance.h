@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -90,14 +90,14 @@ protected:
     /** Default constructor
     */
     EvalPointsDistance();
-    virtual ~EvalPointsDistance();
+    ~EvalPointsDistance() override;
 public:
     /// Init the computation of the distances
-    virtual void init() override;
+    void init() override;
     /// Update
-    virtual void reinit() override;
+    void reinit() override;
     /// Reset the computation of the distances
-    virtual void reset() override { reinit(); }
+    void reset() override { reinit(); }
 
     /** Distance computation */
 
@@ -107,9 +107,9 @@ public:
     virtual SReal doEval(const VecCoord& x1, const VecCoord& x2, const VecCoord& x0);
 
 
-    virtual void handleEvent(sofa::core::objectmodel::Event* event) override;
-    virtual void draw(const core::visual::VisualParams* vparams) override;
-    virtual void doDraw(const VecCoord& x1, const VecCoord& x2);
+    void handleEvent(sofa::core::objectmodel::Event* event) override;
+    void draw(const core::visual::VisualParams* vparams) override;
+    virtual void doDraw(const core::visual::VisualParams* vparams, const VecCoord& x1, const VecCoord& x2);
 
     /// Retrieve the associated MechanicalState (First model)
     core::behavior::MechanicalState<DataTypes>* getMState1() { return mstate1.get(); }
@@ -159,15 +159,10 @@ protected:
     sofa::defaulttype::BoundingBox box2;
 };
 
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_MISC_EVALPOINTSDISTANCE_CPP)
-#ifndef SOFA_FLOAT
-extern template class SOFA_VALIDATION_API EvalPointsDistance<defaulttype::Vec3dTypes>;
-extern template class SOFA_VALIDATION_API EvalPointsDistance<defaulttype::Rigid3dTypes>;
-#endif
-#ifndef SOFA_DOUBLE
-extern template class SOFA_VALIDATION_API EvalPointsDistance<defaulttype::Vec3fTypes>;
-extern template class SOFA_VALIDATION_API EvalPointsDistance<defaulttype::Rigid3fTypes>;
-#endif
+#if  !defined(SOFA_COMPONENT_MISC_EVALPOINTSDISTANCE_CPP)
+extern template class SOFA_VALIDATION_API EvalPointsDistance<defaulttype::Vec3Types>;
+extern template class SOFA_VALIDATION_API EvalPointsDistance<defaulttype::Rigid3Types>;
+
 #endif
 
 } // namespace misc

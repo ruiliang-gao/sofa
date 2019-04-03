@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -32,6 +32,85 @@ namespace simulation
 namespace graph
 {
 
+/// get all down objects respecting specified class_info and tags
+class GetDownObjectsVisitor : public Visitor
+{
+public:
+
+    GetDownObjectsVisitor(const sofa::core::objectmodel::ClassInfo& class_info, DAGNode::GetObjectsCallBack& container, const sofa::core::objectmodel::TagSet& tags)
+        : Visitor( core::ExecParams::defaultInstance() )
+        , _class_info(class_info)
+        , _container(container)
+        , _tags(tags)
+    {}
+
+    Result processNodeTopDown(simulation::Node* node) override
+    {
+        ((const DAGNode*)node)->getLocalObjects( _class_info, _container, _tags );
+        return RESULT_CONTINUE;
+    }
+
+    /// Specify whether this action can be parallelized.
+    bool isThreadSafe() const override { return false; }
+
+    /// Return a category name for this action.
+    /// Only used for debugging / profiling purposes
+    const char* getCategoryName() const override { return "GetDownObjectsVisitor"; }
+    const char* getClassName()    const override { return "GetDownObjectsVisitor"; }
+
+
+protected:
+
+    const sofa::core::objectmodel::ClassInfo& _class_info;
+    DAGNode::GetObjectsCallBack& _container;
+    const sofa::core::objectmodel::TagSet& _tags;
+};
+
+
+/// get all up objects respecting specified class_info and tags
+class GetUpObjectsVisitor : public Visitor
+{
+public:
+
+    GetUpObjectsVisitor(DAGNode* searchNode, const sofa::core::objectmodel::ClassInfo& class_info, DAGNode::GetObjectsCallBack& container, const sofa::core::objectmodel::TagSet& tags)
+        : Visitor( core::ExecParams::defaultInstance() )
+        , _searchNode( searchNode )
+        , _class_info(class_info)
+        , _container(container)
+        , _tags(tags)
+    {}
+
+    Result processNodeTopDown(simulation::Node* node) override
+    {
+        const DAGNode* dagnode = (const DAGNode*)node;
+        if( dagnode->_descendancy.find(_searchNode)!=dagnode->_descendancy.end() ) // searchNode is in the current node descendancy, so the current node is a parent of searchNode
+        {
+            dagnode->getLocalObjects( _class_info, _container, _tags );
+            return RESULT_CONTINUE;
+        }
+        else // the current node is NOT a parent of searchNode, stop here
+        {
+            return RESULT_PRUNE;
+        }
+    }
+
+    /// Specify whether this action can be parallelized.
+    bool isThreadSafe() const override { return false; }
+
+    /// Return a category name for this action.
+    /// Only used for debugging / profiling purposes
+    const char* getCategoryName() const override { return "GetUpObjectsVisitor"; }
+    const char* getClassName()    const override { return "GetUpObjectsVisitor"; }
+
+
+protected:
+
+    DAGNode* _searchNode;
+    const sofa::core::objectmodel::ClassInfo& _class_info;
+    DAGNode::GetObjectsCallBack& _container;
+    const sofa::core::objectmodel::TagSet& _tags;
+
+};
 
 
 
@@ -79,7 +158,6 @@ void DAGNode::doRemoveChild(DAGNode::SPtr node)
 /// Add a child node
 void DAGNode::addChild(core::objectmodel::BaseNode::SPtr node)
 {
-//    printf("DAGNode::addChild this=%s child=%s\n",getName().c_str(),node->getName().c_str());
     DAGNode::SPtr dagnode = sofa::core::objectmodel::SPtr_static_cast<DAGNode>(node);
     notifyAddChild(dagnode);
     doAddChild(dagnode);
@@ -92,7 +170,6 @@ void DAGNode::removeChild(core::objectmodel::BaseNode::SPtr node)
     notifyRemoveChild(dagnode);
     doRemoveChild(dagnode);
 }
-
 
 /// Move a node from another node
 void DAGNode::moveChild(BaseNode::SPtr node)
@@ -127,11 +204,6 @@ void DAGNode::detachFromGraph()
         parents.back()->removeChild(this);
 }
 
-
-
-
-
-
 void DAGNode::notifyAddChild(Node::SPtr node)
 {
     setDirtyDescendancy();
@@ -149,11 +221,6 @@ void DAGNode::notifyMoveChild(Node::SPtr node, Node* prev)
     setDirtyDescendancy();
     Node::notifyMoveChild(node,prev);
 }
-
-
-
-
-
 
 /// Generic object access, possibly searching up or down from the current context
 ///
@@ -262,7 +329,7 @@ void* DAGNode::getObject(const sofa::core::objectmodel::ClassInfo& class_info, c
                 void* obj = parents[i]->getObject(class_info,newpath);
                 if (obj) return obj;
             }
-            return 0;   // not found in any parent node at all
+            return nullptr;   // not found in any parent node at all
         }
         else return getObject(class_info,newpath);
     }
@@ -280,7 +347,6 @@ void* DAGNode::getObject(const sofa::core::objectmodel::ClassInfo& class_info, c
         }
         else if (pend < path.length())
         {
-            //dmsg_error("DAGNode") << "Child node "<<name<<" not found in "<<getPathName();
             return NULL;
         }
         else
@@ -288,7 +354,6 @@ void* DAGNode::getObject(const sofa::core::objectmodel::ClassInfo& class_info, c
             core::objectmodel::BaseObject* obj = simulation::Node::getObject(name);
             if (obj == NULL)
             {
-                //dmsg_error("DAGNode") << "ERROR: object "<<name<<" not found in "<<getPathName();
                 return NULL;
             }
             else
@@ -349,8 +414,6 @@ void DAGNode::getObjects(const sofa::core::objectmodel::ClassInfo& class_info, G
             ((DAGNode*)(this))->executeVisitor(&vis);
             break;
         }
-
-        //case SearchRoot:
         default:
             break;
     }
@@ -470,13 +533,13 @@ void DAGNode::precomputeTraversalOrder( const core::ExecParams* params )
             _orderList.clear();
         }
 
-        virtual Result processNodeTopDown(Node* node)
+        Result processNodeTopDown(Node* node) override
         {
             _orderList.push_back( static_cast<DAGNode*>(node) );
             return RESULT_CONTINUE;
         }
 
-        virtual const char* getClassName() const {return "TraversalOrderVisitor";}
+        const char* getClassName() const override {return "TraversalOrderVisitor";}
     };
 
     TraversalOrderVisitor tov( params, _precomputedTraversalOrder );
@@ -490,8 +553,6 @@ void DAGNode::doExecuteVisitor(simulation::Visitor* action, bool precomputedOrde
 {
     if( precomputedOrder && !_precomputedTraversalOrder.empty() )
     {
-//        msg_info()<<SOFA_CLASS_METHOD<<"precomputed "<<_precomputedTraversalOrder<<std::endl;
-
         for( NodeList::iterator it = _precomputedTraversalOrder.begin(), itend = _precomputedTraversalOrder.end() ; it != itend ; ++it )
         {
             if ( action->canAccessSleepingNode || !(*it)->getContext()->isSleeping() )
@@ -506,13 +567,8 @@ void DAGNode::doExecuteVisitor(simulation::Visitor* action, bool precomputedOrde
     }
     else
     {
-//        msg_info()<<SOFA_CLASS_METHOD<<"not precomputed "<<action->getClassName()<<"      -  "<<action->getCategoryName()<<" "<<action->getInfos()<<std::endl;
-
-
         // WARNING: do not store the traversal infos in the DAGNode, as several visitors could traversed the graph simultaneously
         // These infos are stored in a StatusMap per visitor.
-
-
         updateDescendancy();
 
         Visitor::TreeTraversalRepetition repeat;
@@ -789,9 +845,18 @@ DAGNode* DAGNode::findCommonParent( DAGNode* node1, DAGNode* node2 )
     return NULL;
 }
 
+void DAGNode::getLocalObjects( const sofa::core::objectmodel::ClassInfo& class_info, DAGNode::GetObjectsCallBack& container, const sofa::core::objectmodel::TagSet& tags ) const
+{
+    for (DAGNode::ObjectIterator it = this->object.begin(); it != this->object.end(); ++it)
+    {
+        core::objectmodel::BaseObject* obj = it->get();
+        void* result = class_info.dynamicCast(obj);
+        if (result != NULL && (tags.empty() || (obj)->getTags().includes(tags)))
+            container(result);
+    }
+}
 
 
-SOFA_DECL_CLASS(DAGNode)
 
 //helper::Creator<xml::NodeElement::Factory, DAGNode> DAGNodeDefaultClass("default");
 helper::Creator<xml::NodeElement::Factory, DAGNode> DAGNodeClass("DAGNode");

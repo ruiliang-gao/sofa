@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU General Public License as published by the Free  *
@@ -43,6 +43,9 @@ using std::vector;
 #include <SofaSimulationTree/init.h>
 #include <SofaSimulationTree/TreeSimulation.h>
 using sofa::simulation::Node;
+#include <sofa/simulation/SceneLoaderFactory.h>
+#include <SofaGraphComponent/SceneCheckerListener.h>
+using sofa::simulation::scenechecking::SceneCheckerListener;
 
 #include <SofaComponentCommon/initComponentCommon.h>
 #include <SofaComponentBase/initComponentBase.h>
@@ -56,6 +59,8 @@ using sofa::simulation::Node;
 #include <sofa/helper/cast.h>
 #include <sofa/helper/BackTrace.h>
 #include <sofa/helper/system/FileRepository.h>
+#include <sofa/helper/system/FileSystem.h>
+using sofa::helper::system::FileSystem;
 #include <sofa/helper/system/SetDirectory.h>
 #include <sofa/helper/Utils.h>
 #include <sofa/gui/GUIManager.h>
@@ -70,7 +75,6 @@ using sofa::core::ExecParams ;
 
 #include <sofa/helper/system/console.h>
 using sofa::helper::Utils;
-using sofa::helper::Console;
 
 using sofa::component::misc::CompareStateCreator;
 using sofa::component::misc::ReadStateActivator;
@@ -91,6 +95,8 @@ using  sofa::helper::logging::RichConsoleStyleMessageFormatter ;
 
 #include <sofa/core/logging/PerComponentLoggingMessageHandler.h>
 using  sofa::helper::logging::MainPerComponentLoggingMessageHandler ;
+
+#include <sofa/helper/AdvancedTimer.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -147,7 +153,22 @@ void addGUIParameters(ArgumentParser* argumentParser)
 // ---------------------------------------------------------------------
 int main(int argc, char** argv)
 {
-    GuiDataRepository.addFirstPath(Utils::getSofaPathTo("share/sofa/gui/runSofa/resources").c_str()) ;
+    // Add resources dir to GuiDataRepository
+    const std::string runSofaIniFilePath = Utils::getSofaPathTo("/etc/runSofa.ini");
+    std::map<std::string, std::string> iniFileValues = Utils::readBasicIniFile(runSofaIniFilePath);
+    if (iniFileValues.find("RESOURCES_DIR") != iniFileValues.end())
+    {
+        std::string dir = iniFileValues["RESOURCES_DIR"];
+        dir = SetDirectory::GetRelativeFromProcess(dir.c_str());
+        if(FileSystem::isDirectory(dir))
+        {
+            sofa::gui::GuiDataRepository.addFirstPath(dir);
+        }
+    }
+
+    // Force add plugins dir to PluginRepository (even if not existing)
+    PluginRepository.addFirstPath( Utils::getSofaPathPrefix()+"/plugins" );
+
     sofa::helper::BackTrace::autodump();
 
     ExecParams::defaultInstance()->setAspectID(0);
@@ -183,6 +204,7 @@ int main(int argc, char** argv)
     bool        temporaryFile = false;
     bool        testMode = false;
     bool        noAutoloadPlugins = false;
+    bool        noSceneCheck = false;
     unsigned int nbMSSASamples = 1;
     bool computationTimeAtBegin = false;
     unsigned int computationTimeSampling=0; ///< Frequency of display of the computation time statistics, in number of animation steps. 0 means never.
@@ -204,7 +226,7 @@ int main(int argc, char** argv)
     bool        disableStealing = false;
     bool        affinity = false;
 #endif
-    string colorsStatus = "auto";
+    string colorsStatus = "unset";
     string messageHandler = "auto";
     bool enableInteraction = false ;
     int width = 800;
@@ -223,6 +245,7 @@ int main(int argc, char** argv)
     argParser->addArgument(po::value<std::string>(&gui)->default_value(""),                                         "gui,g", gui_help.c_str());
     argParser->addArgument(po::value<std::vector<std::string>>(&plugins),                                           "load,l", "load given plugins");
     argParser->addArgument(po::value<bool>(&noAutoloadPlugins)->default_value(false)->implicit_value(true),         "noautoload", "disable plugins autoloading");
+    argParser->addArgument(po::value<bool>(&noSceneCheck)->default_value(false)->implicit_value(true),              "noscenecheck", "disable scene checking for each scene loading");
 
     // example of an option using lambda function which ensure the value passed is > 0
     argParser->addArgument(po::value<unsigned int>(&nbMSSASamples)->default_value(1)->notifier([](unsigned int value)
@@ -239,7 +262,7 @@ int main(int argc, char** argv)
     argParser->addArgument(po::value<bool>(&temporaryFile)->default_value(false)->implicit_value(true),             "tmp", "the loaded scene won't appear in history of opened files");
     argParser->addArgument(po::value<bool>(&testMode)->default_value(false)->implicit_value(true),                  "test", "select test mode with xml output after N iteration");
     argParser->addArgument(po::value<std::string>(&verif)->default_value(""), "verification,v",                     "load verification data for the scene");
-    argParser->addArgument(po::value<std::string>(&colorsStatus)->default_value("auto")->implicit_value("yes"),     "colors,c", "use colors on stdout and stderr (yes, no, auto)");
+    argParser->addArgument(po::value<std::string>(&colorsStatus)->default_value("unset", "auto")->implicit_value("yes"),     "colors,c", "use colors on stdout and stderr (yes, no, auto)");
     argParser->addArgument(po::value<std::string>(&messageHandler)->default_value("auto"), "formatting,f",          "select the message formatting to use (auto, clang, sofa, rich, test)");
     argParser->addArgument(po::value<bool>(&enableInteraction)->default_value(false)->implicit_value(true),         "interactive,i", "enable interactive mode for the GUI which includes idle and mouse events (EXPERIMENTAL)");
     argParser->addArgument(po::value<std::vector<std::string> >()->multitoken(), "argv",                            "forward extra args to the python interpreter");
@@ -281,12 +304,24 @@ int main(int argc, char** argv)
     sofa::simulation::setSimulation(new TreeSimulation());
 #endif
 
-    if (colorsStatus == "auto")
-        Console::setColorsStatus(Console::ColorsAuto);
+    if (colorsStatus == "unset") {
+        // If the parameter is unset, check the environment variable
+        const char * colorStatusEnvironment = std::getenv("SOFA_COLOR_TERMINAL");
+        if (colorStatusEnvironment != nullptr) {
+            const std::string status (colorStatusEnvironment);
+            if (status == "yes" || status == "on" || status == "always")
+                sofa::helper::console::setStatus(sofa::helper::console::Status::On);
+            else if (status == "no" || status == "off" || status == "never")
+                sofa::helper::console::setStatus(sofa::helper::console::Status::Off);
+            else
+                sofa::helper::console::setStatus(sofa::helper::console::Status::Auto);
+        }
+    } else if (colorsStatus == "auto")
+        sofa::helper::console::setStatus(sofa::helper::console::Status::Auto);
     else if (colorsStatus == "yes")
-        Console::setColorsStatus(Console::ColorsEnabled);
+        sofa::helper::console::setStatus(sofa::helper::console::Status::On);
     else if (colorsStatus == "no")
-        Console::setColorsStatus(Console::ColorsDisabled);
+        sofa::helper::console::setStatus(sofa::helper::console::Status::Off);
 
     //TODO(dmarchal): Use smart pointer there to avoid memory leaks !!
     if (messageHandler == "auto" )
@@ -307,7 +342,7 @@ int main(int argc, char** argv)
     else if (messageHandler == "rich")
     {
         MessageDispatcher::clearHandlers() ;
-        MessageDispatcher::addHandler( new ConsoleMessageHandler(new RichConsoleStyleMessageFormatter()) ) ;
+        MessageDispatcher::addHandler( new ConsoleMessageHandler(&RichConsoleStyleMessageFormatter::getInstance()) ) ;
     }
     else if (messageHandler == "test"){
         MessageDispatcher::addHandler( new ExceptionMessageHandler() ) ;
@@ -317,10 +352,10 @@ int main(int argc, char** argv)
     }
     MessageDispatcher::addHandler(&MainPerComponentLoggingMessageHandler::getInstance()) ;
 
-
-    // Add the plugin directory to PluginRepository
-    const std::string& pluginDir = Utils::getPluginDirectory();
-    PluginRepository.addFirstPath(pluginDir);
+    // Output FileRepositories
+    msg_info("runSofa") << "PluginRepository paths = " << PluginRepository.getPathsJoined();
+    msg_info("runSofa") << "DataRepository paths = " << DataRepository.getPathsJoined();
+    msg_info("runSofa") << "GuiDataRepository paths = " << GuiDataRepository.getPathsJoined();
 
     // Initialise paths
     BaseGUI::setConfigDirectoryPath(Utils::getSofaPathPrefix() + "/config", true);
@@ -332,17 +367,17 @@ int main(int argc, char** argv)
     for (unsigned int i=0; i<plugins.size(); i++)
         PluginManager::getInstance().loadPlugin(plugins[i]);
 
-    std::string configPluginPath = pluginDir + "/" + TOSTRING(CONFIG_PLUGIN_FILENAME);
-    std::string defaultConfigPluginPath = pluginDir + "/" + TOSTRING(DEFAULT_CONFIG_PLUGIN_FILENAME);
+    std::string configPluginPath = TOSTRING(CONFIG_PLUGIN_FILENAME);
+    std::string defaultConfigPluginPath = TOSTRING(DEFAULT_CONFIG_PLUGIN_FILENAME);
 
     if (!noAutoloadPlugins)
     {
-        if (DataRepository.findFile(configPluginPath))
+        if (PluginRepository.findFile(configPluginPath, "", nullptr))
         {
             msg_info("runSofa") << "Loading automatically plugin list in " << configPluginPath;
             PluginManager::getInstance().readFromIniFile(configPluginPath);
         }
-        else if (DataRepository.findFile(defaultConfigPluginPath))
+        else if (PluginRepository.findFile(defaultConfigPluginPath, "", nullptr))
         {
             msg_info("runSofa") << "Loading automatically plugin list in " << defaultConfigPluginPath;
             PluginManager::getInstance().readFromIniFile(defaultConfigPluginPath);
@@ -374,11 +409,17 @@ int main(int argc, char** argv)
     }
 
 
-    if (int err=GUIManager::createGUI(NULL))
+    if (int err=GUIManager::createGUI(nullptr))
         return err;
 
     //To set a specific resolution for the viewer, use the component ViewerSetting in you scene graph
     GUIManager::SetDimension(width, height);
+
+    // Create and register the SceneCheckerListener before scene loading
+    if(!noSceneCheck)
+    {
+        sofa::simulation::SceneLoader::addListener( SceneCheckerListener::getInstance() );
+    }
 
     Node::SPtr groot = sofa::simulation::getSimulation()->load(fileName.c_str());
     if( !groot )

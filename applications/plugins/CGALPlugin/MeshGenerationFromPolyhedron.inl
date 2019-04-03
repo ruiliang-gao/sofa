@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -164,7 +164,7 @@ void printStats(C3t3& c3t3, Obj* obj, const char* step = "")
 }
 
 template <class DataTypes>
-void MeshGenerationFromPolyhedron<DataTypes>::update()
+void MeshGenerationFromPolyhedron<DataTypes>::doUpdate()
 {
     // Domain
     // (we use exact intersection computation with Robust_intersection_traits_3)

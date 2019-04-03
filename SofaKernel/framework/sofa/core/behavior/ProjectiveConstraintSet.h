@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -24,14 +24,8 @@
 
 #include <sofa/core/core.h>
 #include <sofa/core/behavior/BaseProjectiveConstraintSet.h>
-#include <sofa/core/behavior/MechanicalState.h>
-#include <sofa/core/behavior/MultiMatrixAccessor.h>
 
-#include <sofa/defaulttype/BaseMatrix.h>
-#include <sofa/defaulttype/BaseVector.h>
 
-#include <sofa/defaulttype/VecTypes.h>
-#include <sofa/defaulttype/RigidTypes.h>
 
 namespace sofa
 {
@@ -69,7 +63,7 @@ public:
 protected:
     ProjectiveConstraintSet(MechanicalState<DataTypes> *mm = NULL);
 
-    virtual ~ProjectiveConstraintSet();
+    ~ProjectiveConstraintSet() override;
 public:
 
     // to get rid of warnings
@@ -80,7 +74,7 @@ public:
     Data<Real> endTime;  ///< Time when the constraint becomes inactive (-1 for infinitely active)
     virtual bool isActive() const; ///< if false, the constraint does nothing
 
-    virtual void init() override;
+    void init() override;
 
     
     virtual helper::vector< core::BaseState* > getModels() override
@@ -102,28 +96,28 @@ public:
     /// This method retrieves the dxId vector from the MechanicalState and call
     /// the internal projectResponse(VecDeriv&) method implemented by
     /// the component.
-    virtual void projectResponse(const MechanicalParams* mparams, MultiVecDerivId dxId) override;
+    void projectResponse(const MechanicalParams* mparams, MultiVecDerivId dxId) override;
 
     /// Project the L matrix of the Lagrange Multiplier equation system.
     ///
     /// This method retrieves the lines of the Jacobian Matrix from the MechanicalState and call
     /// the internal projectResponse(MatrixDeriv&) method implemented by
     /// the component.
-    virtual void projectJacobianMatrix(const MechanicalParams* mparams, MultiMatrixDerivId cId) override;
+    void projectJacobianMatrix(const MechanicalParams* mparams, MultiMatrixDerivId cId) override;
 
     /// Project v to constrained space (v models a velocity).
     ///
     /// This method retrieves the vId vector from the MechanicalState and call
     /// the internal projectVelocity(VecDeriv&) method implemented by
     /// the component.
-    virtual void projectVelocity(const MechanicalParams* mparams, MultiVecDerivId vId) override;
+    void projectVelocity(const MechanicalParams* mparams, MultiVecDerivId vId) override;
 
     /// Project x to constrained space (x models a position).
     ///
     /// This method retrieves the xId vector from the MechanicalState and call
     /// the internal projectPosition(VecCoord&) method implemented by
     /// the component.
-    virtual void projectPosition(const MechanicalParams* mparams, MultiVecCoordId xId) override;
+    void projectPosition(const MechanicalParams* mparams, MultiVecCoordId xId) override;
 
 
 
@@ -153,14 +147,14 @@ public:
 
 
     /// Project the global Mechanical Matrix to constrained space using offset parameter
-    virtual void applyConstraint(const MechanicalParams* /*mparams*/, const sofa::core::behavior::MultiMatrixAccessor* /*matrix*/) override
+    void applyConstraint(const MechanicalParams* /*mparams*/, const sofa::core::behavior::MultiMatrixAccessor* /*matrix*/) override
     {
         serr << "applyConstraint(mparams, matrix) not implemented" << sendl;
     }
 
 
     /// Project the global Mechanical Vector to constrained space using offset parameter
-    virtual void applyConstraint(const MechanicalParams* /*mparams*/, defaulttype::BaseVector* /*vector*/, const sofa::core::behavior::MultiMatrixAccessor* /*matrix*/) override
+    void applyConstraint(const MechanicalParams* /*mparams*/, defaulttype::BaseVector* /*vector*/, const sofa::core::behavior::MultiMatrixAccessor* /*matrix*/) override
     {
         serr << "applyConstraint(mparams, vector, matrix) not implemented" << sendl;
     }
@@ -189,24 +183,15 @@ protected:
     SingleLink<ProjectiveConstraintSet<DataTypes>,MechanicalState<DataTypes>,BaseLink::FLAG_STRONGLINK> mstate;
 };
 
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_CORE_BEHAVIOR_PROJECTIVECONSTRAINTSET_CPP)
-#ifndef SOFA_FLOAT
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec6dTypes >;
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec3dTypes >;
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec2dTypes >;
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec1dTypes >;
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Rigid3dTypes >;
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Rigid2dTypes >;
-#endif
+#if  !defined(SOFA_CORE_BEHAVIOR_PROJECTIVECONSTRAINTSET_CPP)
+extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec6Types >;
+extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec3Types >;
+extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec2Types >;
+extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec1Types >;
+extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Rigid3Types >;
+extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Rigid2Types >;
 
-#ifndef SOFA_DOUBLE
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec6fTypes >;
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec3fTypes >;
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec2fTypes >;
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Vec1fTypes >;
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Rigid3fTypes >;
-extern template class SOFA_CORE_API ProjectiveConstraintSet< defaulttype::Rigid2fTypes >;
-#endif
+
 #endif
 } // namespace behavior
 

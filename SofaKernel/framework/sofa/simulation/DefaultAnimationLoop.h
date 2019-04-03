@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -27,7 +27,13 @@
 #include <sofa/core/ExecParams.h>
 #include <sofa/simulation/simulationcore.h>
 #include <sofa/simulation/Node.h>
-#include <sofa/helper/AdvancedTimer.h>
+
+namespace sofa {
+namespace core {
+    class ExecParams ;
+}
+}
+
 
 namespace sofa
 {
@@ -49,18 +55,18 @@ public:
     typedef sofa::core::objectmodel::BaseObjectDescription BaseObjectDescription;
     SOFA_CLASS(DefaultAnimationLoop,sofa::core::behavior::BaseAnimationLoop);
 protected:
-    DefaultAnimationLoop(simulation::Node* gnode = NULL);
+    DefaultAnimationLoop(simulation::Node* gnode = nullptr);
 
-    virtual ~DefaultAnimationLoop();
+    ~DefaultAnimationLoop() override;
 public:
     /// Set the simulation node this animation loop is controlling
     virtual void setNode( simulation::Node* );
 
     /// Set the simulation node to the local context if not specified previously
-    virtual void init() override;
+    void init() override;
 
     /// perform one animation step
-    virtual void step(const core::ExecParams* params, SReal dt) override;
+    void step(const sofa::core::ExecParams* params, SReal dt) override;
 
 
     /// Construction method called by ObjectFactory.

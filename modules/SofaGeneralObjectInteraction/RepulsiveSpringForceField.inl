@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -58,7 +58,7 @@ void RepulsiveSpringForceField<DataTypes>::addForce(const sofa::core::Mechanical
         int b = springs[i].m2;
         Coord u = x2[b]-x1[a];
         Real d = u.norm();
-        if (d < springs[i].initpos)
+        if (d!=0 && d < springs[i].initpos)
         {
             Real inverseLength = 1.0f/d;
             u *= inverseLength;

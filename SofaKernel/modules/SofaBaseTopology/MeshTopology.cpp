@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -25,7 +25,7 @@
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/helper/fixed_array.h>
 #include <set>
-#include <string.h>
+#include <cstring>
 
 namespace sofa
 {
@@ -59,7 +59,7 @@ MeshTopology::EdgeUpdate::EdgeUpdate(MeshTopology* t)
 
 }
 
-void MeshTopology::EdgeUpdate::update()
+void MeshTopology::EdgeUpdate::doUpdate()
 {
     if(topology->hasVolume() ) updateFromVolume();
     else if(topology->hasSurface()) updateFromSurface();
@@ -186,7 +186,9 @@ void MeshTopology::EdgeUpdate::updateFromSurface()
                 // edge not in edgeMap so create a new one
                 edgeIndex=(unsigned int)seqEdges.size();
                 edgeMap[e]=edgeIndex;
-                seqEdges.push_back(e);
+                // To be similar to TriangleSetTopologyContainer::createEdgeSetArray
+                //seqEdges.push_back(e); Changed to have oriented edges on the border of the triangulation. 
+                seqEdges.push_back(Edge(v1, v2));
             }
 //            else
 //            {
@@ -240,7 +242,7 @@ MeshTopology::TriangleUpdate::TriangleUpdate(MeshTopology *t)
 }
 
 
-void MeshTopology::TriangleUpdate::update()
+void MeshTopology::TriangleUpdate::doUpdate()
 {
     typedef MeshTopology::SeqTetrahedra SeqTetrahedra;
     typedef MeshTopology::SeqTriangles SeqTriangles;
@@ -253,26 +255,22 @@ void MeshTopology::TriangleUpdate::update()
     Triangle tr;
     unsigned int triangleIndex;
     unsigned int v[3],val;
+    const unsigned int trianglesInTetrahedronArray[4][3]= {{0,2,1}, {0,1,3}, {1,2,3}, {0,3,2}};
     /// create the m_edge array at the same time than it fills the m_trianglesInTetrahedron array
     for (unsigned int i = 0; i < tetrahedra.size(); ++i)
     {
         const Tetra &t=topology->seqTetrahedra.getValue()[i];
-        for (unsigned int j=0; j<4; ++j)
+        for (TriangleID j=0; j<4; ++j)
         {
-            if (j%2)
-            {
-                v[0]=t[(j+1)%4]; v[1]=t[(j+2)%4]; v[2]=t[(j+3)%4];
-            }
-            else
-            {
-                v[0]=t[(j+1)%4]; v[2]=t[(j+2)%4]; v[1]=t[(j+3)%4];
-            }
-            //		std::sort(v,v+2);
+            for (PointID k=0; k<3; ++k)
+                v[k] = t[trianglesInTetrahedronArray[j][k]];
+
             // sort v such that v[0] is the smallest one
             while ((v[0]>v[1]) || (v[0]>v[2]))
             {
                 val=v[0]; v[0]=v[1]; v[1]=v[2]; v[2]=val;
             }
+
             // check if a triangle with an opposite orientation already exists
             tr=Triangle(v[0],v[2],v[1]);
             itt=triangleMap.find(tr);
@@ -284,16 +282,10 @@ void MeshTopology::TriangleUpdate::update()
                 triangleMap[tr]=triangleIndex;
                 seqTriangles.push_back(tr);
             }
-//            else
-//            {
-//                triangleIndex=(*itt).second;
-//            }
-            //m_trianglesInTetrahedron[i][j]=triangleIndex;
         }
     }
 
     topology->seqTriangles.endEdit();
-
 }
 
 MeshTopology::QuadUpdate::QuadUpdate(MeshTopology *t)
@@ -304,7 +296,7 @@ MeshTopology::QuadUpdate::QuadUpdate(MeshTopology *t)
     setDirtyValue();
 }
 
-void MeshTopology::QuadUpdate::update()
+void MeshTopology::QuadUpdate::doUpdate()
 {
     typedef MeshTopology::SeqHexahedra SeqHexahedra;
     typedef MeshTopology::SeqQuads SeqQuads;
@@ -505,8 +497,6 @@ using namespace sofa::defaulttype;
 using core::topology::BaseMeshTopology;
 
 
-SOFA_DECL_CLASS(MeshTopology)
-
 int MeshTopologyClass = core::RegisterObject("Generic mesh topology")
         .addAlias("Mesh")
         .add< MeshTopology >()
@@ -700,11 +690,9 @@ void MeshTopology::addTetra( int a, int b, int c, int d )
 
 void MeshTopology::addHexa(int p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8)
 {
-#ifdef SOFA_NEW_HEXA
+
     seqHexahedra.beginEdit()->push_back(Hexa(p1,p2,p3,p4,p5,p6,p7,p8));
-#else
-    seqHexahedra.beginEdit()->push_back(Hexa(p1,p2,p4,p3,p5,p6,p8,p7));
-#endif
+
     seqHexahedra.endEdit();
     if (p1 >= (int)nbPoints) nbPoints = p1+1;
     if (p2 >= (int)nbPoints) nbPoints = p2+1;
@@ -775,34 +763,34 @@ void MeshTopology::setNbPoints(int n)
     nbPoints = n;
 }
 
-int MeshTopology::getNbEdges()
+size_t MeshTopology::getNbEdges()
 {
-    return (int)getEdges().size();
+    return getEdges().size();
 }
 
-int MeshTopology::getNbTriangles()
+size_t MeshTopology::getNbTriangles()
 {
-    return (int)getTriangles().size();
+    return getTriangles().size();
 }
 
-int MeshTopology::getNbQuads()
+size_t MeshTopology::getNbQuads()
 {
-    return (int)getQuads().size();
+    return getQuads().size();
 }
 
-int MeshTopology::getNbTetrahedra()
+size_t MeshTopology::getNbTetrahedra()
 {
-    return (int)getTetrahedra().size();
+    return getTetrahedra().size();
 }
 
-int MeshTopology::getNbHexahedra()
+size_t MeshTopology::getNbHexahedra()
 {
-    return (int)getHexahedra().size();
+    return getHexahedra().size();
 }
 
-int MeshTopology::getNbUVs()
+size_t MeshTopology::getNbUVs()
 {
-    return (int)getUVs().size();
+    return getUVs().size();
 }
 
 const MeshTopology::Edge MeshTopology::getEdge(index_type i)
@@ -867,7 +855,7 @@ void MeshTopology::createEdgesAroundVertexArray ()
         {
             // adding edge i in the edge shell of both points
             m_edgesAroundVertex[ edges[i][0] ].push_back( i );
-            m_edgesAroundVertex[ edges[i][1] ].insert( m_edgesAroundVertex[ edges[i][1] ].begin(), i );
+            m_edgesAroundVertex[ edges[i][1] ].push_back( i );
         }
     }
 }
@@ -884,8 +872,8 @@ void MeshTopology::createEdgesInTriangleArray ()
         // adding edge i in the edge shell of both points
         for (unsigned int j=0; j<3; ++j)
         {
-            int edgeIndex=getEdgeIndex(t[(j+1)%3],t[(j+2)%3]);
-            assert(edgeIndex!= -1);
+            EdgeID edgeIndex=getEdgeIndex(t[(j+1)%3],t[(j+2)%3]);
+            assert(edgeIndex != InvalidID);
             m_edgesInTriangle[i][j]=edgeIndex;
         }
     }
@@ -903,8 +891,8 @@ void MeshTopology::createEdgesInQuadArray ()
         // adding edge i in the edge shell of both points
         for (unsigned int j=0; j<4; ++j)
         {
-            int edgeIndex=getEdgeIndex(t[(j+1)%4],t[(j+2)%4]);
-            assert(edgeIndex!= -1);
+            EdgeID edgeIndex = getEdgeIndex(t[(j+1)%4],t[(j+2)%4]);
+            assert(edgeIndex != InvalidID);
             m_edgesInQuad[i][j]=edgeIndex;
         }
     }
@@ -924,9 +912,8 @@ void MeshTopology::createEdgesInTetrahedronArray ()
         // adding edge i in the edge shell of both points
         for (unsigned int j=0; j<6; ++j)
         {
-            int edgeIndex=getEdgeIndex(t[edgesInTetrahedronArray[j][0]],
-                    t[edgesInTetrahedronArray[j][1]]);
-            assert(edgeIndex!= -1);
+            EdgeID edgeIndex = getEdgeIndex(t[edgesInTetrahedronArray[j][0]], t[edgesInTetrahedronArray[j][1]]);
+            assert(edgeIndex != InvalidID);
             m_edgesInTetrahedron[i][j]=edgeIndex;
         }
     }
@@ -947,9 +934,8 @@ void MeshTopology::createEdgesInHexahedronArray ()
         // adding edge i in the edge shell of both points
         for (unsigned int j=0; j<12; ++j)
         {
-            int edgeIndex=getEdgeIndex(h[edgeHexahedronDescriptionArray[j][0]],
-                    h[edgeHexahedronDescriptionArray[j][1]]);
-            assert(edgeIndex!= -1);
+            EdgeID edgeIndex = getEdgeIndex(h[edgeHexahedronDescriptionArray[j][0]], h[edgeHexahedronDescriptionArray[j][1]]);
+            assert(edgeIndex != InvalidID);
             m_edgesInHexahedron[i][j]=edgeIndex;
         }
     }
@@ -1153,8 +1139,8 @@ void MeshTopology::createTrianglesInTetrahedronArray ()
         // adding triangles in the triangle list of the ith tetrahedron  i
         for (unsigned int j=0; j<4; ++j)
         {
-            int triangleIndex=getTriangleIndex(t[(j+1)%4],t[(j+2)%4],t[(j+3)%4]);
-            assert(triangleIndex!= -1);
+            TriangleID triangleIndex=getTriangleIndex(t[(j+1)%4],t[(j+2)%4],t[(j+3)%4]);
+            assert(triangleIndex != InvalidID);
             m_trianglesInTetrahedron[i][j]=triangleIndex;
         }
     }
@@ -1338,31 +1324,31 @@ void MeshTopology::createQuadsInHexahedronArray ()
     for (unsigned int i = 0; i < hexahedra.size(); ++i)
     {
         const Hexa &h=hexahedra[i];
-        int quadIndex;
+        QuadID quadIndex;
         // adding the 6 quads in the quad list of the ith hexahedron  i
         // Quad 0 :
         quadIndex=getQuadIndex(h[0],h[3],h[2],h[1]);
-        assert(quadIndex!= -1);
+        assert(quadIndex!= InvalidID);
         m_quadsInHexahedron[i][0]=quadIndex;
         // Quad 1 :
         quadIndex=getQuadIndex(h[4],h[5],h[6],h[7]);
-        assert(quadIndex!= -1);
+        assert(quadIndex!= InvalidID);
         m_quadsInHexahedron[i][1]=quadIndex;
         // Quad 2 :
         quadIndex=getQuadIndex(h[0],h[1],h[5],h[4]);
-        assert(quadIndex!= -1);
+        assert(quadIndex!= InvalidID);
         m_quadsInHexahedron[i][2]=quadIndex;
         // Quad 3 :
         quadIndex=getQuadIndex(h[1],h[2],h[6],h[5]);
-        assert(quadIndex!= -1);
+        assert(quadIndex!= InvalidID);
         m_quadsInHexahedron[i][3]=quadIndex;
         // Quad 4 :
         quadIndex=getQuadIndex(h[2],h[3],h[7],h[6]);
-        assert(quadIndex!= -1);
+        assert(quadIndex!= InvalidID);
         m_quadsInHexahedron[i][4]=quadIndex;
         // Quad 5 :
         quadIndex=getQuadIndex(h[3],h[0],h[4],h[7]);
-        assert(quadIndex!= -1);
+        assert(quadIndex!= InvalidID);
         m_quadsInHexahedron[i][5]=quadIndex;
     }
 }
@@ -1603,14 +1589,25 @@ const MeshTopology::HexahedraAroundQuad& MeshTopology::getHexahedraAroundQuad(Qu
 
 
 
+const vector< MeshTopology::EdgesAroundVertex >& MeshTopology::getEdgesAroundVertexArray()
+{
+    if (m_edgesAroundVertex.empty())	// this method should only be called when the array exists.
+    {
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetEdgesAroundVertexArray EdgesAroundVertex array is empty.";
+
+        createEdgesAroundVertexArray();
+    }
+
+    return m_edgesAroundVertex;
+}
 
 const vector< MeshTopology::EdgesInTriangle >& MeshTopology::getEdgesInTriangleArray()
 {
     if(m_edgesInTriangle.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getEdgesInTriangleArray] EdgesInTriangle array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetEdgesInTriangleArray EdgesInTriangle array is empty.";
 
         createEdgesInTriangleArray();
     }
@@ -1622,9 +1619,8 @@ const vector< MeshTopology::TrianglesAroundVertex >& MeshTopology::getTrianglesA
 {
     if(m_trianglesAroundVertex.empty())	// this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getTrianglesAroundVertexArray] TrianglesAroundVertex array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetTrianglesAroundVertexArray TrianglesAroundVertex array is empty.";
 
         createTrianglesAroundVertexArray();
     }
@@ -1636,9 +1632,8 @@ const vector< MeshTopology::TrianglesAroundEdge >& MeshTopology::getTrianglesAro
 {
     if(m_trianglesAroundEdge.empty())	// this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getTrianglesAroundEdgeArray] TrianglesAroundEdge array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetTrianglesAroundEdgeArray TrianglesAroundEdge array is empty.";
 
         createTrianglesAroundEdgeArray();
     }
@@ -1653,9 +1648,8 @@ const vector< MeshTopology::EdgesInQuad >& MeshTopology::getEdgesInQuadArray()
 {
     if(m_edgesInQuad.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getEdgesInQuadArray] EdgesInQuad array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetEdgesInQuadArray EdgesInQuad array is empty.";
 
         createEdgesInQuadArray();
     }
@@ -1667,9 +1661,8 @@ const vector< MeshTopology::QuadsAroundVertex >& MeshTopology::getQuadsAroundVer
 {
     if(m_quadsAroundVertex.empty())	// this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getQuadsAroundVertexArray] QuadsAroundVertex array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetQuadsAroundVertexArray QuadsAroundVertex array is empty.";
 
         createQuadsAroundVertexArray();
     }
@@ -1681,9 +1674,8 @@ const vector< MeshTopology::QuadsAroundEdge >& MeshTopology::getQuadsAroundEdgeA
 {
     if(m_quadsAroundEdge.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getQuadsAroundEdgeArray] QuadsAroundEdge array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetQuadsAroundEdgeArray QuadsAroundEdge array is empty.";
 
         createQuadsAroundEdgeArray();
     }
@@ -1699,9 +1691,8 @@ const vector< MeshTopology::EdgesInTetrahedron >& MeshTopology::getEdgesInTetrah
 {
     if (m_edgesInTetrahedron.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getEdgesInTetrahedronArray] EdgesInTetrahedron array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+           msg_warning() << "GetEdgesInTetrahedronArray EdgesInTetrahedron array is empty.";
 
         createEdgesInTetrahedronArray();
     }
@@ -1713,9 +1704,8 @@ const vector< MeshTopology::TrianglesInTetrahedron >& MeshTopology::getTriangles
 {
     if (m_trianglesInTetrahedron.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getTrianglesInTetrahedronArray] TrianglesInTetrahedron array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetTrianglesInTetrahedronArray TrianglesInTetrahedron array is empty.";
 
         createTrianglesInTetrahedronArray();
     }
@@ -1727,9 +1717,8 @@ const vector< MeshTopology::TetrahedraAroundVertex >& MeshTopology::getTetrahedr
 {
     if (m_tetrahedraAroundVertex.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getTetrahedraAroundVertexArray] TetrahedraAroundVertex array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetTetrahedraAroundVertexArray TetrahedraAroundVertex array is empty.";
 
         createTetrahedraAroundVertexArray();
     }
@@ -1741,13 +1730,11 @@ const vector< MeshTopology::TetrahedraAroundEdge >& MeshTopology::getTetrahedraA
 {
     if (m_tetrahedraAroundEdge.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getTetrahedraAroundEdgeArray] TetrahedraAroundEdge array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetTetrahedraAroundEdgeArray TetrahedraAroundEdge array is empty.";
 
         createTetrahedraAroundEdgeArray();
     }
-
     return m_tetrahedraAroundEdge;
 }
 
@@ -1755,9 +1742,8 @@ const vector< MeshTopology::TetrahedraAroundTriangle >& MeshTopology::getTetrahe
 {
     if (m_tetrahedraAroundTriangle.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getTetrahedraAroundTriangleArray] TetrahedraAroundTriangle array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetTetrahedraAroundTriangleArray TetrahedraAroundTriangle array is empty.";
 
         createTetrahedraAroundTriangleArray();
     }
@@ -1772,9 +1758,8 @@ const vector< MeshTopology::EdgesInHexahedron >& MeshTopology::getEdgesInHexahed
 {
     if (m_edgesInHexahedron.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getEdgesInHexahedronArray] EdgesInHexahedron array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetEdgesInHexahedronArray EdgesInHexahedron array is empty.";
 
         createEdgesInHexahedronArray();
     }
@@ -1786,9 +1771,8 @@ const vector< MeshTopology::QuadsInHexahedron >& MeshTopology::getQuadsInHexahed
 {
     if (m_quadsInHexahedron.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getQuadsInHexahedronArray] QuadsInHexahedron array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetQuadsInHexahedronArray QuadsInHexahedron array is empty.";
 
         createQuadsInHexahedronArray();
     }
@@ -1800,9 +1784,8 @@ const vector< MeshTopology::HexahedraAroundVertex >& MeshTopology::getHexahedraA
 {
     if (m_hexahedraAroundVertex.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getHexahedraAroundVertexArray] HexahedraAroundVertex array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetHexahedraAroundVertexArray HexahedraAroundVertex array is empty.";
 
         createHexahedraAroundVertexArray();
     }
@@ -1814,9 +1797,8 @@ const vector< MeshTopology::HexahedraAroundEdge >& MeshTopology::getHexahedraAro
 {
     if (m_hexahedraAroundEdge.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getHexahedraAroundEdgeArray] HexahedraAroundEdge array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetHexahedraAroundEdgeArray HexahedraAroundEdge array is empty.";
 
         createHexahedraAroundEdgeArray();
     }
@@ -1828,9 +1810,8 @@ const vector< MeshTopology::HexahedraAroundQuad >& MeshTopology::getHexahedraAro
 {
     if (m_hexahedraAroundQuad.empty()) // this method should only be called when the array exists.
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::getHexahedraAroundQuadArray] HexahedraAroundQuad array is empty." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "GetHexahedraAroundQuadArray HexahedraAroundQuad array is empty.";
 
         createHexahedraAroundQuadArray();
     }
@@ -1840,13 +1821,13 @@ const vector< MeshTopology::HexahedraAroundQuad >& MeshTopology::getHexahedraAro
 
 
 
-int MeshTopology::getEdgeIndex(PointID v1, PointID v2)
+core::topology::Topology::EdgeID MeshTopology::getEdgeIndex(PointID v1, PointID v2)
 {
     const EdgesAroundVertex &es1 = getEdgesAroundVertex(v1) ;
     const SeqEdges &ea = getEdges();
     unsigned int i=0;
-    int result= -1;
-    while ((i<es1.size()) && (result== -1))
+    EdgeID result= InvalidID;
+    while ((i<es1.size()) && (result == InvalidID))
     {
         const MeshTopology::Edge &e=ea[es1[i]];
         if ((e[0]==v2)|| (e[1]==v2))
@@ -1854,10 +1835,11 @@ int MeshTopology::getEdgeIndex(PointID v1, PointID v2)
 
         i++;
     }
+
     return result;
 }
 
-int MeshTopology::getTriangleIndex(PointID v1, PointID v2, PointID v3)
+core::topology::Topology::TriangleID MeshTopology::getTriangleIndex(PointID v1, PointID v2, PointID v3)
 {
     //const vector< TrianglesAroundVertex > &tvs=getTrianglesAroundVertexArray();
 
@@ -1878,13 +1860,16 @@ int MeshTopology::getTriangleIndex(PointID v1, PointID v2, PointID v3)
 
     assert(out2.size()==0 || out2.size()==1);
 
+    if(out2.size() > 1)
+        msg_warning() << "More than one triangle found for indices: [" << v1 << "; " << v2 << "; " << v3 << "]";
+
     if (out2.size()==1)
         return (int) (out2[0]);
-    else
-        return -1;
+
+    return InvalidID;
 }
 
-int MeshTopology::getQuadIndex(PointID v1, PointID v2, PointID v3,  PointID v4)
+core::topology::Topology::QuadID MeshTopology::getQuadIndex(PointID v1, PointID v2, PointID v3,  PointID v4)
 {
     //const vector< QuadsAroundVertex > &qvs=getQuadsAroundVertexArray();
 
@@ -1911,13 +1896,17 @@ int MeshTopology::getQuadIndex(PointID v1, PointID v2, PointID v3,  PointID v4)
 
     assert(out3.size()==0 || out3.size()==1);
 
+    if(out3.size() > 1)
+        msg_warning() << "More than one Quad found for indices: [" << v1 << "; " << v2 << "; " << v3 << "; " << v4 << "]";
+
+
     if (out3.size()==1)
         return (int) (out3[0]);
-    else
-        return -1;
+
+    return InvalidID;
 }
 
-int MeshTopology::getTetrahedronIndex(PointID v1, PointID v2, PointID v3,  PointID v4)
+core::topology::Topology::TetrahedronID MeshTopology::getTetrahedronIndex(PointID v1, PointID v2, PointID v3,  PointID v4)
 {
     const vector<TetraID> &set1=getTetrahedraAroundVertex(v1);
     const vector<TetraID> &set2=getTetrahedraAroundVertex(v2);
@@ -1942,13 +1931,16 @@ int MeshTopology::getTetrahedronIndex(PointID v1, PointID v2, PointID v3,  Point
 
     assert(out3.size()==0 || out3.size()==1);
 
+    if(out3.size() > 1)
+        msg_warning() << "More than one Tetrahedron found for indices: [" << v1 << "; " << v2 << "; " << v3 << "; " << v4 << "]";
+
     if (out3.size()==1)
         return (int) (out3[0]);
-    else
-        return -1;
+
+    return InvalidID;
 }
 
-int MeshTopology::getHexahedronIndex(PointID v1, PointID v2, PointID v3, PointID v4, PointID v5, PointID v6, PointID v7, PointID v8)
+core::topology::Topology::HexahedronID MeshTopology::getHexahedronIndex(PointID v1, PointID v2, PointID v3, PointID v4, PointID v5, PointID v6, PointID v7, PointID v8)
 {
     const vector<HexaID> &set1=getTetrahedraAroundVertex(v1);
     const vector<HexaID> &set2=getTetrahedraAroundVertex(v2);
@@ -1996,11 +1988,14 @@ int MeshTopology::getHexahedronIndex(PointID v1, PointID v2, PointID v3, PointID
     out7.erase(result7,out7.end());
 
     assert(out7.size()==0 || out7.size()==1);
+    if(out7.size() > 1)
+        msg_warning() << "More than one Hexahedron found for indices: [" << v1 << "; " << v2 << "; " << v3 << "; " << v4 << "; "
+                         << v5 << "; " << v6 << "; " << v7 << "; " << v8 << "]";
 
     if (out7.size()==1)
         return (int) (out7[0]);
-    else
-        return -1;
+
+    return InvalidID;
 }
 
 int MeshTopology::getVertexIndexInTriangle(const Triangle &t, PointID vertexIndex) const
@@ -2234,9 +2229,8 @@ void MeshTopology::reOrientateTriangle(TriangleID id)
 {
     if (id >= (unsigned int)this->getNbTriangles())
     {
-#ifndef NDEBUG
-        sout << "Warning. [MeshTopology::reOrientateTriangle] Triangle ID out of bounds." << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_warning() << "reOrientateTriangle Triangle ID out of bounds.";
         return;
     }
     Triangle& tri = (*seqTriangles.beginEdit())[id];
@@ -2292,7 +2286,7 @@ void MeshTopology::invalidate()
     m_hexahedraAroundEdge.clear();
     m_hexahedraAroundQuad.clear();
     ++revision;
-    //sout << "MeshTopology::invalidate()"<<sendl;
+    //msg_info() << "MeshTopology::invalidate()";
 }
 
 
@@ -2317,7 +2311,7 @@ void MeshTopology::updateTetrahedra()
 
 bool MeshTopology::checkConnexity()
 {
-    unsigned int nbr = 0;
+    size_t nbr = 0;
 
     if (UpperTopology == core::topology::HEXAHEDRON)
         nbr = this->getNbHexahedra();
@@ -2332,9 +2326,9 @@ bool MeshTopology::checkConnexity()
 
     if (nbr == 0)
     {
-#ifndef NDEBUG
-        serr << "Warning. [MeshTopology::checkConnexity] Can't compute connexity as some element are missing" << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_error() << "CheckConnexity: Can't compute connexity as some element are missing.";
+
         return false;
     }
 
@@ -2342,7 +2336,7 @@ bool MeshTopology::checkConnexity()
 
     if (elemAll.size() != nbr)
     {
-        serr << "Warning: in computing connexity, elements are missings. There is more than one connexe component." << sendl;
+        msg_error() << "CheckConnexity: elements are missings. There is more than one connexe component.";
         return false;
     }
 
@@ -2350,9 +2344,9 @@ bool MeshTopology::checkConnexity()
 }
 
 
-unsigned int MeshTopology::getNumberOfConnectedComponent()
+size_t MeshTopology::getNumberOfConnectedComponent()
 {
-    unsigned int nbr = 0;
+    size_t nbr = 0;
 
     if (UpperTopology == core::topology::HEXAHEDRON)
         nbr = this->getNbHexahedra();
@@ -2367,9 +2361,9 @@ unsigned int MeshTopology::getNumberOfConnectedComponent()
 
     if (nbr == 0)
     {
-#ifndef NDEBUG
-        serr << "Warning. [MeshTopology::getNumberOfConnectedComponent] Can't compute connexity as there are no elements" << sendl;
-#endif
+        if (CHECK_TOPOLOGY)
+            msg_error() << "GetNumberOfConnectedComponent Can't compute connexity as there are no elements.";
+
         return 0;
     }
 
@@ -2400,7 +2394,7 @@ unsigned int MeshTopology::getNumberOfConnectedComponent()
 
 const sofa::helper::vector <unsigned int> MeshTopology::getConnectedElement(unsigned int elem)
 {
-    unsigned int nbr = 0;
+    size_t nbr = 0;
 
     if (UpperTopology == core::topology::HEXAHEDRON)
         nbr = this->getNbHexahedra();
@@ -2455,9 +2449,9 @@ const sofa::helper::vector <unsigned int> MeshTopology::getConnectedElement(unsi
         if (elemPreviousFront.empty())
         {
             end = true;
-#ifndef NDEBUG
-            serr << "Loop for computing connexity has reach end." << sendl;
-#endif
+            if (CHECK_TOPOLOGY)
+                msg_error() << "Loop for computing connexity has reach end.";
+
         }
 
         // iterate
@@ -2641,7 +2635,7 @@ void MeshTopology::draw(const core::visual::VisualParams* vparams)
     {
         std::vector<defaulttype::Vector3> pos;
         pos.reserve(this->getNbEdges()*2u);
-        for (int i=0; i<getNbEdges(); i++)
+        for (EdgeID i=0; i<getNbEdges(); i++)
         {
             const Edge& c = getEdge(i);
             pos.push_back(defaulttype::Vector3(getPosX(c[0]), getPosY(c[0]), getPosZ(c[0])));
@@ -2655,7 +2649,7 @@ void MeshTopology::draw(const core::visual::VisualParams* vparams)
     {
         std::vector<defaulttype::Vector3> pos;
         pos.reserve(this->getNbTriangles()*3u);
-        for (int i=0; i<getNbTriangles(); i++)
+        for (TriangleID i=0; i<getNbTriangles(); i++)
         {
             const Triangle& c = getTriangle(i);
             pos.push_back(defaulttype::Vector3(getPosX(c[0]), getPosY(c[0]), getPosZ(c[0])));
@@ -2670,7 +2664,7 @@ void MeshTopology::draw(const core::visual::VisualParams* vparams)
     {
         std::vector<defaulttype::Vector3> pos;
         pos.reserve(this->getNbQuads()*4u);
-        for (int i=0; i<getNbQuads(); i++)
+        for (QuadID i=0; i<getNbQuads(); i++)
         {
             const Quad& c = getQuad(i);
             pos.push_back(defaulttype::Vector3(getPosX(c[0]), getPosY(c[0]), getPosZ(c[0])));
@@ -2688,7 +2682,7 @@ void MeshTopology::draw(const core::visual::VisualParams* vparams)
         std::vector<defaulttype::Vector3> pos2;
         pos1.reserve(this->getNbHexahedra()*8u);
         pos2.reserve(this->getNbHexahedra()*8u);
-        for (int i=0; i<getNbHexahedra(); i++)
+        for (HexahedronID i=0; i<getNbHexahedra(); i++)
         {
             const Hexa& c = getHexahedron(i);
             pos1.push_back(defaulttype::Vector3(getPosX(c[0]), getPosY(c[0]), getPosZ(c[0])));
@@ -2718,7 +2712,7 @@ void MeshTopology::draw(const core::visual::VisualParams* vparams)
     {
         std::vector<defaulttype::Vector3> pos;
         pos.reserve(this->getNbTetrahedra()*12u);
-        for (int i=0; i<getNbTetras(); i++)
+        for (TetrahedronID i=0; i<getNbTetras(); i++)
         {
             const Tetra& t = getTetra(i);
             pos.push_back(defaulttype::Vector3(getPosX(t[0]), getPosY(t[0]), getPosZ(t[0])));

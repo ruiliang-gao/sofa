@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -22,13 +22,9 @@
 #ifndef SOFA_CORE_OBJECTMODEL_BASECLASS_H
 #define SOFA_CORE_OBJECTMODEL_BASECLASS_H
 
-#include <sofa/helper/system/config.h>
-#include <sofa/helper/vector.h>
 #include <sofa/core/core.h>
 #include <sofa/core/objectmodel/SPtr.h>
-#include <string>
 #include <map>
-#include <typeinfo>
 
 namespace sofa
 {
@@ -348,7 +344,7 @@ public:
     }
     static const BaseClass* get(int)
     {
-        return NULL;
+        return nullptr;
     }
 };
 
@@ -387,16 +383,16 @@ protected:
         for (int i=0; i<TClassParents<Parents>::nb(); ++i)
             parents[i] = TClassParents<Parents>::get(i);
     }
-    virtual ~TClass() {}
+    ~TClass() override {}
 
-    virtual void* dynamicCast(Base* obj) const
+    void* dynamicCast(Base* obj) const override
     {
         T* ptr = NULL;
         T::dynamicCast(ptr, obj);
         return ptr;
     }
 
-    virtual bool isInstance(Base* obj) const
+    bool isInstance(Base* obj) const override
     {
         return dynamicCast(obj) != NULL;
     }

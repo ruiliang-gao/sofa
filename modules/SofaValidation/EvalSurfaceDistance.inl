@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -25,7 +25,6 @@
 #include "EvalSurfaceDistance.h"
 #include <sofa/defaulttype/DataTypeInfo.h>
 #include <sofa/simulation/Node.h>
-#include <sofa/helper/gl/template.h>
 
 #include <fstream>
 
@@ -64,14 +63,14 @@ void EvalSurfaceDistance<DataTypes>::init()
     c1->get(pointsCM);
     if (pointsCM == NULL)
     {
-        serr << "EvalSurfaceDistance ERROR: object1 PointModel not found."<<sendl;
+        msg_error() << "EvalSurfaceDistance ERROR: object1 PointModel not found.";
         return;
     }
     sofa::core::objectmodel::BaseContext* c2 = this->mstate2->getContext();
     c2->get(surfaceCM);
     if (surfaceCM == NULL)
     {
-        serr << "EvalSurfaceDistance ERROR: object2 TriangleModel not found."<<sendl;
+        msg_error() << "EvalSurfaceDistance ERROR: object2 TriangleModel not found.";
         return;
     }
 
@@ -103,7 +102,7 @@ SReal EvalSurfaceDistance<DataTypes>::eval()
     vectCMPair.push_back(std::make_pair(surfaceCM->getFirst(), pointsCM->getFirst()));
 
     detection->beginNarrowPhase();
-    sout << "narrow phase detection between " <<surfaceCM->getClassName()<< " and " << pointsCM->getClassName() << sendl;
+    msg_info()<< "narrow phase detection between " <<surfaceCM->getClassName()<< " and " << pointsCM->getClassName();
     detection->addCollisionPairs(vectCMPair);
     detection->endNarrowPhase();
 
@@ -122,7 +121,7 @@ SReal EvalSurfaceDistance<DataTypes>::eval()
         const ContactVector* contacts = dynamic_cast<const ContactVector*>(it->second);
         if (contacts != NULL)
         {
-            sout << contacts->size() << " contacts detected." << sendl;
+            msg_info() << contacts->size() << " contacts detected.";
             for (unsigned int i=0; i<contacts->size(); i++)
             {
                 if ((*contacts)[i].elem.first.getCollisionModel() == surfaceCM)
@@ -158,14 +157,14 @@ SReal EvalSurfaceDistance<DataTypes>::eval()
 
 //-------------------------------- draw------------------------------------
 template<class DataTypes>
-void EvalSurfaceDistance<DataTypes>::draw(const core::visual::VisualParams* )
+void EvalSurfaceDistance<DataTypes>::draw(const core::visual::VisualParams* vparams)
 {
     if (!this->f_draw.getValue())
         return;
     if (!this->mstate1 || !this->mstate2 || xproj.empty()) return;
     const VecCoord& x1 = this->mstate1->read(core::ConstVecCoordId::position())->getValue();
     const VecCoord& x2 = xproj; //this->mstate2->read(core::ConstVecCoordId::position())->getValue();
-    this->doDraw(x1, x2);
+    this->doDraw(vparams, x1, x2);
 }
 
 } // namespace misc

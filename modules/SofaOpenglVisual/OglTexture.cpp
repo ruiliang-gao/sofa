@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -32,9 +32,6 @@ namespace component
 namespace visualmodel
 {
 
-SOFA_DECL_CLASS(OglTexture)
-SOFA_DECL_CLASS(OglTexture2D)
-
 // Register the OglTexture* objects in the Object Factory
 int OglTextureClass = core::RegisterObject("OglTexture").add< OglTexture >();
 int OglTexture2DClass = core::RegisterObject("OglTexture2D").add< OglTexture2D >();
@@ -61,8 +58,8 @@ OglTexture::OglTexture()
     ,cubemapFilenameNegX(initData(&cubemapFilenameNegX, (std::string) "", "cubemapFilenameNegX", "Texture filename of negative-X cubemap face"))
     ,cubemapFilenameNegY(initData(&cubemapFilenameNegY, (std::string) "", "cubemapFilenameNegY", "Texture filename of negative-Y cubemap face"))
     ,cubemapFilenameNegZ(initData(&cubemapFilenameNegZ, (std::string) "", "cubemapFilenameNegZ", "Texture filename of negative-Z cubemap face"))
-    ,texture(0)
-    ,img(0)
+    ,texture(nullptr)
+    ,img(nullptr)
 {
     this->addAlias(&textureFilename, "filename");
 }
@@ -98,7 +95,7 @@ void OglTexture::init()
             if (height > 0 && width > 0 && !textureData.empty() )
             {
                 //Init texture
-                if (img) { delete img; img=0; }
+                if (img) { delete img; img=nullptr; }
                 img = new helper::io::Image();
                 img->init(width, height, nbb);
 
@@ -126,8 +123,8 @@ void OglTexture::init()
             };
 
             if (img) delete img;
-            img = 0;
-            helper::io::Image *tmp = 0;
+            img = nullptr;
+            helper::io::Image *tmp = nullptr;
 
             for (unsigned i = 0; i < 6; i++)
                 if (!filename[i].empty())
@@ -187,7 +184,7 @@ void OglTexture::init()
         {
             serr << "OglTexture file " << textureFilename.getFullPath() << " not found." << sendl;
             //create dummy texture
-            if (img) { delete img; img=0; }
+            if (img) { delete img; img=nullptr; }
             img = new helper::io::Image();
             unsigned int dummyWidth = 128;
             unsigned int dummyHeight = 128;

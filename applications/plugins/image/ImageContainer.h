@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -24,11 +24,12 @@
 
 #include <image/config.h>
 #include "ImageTypes.h"
-#include <limits.h>
+#include <climits>
 #include <sofa/defaulttype/Vec.h>
 #include <sofa/core/objectmodel/BaseObject.h>
 #include <sofa/core/objectmodel/DataFileName.h>
 #include <sofa/core/visual/VisualParams.h>
+#include <sofa/helper/system/gl.h>
 #include <sofa/defaulttype/BoundingBox.h>
 #include <sofa/core/objectmodel/Event.h>
 #include <sofa/simulation/AnimateBeginEvent.h>
@@ -72,7 +73,7 @@ struct ImageContainerSpecialization< defaulttype::Image<T> >
         container->f_listening.setValue(true);  // to update camera during animate
     }
 
-    static void parse( ImageContainerT* container, sofa::core::objectmodel::BaseObjectDescription* /* arg */ = NULL )
+    static void parse( ImageContainerT* container, sofa::core::objectmodel::BaseObjectDescription* /* arg */ = nullptr )
     {
         if( container->image.isSet() ) return; // image is set from data link
 
@@ -107,7 +108,6 @@ struct ImageContainerSpecialization< defaulttype::Image<T> >
         typename ImageContainerT::waTransform wtransform(container->transform);
 
         // read image
-#ifndef __PS3__
 #ifdef SOFA_HAVE_ZLIB
         //Load .inr.gz using ZLib
         if(fname.size() >= 3 && (fname.substr(fname.size()-7)==".inr.gz" || fname.substr(fname.size()-4)==".inr") )
@@ -135,7 +135,6 @@ struct ImageContainerSpecialization< defaulttype::Image<T> >
         }
         else
 #endif // SOFA_HAVE_ZLIB
-#endif // __PS3__
             if(fname.find(".mhd")!=std::string::npos || fname.find(".MHD")!=std::string::npos || fname.find(".Mhd")!=std::string::npos
                     || fname.find(".raw")!=std::string::npos || fname.find(".RAW")!=std::string::npos || fname.find(".Raw")!=std::string::npos)
             {
@@ -392,11 +391,11 @@ public:
         wimage->clear();
     }
 
-    virtual ~ImageContainer() {clear();}
+    ~ImageContainer() override {clear();}
 
     bool transformIsSet;
 
-    virtual void parse(sofa::core::objectmodel::BaseObjectDescription *arg) override
+    void parse(sofa::core::objectmodel::BaseObjectDescription *arg) override
     {
         Inherited::parse(arg);
 
@@ -412,7 +411,7 @@ public:
         ImageContainerSpecialization<ImageTypes>::parse( this, arg );
     }
 
-    virtual void init() override
+    void init() override
     {
         ImageContainerSpecialization<ImageTypes>::init( this );
 
@@ -531,7 +530,7 @@ protected:
         for(unsigned int i=0;i<p.size();i++) c[i]=rtransform->fromImage(p[i]);
     }
 
-    virtual void computeBBox(const core::ExecParams*  params, bool onlyVisible=false ) override
+    void computeBBox(const core::ExecParams*  params, bool onlyVisible=false ) override
     {
         if( onlyVisible && !drawBB.getValue()) return;
 

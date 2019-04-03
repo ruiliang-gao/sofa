@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -27,15 +27,11 @@
 #include <sofa/core/visual/DisplayFlags.h>
 #include <memory>
 
-#include <sofa/simulation/DefaultAnimationLoop.h>
-#include <sofa/simulation/DefaultVisualManagerLoop.h>
-
 namespace sofa
 {
 
 namespace simulation
 {
-
 
 /** Main controller of the scene.
     Defines how the scene is inited at the beginning, and updated at each time step.
@@ -47,9 +43,8 @@ public:
     SOFA_CLASS(Simulation, sofa::core::objectmodel::Base);
 
     typedef sofa::core::visual::DisplayFlags DisplayFlags;
-// protected:
     Simulation();
-    virtual ~Simulation();
+    ~Simulation() override;
 	
 private:
 	Simulation(const Simulation& n) ;
@@ -105,10 +100,10 @@ public:
     virtual void exportOBJ(Node* root, const char* filename, bool exportMTL = true);
 
     /// Print all object in the graph in XML format
-    virtual void exportXML(Node* root, const char* fileName=NULL);
+    virtual void exportXML(Node* root, const char* fileName=nullptr);
 
     /// Print all objects in the graph in the given file (format is given by the filename extension)
-    virtual void exportGraph(Node* root, const char* filename=NULL);
+    virtual void exportGraph(Node* root, const char* filename=nullptr);
 
     /// Dump the current state in the given stream
     virtual void dumpState( Node* root, std::ofstream& out );

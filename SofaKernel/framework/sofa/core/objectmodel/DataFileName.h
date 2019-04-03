@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -21,10 +21,6 @@
 ******************************************************************************/
 #ifndef SOFA_CORE_OBJECTMODEL_DATAFILENAME_H
 #define SOFA_CORE_OBJECTMODEL_DATAFILENAME_H
-
-#if !defined(__GNUC__) || (__GNUC__ > 3 || (_GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#pragma once
-#endif
 
 #include <sofa/core/objectmodel/Data.h>
 #include <sofa/helper/SVector.h>
@@ -47,12 +43,12 @@ class SOFA_CORE_API DataFileName : public sofa::core::objectmodel::Data<std::str
 public:
     typedef sofa::core::objectmodel::Data<std::string> Inherit;
 
-    DataFileName( const char* helpMsg=0, bool isDisplayed=true, bool isReadOnly=false )
+    DataFileName( const char* helpMsg=nullptr, bool isDisplayed=true, bool isReadOnly=false )
         : Inherit(helpMsg, isDisplayed, isReadOnly)
     {
     }
 
-    DataFileName( const std::string& value, const char* helpMsg=0, bool isDisplayed=true, bool isReadOnly=false )
+    DataFileName( const std::string& value, const char* helpMsg=nullptr, bool isDisplayed=true, bool isReadOnly=false )
         : Inherit(value, helpMsg, isDisplayed, isReadOnly)
     {
         updatePath();
@@ -79,7 +75,7 @@ public:
     {
     }
 
-    void endEdit(const core::ExecParams* params = 0)
+    void endEdit(const core::ExecParams* params = nullptr)
     {
         updatePath();
         Inherit::endEdit(params);
@@ -110,6 +106,11 @@ public:
         this->updateIfDirty();
         return m_fullpath;
     }
+    virtual const std::string& getExtension() const
+    {
+        this->updateIfDirty();
+        return m_extension;
+    }
 
     virtual void update()
     {
@@ -122,6 +123,7 @@ protected:
 
     std::string m_fullpath;
     std::string m_relativepath;
+    std::string m_extension;
 
 private:
     DataFileName(const Inherit& d);
@@ -135,12 +137,12 @@ class SOFA_CORE_API DataFileNameVector : public sofa::core::objectmodel::Data< s
 public:
     typedef sofa::core::objectmodel::Data<sofa::helper::SVector<std::string> > Inherit;
 
-    DataFileNameVector( const char* helpMsg=0, bool isDisplayed=true, bool isReadOnly=false )
+    DataFileNameVector( const char* helpMsg=nullptr, bool isDisplayed=true, bool isReadOnly=false )
         : Inherit(helpMsg, isDisplayed, isReadOnly)
     {
     }
 
-    DataFileNameVector( const sofa::helper::vector<std::string>& value, const char* helpMsg=0, bool isDisplayed=true, bool isReadOnly=false )
+    DataFileNameVector( const sofa::helper::vector<std::string>& value, const char* helpMsg=nullptr, bool isDisplayed=true, bool isReadOnly=false )
         : Inherit(value, helpMsg, isDisplayed, isReadOnly)
     {
         updatePath();
@@ -167,7 +169,7 @@ public:
     {
     }
 
-    void endEdit(const core::ExecParams* params = 0)
+    void endEdit(const core::ExecParams* params = nullptr)
     {
         updatePath();
         Inherit::endEdit(params);

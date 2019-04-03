@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -23,7 +23,7 @@
 #define SOFA_HELPER_ADVANCEDTIMER_H
 #include <sofa/helper/helper.h>
 #include <sofa/simulation/Simulation.h>
-
+#include <sofa/helper/system/thread/thread_specific_ptr.h>
 
 #include <iostream>
 #include <string>
@@ -141,9 +141,9 @@ public:
             {
                 idsList.push_back(std::string("0")); // ID 0 == "0" or empty string
             }
-
+            
         public:
-
+            
             /**
                @return the Id corresponding to the name of the id given in parameter
                If the name isn't found in the list, it is added to it and return the new id.
@@ -188,8 +188,12 @@ public:
             /// return the instance of the factory. Creates it if doesn't exist yet.
             static IdFactory& getInstance()
             {
-                static IdFactory instance;
-                return instance;
+                SOFA_THREAD_SPECIFIC_PTR(IdFactory, instance);
+                if (instance == nullptr)
+                {
+                    instance = new IdFactory;
+                }
+                return *instance;
             }
         };
 
@@ -388,15 +392,15 @@ public:
         const char* idStr;
         const IdObj obj;
         const char* objStr;
-        StepVar(IdStep id) : id(id), idStr(NULL), objStr(NULL)
+        StepVar(IdStep id) : id(id), idStr(nullptr), objStr(nullptr)
         {
             stepBegin(id);
         }
-        StepVar(const char* idStr) : idStr(idStr), objStr(NULL)
+        StepVar(const char* idStr) : idStr(idStr), objStr(nullptr)
         {
             stepBegin(idStr);
         }
-        StepVar(IdStep id, IdObj obj) : id(id), idStr(NULL), obj(obj), objStr(NULL)
+        StepVar(IdStep id, IdObj obj) : id(id), idStr(nullptr), obj(obj), objStr(nullptr)
         {
             stepBegin(id, obj);
         }
@@ -435,11 +439,11 @@ public:
 
 
     typedef void (*SyncCallBack)(void* userData);
-    static std::pair<SyncCallBack,void*> setSyncCallBack(SyncCallBack cb, void* userData = NULL);
+    static std::pair<SyncCallBack,void*> setSyncCallBack(SyncCallBack cb, void* userData = nullptr);
 
 };
 
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_HELPER_ADVANCEDTIMER_CPP)
+#if  !defined(SOFA_HELPER_ADVANCEDTIMER_CPP)
 extern template class SOFA_HELPER_API AdvancedTimer::Id<AdvancedTimer::Timer>;
 extern template class SOFA_HELPER_API AdvancedTimer::Id<AdvancedTimer::Step>;
 extern template class SOFA_HELPER_API AdvancedTimer::Id<AdvancedTimer::Obj>;

@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -170,11 +170,11 @@ public:
         this->addAlias(vf_roiValue[0], "roiValue");
     }
 
-    virtual ~MeshToImageEngine()
+    ~MeshToImageEngine() override
     {
     }
 
-    virtual void init() override
+    void init() override
     {
         // backward compatibility (if InsideValue is not set: use first value)
         for( size_t meshId=0; meshId<vf_InsideValues.size() ; ++meshId )
@@ -208,7 +208,7 @@ public:
         im.fill((T)0);
     }
 
-    virtual void reinit() override
+    void reinit() override
     {
         vf_positions.resize(f_nbMeshes.getValue());
         vf_edges.resize(f_nbMeshes.getValue());
@@ -251,11 +251,8 @@ public:
 
 protected:
 
-    virtual void update() override
+    void doUpdate() override
     {
-        updateAllInputsIfDirty();
-        cleanDirty();
-
         // to be backward-compatible, if less than 3 values, fill with the last one
         waVecReal vs( voxelSize ); unsigned vs_lastid=vs.size()-1;
         for( unsigned i=vs.size() ; i<3 ; ++i ) vs.push_back( vs[vs_lastid] );
@@ -541,7 +538,7 @@ protected:
 
 
 
-    virtual void draw(const core::visual::VisualParams* /*vparams*/) override
+    void draw(const core::visual::VisualParams* /*vparams*/) override
     {
     }
 
@@ -704,7 +701,7 @@ protected:
 
 
 
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_IMAGE_MeshToImageEngine_CPP)
+#if  !defined(SOFA_IMAGE_MeshToImageEngine_CPP)
 extern template class SOFA_IMAGE_API MeshToImageEngine<sofa::defaulttype::ImageB>;
 extern template class SOFA_IMAGE_API MeshToImageEngine<sofa::defaulttype::ImageUC>;
 extern template class SOFA_IMAGE_API MeshToImageEngine<sofa::defaulttype::ImageUS>;

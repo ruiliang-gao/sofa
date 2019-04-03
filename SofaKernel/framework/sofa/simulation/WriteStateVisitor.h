@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -33,9 +33,7 @@
 #ifndef SOFA_SIMULATION_WRITESTATEACTION_H
 #define SOFA_SIMULATION_WRITESTATEACTION_H
 
-#if !defined(__GNUC__) || (__GNUC__ > 3 || (_GNUC__ == 3 && __GNUC_MINOR__ > 3))
-#pragma once
-#endif
+
 
 #include <sofa/simulation/Visitor.h>
 #include <iostream>
@@ -50,10 +48,10 @@ class SOFA_SIMULATION_CORE_API WriteStateVisitor: public Visitor
 {
 public:
     WriteStateVisitor( const sofa::core::ExecParams* params, std::ostream& out );
-    virtual ~WriteStateVisitor();
+    ~WriteStateVisitor() override;
 
-    virtual Result processNodeTopDown( simulation::Node*  );
-    virtual const char* getClassName() const { return "WriteStateVisitor"; }
+    Result processNodeTopDown( simulation::Node*  ) override;
+    const char* getClassName() const override { return "WriteStateVisitor"; }
 
 protected:
     std::ostream& m_out;

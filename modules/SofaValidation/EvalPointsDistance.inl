@@ -1,6 +1,6 @@
 /******************************************************************************
 *       SOFA, Simulation Open-Framework Architecture, development version     *
-*                (c) 2006-2018 INRIA, USTL, UJF, CNRS, MGH                    *
+*                (c) 2006-2019 INRIA, USTL, UJF, CNRS, MGH                    *
 *                                                                             *
 * This program is free software; you can redistribute it and/or modify it     *
 * under the terms of the GNU Lesser General Public License as published by    *
@@ -27,7 +27,8 @@
 #include <sofa/simulation/AnimateBeginEvent.h>
 #include <sofa/simulation/AnimateEndEvent.h>
 #include <sofa/simulation/UpdateMappingEndEvent.h>
-#include <sofa/helper/gl/template.h>
+#include <sofa/core/visual/VisualParams.h>
+#include <sofa/defaulttype/RGBAColor.h>
 
 #include <iomanip>
 
@@ -87,19 +88,19 @@ void EvalPointsDistance<DataTypes>::init()
     {
         mstate1 = dynamic_cast<core::behavior::MechanicalState<DataTypes>*>(this->getContext()->getMechanicalState());
         box1 = mstate1->f_bbox.getValue();
-        serr << " Mechanical State object1 not found, this will be taken in the same context " << sendl;
+        msg_error()<< " Mechanical State object1 not found, this will be taken in the same context ";
     }
     if (!mstate2)
     {
         mstate2 = dynamic_cast<core::behavior::MechanicalState<DataTypes>*>(this->getContext()->getMechanicalState());
         this->box2 = mstate1->f_bbox.getValue();
-        serr << " Mechanical State object2 not found, this will be taken in the same context " << sendl;
+        msg_error()<< " Mechanical State object2 not found, this will be taken in the same context ";
     }
 
 
     if (!mstate1 || !mstate2)
     {
-        serr << " ERROR Mechanical State object1 and object2 expected  " << sendl;
+        msg_error()<< " ERROR Mechanical State object1 and object2 expected ";
         return;
     }
 
@@ -118,7 +119,7 @@ void EvalPointsDistance<DataTypes>::reinit()
         outfile = new std::ofstream(filename.c_str());
         if( !outfile->is_open() )
         {
-            serr << "Error creating file "<<filename<<sendl;
+            msg_error() << "Error creating file "<<filename;
             delete outfile;
             outfile = NULL;
         }
@@ -135,7 +136,7 @@ void EvalPointsDistance<DataTypes>::reinit()
 
     if(f_period.getValue() == 0.0)
     {
-        serr << " ERROR period must be different of zero  " << sendl;
+        msg_error() << " ERROR period must be different of zero  ";
         return;
     }
 
@@ -222,7 +223,7 @@ SReal EvalPointsDistance<DataTypes>::doEval(const VecCoord& x1, const VecCoord& 
 
 //-------------------------------- draw ------------------------------------
 template<class DataTypes>
-void EvalPointsDistance<DataTypes>::draw(const core::visual::VisualParams* )
+void EvalPointsDistance<DataTypes>::draw(const core::visual::VisualParams* vparams)
 {
     if (!f_draw.getValue())
         return;
@@ -230,27 +231,32 @@ void EvalPointsDistance<DataTypes>::draw(const core::visual::VisualParams* )
         return;
     const VecCoord& x1 = mstate1->read(core::ConstVecCoordId::position())->getValue();
     const VecCoord& x2 = mstate2->read(core::ConstVecCoordId::position())->getValue();
-    this->doDraw(x1,x2);
+    this->doDraw(vparams, x1,x2);
 }
 
 //-------------------------------- doDraw------------------------------------
 template<class DataTypes>
-void EvalPointsDistance<DataTypes>::doDraw(const VecCoord& x1, const VecCoord& x2)
+void EvalPointsDistance<DataTypes>::doDraw(const core::visual::VisualParams* vparams, const VecCoord& x1, const VecCoord& x2)
 {
-#ifndef SOFA_NO_OPENGL
     const int n = (x1.size()<x2.size())?x1.size():x2.size();
     int s1 = x1.size()-n;
     int s2 = x2.size()-n;
-    glDisable(GL_LIGHTING);
-    glColor3f(1.0f,0.5f,0.5f);
-    glBegin(GL_LINES);
+
+    vparams->drawTool()->saveLastState();
+    vparams->drawTool()->disableLighting();
+
+    std::vector<sofa::defaulttype::Vector3> vertices;
+    sofa::defaulttype::RGBAColor color(1, 0.5, 0.5, 1);
+
     for (int i=0; i<n; ++i)
     {
-        helper::gl::glVertexT(x1[s1+i]);
-        helper::gl::glVertexT(x2[s2+i]);
+        sofa::defaulttype::Vector3 v0(x1[s1+i][0],x1[s1+i][1],x1[s1+i][2]);
+        sofa::defaulttype::Vector3 v1(x2[s2+i][0],x2[s2+i][1],x2[s2+i][2]);
+        vertices.push_back(v0);
+        vertices.push_back(v1);
     }
-    glEnd();
-#endif /* SOFA_NO_OPENGL */
+    vparams->drawTool()->drawLines(vertices, 1, color);
+    vparams->drawTool()->restoreLastState();
 }
 
 //-------------------------------- handleEvent ------------------------------------
@@ -260,7 +266,7 @@ void EvalPointsDistance<DataTypes>::handleEvent(sofa::core::objectmodel::Event* 
 
     if (!mstate1 || !mstate2)
             return;
-    // std::ostream *out = (outfile==NULL)? (std::ostream *)(&sout) : outfile;
+
     if (simulation::AnimateEndEvent::checkEventType(event))
     {
         double time = getContext()->getTime();
@@ -271,11 +277,10 @@ void EvalPointsDistance<DataTypes>::handleEvent(sofa::core::objectmodel::Event* 
             eval();
             if (outfile==NULL)
             {
-                sout << "# name\ttime\tmean\tmin\tmax\tdev\tmean(%)\tmin(%)\tmax(%)\tdev(%)" << sendl;
-                sout << this->getName() << "\t" << time
+                msg_info() << "# name\ttime\tmean\tmin\tmax\tdev\tmean(%)\tmin(%)\tmax(%)\tdev(%)";
+                msg_info() << this->getName() << "\t" << time
                      << "\t" << distMean.getValue() << "\t" << distMin.getValue() << "\t" << distMax.getValue() << "\t" << distDev.getValue()
-                     << "\t" << 100*rdistMean.getValue() << "\t" << 100*rdistMin.getValue() << "\t" << 100*rdistMax.getValue() << "\t" << 100*rdistDev.getValue()
-                     <<  sendl;
+                     << "\t" << 100*rdistMean.getValue() << "\t" << 100*rdistMin.getValue() << "\t" << 100*rdistMax.getValue() << "\t" << 100*rdistDev.getValue();
             }
             else
             {
