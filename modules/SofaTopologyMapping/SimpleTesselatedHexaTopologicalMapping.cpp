@@ -325,9 +325,6 @@ void SimpleTesselatedHexaTopologicalMapping::init()
                         pointMappedFromEdge[fixed_array<int,2>(h[7],h[6])],
                         h[7]);
             }
-
-            // Need to fully init the target topology
-            toModel->init();
         }
     }
 }

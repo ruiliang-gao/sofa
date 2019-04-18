@@ -183,9 +183,6 @@ void Hexa2TetraTopologicalMapping::init()
             to_tstm->notifyEndingEvent();
             //to_tstm->propagateTopologicalChanges();
             Loc2GlobDataVec.endEdit();
-
-            // Need to fully init the target topology
-            toModel->init();
         }
 
     }

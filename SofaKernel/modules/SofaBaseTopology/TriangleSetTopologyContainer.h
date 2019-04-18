@@ -75,6 +75,8 @@ public:
     void addTriangle( int a, int b, int c ) override;
     /// @}
 
+
+
     /// BaseMeshTopology API
     /// @{
 
@@ -110,7 +112,7 @@ public:
      * @param ID of a triangle.
      * @return EdgesInTriangle list composing the input triangle.
      */
-    const EdgesInTriangle& getEdgesInTriangle(TriangleID id) override;
+    const EdgesInTriangle& getEdgesInTriangle(TriangleID i) override;
 
 
     /** \brief Returns the set of triangles adjacent to a given vertex.
@@ -118,7 +120,7 @@ public:
      * @param ID of a vertex
      * @return TrianglesAroundVertex list around the input vertex
      */
-    const TrianglesAroundVertex& getTrianglesAroundVertex(PointID id) override;
+    const TrianglesAroundVertex& getTrianglesAroundVertex(PointID i) override;
 
 
     /** \brief Returns the set of triangles adjacent to a given edge.
@@ -126,7 +128,7 @@ public:
      * @param ID of an edge.
      * @return TrianglesAroundEdge list around the input edge.
      */
-    const TrianglesAroundEdge& getTrianglesAroundEdge(EdgeID id) override;
+    const TrianglesAroundEdge& getTrianglesAroundEdge(EdgeID i) override;
 
 
     /** \brief Returns the index (either 0, 1 ,2) of the vertex whose global index is vertexIndex.
@@ -153,8 +155,7 @@ public:
 
     /// Dynamic Topology API
     /// @{
-    /// Method called by component Init method. Will create all the topology neighboorhood buffers and call @see EdgeSetTopologyContainer::initTopology()
-    void initTopology();
+
 
     /** \brief Checks if the topology is coherent
      *

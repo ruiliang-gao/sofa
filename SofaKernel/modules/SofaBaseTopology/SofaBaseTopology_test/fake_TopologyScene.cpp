@@ -75,7 +75,6 @@ bool fake_TopologyScene::loadMeshFile()
         { "name", "topoCon" },
         { "src", "@loader" }
     });
-    topo->init();
    
     return true;
 }

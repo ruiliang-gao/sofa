@@ -350,9 +350,6 @@ void SubsetTopologicalMapping::init()
         if (handleHexahedra.getValue())
             sout << " HE: "<<fromModel->getNbHexahedra() << "->" << toModel->getNbHexahedra() << "/" << (fromModel->getNbHexahedra() - toModel->getNbHexahedra());
         sout << sendl;
-
-        // Need to fully init the target topology
-        toModel->init();
     }
 }
 

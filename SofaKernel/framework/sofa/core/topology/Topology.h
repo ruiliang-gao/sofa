@@ -81,54 +81,46 @@ public:
     class Edge : public sofa::helper::fixed_array<PointID,2>
     {
     public:
-        Edge(): sofa::helper::fixed_array<PointID,2>(Topology::InvalidID, Topology::InvalidID){}
+        Edge() {}
         Edge(PointID a, PointID b) : sofa::helper::fixed_array<PointID,2>(a,b) {}
     };
-
     class Triangle : public sofa::helper::fixed_array<PointID,3>
     {
     public:
-        Triangle(): sofa::helper::fixed_array<PointID,3>(Topology::InvalidID, Topology::InvalidID, Topology::InvalidID) {}
+        Triangle() {}
         Triangle(PointID a, PointID b, PointID c) : sofa::helper::fixed_array<PointID,3>(a,b,c) {}
     };
-
     class Quad : public sofa::helper::fixed_array<PointID,4>
     {
     public:
-        Quad(): sofa::helper::fixed_array<PointID,4>(Topology::InvalidID, Topology::InvalidID, Topology::InvalidID, Topology::InvalidID) {}
+        Quad() {}
         Quad(PointID a, PointID b, PointID c, PointID d) : sofa::helper::fixed_array<PointID,4>(a,b,c,d) {}
     };
-
     class Tetrahedron : public sofa::helper::fixed_array<PointID,4>
     {
     public:
-        Tetrahedron(): sofa::helper::fixed_array<PointID,4>(Topology::InvalidID, Topology::InvalidID, Topology::InvalidID, Topology::InvalidID) {}
+        Tetrahedron() {}
         Tetrahedron(PointID a, PointID b, PointID c, PointID d) : sofa::helper::fixed_array<PointID,4>(a,b,c,d) {}
     };
     typedef Tetrahedron                         Tetra;
-
     class Pyramid : public sofa::helper::fixed_array<PointID,5>
     {
     public:
-        Pyramid(): sofa::helper::fixed_array<PointID,5>(Topology::InvalidID, Topology::InvalidID, Topology::InvalidID, Topology::InvalidID, Topology::InvalidID) {}
+        Pyramid() {}
         Pyramid(PointID a, PointID b, PointID c, PointID d, PointID e) : sofa::helper::fixed_array<PointID,5>(a,b,c,d,e) {}
     };
-
     class Pentahedron : public sofa::helper::fixed_array<PointID,6>
     {
     public:
-        Pentahedron(): sofa::helper::fixed_array<PointID,6>(Topology::InvalidID, Topology::InvalidID, Topology::InvalidID, Topology::InvalidID, Topology::InvalidID, Topology::InvalidID) {}
+        Pentahedron() {}
         Pentahedron(PointID a, PointID b, PointID c, PointID d, PointID e, PointID f) : sofa::helper::fixed_array<PointID,6>(a,b,c,d,e,f) {}
     };
     typedef Pentahedron                          Penta;
-
     class Hexahedron : public sofa::helper::fixed_array<PointID,8>
     {
     public:
-        Hexahedron(): sofa::helper::fixed_array<PointID,8>(Topology::InvalidID, Topology::InvalidID, Topology::InvalidID, Topology::InvalidID,
-                                                           Topology::InvalidID, Topology::InvalidID, Topology::InvalidID, Topology::InvalidID) {}
-        Hexahedron(PointID a, PointID b, PointID c, PointID d,
-                   PointID e, PointID f, PointID g, PointID h) : sofa::helper::fixed_array<PointID,8>(a,b,c,d,e,f,g,h) {}
+        Hexahedron() {}
+        Hexahedron(PointID a, PointID b, PointID c, PointID d, PointID e, PointID f, PointID g, PointID h) : sofa::helper::fixed_array<PointID,8>(a,b,c,d,e,f,g,h) {}
     };
     typedef Hexahedron                          Hexa;
 
@@ -154,18 +146,7 @@ public:
 
     bool insertInNode( objectmodel::BaseNode* node ) override;
     bool removeInNode( objectmodel::BaseNode* node ) override;
-
-    // Declare invalid topology structures filled with Topology::InvalidID
-    static const sofa::helper::vector<Topology::index_type> InvalidSet;
-    static const Edge                                       InvalidEdge;
-    static const Triangle                                   InvalidTriangle;
-    static const Quad                                       InvalidQuad;
-    static const Tetrahedron                                InvalidTetrahedron;
-    static const Pyramid                                    InvalidPyramid;
-    static const Pentahedron                                InvalidPentahedron;
-    static const Hexahedron                                 InvalidHexahedron;
 };
-
 
 template<class TopologyElement>
 struct TopologyElementInfo;
