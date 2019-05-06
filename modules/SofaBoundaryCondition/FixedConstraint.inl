@@ -23,6 +23,10 @@
 #define SOFA_COMPONENT_PROJECTIVECONSTRAINTSET_FIXEDCONSTRAINT_INL
 
 #include <sofa/core/topology/BaseMeshTopology.h>
+
+#include <sofa/core/objectmodel/BaseContext.h>
+#include <sofa/core/ObjectFactory.h>
+
 #include <SofaBoundaryCondition/FixedConstraint.h>
 #include <SofaBaseLinearSolver/SparseMatrix.h>
 #include <sofa/core/visual/VisualParams.h>
@@ -127,13 +131,28 @@ void FixedConstraint<DataTypes>::init()
 
     if (!this->mstate.get())
     {
-        msg_warning() << "Missing mstate, cannot initialize the component.";
+        msg_warning("FixedConstraint") << "Missing mstate, cannot initialize the component.";
         return;
     }
 
     topology = this->getContext()->getMeshTopology();
     if (!topology)
-        msg_warning() << "Can not find the topology, won't be able to handle topological changes";
+    {
+        msg_warning("FixedConstraint") << "Can not find the topology, won't be able to handle topological changes!";
+
+        std::vector<sofa::core::topology::BaseMeshTopology*> bmtDec;
+        sofa::core::objectmodel::BaseContext::GetObjectsCallBackT<sofa::core::topology::BaseMeshTopology, std::vector<sofa::core::topology::BaseMeshTopology*> > bmtd(&bmtDec);
+        this->getContext()->getObjects(sofa::core::objectmodel::TClassInfo<sofa::core::topology::BaseMeshTopology>::get(), bmtd, sofa::core::objectmodel::BaseContext::SearchDown);
+
+        msg_info("FixedConstraint") << "Searched for BaseMeshTopology instances in child nodes, found: " << bmtDec.size();
+        if (bmtDec.size() > 0)
+        {
+            msg_info("FixedConstraint") << "Found a BaseMeshTopology instance in a child node, using it instead: " << bmtDec[0]->getName();
+            topology = bmtDec[0];
+        }
+        else
+            msg_error("FixedConstraint") << "Did not find a BaseMeshTopology in child nodes, won't be able to handle topological changes!";
+    }
 
     // Initialize topological functions
     d_indices.createTopologicalEngine(topology, pointHandler);

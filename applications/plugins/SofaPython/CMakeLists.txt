@@ -167,6 +167,34 @@ list(APPEND HEADER_FILES
     )
 endif()
 
+if (PLUGIN_ZYROSCONNECTOR)
+    message(STATUS "ZyROSConnector plugin is part of the SOFA build, adding Python bindings for it.")
+
+    find_package(ROS QUIET REQUIRED)
+    message(STATUS "ROS found: ${ROS_FOUND}")
+    find_package(Boost COMPONENTS regex thread signals QUIET REQUIRED)
+    find_package(Log4cxx QUIET REQUIRED)
+
+    # Boost
+    find_package(Boost COMPONENTS system chrono thread REQUIRED QUIET)
+    include_directories(${Boost_INCLUDE_DIR})
+    link_directories(${Boost_LIBRARY_DIRS})
+
+    # Dependency libraries
+    include_directories(${CMAKE_SOURCE_DIR}/applications/plugins/SofaROSConnector)
+    include_directories(${CMAKE_SOURCE_DIR}/applications/plugins/SofaROSConnector/ZyROSConnector)
+    include_directories(${CMAKE_SOURCE_DIR}/applications/plugins/SofaROSConnector/ZyGripping)
+    include_directories(${CMAKE_SOURCE_DIR}/applications/plugins/SofaROSConnector/ZySOFAControllers)
+    include_directories(${CMAKE_SOURCE_DIR}/applications/plugins/SofaROSConnector/ZyVelocityApproximation)
+
+    # ROS
+    include_directories(${ROS_INCLUDE_DIR})
+    include_directories(${LOG4CXX_INCLUDE_DIRS})
+
+    list(APPEND HEADER_FILES Binding_ZyROSConnector.h)
+    list(APPEND SOURCE_FILES Binding_ZyROSConnector.cpp)
+endif()
+
 # TODO: Get rid of absolute paths in SofaPython
 add_definitions("-DSOFA_SRC_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/../../..\"")
 
@@ -196,6 +224,11 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaSimulationCommon SofaUserInteraction SofaGuiCommon SofaComponentMisc SofaComponentGeneral ${PYTHON_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE SofaExporter)
+
+if (PLUGIN_ZYROSCONNECTOR)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ZyROSConnector ZyROSConnectionManager)
+endif()
+
 if(CMAKE_SYSTEM_NAME STREQUAL Linux)
     # dlopen() is used on Linux for a workaround (see PythonEnvironnement.cpp)
     target_link_libraries(${PROJECT_NAME} PRIVATE dl)

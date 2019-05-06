@@ -1,3 +1,14 @@
 
 --- NEW SESSION: 22/09/2018 10:38:33 ---
 /zyObjectManager.currentVelocityApproximationData = 2018-Sep-22 10:38:12.423298 Trans_shape0_005-mesh 9960 0 0 0.000000 0.000000 0.000000 0.000000 0.000000 44.994664 0.327770
+
+--- NEW SESSION: 01/05/2019 20:33:51 ---
+/DAE_blendfix_scene/KinematicsModels/ur10_kinematics_model.ur10_kinematics_model./DOF/6D.velocity = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+/DAE_blendfix_scene/KinematicsModels/ur10_kinematics_model.ur10_kinematics_model./DOF/6D.force = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+/DAE_blendfix_scene/KinematicsModels/ur10_kinematics_model.ur10_kinematics_model./DOF/6D.derivX = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+/DAE_blendfix_scene/KinematicsModels/ur10_kinematics_model.ur10_kinematics_model./DOF/6D.free_velocity = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+/DAE_blendfix_scene/KinematicsModels/ur10_kinematics_model.ur10_kinematics_model./DOF/6D.dforce(V_DERIV) = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+/DAE_blendfix_scene/KinematicsModels/ur10_kinematics_model.ur10_kinematics_model./DOF/6D.9(V_DERIV) = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+/DAE_blendfix_scene/KinematicsModels/ur10_kinematics_model.ur10_kinematics_model./DOF/6D.10(V_DERIV) = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+/DAE_blendfix_scene/KinematicsModels/ur10_kinematics_model.ur10_kinematics_model./ArticulatedObject.velocity = 0 0 0 0
+/DAE_blendfix_scene/KinematicsModels/ur10_kinematics_model.ur10_kinematics_model./ArticulatedObject.velocity = 0 0 0 0 0 0 0 0 0 0 0 0 0

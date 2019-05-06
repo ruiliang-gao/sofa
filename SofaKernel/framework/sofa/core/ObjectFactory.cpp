@@ -37,7 +37,10 @@ ObjectFactory::~ObjectFactory()
 
 ObjectFactory::ClassEntry& ObjectFactory::getEntry(std::string classname)
 {
-    if (registry.find(classname) == registry.end()) {
+    if (registry.find(classname) == registry.end())
+    {
+        msg_info("ObjectFactory") << "Adding new class to registry: " << classname;
+
         registry[classname] = ClassEntry::SPtr(new ClassEntry);
         registry[classname]->className = classname;
     }
@@ -94,12 +97,16 @@ bool ObjectFactory::addAlias(std::string name, std::string target, bool force,
         return false;
     }
 
-    if (previous) {
+    if (previous)
+    {
         ClassEntry::SPtr& entry = aliasEntry;
         *previous = entry;
     }
 
     registry[name] = pointedEntry;
+
+    msg_info("ObjectFactory") << "Adding new alias to registry: " << name;
+
     pointedEntry->aliases.insert(name);
     return true;
 }
@@ -150,7 +157,9 @@ objectmodel::BaseObject::SPtr ObjectFactory::createObject(objectmodel::BaseConte
     std::string userresolved = templatename; // Copy in case we change for the default one
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+    msg_info("ObjectFactory") << "Known classnames in total: " << registry.size();
+    for (ClassEntryMap::iterator it = registry.begin(); it != registry.end(); ++it)
+        msg_info("ObjectFactory") << "Known classname: " << it->first;
 
     ClassEntryMap::iterator it = registry.find(classname);
     if (it != registry.end()) // Found the classname
@@ -476,7 +485,7 @@ RegisterObject& RegisterObject::addCreator(std::string classname,
                                            std::string templatename,
                                            ObjectFactory::Creator::SPtr creator)
 {
-
+    msg_info("RegisterObject") << "Adding creator for class: " << classname << " with template name: " << templatename;
     if (!entry.className.empty() && entry.className != classname)
     {
         msg_error("ObjectFactory") << "Template already instanciated with a different classname: " << entry.className << " != " << classname;
@@ -487,8 +496,9 @@ RegisterObject& RegisterObject::addCreator(std::string classname,
     }
     else
     {
+        msg_info("RegisterObject") << "Component not registered and not already instantiated with different class name, adding it to registry.";
         entry.className = classname;
-        entry.creatorMap[templatename] =  creator;
+        entry.creatorMap[templatename] = creator;
     }
     return *this;
 }

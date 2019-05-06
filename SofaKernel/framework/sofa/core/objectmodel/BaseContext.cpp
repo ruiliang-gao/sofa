@@ -172,6 +172,7 @@ core::topology::Topology* BaseContext::getTopology() const
 /// Mesh Topology (unified interface for both static and dynamic topologies)
 core::topology::BaseMeshTopology* BaseContext::getMeshTopology() const
 {
+    msg_info("BaseContext") << "Calling getMeshTopology() for: " << this->name.getValueString();
     return this->get<sofa::core::topology::BaseMeshTopology>();
 }
 

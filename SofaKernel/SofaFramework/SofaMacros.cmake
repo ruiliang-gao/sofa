@@ -442,6 +442,10 @@ endfunction()
 
 
 macro(sofa_install_targets package_name the_targets include_install_dir)
+    message(STATUS "sofa_install_targets: package_name = '${package_name}'")
+    if ("${package_name}" STREQUAL "")
+        message(FATAL "sofa_install_targets called with EMPTY package_name!")
+    endif()
     install(TARGETS ${the_targets}
             EXPORT ${package_name}Targets
             RUNTIME DESTINATION bin COMPONENT applications
@@ -515,6 +519,7 @@ endmacro()
 macro(sofa_write_package_config_files package_name version)
 
     ## <package_name>Targets.cmake
+    message(STATUS "Adding EXPORT install target for package: ${package_name}")
     install(EXPORT ${package_name}Targets DESTINATION lib/cmake/${package_name} COMPONENT headers)
 
     ## <package_name>ConfigVersion.cmake

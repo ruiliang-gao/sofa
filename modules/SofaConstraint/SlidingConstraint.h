@@ -60,7 +60,7 @@ public:
 
     // Zykl.io begin
     void setM2b(int i) {
-        m2b.setValue(i);
+        d_m2b.setValue(i);
     }
     // Zykl.io end
 

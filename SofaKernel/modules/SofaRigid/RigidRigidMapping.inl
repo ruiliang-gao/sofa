@@ -429,22 +429,32 @@ void RigidRigidMapping<TIn, TOut>::applyJT(const core::MechanicalParams * /*mpar
 
     ForceMask& mask = *this->maskFrom;
 
-
     switch(repartition.getValue().size())
     {
     case 0 :
-        for( ; childIndex<this->maskTo->size() ; ++childIndex)
+        msg_warning("RigidRigidMapping") << this->getName() << " applyJT(): " << this->name.getValueString() << "; sizes: in = " << childForces.size() << ", maskTo = " << this->maskTo->size();
+
+        if (childForces.size() != this->maskTo->size())
         {
-            if( !this->maskTo->getEntry(childIndex) ) continue;
+            msg_warning("RigidRigidMapping") << "Sizes: of childForces = " << childForces.size() << " and maskTo = " << this->maskTo->size() << " don't match, aborting!";
+            return;
+        }
 
-            // out = Jt in
-            // Jt = [ I     ]
-            //      [ -OM^t ]
-            // -OM^t = OM^
+        if (childForces.size() > 0)
+        {
+            for( ; childIndex < this->maskTo->size(); ++childIndex)
+            {
+                if( !this->maskTo->getEntry(childIndex) ) continue;
 
-            Vector f = getVCenter(childForces[childIndex]);
-            v += f;
-            omega += getVOrientation(childForces[childIndex]) + cross(f,-pointsR0[childIndex].getCenter());
+                // out = Jt in
+                // Jt = [ I     ]
+                //      [ -OM^t ]
+                // -OM^t = OM^
+
+                Vector f = getVCenter(childForces[childIndex]);
+                v += f;
+                omega += getVOrientation(childForces[childIndex]) + cross(f,-pointsR0[childIndex].getCenter());
+            }
         }
 
         parentIndex = indexFromEnd.getValue() ? parentForces.size()-1-index.getValue() : index.getValue();

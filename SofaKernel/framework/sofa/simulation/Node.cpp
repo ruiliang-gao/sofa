@@ -555,6 +555,7 @@ core::topology::Topology* Node::getTopology() const
 /// Mesh Topology (unified interface for both static and dynamic topologies)
 core::topology::BaseMeshTopology* Node::getMeshTopology() const
 {
+    msg_info("Node") << "Calling getMeshTopology() for: " << this->name.getValueString();
     if (this->meshTopology)
         return this->meshTopology;
     else

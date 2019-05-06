@@ -63,6 +63,4 @@ else()
     sofa_generate_pkgconfig_file(SOFA_LIBRARY_NAME ${PROJECT_NAME} SOFA_LIBRARY_DESCRIPTION "The ${PROJECT_NAME} library." SOFA_LIBRARY_SO_NAME "${PROJECT_NAME}_d" SOFA_LIBRARY_INCLUDE_FLAGS "")
 endif()
 
-sofa_install_targets(SofaFramework SofaDefaultType "")
-
 sofa_install_targets(SofaFramework ${PROJECT_NAME} "sofa/defaulttype")

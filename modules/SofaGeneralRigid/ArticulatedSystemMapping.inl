@@ -380,8 +380,9 @@ void ArticulatedSystemMapping<TIn, TInRoot, TOut>::applyJ( typename Out::VecDeri
 
 
 template <class TIn, class TInRoot, class TOut>
-void ArticulatedSystemMapping<TIn, TInRoot, TOut>::applyJT( typename In::VecDeriv& out, const typename Out::VecDeriv& in, typename InRoot::VecDeriv* outroot )
+void ArticulatedSystemMapping<TIn, TInRoot, TOut>::applyJT(typename In::VecDeriv& out, const typename Out::VecDeriv& in, typename InRoot::VecDeriv* outroot)
 {
+    msg_warning("ArticulatedSystemMapping") << this->getName() << " applyJT(): " << " sizes: in = " << in.size() << ", out = " << out.size();
     const OutVecCoord& xto = m_toModel->read(core::VecCoordId::position())->getValue();
 
     OutVecDeriv fObjects6DBuf = in;
@@ -390,12 +391,23 @@ void ArticulatedSystemMapping<TIn, TInRoot, TOut>::applyJT( typename In::VecDeri
     helper::vector< sofa::component::container::ArticulationCenter* >::const_iterator ac = articulationCenters.end();
     helper::vector< sofa::component::container::ArticulationCenter* >::const_iterator acBegin = articulationCenters.begin();
 
-    int i=ArticulationAxis.size();
+    int i = ArticulationAxis.size();
+    msg_info("ArticulatedSystemMapping") << "ArticulationAxis.size() = " << ArticulationAxis.size() << ", articulationCenters.size() = " << articulationCenters.size();
+    size_t articulationCenterIdx = 0;
     while (ac != acBegin)
     {
         ac--;
         int parent = (*ac)->parentIndex.getValue();
         int child = (*ac)->childIndex.getValue();
+
+        msg_info("ArticulatedSystemMapping") << "articulationCenter " << articulationCenterIdx << ": parentIndex = " << parent << ", childIndex = " << child;
+        articulationCenterIdx++;
+
+        if (parent >= fObjects6DBuf.size() || child >= fObjects6DBuf.size())
+        {
+            msg_error("ArticulatedSystemMapping") << "parent or child indices tried accessing element outside size of fObjects6DBuf: fObjects6DBuf size = " << fObjects6DBuf.size() << ", parent = " << parent << ", child = " << child;
+            continue;
+        }
 
         getVCenter(fObjects6DBuf[parent]) += getVCenter(fObjects6DBuf[child]);
         sofa::defaulttype::Vec<3,OutReal> P = xto[parent].getCenter();
@@ -407,13 +419,19 @@ void ArticulatedSystemMapping<TIn, TInRoot, TOut>::applyJT( typename In::VecDeri
         helper::vector< sofa::component::container::Articulation* >::const_iterator a = articulations.end();
         helper::vector< sofa::component::container::Articulation* >::const_iterator aBegin = articulations.begin();
 
+        size_t articulationIdx = 0;
+        msg_info("ArticulatedSystemMapping") << "Articulations to apply: " << articulations.size();
         while (a != aBegin)
         {
             a--;
             i--;
             int ind = (*a)->articulationIndex.getValue();
+
+            msg_info("ArticulatedSystemMapping") << "Articulation: " <<  articulationIdx << ": articulation ind = " << ind;
+            articulationIdx++;
+
             sofa::defaulttype::Vec<3,OutReal> axis = ArticulationAxis[ind];
-            sofa::defaulttype::Vec<3,Real> A = ArticulationPos[ind] ;
+            sofa::defaulttype::Vec<3,Real> A = ArticulationPos[ind];
             OutDeriv T;
             getVCenter(T) = getVCenter(fObjects6DBuf[child]);
             getVOrientation(T) = getVOrientation(fObjects6DBuf[child]) + cross(C-A, getVCenter(fObjects6DBuf[child]));

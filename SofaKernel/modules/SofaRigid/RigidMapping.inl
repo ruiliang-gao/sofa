@@ -354,18 +354,29 @@ void RigidMapping<TIn, TOut>::applyJT(const core::MechanicalParams * /*mparams*/
 
     ForceMask &mask = *this->maskFrom;
 
-    for( size_t i=0 ; i<this->maskTo->size() ; ++i)
+    msg_warning("RigidMapping") << this->getName() << " applyJT(): " << this->name.getValueString() << "; sizes: in = " << in.size() << ", maskTo = " << this->maskTo->size();
+
+    if (in.size() != this->maskTo->size())
     {
-        if( !this->maskTo->getEntry(i) ) continue;
-
-        unsigned int rigidIndex = getRigidIndex(i);
-
-        getVCenter(out[rigidIndex]) += in[i];
-        getVOrientation(out[rigidIndex]) += (typename InDeriv::Rot)cross(rotatedPoints[i], in[i]);
-
-        mask.insertEntry(rigidIndex);
+        msg_warning("RigidMapping") << "Sizes: of in = " << in.size() << " and maskTo = " << this->maskTo->size() << " don't match, aborting!";
+        return;
     }
 
+    if (in.size() > 0)
+    {
+        msg_warning("RigidMapping") << "Sizes of in and maskTo match, applying mapping.";
+        for( size_t i = 0; i < this->maskTo->size(); ++i)
+        {
+            if( !this->maskTo->getEntry(i) ) continue;
+
+            unsigned int rigidIndex = getRigidIndex(i);
+
+            getVCenter(out[rigidIndex]) += in[i];
+            getVOrientation(out[rigidIndex]) += (typename InDeriv::Rot)cross(rotatedPoints[i], in[i]);
+
+            mask.insertEntry(rigidIndex);
+        }
+    }
 }
 
 template <class TIn, class TOut>

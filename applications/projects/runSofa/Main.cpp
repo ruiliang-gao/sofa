@@ -244,6 +244,8 @@ int main(int argc, char** argv)
     argParser->addArgument(po::value<std::string>(&computationTimeOutputType)->default_value("stdout"),             "computationTimeOutputType,o", "Output type for the computation time statistics: either stdout, json or ljson");
     argParser->addArgument(po::value<std::string>(&gui)->default_value(""),                                         "gui,g", gui_help.c_str());
     argParser->addArgument(po::value<std::vector<std::string>>(&plugins),                                           "load,l", "load given plugins");
+
+    // Zykl.io: Disable autoloading of plugins by default.
     argParser->addArgument(po::value<bool>(&noAutoloadPlugins)->default_value(false)->implicit_value(true),         "noautoload", "disable plugins autoloading");
     argParser->addArgument(po::value<bool>(&noSceneCheck)->default_value(false)->implicit_value(true),              "noscenecheck", "disable scene checking for each scene loading");
 
@@ -364,9 +366,12 @@ int main(int argc, char** argv)
     if (!files.empty())
         fileName = files[0];
 
+    msg_info("runSofa") << "Plugins to load: " << plugins.size();
     for (unsigned int i=0; i<plugins.size(); i++)
+    {
+        msg_info("runSofa") << "Loading plugin: " << plugins[i];
         PluginManager::getInstance().loadPlugin(plugins[i]);
-
+    }
     std::string configPluginPath = TOSTRING(CONFIG_PLUGIN_FILENAME);
     std::string defaultConfigPluginPath = TOSTRING(DEFAULT_CONFIG_PLUGIN_FILENAME);
 

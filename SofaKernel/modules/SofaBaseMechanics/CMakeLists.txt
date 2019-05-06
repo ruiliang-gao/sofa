@@ -73,7 +73,7 @@ set(SOURCE_FILES
 include_directories(${CMAKE_SOURCE_DIR}/modules)
 # Zykl.io end
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} SofaBaseTopology)
+target_link_libraries(${PROJECT_NAME} SofaBaseTopology GLEW GLU glut)
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_BASE_MECHANICS")
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")

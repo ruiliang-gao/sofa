@@ -60,5 +60,9 @@ else()
     sofa_add_plugin(VolumetricRendering VolumetricRendering) # VolumetricRendering plugin can't work without OPENGL
 endif()
 
+set(SOFA_BUILD_METIS ON CACHE BOOL "Compile SOFA with Metis support by default as per dependency for the SoftRobots plugin." FORCE)
+set(PLUGIN_SOFAPYTHON ON CACHE BOOL "Compile the SofaPython plugin by default as per dependency for the SoftRobots plugin." FORCE)
+
+sofa_add_plugin(STLIB STLIB ON)
 sofa_add_plugin(SoftRobots SoftRobots ON)
 sofa_add_plugin(SofaROSConnector ZyROSConnector ON)
