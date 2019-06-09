@@ -1,0 +1,11 @@
+prefix=/home/faichele/src/sofa/Sofa-1.0-RC1
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: CyberX3D
+Description: An X3D/VRML parser for C++
+Requires: 
+Version: 1.0.1
+Libs: -L${libdir} -lcx3d-1.0 -lz -lz -ljpeg -lpng -lglut -lGLU -lGL -lxerces-c 
+Cflags: -I${includedir}/CyberX3D-1.0

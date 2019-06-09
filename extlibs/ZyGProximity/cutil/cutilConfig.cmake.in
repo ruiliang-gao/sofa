@@ -1,0 +1,12 @@
+# CMake package configuration file for the cutil library
+
+@PACKAGE_INIT@
+
+if(NOT TARGET cutil)
+	include("${CMAKE_CURRENT_LIST_DIR}/cutilTargets.cmake")
+endif()
+
+check_required_components(cutil)
+
+set(cutil_LIBRARIES cutil)
+set(cutil_INCLUDE_DIRS @PACKAGE_CUTIL_INCLUDE_DIR@)

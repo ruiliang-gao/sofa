@@ -1,0 +1,8 @@
+# CMake package configuration file for the ZyObbTreeGpu library
+
+@PACKAGE_INIT@
+if(NOT TARGET ObbTreeGpu)
+	include("${CMAKE_CURRENT_LIST_DIR}/ZyObbTreeGpuTargets.cmake")
+endif()
+
+check_required_components(ZyObbTreeGpu)

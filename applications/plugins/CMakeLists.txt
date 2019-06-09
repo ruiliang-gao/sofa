@@ -66,3 +66,6 @@ set(PLUGIN_SOFAPYTHON ON CACHE BOOL "Compile the SofaPython plugin by default as
 sofa_add_plugin(STLIB STLIB ON)
 sofa_add_plugin(SoftRobots SoftRobots ON)
 sofa_add_plugin(SofaROSConnector ZyROSConnector ON)
+
+sofa_add_plugin(ZyObbTreeGPU ZyObbTreeGPU ON)
+sofa_add_plugin(ZyBVHModels ZyBVHModels ON)

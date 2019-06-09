@@ -1,0 +1,12 @@
+# CMake package configuration file for the gProximity library
+
+@PACKAGE_INIT@
+
+if(NOT TARGET gProximity)
+	include("${CMAKE_CURRENT_LIST_DIR}/gProximityTargets.cmake")
+endif()
+
+check_required_components(gProximity)
+
+set(gProximity_LIBRARIES gProximity)
+set(gProximity_INCLUDE_DIRS @PACKAGE_GPROXIMITY_INCLUDE_DIR@)

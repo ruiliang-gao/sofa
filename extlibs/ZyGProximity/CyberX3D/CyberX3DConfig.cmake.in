@@ -1,0 +1,12 @@
+# CMake package configuration file for the CyberX3D library
+
+@PACKAGE_INIT@
+
+if(NOT TARGET CyberX3D)
+	include("${CMAKE_CURRENT_LIST_DIR}/CyberX3DTargets.cmake")
+endif()
+
+check_required_components(CyberX3D)
+
+set(gProximity_LIBRARIES CyberX3D)
+set(gProximity_INCLUDE_DIRS @PACKAGE_CYBERX3D_INCLUDE_DIR@)

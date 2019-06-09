@@ -1,0 +1,12 @@
+# CMake package configuration file for the ZyPQP library
+
+@PACKAGE_INIT@
+
+if(NOT TARGET ZyPQP)
+	include("${CMAKE_CURRENT_LIST_DIR}/ZyPQPTargets.cmake")
+endif()
+
+check_required_components(ZyPQP)
+
+set(ZYPQP_LIBRARIES ZyPQP)
+set(ZYPQP_INCLUDE_DIRS @PACKAGE_PQP_INCLUDE_DIR@)

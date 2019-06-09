@@ -1,0 +1,731 @@
+std::map<unsigned int, std::vector<gProximityWorkerResult*> > resultBinsPerPairCheck;
+            std::map<unsigned int, std::multimap<unsigned int, unsigned int> > bestDivSlotsPerPairCheck;
+            std::map<unsigned int, unsigned int> requiredSizesPerPairCheck;
+
+            std::map<unsigned int, bool> satisfiablePairChecks;
+            std::map<unsigned int, int> freeBinsPerBinLevel;
+
+            std::map<unsigned int, std::multimap<unsigned int, unsigned int> > claimedResultBinsPerPairCheck;
+
+            for (unsigned int k = 0; k < _numStreamedWorkerResultBins.getValue(); k++)
+            {
+                freeBinsPerBinLevel[k] = _streamedWorkerResults[k].size();
+                claimedResultBinsPerPairCheck.insert(std::make_pair(k, std::multimap<unsigned int, unsigned int>()));
+            }
+
+            for (unsigned int m = 0; m < intersectingTriPairCount.size(); m++)
+            {
+                bool triPairCheckAccepted = false;
+                std::cout << "CHECK TRIANGLE INTERSECTION: " << intersectingTriPairCount.size() << " pair-wise intersection tests." << std::endl;
+                {
+                    unsigned int triPairCheckIndex = (i * _numStreamedWorkerUnits.getValue()) + m;
+                    std::cout << " iteration = " << i << ", _numStreamedWorkerUnits = " << _numStreamedWorkerUnits.getValue() << ", intersectingTriPairCount index = " << m << std::endl;
+                    std::cout << "  triPairCheckIndex = " << triPairCheckIndex << ", _narrowPhasePairs.size() = " << _narrowPhasePairs.size() << std::endl;
+
+                    if (intersectingTriPairCount[m] > 0 && triPairCheckIndex < _narrowPhasePairs.size())
+                    {
+                        std::pair<OBBModelContainer,OBBModelContainer>& triCheckPair = _narrowPhasePairs.at(triPairCheckIndex);
+                        OBBContainer& obbTree1 = triCheckPair.first._obbContainer;
+                        OBBContainer& obbTree2 = triCheckPair.second._obbContainer;
+
+                        ObbTreeGPUCollisionModel<Vec3Types>* obbModel1 = triCheckPair.first._obbCollisionModel;
+                        ObbTreeGPUCollisionModel<Vec3Types>* obbModel2 = triCheckPair.second._obbCollisionModel;
+
+                        std::cout << " - check triangle intersection for " << obbModel1->getName() << " -- " << obbModel2->getName() << std::endl;
+
+                        int potentialResults = intersectingTriPairCount[m] * CollisionTestElementsSize;
+
+                        requiredSizesPerPairCheck.insert(std::make_pair(m, potentialResults));
+
+                        std::cout << "   potentially intersecting tri-pairs = " << intersectingTriPairCount[m] << "; potential contact points from intersecting triangles = " << potentialResults << std::endl;
+
+                        std::multimap<unsigned int, unsigned int> bestDivSlots;
+
+                        unsigned int curBinSize = _streamedWorkerResultMinSize.getValue();
+
+                        int bestDivSlot = _numStreamedWorkerResultBins.getValue();
+                        int modSize = -1;
+                        int bestSlotPosition = -1;
+                        for (unsigned int l = 0; l < _numStreamedWorkerResultBins.getValue(); l++)
+                        {
+                            unsigned int sizeDivBinK = potentialResults / curBinSize;
+                            unsigned int sizeModBinK = potentialResults % curBinSize;
+
+                            std::cout << "    bin fitting: DivBin_" << l << " = " << sizeDivBinK << ", ModBin_" << l << " = " << sizeModBinK << std::endl;
+                            if (_streamedWorkerResults[l].size() > 0)
+                            {
+                                std::cout << "    required bins for size " << l << " = " << _streamedWorkerResults[l][0]->_maxResults << ": " << sizeDivBinK << " + " << (sizeModBinK == 0 ? "0" : "1");
+                                if (sizeDivBinK > 0 && sizeDivBinK < bestDivSlot)
+                                {
+                                    bestDivSlot = sizeDivBinK;
+                                    bestSlotPosition = l;
+                                    modSize = sizeModBinK;
+                                }
+
+                                if (sizeModBinK == 0)
+                                    modSize = sizeModBinK;
+                            }
+
+                            int totalRequiredBins = sizeDivBinK;
+                            if (sizeModBinK != 0)
+                                totalRequiredBins += 1;
+
+                            bestDivSlots.insert(std::make_pair(l, totalRequiredBins));
+
+                            std::cout << std::endl;
+
+                            curBinSize *= 2;
+                        }
+
+                        if (bestSlotPosition == -1)
+                        {
+                            unsigned int summedResultSize = 0;
+                            bool fulfilledRequirements = false;
+                            std::cout << "  NO single-bin size combination located to fit all results; trying to locate a combination that could fit." << std::endl;
+                            std::cout << "  bestDivSlots.size() = " << bestDivSlots.size() << std::endl;
+
+                            for (std::multimap<unsigned int, unsigned int>::const_iterator it = bestDivSlots.begin(); it != bestDivSlots.end(); it++)
+                            {
+                                std::cout << " --> alternative " << it->first << ": " << it->second << " bins * " << _streamedWorkerResults[it->first][0]->_maxResults << " size = " << (it->second * _streamedWorkerResults[it->first][0]->_maxResults) << std::endl;
+                            }
+
+                            for (std::multimap<unsigned int, unsigned int>::const_iterator it = bestDivSlots.begin(); it != bestDivSlots.end(); it++)
+                            {
+                                unsigned int totalBlockSize = it->second * _streamedWorkerResults[it->first][0]->_maxResults;
+                                std::cout << " --> alternative " << it->first << ": " << it->second << " bins * " << _streamedWorkerResults[it->first][0]->_maxResults << " size = " << (it->second * _streamedWorkerResults[it->first][0]->_maxResults) << std::endl;
+
+                                if (summedResultSize + totalBlockSize <= potentialResults)
+                                {
+                                    std::cout << "   all " << it->second << " required bins in level " << it->first << " needed" << std::endl;
+                                    if (freeBinsPerBinLevel[it->first] > 0 && freeBinsPerBinLevel[it->first] < it->second)
+                                    {
+                                        std::cout << "    claiming remaining free bins in level " << it->first << ": " << freeBinsPerBinLevel[it->first] << std::endl;
+                                        //summedResultSize += (freeBinsPerBinLevel[it->first] * _streamedWorkerResults[it->first][0]->_maxResults);
+                                        std::cout << "    summedResultSize updated = " << summedResultSize << std::endl;
+
+                                        std::cout << "    marking bins as blocked: " << _streamedWorkerResults[it->first].size() << " in slot " << it->first << std::endl;
+                                        unsigned int freeBinsInSlot = 0, blockedBinsInSlot = 0;
+                                        for (unsigned int q = 0; q < _streamedWorkerResults[it->first].size(); q++)
+                                        {
+                                            if (_streamedWorkerResults[it->first][q]->_blocked == false)
+                                            {
+                                                freeBinsInSlot++;
+                                                std::cout << "     - bin " << q << " still free, marking as blocked" << std::endl;
+                                                claimedResultBinsPerPairCheck[it->first].insert(std::make_pair(m, q));
+                                                //_streamedWorkerResults[it->first][q]->_blocked = true;
+                                            }
+                                            else
+                                            {
+                                                blockedBinsInSlot++;
+                                                std::cout << "    - bin " << q << " already blocked, skipping" << std::endl;
+                                            }
+
+                                            if (freeBinsInSlot == freeBinsPerBinLevel[it->first])
+                                            {
+                                                std::cout << "   Claiming remaining blocks: SUCCESS -- free slots blocked = " << freeBinsInSlot << ", already blocked = " << blockedBinsInSlot << std::endl;
+                                                break;
+                                            }
+                                        }
+
+                                        if (freeBinsInSlot == freeBinsPerBinLevel[it->first])
+                                        {
+                                            std::cout << "     setting _blocked flags in target slots: "  << claimedResultBinsPerPairCheck[it->first].size() << " slots." << std::endl;
+                                            for (std::multimap<unsigned int, unsigned int>::const_iterator sit = claimedResultBinsPerPairCheck[it->first].begin(); sit != claimedResultBinsPerPairCheck[it->first].end(); sit++)
+                                            {
+                                                if (sit->second == m)
+                                                {
+                                                    std::cout << "       - set slot " << sit->second << " to blocked" << std::endl;
+                                                    _streamedWorkerResults[it->first][sit->second]->_blocked = true;
+
+                                                    summedResultSize += _streamedWorkerResults[it->first][sit->second]->_maxResults;
+                                                    std::cout << "         summedResultSize updated = " << summedResultSize << std::endl;
+
+                                                    freeBinsPerBinLevel[it->first] -= 1;
+
+                                                    if (summedResultSize >= potentialResults)
+                                                    {
+                                                        fulfilledRequirements = true;
+                                                        std::cout << "       found enough result bins to reserve; marking as requirements fulfilled!" << std::endl;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            if (summedResultSize >= potentialResults)
+                                            {
+                                                std::cout << "   summedResultSize = " << summedResultSize << " >= potentialResults = " << potentialResults << std::endl;
+                                                std::cout << "   tri-pair check HAS ENOUGH result bins reserved, marking als REQUIREMENTS FULFILLED!" << std::endl;
+                                                fulfilledRequirements = true;
+                                                break;
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            std::cout << "Another failed check (claiming slots) here???" << std::endl;
+                                        }
+                                        continue;
+                                    }
+                                    else if (freeBinsPerBinLevel[it->first] >= it->second)
+                                    {
+                                        std::cout << "    level " << it->first << " has enough remaining free blocks: " << freeBinsPerBinLevel[it->first] << std::endl;
+                                        // summedResultSize += totalBlockSize;
+
+                                        std::cout << "    marking bins as blocked: " << _streamedWorkerResults[it->first].size() << " in slot " << it->first << std::endl;
+                                        unsigned int freeBinsInSlot = 0, blockedBinsInSlot = 0;
+                                        for (unsigned int q = 0; q < _streamedWorkerResults[it->first].size(); q++)
+                                        {
+                                            if (_streamedWorkerResults[it->first][q]->_blocked == false)
+                                            {
+                                                freeBinsInSlot++;
+                                                std::cout << "     - bin " << q << " still free, marking as blocked" << std::endl;
+                                                claimedResultBinsPerPairCheck[it->first].insert(std::make_pair(m, q));
+                                                //_streamedWorkerResults[it->first][q]->_blocked = true;
+                                            }
+                                            else
+                                            {
+                                                blockedBinsInSlot++;
+                                                std::cout << "    - bin " << q << " already blocked, skipping" << std::endl;
+                                            }
+
+                                            if (freeBinsInSlot == freeBinsPerBinLevel[it->first])
+                                            {
+                                                std::cout << "   - found " << freeBinsInSlot << " slots to claim, stop search" << std::endl;
+                                                break;
+                                            }
+                                        }
+
+                                        if (freeBinsInSlot == freeBinsPerBinLevel[it->first])
+                                        {
+                                            std::cout << "   Claiming remaining blocks: SUCCESS -- free slots blocked = " << freeBinsInSlot << ", already blocked = " << blockedBinsInSlot << std::endl;
+
+                                            std::cout << "     setting _blocked flags in target slots: "  << claimedResultBinsPerPairCheck[it->first].size() << " slots." << std::endl;
+                                            for (std::multimap<unsigned int, unsigned int>::const_iterator sit = claimedResultBinsPerPairCheck[it->first].begin(); sit != claimedResultBinsPerPairCheck[it->first].end(); sit++)
+                                            {
+                                                if (sit->second == m)
+                                                {
+                                                    std::cout << "       - set slot " << sit->second << " to blocked" << std::endl;
+                                                    _streamedWorkerResults[it->first][sit->second]->_blocked = true;
+
+                                                    summedResultSize += _streamedWorkerResults[it->first][sit->second]->_maxResults;
+                                                    std::cout << "         summedResultSize updated = " << summedResultSize << std::endl;
+
+                                                    if (summedResultSize >= potentialResults)
+                                                    {
+                                                        fulfilledRequirements = true;
+                                                        std::cout << "       found enough result bins to reserve; marking as requirements fulfilled!" << std::endl;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            if (summedResultSize >= potentialResults)
+                                            {
+                                                std::cout << "   summedResultSize = " << summedResultSize << " >= potentialResults = " << potentialResults << std::endl;
+                                                std::cout << "   tri-pair check HAS ENOUGH result bins reserved, marking als REQUIREMENTS FULFILLED!" << std::endl;
+                                                fulfilledRequirements = true;
+
+                                                freeBinsPerBinLevel[it->first] -= it->second;
+
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            fulfilledRequirements = false;
+                                            std::cout << "   Claiming remaining blocks: FAILURE -- free slots blocked = " << freeBinsInSlot << ", already blocked = " << blockedBinsInSlot << std::endl;
+                                        }
+
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    std::cout << "   only need a partial number of bins in level " << it->first << ": Would need " << it->second << "." << std::endl;
+                                    unsigned int summedResultSize_tmp = summedResultSize;
+                                    unsigned int freeBinsInSlot = 0, blockedBinsInSlot = 0;
+                                    for (unsigned int q = 0; q < _streamedWorkerResults[it->first].size() /*it->second*/; q++)
+                                    {
+                                        if (_streamedWorkerResults[it->first][q]->_blocked == false)
+                                        {
+                                            summedResultSize_tmp += _streamedWorkerResults[it->first][0]->_maxResults;
+                                            std::cout << "     * step " << q << ": summedResultSize_tmp = " << summedResultSize_tmp << ", freeBinsPerBinLevel[" << it->first << "] = " << freeBinsPerBinLevel[it->first] << std::endl;
+
+                                            //freeBinsPerBinLevel[it->first] -= 1;
+                                            claimedResultBinsPerPairCheck[it->first].insert(std::make_pair(m, q));
+                                            freeBinsInSlot++;
+
+                                            if (freeBinsInSlot == it->second)
+                                            {
+                                                std::cout << "   - found " << freeBinsInSlot << " slots to claim, stop search" << std::endl;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            std::cout << "     * step " << q << ": summedResultSize_tmp = " << summedResultSize_tmp << ", freeBinsPerBinLevel[" << it->first << "] = " << freeBinsPerBinLevel[it->first] << std::endl;
+                                            blockedBinsInSlot++;
+                                        }
+                                    }
+
+                                    std::cout << "     freeBinsInSlot = " << freeBinsInSlot << ", blockedBinsInSlot = " << blockedBinsInSlot << std::endl;
+
+                                    if (freeBinsInSlot > 0)
+                                    {
+                                        std::cout << "     setting _blocked flags in target slots: "  << claimedResultBinsPerPairCheck[it->first].size() << " slots." << std::endl;
+                                        for (std::multimap<unsigned int, unsigned int>::const_iterator sit = claimedResultBinsPerPairCheck[it->first].begin(); sit != claimedResultBinsPerPairCheck[it->first].end(); sit++)
+                                        {
+                                            if (sit->first == m)
+                                            {
+                                                std::cout << "       - set slot " << sit->second << " to blocked" << std::endl;
+                                                _streamedWorkerResults[it->first][sit->second]->_blocked = true;
+                                                summedResultSize += (_streamedWorkerResults[it->first][sit->second])->_maxResults;
+                                                std::cout << "         summedResultSize updated = " << summedResultSize << std::endl;
+
+                                                freeBinsPerBinLevel[bestSlotPosition] -= 1;
+
+                                                if (summedResultSize >= potentialResults)
+                                                {
+                                                    fulfilledRequirements = true;
+                                                    std::cout << "       found enough result bins to reserve; marking as requirements fulfilled!" << std::endl;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (fulfilledRequirements)
+                            {
+                                std::cout << " Marking triPairTest " << m << " as 'requirements fulfilled'!" << std::endl;
+                                satisfiablePairChecks.insert(std::make_pair(m, true));
+                                triPairCheckAccepted = true;
+                                //continue;
+                            }
+                            else
+                            {
+                                std::cout << " triPairTest " << m << " REQUIREMENTS NOT FULLFILLED!!!" << std::endl;
+                                //satisfiablePairChecks.insert(std::make_pair(m, false));
+                            }
+
+                            //bestSlotPosition = 0;
+                            //bestDivSlot = 1;
+                        }
+                        else
+                        {
+                            unsigned int summedResultSize = 0;
+                            bool fulfilledRequirements = false;
+                            std::cout << "    FOUND single-bin size combination that fits all results?" << std::endl;
+                            if (freeBinsPerBinLevel[bestSlotPosition] >= bestDivSlot)
+                            {
+                                std::cout << "    Enough slots in bin size " << bestSlotPosition << ": " << freeBinsPerBinLevel[bestSlotPosition] << " free, " << bestDivSlot << " required." << std::endl;
+
+                                std::cout << "    trying to claim free slots" << std::endl;
+                                unsigned int freeBinsInSlot = 0, blockedBinsInSlot = 0;
+                                for (unsigned int q = 0; q < _streamedWorkerResults[bestSlotPosition].size(); q++)
+                                {
+                                    if (_streamedWorkerResults[bestSlotPosition][q]->_blocked == false)
+                                    {
+                                        freeBinsInSlot++;
+                                        std::cout << "      - bin " << q << " still free, marking as blocked" << std::endl;
+                                        claimedResultBinsPerPairCheck[bestSlotPosition].insert(std::make_pair(m, q));
+                                    }
+                                    else
+                                    {
+                                        blockedBinsInSlot++;
+                                        std::cout << "     - bin " << q << " already blocked, skipping" << std::endl;
+                                    }
+
+                                    if (freeBinsInSlot == bestDivSlot)
+                                    {
+                                        std::cout << "   - found " << freeBinsInSlot << " slots to claim, stop search" << std::endl;
+                                        break;
+                                    }
+                                }
+
+                                if (freeBinsInSlot == bestDivSlot)
+                                {
+                                    std::cout << "     Claiming remaining blocks: SUCCESS -- free slots blocked = " << freeBinsInSlot << ", already blocked = " << blockedBinsInSlot << std::endl;
+
+                                    std::cout << "     setting _blocked flags in target slots: "  << claimedResultBinsPerPairCheck[bestSlotPosition].size() << " slots." << std::endl;
+                                    for (std::multimap<unsigned int, unsigned int>::const_iterator sit = claimedResultBinsPerPairCheck[bestSlotPosition].begin(); sit != claimedResultBinsPerPairCheck[bestSlotPosition].end(); sit++)
+                                    {
+                                        if (sit->first == m)
+                                        {
+                                            std::cout << "       - set slot " << sit->second << " to blocked" << std::endl;
+                                            _streamedWorkerResults[bestSlotPosition][sit->second]->_blocked = true;
+                                            summedResultSize += (_streamedWorkerResults[bestSlotPosition][sit->second])->_maxResults;
+                                            std::cout << "         summedResultSize updated = " << summedResultSize << std::endl;
+
+                                            freeBinsPerBinLevel[bestSlotPosition] -= 1;
+
+                                            if (summedResultSize >= potentialResults)
+                                            {
+                                                fulfilledRequirements = true;
+                                                std::cout << "       found enough result bins to reserve; marking as requirements fulfilled!" << std::endl;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if (summedResultSize >= potentialResults)
+                                    {
+                                        std::cout << "   summedResultSize = " << summedResultSize << " >= potentialResults = " << potentialResults << std::endl;
+                                        std::cout << "   tri-pair check HAS ENOUGH result bins reserved, marking als REQUIREMENTS FULFILLED!" << std::endl;
+                                        fulfilledRequirements = true;
+
+                                        freeBinsPerBinLevel[bestSlotPosition] -= bestDivSlot;
+
+                                        break;
+                                    }
+
+                                }
+                                else
+                                {
+                                    //fulfilledRequirements = false;
+                                    std::cout << "   Claiming remaining blocks: FAILURE -- free slots blocked = " << freeBinsInSlot << ", already blocked = " << blockedBinsInSlot << std::endl;
+                                    continue;
+                                }
+
+                                //satisfiablePairChecks.insert(std::make_pair(m,true));
+                            }
+                            else
+                            {
+                                std::cout << "     Not enough slots free to satisfy pair-check: " << freeBinsPerBinLevel[bestSlotPosition] << " free, " << bestDivSlot << " required." << std::endl;
+                                std::cout << "     Check which bins could still be blocked anyways." << std::endl;
+                                unsigned int freeBinsInSlot = 0, blockedBinsInSlot = 0;
+                                if (freeBinsPerBinLevel[bestSlotPosition] > 0)
+                                {
+                                    for (unsigned int r = 0; r < _streamedWorkerResults[bestSlotPosition].size(); r++)
+                                    {
+                                        if (_streamedWorkerResults[bestSlotPosition][r]->_blocked == false)
+                                        {
+                                            claimedResultBinsPerPairCheck[bestSlotPosition].insert(std::make_pair(m, r));
+                                            freeBinsInSlot++;
+                                        }
+                                        else
+                                        {
+                                            blockedBinsInSlot++;
+                                        }
+                                    }
+
+                                    std::cout << "     remaining available bins = " << freeBinsInSlot << ", already blocked bins = " << blockedBinsInSlot << std::endl;
+                                    if (freeBinsInSlot > 0)
+                                    {
+                                        std::cout << "    blocking " << freeBinsInSlot << " available bins in slot " << bestSlotPosition << std::endl;
+                                        std::cout << "    setting _blocked flags in target slots: "  << claimedResultBinsPerPairCheck[bestSlotPosition].size() << " slots." << std::endl;
+                                        for (std::multimap<unsigned int, unsigned int>::const_iterator sit = claimedResultBinsPerPairCheck[bestSlotPosition].begin(); sit != claimedResultBinsPerPairCheck[bestSlotPosition].end(); sit++)
+                                        {
+                                            if (sit->first == m && freeBinsPerBinLevel[bestSlotPosition] >= 1)
+                                            {
+                                                std::cout << "       - set slot " << sit->second << " to blocked" << std::endl;
+                                                _streamedWorkerResults[bestSlotPosition][sit->second]->_blocked = true;
+                                                summedResultSize += _streamedWorkerResults[bestSlotPosition][sit->second]->_maxResults;
+                                                std::cout << "         summedResultSize updated = " << summedResultSize << std::endl;
+
+                                                freeBinsPerBinLevel[bestSlotPosition] -= 1;
+
+                                                if (summedResultSize >= potentialResults)
+                                                {
+                                                    fulfilledRequirements = true;
+                                                    std::cout << "       found enough result bins to reserve; marking as requirements fulfilled!" << std::endl;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        std::cout << "    sanity check after _block'ing: freeBinsPerLevel[" << bestSlotPosition << "] = " << freeBinsPerBinLevel[bestSlotPosition] << std::endl;
+                                        std::cout << "    summedResultSize updated = " << summedResultSize << std::endl;
+
+                                        if (summedResultSize >= potentialResults)
+                                        {
+                                            std::cout << "   summedResultSize = " << summedResultSize << " >= potentialResults = " << potentialResults << std::endl;
+                                            std::cout << "   tri-pair check HAS ENOUGH result bins reserved, marking als REQUIREMENTS FULFILLED!" << std::endl;
+                                            fulfilledRequirements = true;
+
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                std::cout << "     BEGINNING second pass through result bins." << std::endl;
+                                for (std::multimap<unsigned int, unsigned int>::const_iterator it = bestDivSlots.begin(); it != bestDivSlots.end(); it++)
+                                {
+                                    std::cout << " --> alternative " << it->first << ": " << it->second << " bins * " << _streamedWorkerResults[it->first][0]->_maxResults << " size = " << (it->second * _streamedWorkerResults[it->first][0]->_maxResults) << std::endl;
+                                }
+
+                                for (std::multimap<unsigned int, unsigned int>::const_iterator it = bestDivSlots.begin(); it != bestDivSlots.end(); it++)
+                                {
+                                    unsigned int totalBlockSize = it->second * _streamedWorkerResults[it->first][0]->_maxResults;
+                                    std::cout << " --> alternative " << it->first << ": " << it->second << " bins * " << _streamedWorkerResults[it->first][0]->_maxResults << " size = " << (it->second * _streamedWorkerResults[it->first][0]->_maxResults) << std::endl;
+
+                                    if (summedResultSize + totalBlockSize <= potentialResults)
+                                    {
+                                        std::cout << "   all " << it->second << " required bins in level " << it->first << " needed" << std::endl;
+                                        if (freeBinsPerBinLevel[it->first] > 0 && freeBinsPerBinLevel[it->first] < it->second)
+                                        {
+                                            std::cout << "    claiming remaining free bins in level " << it->first << ": " << freeBinsPerBinLevel[it->first] << std::endl;
+
+                                            //summedResultSize += (freeBinsPerBinLevel[it->first] * _streamedWorkerResults[it->first][0]->_maxResults);
+
+                                            std::cout << "    summedResultSize updated = " << summedResultSize << std::endl;
+
+                                            std::cout << "    marking bins as blocked: " << _streamedWorkerResults[it->first].size() << " in slot " << it->first << std::endl;
+                                            unsigned int freeBinsInSlot = 0, blockedBinsInSlot = 0;
+                                            for (unsigned int q = 0; q < _streamedWorkerResults[it->first].size(); q++)
+                                            {
+                                                if (_streamedWorkerResults[it->first][q]->_blocked == false)
+                                                {
+                                                    freeBinsInSlot++;
+                                                    std::cout << "     - bin " << q << " still free, marking as blocked" << std::endl;
+                                                    claimedResultBinsPerPairCheck[it->first].insert(std::make_pair(m, q));
+                                                    //_streamedWorkerResults[it->first][q]->_blocked = true;
+                                                }
+                                                else
+                                                {
+                                                    blockedBinsInSlot++;
+                                                    std::cout << "    - bin " << q << " already blocked, skipping" << std::endl;
+                                                }
+
+                                                if (freeBinsInSlot == freeBinsPerBinLevel[it->first])
+                                                {
+                                                    std::cout << "   Claiming remaining blocks: SUCCESS -- free slots blocked = " << freeBinsInSlot << ", already blocked = " << blockedBinsInSlot << std::endl;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (freeBinsInSlot == freeBinsPerBinLevel[it->first])
+                                            {
+                                                std::cout << "     setting _blocked flags in target slots: "  << claimedResultBinsPerPairCheck[it->first].size() << " slots." << std::endl;
+                                                for (std::multimap<unsigned int, unsigned int>::const_iterator sit = claimedResultBinsPerPairCheck[it->first].begin(); sit != claimedResultBinsPerPairCheck[it->first].end(); sit++)
+                                                {
+                                                    if (sit->first == m)
+                                                    {
+                                                        std::cout << "       - set slot " << sit->second << " to blocked" << std::endl;
+                                                        _streamedWorkerResults[it->first][sit->second]->_blocked = true;
+
+                                                        summedResultSize += _streamedWorkerResults[it->first][sit->second]->_maxResults;
+                                                        std::cout << "         summedResultSize updated = " << summedResultSize << std::endl;
+
+                                                        if (summedResultSize >= potentialResults)
+                                                        {
+                                                            fulfilledRequirements = true;
+                                                            std::cout << "       found enough result bins to reserve; marking as requirements fulfilled!" << std::endl;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                                if (summedResultSize >= potentialResults)
+                                                {
+                                                    std::cout << "   summedResultSize = " << summedResultSize << " >= potentialResults = " << potentialResults << std::endl;
+                                                    std::cout << "   tri-pair check HAS ENOUGH result bins reserved, marking als REQUIREMENTS FULFILLED!" << std::endl;
+                                                    fulfilledRequirements = true;
+
+                                                    freeBinsPerBinLevel[it->first] = 0;
+
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                std::cout << "Another failed check (claiming slots) here???" << std::endl;
+                                            }
+
+                                            continue;
+                                        }
+                                        else if (freeBinsPerBinLevel[it->first] >= it->second)
+                                        {
+                                            std::cout << "    level " << it->first << " has enough remaining free blocks: " << freeBinsPerBinLevel[it->first] << std::endl;
+
+                                            std::cout << "    marking bins as blocked: " << _streamedWorkerResults[it->first].size() << " in slot " << it->first << std::endl;
+                                            unsigned int freeBinsInSlot = 0, blockedBinsInSlot = 0;
+                                            for (unsigned int q = 0; q < _streamedWorkerResults[it->first].size(); q++)
+                                            {
+                                                if (_streamedWorkerResults[it->first][q]->_blocked == false)
+                                                {
+                                                    freeBinsInSlot++;
+                                                    std::cout << "     - bin " << q << " still free, marking as blocked" << std::endl;
+                                                    claimedResultBinsPerPairCheck[it->first].insert(std::make_pair(m, q));
+                                                    //_streamedWorkerResults[it->first][q]->_blocked = true;
+                                                }
+                                                else
+                                                {
+                                                    blockedBinsInSlot++;
+                                                    std::cout << "    - bin " << q << " already blocked, skipping" << std::endl;
+                                                }
+
+                                                if (freeBinsInSlot == freeBinsPerBinLevel[it->first])
+                                                {
+                                                    std::cout << "   - found " << freeBinsInSlot << " slots to claim, stop search" << std::endl;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (freeBinsInSlot == freeBinsPerBinLevel[it->first])
+                                            {
+                                                std::cout << "   Claiming remaining blocks: SUCCESS -- free slots blocked = " << freeBinsInSlot << ", already blocked = " << blockedBinsInSlot << std::endl;
+
+                                                std::cout << "     setting _blocked flags in target slots: "  << claimedResultBinsPerPairCheck[it->first].size() << " slots." << std::endl;
+                                                for (std::multimap<unsigned int, unsigned int>::const_iterator sit = claimedResultBinsPerPairCheck[it->first].begin(); sit != claimedResultBinsPerPairCheck[it->first].end(); sit++)
+                                                {
+                                                    if (sit->first == m)
+                                                    {
+                                                        std::cout << "       - set slot " << sit->second << " to blocked" << std::endl;
+                                                        _streamedWorkerResults[it->first][sit->second]->_blocked = true;
+
+                                                        summedResultSize += _streamedWorkerResults[it->first][sit->second]->_maxResults;
+                                                        std::cout << "         summedResultSize updated = " << summedResultSize << std::endl;
+
+                                                        freeBinsPerBinLevel[it->first] -= 1;
+
+                                                        if (summedResultSize >= potentialResults)
+                                                        {
+                                                            fulfilledRequirements = true;
+                                                            std::cout << "       found enough result bins to reserve; marking as requirements fulfilled!" << std::endl;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                                if (summedResultSize >= potentialResults)
+                                                {
+                                                    std::cout << "   summedResultSize = " << summedResultSize << " >= potentialResults = " << potentialResults << std::endl;
+                                                    std::cout << "   tri-pair check HAS ENOUGH result bins reserved, marking als REQUIREMENTS FULFILLED!" << std::endl;
+                                                    fulfilledRequirements = true;
+
+                                                    freeBinsPerBinLevel[it->first] -= it->second;
+
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                fulfilledRequirements = false;
+                                                std::cout << "   Claiming remaining blocks: FAILURE -- free slots blocked = " << freeBinsInSlot << ", already blocked = " << blockedBinsInSlot << std::endl;
+                                            }
+
+                                            /*summedResultSize += totalBlockSize;
+                                            fulfilledRequirements = true;
+                                            freeBinsPerBinLevel[it->first] -= it->second;*/
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        std::cout << "   only need a partial number of bins in level " << it->first << ": Would need " << it->second << "." << std::endl;
+
+                                        unsigned int summedResultSize_tmp = summedResultSize;
+                                        unsigned int freeBinsInSlot = 0, blockedBinsInSlot = 0;
+                                        for (unsigned int q = 0; q < _streamedWorkerResults[it->first].size() /*it->second*/; q++)
+                                        {
+                                            if (_streamedWorkerResults[it->first][q]->_blocked == false)
+                                            {
+                                                summedResultSize_tmp += _streamedWorkerResults[it->first][0]->_maxResults;
+                                                std::cout << "     * step " << q << ": summedResultSize_tmp = " << summedResultSize_tmp << ", freeBinsPerBinLevel[" << it->first << "] = " << freeBinsPerBinLevel[it->first] << std::endl;
+
+                                                //freeBinsPerBinLevel[it->first] -= 1;
+                                                claimedResultBinsPerPairCheck[it->first].insert(std::make_pair(m, q));
+                                                freeBinsInSlot++;
+
+                                                if (freeBinsInSlot == it->second)
+                                                {
+                                                    std::cout << "   - found " << freeBinsInSlot << " slots to claim, stop search" << std::endl;
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                std::cout << "     * step " << q << ": summedResultSize_tmp = " << summedResultSize_tmp << ", freeBinsPerBinLevel[" << it->first << "] = " << freeBinsPerBinLevel[it->first] << std::endl;
+                                                blockedBinsInSlot++;
+                                            }
+                                        }
+
+                                        std::cout << "     freeBinsInSlot = " << freeBinsInSlot << ", blockedBinsInSlot = " << blockedBinsInSlot << std::endl;
+
+                                        if (freeBinsInSlot > 0)
+                                        {
+                                            std::cout << "     setting _blocked flags in target slots: "  << claimedResultBinsPerPairCheck[it->first].size() << " slots." << std::endl;
+                                            for (std::multimap<unsigned int, unsigned int>::const_iterator sit = claimedResultBinsPerPairCheck[it->first].begin(); sit != claimedResultBinsPerPairCheck[it->first].end(); sit++)
+                                            {
+                                                if (sit->first == m)
+                                                {
+                                                    std::cout << "       - set slot " << sit->second << " to blocked" << std::endl;
+                                                    _streamedWorkerResults[it->first][sit->second]->_blocked = true;
+                                                    summedResultSize += (_streamedWorkerResults[it->first][sit->second])->_maxResults;
+                                                    std::cout << "         summedResultSize updated = " << summedResultSize << std::endl;
+
+                                                    freeBinsPerBinLevel[bestSlotPosition] -= 1;
+
+                                                    if (summedResultSize >= potentialResults)
+                                                    {
+                                                        fulfilledRequirements = true;
+                                                        std::cout << "       found enough result bins to reserve; marking as requirements fulfilled!" << std::endl;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (fulfilledRequirements)
+                                {
+                                    std::cout << " Marking triPairTest " << m << " as 'requirements fulfilled'!" << std::endl;
+                                    satisfiablePairChecks.insert(std::make_pair(m, true));
+                                    triPairCheckAccepted = true;
+                                    //continue;
+                                }
+                                else
+                                {
+                                    std::cout << " triPairTest " << m << " REQUIREMENTS NOT FULLFILLED!" << std::endl;
+                                    satisfiablePairChecks.insert(std::make_pair(m, false));
+                                    continue;
+                                }
+                                std::cout << "   END of second part..." << std::endl;
+                            }
+                        }
+
+                        // STATS MOVED FROM HERE
+
+                        if (triPairCheckAccepted)
+                        {
+                            std::cout << "ACCEPTED triPairCheck " << m << " = " << triPairCheckAccepted;
+                            continue;
+                        }
+                        else
+                        {
+                            std::cout << "REJECTED triPairCheck " << m << "! Bin size requirements couldn't be matched." << std::endl;
+                        }
+
+                    }
+                }
+            }
+
+            std::cout << "=== Remaining free result bins per level after matching ===" << std::endl;
+            for (std::map<unsigned int, int>::const_iterator it = freeBinsPerBinLevel.begin(); it != freeBinsPerBinLevel.end(); it++)
+            {
+                std::cout << " - level " << it->first << ": " << it->second << std::endl;
+            }
+
+
+            std::cout << "=== triPairTests requirements === " << std::endl;
+            for (std::map<unsigned int, bool>::const_iterator it = satisfiablePairChecks.begin(); it != satisfiablePairChecks.end(); it++)
+            {
+                std::cout << " - check " << it->first << " satisfied = " << it->second << std::endl;
+            }
+
+            std::cout << "=== bin occupancy for tasks ===" << std::endl;
+            for (std::map<unsigned int, std::multimap<unsigned int, unsigned int> >::const_iterator bit = claimedResultBinsPerPairCheck.begin(); bit != claimedResultBinsPerPairCheck.end(); bit++)
+            {
+                const std::multimap<unsigned int, unsigned int>& claimedResultBinsPerTask = bit->second;
+                std::cout << " - block " << bit->first << ": ";
+                {
+                    for (std::multimap<unsigned int, unsigned int>::const_iterator rit = claimedResultBinsPerTask.begin(); rit != claimedResultBinsPerTask.end(); rit++)
+                    {
+                        std::cout << " task " << rit->first << ": block " << rit->second << ";";
+                    }
+                    std::cout << std::endl;
+                }
+            }

@@ -1,0 +1,202 @@
+#ifndef LGCPOINTMODEL_H
+#define LGCPOINTMODEL_H
+
+#include "LGCCollisionModel.h"
+#include "LGCPointCluster.h"
+#include "LGCObbTree.h"
+
+#include <PQP/include/PQP.h>
+
+#include <sofa/component/collision/CubeModel.h>
+
+#define LGC_POINT_MODEL_CHECK_WITNESS_GRID
+#define LGC_POINT_MODEL_GRID_SIZE 16
+#define LGC_POINT_MODEL_GRID_TILE_SIZE 8
+
+//#define LGC_POINT_MODEL_BUILD_CLUSTER_FROM_CGAL
+
+namespace HACD
+{
+    class HACD;
+    class HeapManager;
+}
+
+namespace pcl
+{
+    namespace gpu
+    {
+        class Octree;
+    }
+}
+
+namespace sofa
+{
+    namespace component
+    {
+        namespace collision
+        {
+            class LGCPointModel;
+            class LGCPoint : public core::TCollisionElementIterator<LGCPointModel>
+            {
+                public:
+                    LGCPoint(LGCPointModel* model, int index);
+
+                    explicit LGCPoint(core::CollisionElementIterator& i);
+
+                    inline const Vector3& p() const { return _point; }
+                    inline const Vector3& position() { return _translation; }
+                    inline const Quaternion& orientation() { return _orientation; }
+
+                private:
+                    Vector3 _point;
+                    Vector3 _translation;
+                    Quaternion _orientation;
+            };
+
+            class LGCPointPatch: public core::TCollisionElementIterator<LGCPointModel>
+            {
+                public:
+                    typedef LGCPointCluster<Vec3Types> Element;
+
+                    LGCPointPatch(LGCPointModel* model, int index);
+                    explicit LGCPointPatch(core::CollisionElementIterator& i);
+
+                    LGCPointCluster<Vec3Types>* cluster() const { return _cluster; }
+
+                private:
+                    LGCPointCluster<Vec3Types>* _cluster;
+            };
+
+            class LGCPointModelFace: public core::TCollisionElementIterator<LGCPointModel>
+            {
+                public:
+                    typedef LGCPointCluster<Vec3Types> Element;
+                    LGCPointModelFace(LGCPointModel* model, int index);
+
+                    explicit LGCPointModelFace(core::CollisionElementIterator& i);
+                    int minFacetIndex() const { return _minFacetIndex; }
+                    int maxFacetIndex() const { return _maxFacetIndex; }
+
+                    virtual bool isFinal() const { return true; }
+
+                private:
+                    int _minFacetIndex;
+                    int _maxFacetIndex;
+            };
+
+            class SOFA_LGC_API LGCPointModel: public LGCCollisionModelBase
+            {
+                public:
+                    SOFA_CLASS(LGCPointModel, LGCCollisionModelBase);
+
+                    typedef LGCPointPatch Element;
+                    typedef Vec3Types InDataTypes;
+
+                    typedef sofa::helper::vector<Vec<4, long> > VecPointMask;
+                    typedef sofa::helper::vector<Vec<3, Real> > VecPointMaskDiagonal;
+                    typedef sofa::helper::vector<Vec<3, Real> > VecPointMaskOrigin;
+                    typedef sofa::helper::vector<Vec<2, int> > VecPointMaskDimension;
+
+                    LGCPointModel();
+                    virtual ~LGCPointModel();
+
+                    virtual void init();
+                    virtual void cleanup();
+
+                    virtual void draw(const core::visual::VisualParams *);
+
+                    virtual void computeBoundingTree(int maxDepth);
+
+                    virtual bool canCollideWith(CollisionModel*);
+                    virtual bool canCollideWithElement(int, CollisionModel*, int);
+
+                    void updateInternalGeometry();
+
+                    LGCCollisionModelType modelType() const { return LGC_POINT_MODEL; }
+
+                    PQP_FlatModel* pqpModel()
+                    {
+                        return _pointCluster->pqpModel();
+                    }
+
+                    unsigned long numSurfacePoints() const;
+                    Vector3 surfacePoint(const unsigned long&) const;
+
+                    unsigned long numEdgePoints() const;
+                    Vector3 edgePoint(const unsigned long&) const;
+
+                    LGCPointCluster<Vec3Types>* childCluster(const unsigned long&, bool = false);
+                    LGCPointCluster<Vec3Types>* parentCluster() { return _pointCluster; }
+                    unsigned long numChildClusters() const { return _pointCluster->numChildren(); }
+
+                    virtual std::pair<core::CollisionElementIterator,core::CollisionElementIterator> getInternalChildren(int index) const;
+                    virtual std::pair<core::CollisionElementIterator,core::CollisionElementIterator> getExternalChildren(int index) const;
+
+                    unsigned int numEdgePointsPerEdge() const { return _edgePointsPerEdge.getValue(); }
+
+                    Vec2i pointGridDimension(const unsigned int& facetIdx) const;
+
+                    virtual bool hasFinalIterators() const { return true; }
+
+                private:
+                    void buildDrawList();
+                    void buildPointCluster();
+
+                    void buildConvexDecomposition();
+
+                    LGCPointCluster<Vec3Types>* _pointCluster;
+
+                    Data<int> _edgePointsPerEdge;
+
+                    void validateClusterStructure();
+                    void computeBoundingTreeRec(LGCObb<Vec3Types>* obb, int& boxIndex, int maxDepth);
+
+                    void createWitnessGrid();
+                    Surface_Point_Type surfacePointType(unsigned int i, unsigned int j, const Exact_Polyhedron_3::Facet_iterator& it);
+
+                    void createClusterGrid(size_t clusterIdx, LGCPointCluster<Vec3Types> *childCluster);
+
+                    CubeModel* _cubeModel;
+
+                    HACD::HACD* _hacd;
+                    HACD::HeapManager* _hacdHeapManager;
+
+                    std::map<int, pcl::gpu::Octree*> _clusterOctrees;
+
+                    Data<bool> _computeOctree;
+                    Data<bool> _computeKdTree;
+
+                    std::vector<Vector3*> _surfacePoints;
+                    std::vector<Vector3*> _edgePoints;
+                    bool _surfacePointsDrawListValid;
+                    GLuint _surfacePointsGLList;
+
+                    Data<bool> _showSurfacePoints;
+                    Data<bool> _drawOcTree;
+                    Data<bool> _drawOcTreeVerbose;
+                    Data<bool> _drawKdTree;
+                    Data<bool> _drawObbPlanes;
+
+                    Data<bool> _doSegmentation;
+
+                    Data<bool> _showOBBTreeStructure;
+                    Data<bool> _showOBBVolumes;
+                    Data<int> _minDrawLimit;
+                    Data<int> _maxDrawLimit;
+
+                    Data<VecPointMask> _pointGrids;
+
+                    Data<VecPointMaskDiagonal> _pointGridOrigins;
+                    Data<VecPointMaskDiagonal> _pointGridSizeX;
+                    Data<VecPointMaskDiagonal> _pointGridSizeY;
+                    Data<VecPointMaskDimension> _pointGridDimensions;
+
+                    // Data<vector<Vector3> > _faceNormals;
+                    // Data<vector<Vector3> > _faceCentroids;
+                    // Data<VecPointMaskDiagonal> _pointGridDiagonals;
+            };
+        }
+    }
+}
+
+#endif // LGCPOINTMODEL_H

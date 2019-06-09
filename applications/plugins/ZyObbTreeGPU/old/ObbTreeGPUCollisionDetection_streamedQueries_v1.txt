@@ -1,0 +1,242 @@
+#ifdef OBBTREE_GPU_STREAMED_COLLISION_QUERIES
+        else
+        {
+            if (!_useDynamicWorkerScheme.getValue())
+            {
+                if (m_workerUnitOccupied[m_numOBBTreePairsTested % 4] == false)
+                {
+                    m_workerUnitOccupied[m_numOBBTreePairsTested % 4] = true;
+
+
+                    gProximityGPUTransform* modelTr1 = (gProximityGPUTransform*) obbModel1->getTransformedVerticesPtr();
+                    gProximityGPUTransform* modelTr2 = (gProximityGPUTransform*) obbModel2->getTransformedVerticesPtr();
+
+					int nIntersectingTriPairs = 0;
+					ObbTreeGPU_BVH_Traverse(&obbTree1, &obbTree2,
+                                            modelTr1, modelTr2,
+                                            m_gProximityWorkerUnits[m_numOBBTreePairsTested % 4],
+                                            m_alarmDistance, m_contactDistance, nIntersectingTriPairs);
+
+
+                    if (nIntersectingTriPairs > 0)
+                    {
+                        unsigned int maxPossibleResults = (obbTree1.nTris * obbTree2.nTris * CollisionTestElementsSize);
+                        int potentialResults = nIntersectingTriPairs * CollisionTestElementsSize;
+
+                        std::cout << "potentially intersecting tri-pairs = " << nIntersectingTriPairs << "; potential contact points from intersecting triangles = " << potentialResults <<  "; max. possible contact results for this OBB pair = " << maxPossibleResults << " (" << obbTree1.nTris << " * " << obbTree2.nTris << " * " << CollisionTestElementsSize << ")" << std::endl;
+
+                        int sizeDivBin1 = potentialResults / m_resultBinSize1;
+                        int sizeDivBin2 = potentialResults / m_resultBinSize2;
+                        int sizeDivBin3 = potentialResults / m_resultBinSize3;
+
+                        int sizeModBin1 = potentialResults % m_resultBinSize1;
+                        int sizeModBin2 = potentialResults % m_resultBinSize2;
+                        int sizeModBin3 = potentialResults % m_resultBinSize3;
+
+                        std::cout << " bin fitting: DivBin1 = " << sizeDivBin1 << ", DivBin2 = " << sizeDivBin2 << ", DivBin3 = " << sizeDivBin3 << std::endl;
+                        std::cout << "              ModBin1 = " << sizeModBin1 << ", ModBin2 = " << sizeModBin2 << ", ModBin3 = " << sizeModBin3 << std::endl;
+
+                        std::cout << " required bins for size1 = " << m_resultBinSize1 << ": " << sizeDivBin1 << " + " << (sizeModBin1 == 0 ? "0" : "1") << std::endl;
+                        std::cout << " required bins for size2 = " << m_resultBinSize2 << ": " << sizeDivBin2 << " + " << (sizeModBin2 == 0 ? "0" : "1") << std::endl;
+                        std::cout << " required bins for size3 = " << m_resultBinSize3 << ": " << sizeDivBin3 << " + " << (sizeModBin3 == 0 ? "0" : "1") << std::endl;
+
+                        gProximityWorkerResult* workerResultUnit = NULL;
+                        if (potentialResults < m_resultBinSize1)
+                        {
+                            workerResultUnit = m_gProximityWorkerResults_64[m_numOBBTreePairsTested % 4];
+                            m_workerResultOccupied_64[m_numOBBTreePairsTested % 4] = true;
+                            std::cout << " use result bin 1, up to " << m_resultBinSize1 << " max. contacts." << std::endl;
+                        }
+                        else if (potentialResults >= m_resultBinSize1 && potentialResults < m_resultBinSize2)
+                        {
+                            workerResultUnit = m_gProximityWorkerResults_128[m_numOBBTreePairsTested % 4];
+                            m_workerResultOccupied_128[m_numOBBTreePairsTested % 4] = true;
+                            std::cout << " use result bin 2, up to " << m_resultBinSize2 << " max. contacts." << std::endl;
+                        }
+                        else if (potentialResults > m_resultBinSize2 && potentialResults < m_resultBinSize3)
+                        {
+                            workerResultUnit = m_gProximityWorkerResults_256[m_numOBBTreePairsTested % 4];
+                            m_workerResultOccupied_256[m_numOBBTreePairsTested % 4] = true;
+                            std::cout << " use result bin 3, up to " << m_resultBinSize3 << " max. contacts." << std::endl;
+                        }
+                        else
+                        {
+                            std::cout << " TOO BIG TO FIT in bins: " << potentialResults << std::endl;
+                        }
+
+                        if (workerResultUnit != NULL)
+                        {
+							int nIntersectingTriangles = 0;
+                            ObbTreeGPU_TriangleIntersection(&obbTree1, &obbTree2,
+                                                            m_gProximityWorkerUnits[m_numOBBTreePairsTested % 4],
+                                                            workerResultUnit,
+															m_alarmDistance, m_contactDistance, nIntersectingTriangles);
+
+                            if (workerResultUnit->_numResults > 0)
+                            {
+
+                                std::cout << "Results from triangle intersection call = " << workerResultUnit->_numResults << std::endl;
+
+                                sofa::core::collision::DetectionOutputVector*& outputs = getDetectionOutputs(obbModel1, obbModel2); // normal Sofa processing is redirected here
+                                sofa::core::collision::TDetectionOutputVector<ObbTreeGPUCollisionModel<Vec3Types>, ObbTreeGPUCollisionModel<Vec3Types> >* discreteOutputs =
+                                m_intersection->getOutputVector<ObbTreeGPUCollisionModel<Vec3Types>, ObbTreeGPUCollisionModel<Vec3Types> >(obbModel1, obbModel2, outputs);
+
+                                if (discreteOutputs == NULL)
+                                {
+
+                                    discreteOutputs = m_intersection->createOutputVector<ObbTreeGPUCollisionModel<Vec3Types>, ObbTreeGPUCollisionModel<Vec3Types> >(obbModel1, obbModel2);
+                                    if (outputs == NULL)
+                                    {
+                                        outputs = dynamic_cast<sofa::core::collision::DetectionOutputVector*>(discreteOutputs);
+                                    }
+                                }
+
+                                if (outputs && discreteOutputs)
+                                {
+                                    const double maxContactDist = m_alarmDistance + (m_alarmDistance - m_contactDistance);
+                                    const double maxContactDist2 = maxContactDist * maxContactDist;
+
+                                    for (int k = 0; k < workerResultUnit->_numResults; k++)
+                                    {
+#if 0
+                                        /*std::cout << " * id = " << workerResultUnit->h_contactId[k] <<
+                                                     ", elems = " << workerResultUnit->h_elems[k].w << "/" << workerResultUnit->h_elems[k].x << "/" << workerResultUnit->h_elems[k].y << "/" << workerResultUnit->h_elems[k].z <<
+                                                     ", distance " << workerResultUnit->h_distance[k] <<
+                                                     ", point0 = " << workerResultUnit->h_point0[k].x << "," << workerResultUnit->h_point0[k].y << "," << workerResultUnit->h_point0[k].z << "," <<
+                                                     ", point1 = " << workerResultUnit->h_point1[k].x << "," << workerResultUnit->h_point1[k].y << "," << workerResultUnit->h_point1[k].z << "," <<
+                                                     ", normal = " << workerResultUnit->h_normal[k].x << "," << workerResultUnit->h_normal[k].y << "," << workerResultUnit->h_normal[k].z << "," <<
+                                                     ", type = " << workerResultUnit->h_gProximityContactType[k]
+                                                     << std::endl;*/
+
+                                        Vector3 contactNormal(workerResultUnit->h_normal[k].x, workerResultUnit->h_normal[k].y, workerResultUnit->h_normal[k].z);
+
+                                        if (contactNormal.norm() >= 1e-06)
+                                        {
+                                            if (contactNormal.norm2() <= maxContactDist2 &&
+                                                std::fabs(workerResultUnit->h_distance[k] - m_contactDistance) < m_contactDistance)
+                                            {
+
+                                            discreteOutputs->resize(discreteOutputs->size()+1);
+                                            sofa::core::collision::DetectionOutput *detection = &*(discreteOutputs->end()-1);
+
+                                            detection->id = workerResultUnit->h_contactId[k];
+
+                                            detection->point[0] = Vector3(workerResultUnit->h_point0[k].x, workerResultUnit->h_point0[k].y, workerResultUnit->h_point0[k].z);
+                                            detection->point[1] = Vector3(workerResultUnit->h_point1[k].x, workerResultUnit->h_point1[k].y, workerResultUnit->h_point1[k].z);
+
+                                            detection->normal = contactNormal;
+
+                                            // Minus contact distance: Testing...
+                                            detection->value = detection->normal.norm();
+                                            detection->normal /= detection->value;
+
+                                            detection->value -= m_contactDistance;
+
+                                            detection->contactType = (sofa::core::collision::DetectionOutputContactType) workerResultUnit->h_gProximityContactType[k];
+
+                                            if (workerResultUnit->h_gProximityContactType[k] == COLLISION_LINE_LINE)
+                                            {
+                                                detection->elem.first = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel1, workerResultUnit->h_elems[k].w * 3 + workerResultUnit->h_elems[k].y); // << CollisionElementIterator
+
+                                                detection->elem.second = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel2, workerResultUnit->h_elems[k].x * 3 + workerResultUnit->h_elems[k].z); // << CollisionElementIterator
+
+                                                detection->elemFeatures.first = workerResultUnit->h_elems[k].y;
+                                                detection->elemFeatures.second = workerResultUnit->h_elems[k].z;
+                                            }
+                                            else if (workerResultUnit->h_gProximityContactType[k] == COLLISION_VERTEX_FACE)
+                                            {
+
+                                                if (workerResultUnit->h_elems[k].z == -1)
+                                                {
+                                                    detection->elem.first = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel1, workerResultUnit->h_elems[k].x * 3); // << CollisionElementIterator
+                                                    detection->elem.second = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel2, workerResultUnit->h_elems[k].w * 3 + workerResultUnit->h_elems[k].y); // << CollisionElementIterator
+                                                    detection->elemFeatures.first = workerResultUnit->h_elems[k].y;
+                                                }
+                                                else if (workerResultUnit->h_elems[k].y == -1)
+                                                {
+                                                    detection->elem.first = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel1, workerResultUnit->h_elems[k].x * 3); // << CollisionElementIterator
+                                                    detection->elem.second = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel2, workerResultUnit->h_elems[k].w * 3 + workerResultUnit->h_elems[k].z); // << CollisionElementIterator
+                                                    detection->elemFeatures.second = workerResultUnit->h_elems[k].z;
+                                                }
+                                            }                                    }
+                                        }
+#endif
+                                    }
+
+                                    std::sort(discreteOutputs->begin(), discreteOutputs->end(), contactTypeCompare);
+
+                                    std::pair< core::CollisionModel*, core::CollisionModel* > cm_pair = std::make_pair(obbModel1, obbModel2);
+
+                                    DetectionOutputMap::iterator it = getDetectionOutputs().find(cm_pair);
+
+                                    std::cout << "Contact points count = " << discreteOutputs->size() << std::endl;
+
+                                    if (it == getDetectionOutputs().end())
+                                    {
+                                        getDetectionOutputs().insert(std::make_pair(cm_pair, outputs));
+                                    }
+                                    else
+                                    {
+                                        getDetectionOutputs()[cm_pair] = outputs;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (potentialResults < m_resultBinSize1)
+                        {
+                            m_workerResultOccupied_64[m_numOBBTreePairsTested % 4] = false;
+                        }
+                        else if (potentialResults >= m_resultBinSize1 && potentialResults < m_resultBinSize2)
+                        {
+                            m_workerResultOccupied_128[m_numOBBTreePairsTested % 4] = false;
+                        }
+                        else if (potentialResults > m_resultBinSize2 && potentialResults < m_resultBinSize3)
+                        {
+                            m_workerResultOccupied_256[m_numOBBTreePairsTested % 4] = false;
+                        }
+                    }
+
+                    m_workerUnitOccupied[m_numOBBTreePairsTested % 4] = false;
+                }
+            }
+            else
+            {
+				int nIntersectingTriPairs = 0; 
+
+                gProximityGPUTransform* modelTr1 = (gProximityGPUTransform*) obbModel1->getTransformedVerticesPtr();
+                gProximityGPUTransform* modelTr2 = (gProximityGPUTransform*) obbModel2->getTransformedVerticesPtr();
+
+                ObbTreeGPU_BVH_Traverse(&obbTree1, &obbTree2,
+                                        modelTr1, modelTr2,
+                                        _streamedWorkerUnits[m_numOBBTreePairsTested % _numStreamedWorkerUnits.getValue()],
+                                        m_alarmDistance, m_contactDistance, nIntersectingTriPairs);
+
+                if (nIntersectingTriPairs > 0)
+                {
+                    unsigned int maxPossibleResults = (obbTree1.nTris * obbTree2.nTris * CollisionTestElementsSize);
+                    int potentialResults = nIntersectingTriPairs * CollisionTestElementsSize;
+
+                    std::cout << "potentially intersecting tri-pairs = " << nIntersectingTriPairs << "; potential contact points from intersecting triangles = " << potentialResults <<  "; max. possible contact results for this OBB pair = " << maxPossibleResults << " (" << obbTree1.nTris << " * " << obbTree2.nTris << " * " << CollisionTestElementsSize << ")" << std::endl;
+
+
+                    unsigned int curBinSize = _streamedWorkerResultMinSize.getValue();
+
+                    for (unsigned int k = 0; k < _numStreamedWorkerResultBins.getValue(); k++)
+                    {
+                        unsigned int sizeDivBinK = potentialResults / curBinSize;
+                        unsigned int sizeModBinK = potentialResults % curBinSize;
+
+                        std::cout << " bin fitting: DivBin_" << k << " = " << sizeDivBinK << ", ModBin_" << k << " = " << sizeModBinK << std::endl;
+                        if (_streamedWorkerResults[k].size() > 0)
+                            std::cout << " required bins for size " << k << " = " << _streamedWorkerResults[k][0]->_maxResults << ": " << sizeDivBinK << " + " << (sizeModBinK == 0 ? "0" : "1") << std::endl;
+
+                        curBinSize *= 2;
+                    }
+                }
+
+            }
+            m_numOBBTreePairsTested++;
+        }
+        //std::cout << " Streams intersecting = " << nIntersecting2 << std::endl;
+#endif

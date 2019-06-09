@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<Node 	 name="Root"  dt="0.001" gravity="0 0 -10" >
+	<VisualStyle name="visualStyle73"  displayFlags="showVisual hideBehavior showCollision hideBoundingCollisionModels hideMapping hideOptions" />
+	<DefaultContactManager name="defaultContactManager0"  response="ObbTreeGPUFrictionContact" />
+	<DefaultPipeline name="defaultPipeline1" />
+	<FreeMotionAnimationLoop name="freeMotionAnimationLoop2"  printLog="0" />
+	<GenericConstraintSolver name="genericConstraintSolver3"  tolerance="1e-005" />
+	<BruteForceDetection name="obbTreeGPUCollisionDetection4"/>
+	<BVHModelsLocalMinDistance name="BVHModelsLocalMinDistance_1"  alarmDistance="0.1"  contactDistance="0.001"  angleCone="0.2"  coneFactor="0.8" />
+	<Node 	 name="fallingRigid"  >
+		<MechanicalObject template="Rigid" name="fallingObject"  position="2 1 2 0 0 0 1"  velocity="0 0 0 0 0 0"  force="0 0 0 0 0 0"  externalForce="0 0 0 0 0 0"  derivX="0 0 0 0 0 0"  restScale="1" translation="0 0 0" rotation="40 30 50"/>
+		<UniformMass template="Rigid" name="uniformMass105"  rayleighMass="0"  mass="1 1 [1 0 0,0 1 0,0 0 1]" />
+		<CGLinearSolver template="GraphScattered" name="cGLinearSolver126" />
+		<EulerImplicitSolver name="eulerImplicitSolver117" />
+		<PrecomputedConstraintCorrection template="Rigid" name="precomputedConstraintCorrection9" />
+		<Node 	 name="fallingVisualNode"  >
+			<OglModel template="ExtVec3f" name="fallingVisual"  fileMesh="share/mesh/two_triangles.obj"  primitiveType="DEFAULT"  blendEquation="GL_FUNC_ADD"  sfactor="GL_SRC_ALPHA"  dfactor="GL_ONE_MINUS_SRC_ALPHA" scale3d="1 1 1"/>
+			<RigidMapping template="Rigid,ExtVec3f" name="rigidMap83"  input="@../fallingObject"  output="@fallingVisual" />
+		</Node>
+		<Node 	 name="fallingCollisionNode"  >
+			<MeshTopology name="fallingCollisionTopology"  fileTopology="share/mesh/two_triangles.obj" />
+			<MechanicalObject template="Vec3d" name="fallingCollisionObject"  position="0 0 0"  velocity="0 0 0"  force="0 0 0"  externalForce="0 0 0"  derivX="0 0 0"  restScale="1"  scale3d="1 1 1"/>
+			<RigidMapping template="Rigid,Vec3d" name="rigidMap101"  input="@../fallingObject"  output="@fallingCollisionObject" />
+			<PQPCollisionModel template="StdVectorTypes&lt;Vec&lt;3,double&gt;,Vec&lt;3,double&gt;,double&gt; &gt;" name="PQPCollisionModel_1"/>
+		</Node>
+	</Node>
+	
+	<Node 	 name="floorNode"  >
+		<MechanicalObject template="Rigid" name="floorObject"  position="0 0 0 0 0 0 1"  velocity="0 0 0 0 0 0"  force="0 0 0 0 0 0"  externalForce="0 0 0 0 0 0"  derivX="0 0 0 0 0 0"  restScale="1" rotation="0 0 0"/>
+		<CGLinearSolver template="GraphScattered" name="cGLinearSolver126" />
+		<EulerImplicitSolver name="eulerImplicitSolver117" />
+		<PrecomputedConstraintCorrection template="Rigid" name="precomputedConstraintCorrection9" />
+		<Node 	 name="floorVisualNode"  >
+			<OglModel template="ExtVec3f" name="floorVisual"  fileMesh="share/mesh/two_triangles.obj"   primitiveType="DEFAULT"  blendEquation="GL_FUNC_ADD"  sfactor="GL_SRC_ALPHA"  dfactor="GL_ONE_MINUS_SRC_ALPHA" scale3d="6 6 6"/>
+			<RigidMapping template="Rigid,ExtVec3f" name="rigidMap83"  input="@../floorObject"  output="@floorVisual" />
+		</Node>
+		<Node 	 name="floorCollisionNode"  >
+			<MeshTopology name="floorCollisionTopology"  fileTopology="share/mesh/two_triangles.obj" />
+			<MechanicalObject template="Vec3d" name="floorCollisionObject"  position="0 0 0"  velocity="0 0 0"  force="0 0 0"  externalForce="0 0 0"  derivX="0 0 0"  restScale="1" scale3d="6 6 6"/>
+			<RigidMapping template="Rigid,Vec3d" name="rigidMap101"  input="@../floorObject"  output="@floorCollisionObject" />
+			<PQPCollisionModel template="StdVectorTypes&lt;Vec&lt;3,double&gt;,Vec&lt;3,double&gt;,double&gt; &gt;" name="PQPCollisionModel_2"/>
+		</Node>
+	</Node>
+</Node>

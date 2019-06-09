@@ -561,7 +561,8 @@ public:
         center[0] = m[0][3];
         center[1] = m[1][3];
         center[2] = m[2][3];
-        sofa::defaulttype::Mat<3,3,Real> rot; rot = m;
+        //sofa::defaulttype::Mat<3,3,Real> rot; rot = m;
+        sofa::defaulttype::Mat3x3d rot; rot = m;
         orientation.fromMatrix(rot);
     }
 

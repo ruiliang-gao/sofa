@@ -1,0 +1,12 @@
+# CMake package configuration file for the ZyBVHModels library
+
+@PACKAGE_INIT@
+
+if(NOT TARGET ZyBVHModels)
+	include("${CMAKE_CURRENT_LIST_DIR}/ZyBVHModelsTargets.cmake")
+endif()
+
+check_required_components(ZyBVHModels)
+
+set(ZyBVHModels_LIBRARIES ZyBVHModels)
+set(ZyBVHModels_INCLUDE_DIRS @PACKAGE_BVHMODELS_INCLUDE_DIR@)

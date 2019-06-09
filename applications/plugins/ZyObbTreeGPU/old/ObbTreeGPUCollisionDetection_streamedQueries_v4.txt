@@ -1,0 +1,639 @@
+//#define DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+#define DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+__device__ __forceinline__ int triangleContact_RangedResults(float3 p1, float3 p2, float3 p3, float3 q1, float3 q2, float3 q3,
+                                                             double alarmDist, double contactDist,
+                                                             int index1, int index2,
+                                                             gProximityDetectionOutput* contacts, int outputPos,
+                                                             int nMaxContacts, int CollisionTestElementsSize,
+                                                             unsigned int contactOutputRangeStart,
+                                                             unsigned int resultRangeMin, unsigned int resultRangeMax,
+                                                             bool flipContactElements,
+                                                             unsigned int* binOutputIndex = NULL)
+{
+    int writePos = outputPos * CollisionTestElementsSize;
+    if (writePos < nMaxContacts)
+    {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        printf("triangleContact_RangedResults: %i - %i to writePos = %i, outputPos = %i\n", index1, index2, writePos, outputPos);
+        __syncthreads();
+#endif
+
+        int rangedWritePos = writePos - contactOutputRangeStart;
+
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        printf(" rangedWritePos = %i, contactOutputRangeStart = %i; resultRangeMin/Max = %i / %i\n", rangedWritePos, contactOutputRangeStart, resultRangeMin, resultRangeMax);
+        __syncthreads();
+#endif
+
+        if (rangedWritePos >= resultRangeMin &&
+            rangedWritePos < resultRangeMax)
+        {
+            writePos = rangedWritePos;
+
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf(" write to rangedWritePos = %i OK\n", rangedWritePos);
+            __syncthreads();
+#endif
+            const double maxContactDist = alarmDist + (alarmDist - contactDist);
+            const double dist2 =  maxContactDist * maxContactDist;
+            float3 tri1_edge1 = f3v_sub(p2, p1);
+            float3 tri1_edge2 = f3v_sub(p3, p1);
+            const float3 pn = f3v_cross(tri1_edge1, tri1_edge2);
+
+            float3 tri2_edge1 = f3v_sub(q2, q1);
+            float3 tri2_edge2 = f3v_sub(q3, q1);
+            const float3 qn = f3v_cross(tri2_edge1, tri2_edge2);
+
+            const int id1 = index1; // index of contacts involving points in e1
+            const int id2 = index2; // index of contacts involving points in e2
+
+            int n = 0;
+
+#ifdef GPROXIMITY_TRIANGLE_PAIR_INTERSECTIONS_TRIANGLE_POINT
+        int nTriangleContacts = 0;
+        nTriangleContacts = doIntersectionTrianglePoint(dist2, contactDist, q1, q2, q3, qn, p1, true, contacts, id1, id2, id1+0, writePos, resultRangeMax, binOutputIndex);
+        n += nTriangleContacts;
+        if (nTriangleContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            if (binOutputIndex == NULL)
+            {
+                printf("   TRIANGLE_POINT contact case 1: p0 = %f,%f,%f, p1 = %f,%f,%f, distance = %f, normal = %f,%f,%f\n",
+                       contacts->point0[writePos].x, contacts->point0[writePos].y ,contacts->point0[writePos].z,
+                       contacts->point1[writePos].x, contacts->point1[writePos].y ,contacts->point1[writePos].z,
+                       contacts->distance[writePos],
+                       contacts->normal[writePos].x, contacts->normal[writePos].y ,contacts->normal[writePos].z);
+            }
+            printf(" ===> n = %i, nTriangleContacts = %i\n", n, nTriangleContacts);
+#endif
+            if (flipContactElements)
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos] = true;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = true;
+                }
+            }
+            else
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos] = false;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = false;
+                }
+            }
+
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos].y = 0;
+                contacts->elems[writePos].z = -1;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" triangle contact case 1: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 0;
+                contacts->elems[*binOutputIndex - 1].z = -1;
+            }
+        }
+
+        nTriangleContacts = doIntersectionTrianglePoint(dist2, contactDist, q1, q2, q3, qn, p2, true, contacts, id1, id2, id1+1, writePos + 1, resultRangeMax, binOutputIndex);
+        n += nTriangleContacts;
+        if (nTriangleContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   TRIANGLE_POINT contact case 2: p0 = %f,%f,%f, p1 = %f,%f,%f, distance = %f, normal = %f,%f,%f\n",
+                   contacts->point0[writePos+1].x, contacts->point0[writePos+1].y ,contacts->point0[writePos+1].z,
+                   contacts->point1[writePos+1].x, contacts->point1[writePos+1].y ,contacts->point1[writePos+1].z,
+                   contacts->distance[writePos+1],
+                   contacts->normal[writePos+1].x, contacts->normal[writePos+1].y ,contacts->normal[writePos+1].z);
+            printf(" ===> n = %i, nTriangleContacts = %i\n", n, nTriangleContacts);
+#endif
+            if (flipContactElements)
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos+1] = true;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = true;
+                }
+            }
+            else
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos+1] = false;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = false;
+                }
+            }
+
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 1].y = 1;
+                contacts->elems[writePos + 1].z = -1;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" triangle contact case 2: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 1;
+                contacts->elems[*binOutputIndex - 1].z = -1;
+            }
+        }
+
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+        nTriangleContacts = doIntersectionTrianglePoint(dist2, contactDist, q1, q2, q3, qn, p3, true, contacts, id1, id2, id1+2, writePos + 2, resultRangeMax, binOutputIndex);
+        n += nTriangleContacts;
+        if (nTriangleContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   TRIANGLE_POINT contact case 3: p0 = %f,%f,%f, p1 = %f,%f,%f, distance = %f, normal = %f,%f,%f\n",
+                   contacts->point0[writePos+2].x, contacts->point0[writePos+2].y ,contacts->point0[writePos+2].z,
+                   contacts->point1[writePos+2].x, contacts->point1[writePos+2].y ,contacts->point1[writePos+2].z,
+                   contacts->distance[writePos+2],
+                   contacts->normal[writePos+2].x, contacts->normal[writePos+2].y ,contacts->normal[writePos+2].z);
+            printf(" ===> n = %i, nTriangleContacts = %i\n", n, nTriangleContacts);
+#endif
+
+            if (flipContactElements)
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos+2] = true;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = true;
+                }
+            }
+            else
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos+2] = false;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = false;
+                }
+            }
+
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 2].y = 2;
+                contacts->elems[writePos + 2].z = -1;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" triangle contact case 3: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 2;
+                contacts->elems[*binOutputIndex - 1].z = -1;
+            }
+        }
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+        nTriangleContacts = doIntersectionTrianglePoint(dist2, contactDist, p1, p2, p3, pn, q1, false, contacts, id1, id2, id2+0, writePos + 3, resultRangeMax, binOutputIndex);
+        n += nTriangleContacts;
+        if (nTriangleContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   TRIANGLE_POINT contact case 4: p0 = %f,%f,%f, p1 = %f,%f,%f, distance = %f, normal = %f,%f,%f\n",
+                   contacts->point0[writePos+3].x, contacts->point0[writePos+3].y ,contacts->point0[writePos+3].z,
+                   contacts->point1[writePos+3].x, contacts->point1[writePos+3].y ,contacts->point1[writePos+3].z,
+                   contacts->distance[writePos+3],
+                   contacts->normal[writePos+3].x, contacts->normal[writePos+3].y ,contacts->normal[writePos+3].z);
+        printf(" ===> n = %i, nTriangleContacts = %i\n", n, nTriangleContacts);
+#endif
+            if (flipContactElements)
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos+3] = true;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = true;
+                }
+            }
+            else
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos+3] = false;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = false;
+                }
+            }
+
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 3].y = -1;
+                contacts->elems[writePos + 3].z = 0;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" triangle contact case 4: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = -1;
+                contacts->elems[*binOutputIndex - 1].z = 0;
+            }
+        }
+
+        nTriangleContacts = doIntersectionTrianglePoint(dist2, contactDist, p1, p2, p3, pn, q2, false, contacts, id1, id2, id2+1, writePos + 4, resultRangeMax, binOutputIndex);
+        n += nTriangleContacts;
+        if (nTriangleContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   TRIANGLE_POINT contact case 5: p0 = %f,%f,%f, p1 = %f,%f,%f, distance = %f, normal = %f,%f,%f\n",
+                   contacts->point0[writePos+4].x, contacts->point0[writePos+4].y ,contacts->point0[writePos+4].z,
+                   contacts->point1[writePos+4].x, contacts->point1[writePos+4].y ,contacts->point1[writePos+4].z,
+                   contacts->distance[writePos+4],
+                   contacts->normal[writePos+4].x, contacts->normal[writePos+4].y ,contacts->normal[writePos+4].z);
+            printf(" ===> n = %i, nTriangleContacts = %i\n", n, nTriangleContacts);
+#endif
+
+            if (flipContactElements)
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos+4] = true;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = true;
+                }
+            }
+            else
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos+4] = false;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = false;
+                }
+            }
+
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 4].y = -1;
+                contacts->elems[writePos + 4].z = 1;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" triangle contact case 5: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = -1;
+                contacts->elems[*binOutputIndex - 1].z = 1;
+            }
+        }
+
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+        nTriangleContacts = doIntersectionTrianglePoint(dist2, contactDist, p1, p2, p3, pn, q3, false, contacts, id1, id2, id2+2, writePos + 5, resultRangeMax, binOutputIndex);
+        n += nTriangleContacts;
+        if (nTriangleContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   TRIANGLE_POINT contact case 6: p0 = %f,%f,%f, p1 = %f,%f,%f, distance = %f, normal = %f,%f,%f\n",
+                   contacts->point0[writePos+5].x, contacts->point0[writePos+5].y ,contacts->point0[writePos+5].z,
+                   contacts->point1[writePos+5].x, contacts->point1[writePos+5].y ,contacts->point1[writePos+5].z,
+                   contacts->distance[writePos+5],
+                   contacts->normal[writePos+5].x, contacts->normal[writePos+5].y ,contacts->normal[writePos+5].z);
+            printf(" ===> n = %i, nTriangleContacts = %i\n", n, nTriangleContacts);
+#endif
+
+            if (flipContactElements)
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos+5] = true;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = true;
+                }
+            }
+            else
+            {
+                if (binOutputIndex == NULL)
+                {
+                    contacts->swapped[writePos+5] = false;
+                }
+                else
+                {
+                    contacts->swapped[*binOutputIndex - 1] = false;
+                }
+            }
+
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 5].y = -1;
+                contacts->elems[writePos + 5].z = 2;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" triangle contact case 6: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = -1;
+                contacts->elems[*binOutputIndex - 1].z = 2;
+            }
+        }
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+
+#endif //GPROXIMITY_TRIANGLE_PAIR_INTERSECTIONS_TRIANGLE_POINT
+
+#ifdef GPROXIMITY_TRIANGLE_PAIR_INTERSECTIONS_LINE_LINE
+        int nLineContacts = 0;
+        nLineContacts = doIntersectionLineLine(dist2, contactDist, p1, p2, q1, q2, contacts, id1, id2, 0, 0, id2+3, writePos + 6, resultRangeMax, binOutputIndex);
+        n += nLineContacts;
+        if (nLineContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("    LINE_LINE contact case 1: edges %i - %i; p1 = %f,%f,%f, p2 = %f,%f,%f, q1 = %f,%f,%f, q2 = %f,%f,%f\n", 2, 2, p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, q1.x, q1.y, q1.z, q2.x, q2.y, q2.z);
+            printf(" ===> n = %i, nLineContacts = %i\n", n, nLineContacts);
+#endif
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 6].y = 2;
+                contacts->elems[writePos + 6].z = 2;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" line-line contact case 1: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 2;
+                contacts->elems[*binOutputIndex - 1].z = 2;
+            }
+        }
+
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+        nLineContacts = doIntersectionLineLine(dist2, contactDist, p1, p2, q2, q3, contacts, id1, id2, 0, 1, id2+4, writePos + 7, resultRangeMax, binOutputIndex);
+        n += nLineContacts;
+        if (nLineContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   LINE_LINE contact case 2: edges %i - %i; p1 = %f,%f,%f, p2 = %f,%f,%f, q2 = %f,%f,%f, q3 = %f,%f,%f\n", 2, 0, p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, q2.x, q2.y, q2.z, q3.x, q3.y, q3.z);
+            printf(" ===> n = %i, nLineContacts = %i\n", n, nLineContacts);
+#endif
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 7].y = 2;
+                contacts->elems[writePos + 7].z = 0;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" line-line contact case 2: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 2;
+                contacts->elems[*binOutputIndex - 1].z = 0;
+            }
+        }
+
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+        nLineContacts = doIntersectionLineLine(dist2, contactDist, p1, p2, q3, q1, contacts, id1, id2, 0, 2, id2+5, writePos + 8, resultRangeMax, binOutputIndex);
+        n += nLineContacts;
+        if (nLineContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   LINE_LINE contact case 3: edges %i - %i; p1 = %f,%f,%f, p2 = %f,%f,%f, q3 = %f,%f,%f, q1 = %f,%f,%f\n", 2, 1, p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, q3.x, q3.y, q3.z, q1.x, q1.y, q1.z);
+            printf(" ===> n = %i, nLineContacts = %i\n", n, nLineContacts);
+#endif
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 8].y = 2;
+                contacts->elems[writePos + 8].z = 1;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" line-line contact case 3: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 2;
+                contacts->elems[*binOutputIndex - 1].z = 1;
+            }
+        }
+
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+        nLineContacts = doIntersectionLineLine(dist2, contactDist, p2, p3, q1, q2, contacts, id1, id2, 1, 0, id2+6, writePos + 9, resultRangeMax, binOutputIndex);
+        n += nLineContacts;
+        if (nLineContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   LINE_LINE contact case 4: edges %i - %i; p2 = %f,%f,%f, p3 = %f,%f,%f, q1 = %f,%f,%f, q2 = %f,%f,%f\n", 0, 2, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z, q1.x, q1.y, q1.z, q2.x, q2.y, q2.z);
+            printf(" ===> n = %i, nLineContacts = %i\n", n, nLineContacts);
+#endif
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 9].y = 0;
+                contacts->elems[writePos + 9].z = 2;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" line-line contact case 4: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 0;
+                contacts->elems[*binOutputIndex - 1].z = 2;
+            }
+        }
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+        nLineContacts = doIntersectionLineLine(dist2, contactDist, p2, p3, q2, q3, contacts, id1, id2, 1, 1, id2+7, writePos + 10, resultRangeMax, binOutputIndex);
+        n += nLineContacts;
+        if (nLineContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   LINE_LINE contact case 5: edges %i - %i; p2 = %f,%f,%f, p3 = %f,%f,%f, q2 = %f,%f,%f, q3 = %f,%f,%f\n", 0, 0, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z, q2.x, q2.y, q2.z, q3.x, q3.y, q3.z);
+            printf(" ===> n = %i, nLineContacts = %i\n", n, nLineContacts);
+#endif
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 10].y = 0;
+                contacts->elems[writePos + 10].z = 0;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" line-line contact case 5: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 0;
+                contacts->elems[*binOutputIndex - 1].z = 0;
+            }
+        }
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+        nLineContacts = doIntersectionLineLine(dist2, contactDist, p2, p3, q3, q1, contacts, id1, id2, 1, 2, id2+8, writePos + 11, resultRangeMax, binOutputIndex);
+        n += nLineContacts;
+        if (nLineContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   LINE_LINE contact case 6: edges %i - %i; p2 = %f,%f,%f, p3 = %f,%f,%f, q3 = %f,%f,%f, q1 = %f,%f,%f\n", 0, 1, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z, q3.x, q3.y, q3.z, q1.x, q1.y, q1.z);
+            printf(" ===> n = %i, nLineContacts = %i\n", n, nLineContacts);
+#endif
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 11].y = 0;
+                contacts->elems[writePos + 11].z = 1;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" line-line contact case 6: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 0;
+                contacts->elems[*binOutputIndex - 1].z = 1;
+            }
+        }
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+        nLineContacts = doIntersectionLineLine(dist2, contactDist, p3, p1, q1, q2, contacts, id1, id2, 2, 0, id2+9, writePos + 12, resultRangeMax, binOutputIndex);
+        n += nLineContacts;
+        if (nLineContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   LINE_LINE contact case 7: edges %i - %i; p3 = %f,%f,%f, p1 = %f,%f,%f, q1 = %f,%f,%f, q2 = %f,%f,%f\n", 1, 2, p3.x, p3.y, p3.z, p1.x, p1.y, p1.z, q1.x, q1.y, q1.z, q2.x, q2.y, q2.z);
+            printf(" ===> n = %i, nLineContacts = %i\n", n, nLineContacts);
+#endif
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 12].y = 1;
+                contacts->elems[writePos + 12].z = 2;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" line-line contact case 7: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 1;
+                contacts->elems[*binOutputIndex - 1].z = 2;
+            }
+        }
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+        nLineContacts = doIntersectionLineLine(dist2, contactDist, p3, p1, q2, q3, contacts, id1, id2, 2, 1, id2+10, writePos + 13, resultRangeMax, binOutputIndex);
+        n += nLineContacts;
+        if (nLineContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   LINE_LINE contact case 8: edges %i - %i; p3 = %f,%f,%f, p1 = %f,%f,%f, q2 = %f,%f,%f, q3 = %f,%f,%f\n", 1, 0, p3.x, p3.y, p3.z, p1.x, p1.y, p1.z, q2.x, q2.y, q2.z, q3.x, q3.y, q3.z);
+            printf(" ===> n = %i, nLineContacts = %i\n", n, nLineContacts);
+#endif
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 13].y = 1;
+                contacts->elems[writePos + 13].z = 0;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" line-line contact case 8: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 1;
+                contacts->elems[*binOutputIndex - 1].z = 0;
+            }
+        }
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+        nLineContacts = doIntersectionLineLine(dist2, contactDist, p3, p1, q3, q1, contacts, id1, id2, 2, 2, id2+11, writePos + 14, resultRangeMax, binOutputIndex);
+        n += nLineContacts;
+        if (nLineContacts > 0)
+        {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("   LINE_LINE contact case 9: edges %i - %i; p3 = %f,%f,%f, p1 = %f,%f,%f, q3 = %f,%f,%f, q1 = %f,%f,%f\n", 1, 1, p3.x, p3.y, p3.z, p1.x, p1.y, p1.z, q3.x, q3.y, q3.z, q1.x, q1.y, q1.z);
+            printf(" ===> n = %i, nLineContacts = %i\n", n, nLineContacts);
+#endif
+            if (binOutputIndex == NULL)
+            {
+                contacts->elems[writePos + 14].y = 1;
+                contacts->elems[writePos + 14].z = 1;
+            }
+            else
+            {
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS_OUTPUTINDEX
+                printf(" line-line contact case 9: write to outputIndex = %i\n", *binOutputIndex - 1);
+                __syncthreads();
+#endif
+                contacts->elems[*binOutputIndex - 1].y = 1;
+                contacts->elems[*binOutputIndex - 1].z = 1;
+            }
+        }
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+        __syncthreads();
+#endif
+
+#endif //GPROXIMITY_TRIANGLE_PAIR_INTERSECTIONS_LINE_LINE
+
+#ifdef DEBUG_TRIANGLE_CONTACT_RANGEDRESULTS
+            printf("triangleContact_RangedResults %i - %i at rangedWritePos = %i: contact points generated = %i\n", index1, index2, rangedWritePos, n);
+#endif
+            return n;
+        }
+    }
+    return 0;
+}
