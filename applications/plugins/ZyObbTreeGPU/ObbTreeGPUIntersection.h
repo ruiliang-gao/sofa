@@ -64,8 +64,8 @@ namespace sofa
                     // ObbTreeGPU and Cube models don't collide, currently
                     // (implementing these is necessary to add the corresponding intersector in ObbTreeGPULocalMinDistance::init())
                     // (without an intersector, SOFA complains if both ObbTreeGPU and Point/Line/Triangle models appear in the same scene)
-                    bool testIntersection(ObbTreeGPUCollisionModelNode&, Cube&) { return false; };
-                    int computeIntersection(ObbTreeGPUCollisionModelNode& e1, Cube& e2, OutputVector* contacts) { return 0; };
+                    bool testIntersection(ObbTreeGPUCollisionModelNode&, Cube&) { return false; }
+                    int computeIntersection(ObbTreeGPUCollisionModelNode& e1, Cube& e2, OutputVector* contacts) { return 0; }
 
 					bool testIntersection(Cube& c1, Cube& c2);
 					bool testIntersection(Point&, Point&);

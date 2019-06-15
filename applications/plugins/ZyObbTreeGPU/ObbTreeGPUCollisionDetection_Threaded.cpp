@@ -115,7 +115,7 @@ ObbTreeGPUCollisionDetection_Threaded::~ObbTreeGPUCollisionDetection_Threaded()
     }
 #endif
 
-    sout << "ObbTreeGPUCollisionDetection_Threaded::~ObbTreeGPUCollisionDetection_Threaded(" << this->getName() << ")" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection_Threaded::~ObbTreeGPUCollisionDetection_Threaded(" << this->getName() << ")";
 
     m_scheduler_traversal->cleanup();
     m_scheduler_traversal->getScheduler()->stopThreads(true);
@@ -161,7 +161,7 @@ ObbTreeGPUCollisionDetection_Threaded::~ObbTreeGPUCollisionDetection_Threaded()
 		m_detectionOutputVectors = NULL;
 	}
 
-    sout << " call cudaDeviceReset()" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " call cudaDeviceReset()";
     CUDA_SAFE_CALL(cudaDeviceReset());
 }
 
@@ -186,28 +186,28 @@ void ObbTreeGPUCollisionDetection_Threaded::init()
 
     BruteForceDetection::init();
 
-	std::cout << "NarrowPhaseDetection DetectionOutputMap instance = " << &(this->m_outputsMap) << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "NarrowPhaseDetection DetectionOutputMap instance = " << &(this->m_outputsMap);
 
     std::vector<sofa::component::collision::OBBTreeGPUDiscreteIntersection* > moV;
     sofa::core::objectmodel::BaseContext::GetObjectsCallBackT<sofa::component::collision::OBBTreeGPUDiscreteIntersection, std::vector<sofa::component::collision::OBBTreeGPUDiscreteIntersection* > > cb(&moV);
 
 	getContext()->getObjects(sofa::core::objectmodel::TClassInfo<sofa::component::collision::OBBTreeGPUDiscreteIntersection>::get(), cb, sofa::core::objectmodel::TagSet(), sofa::core::objectmodel::BaseContext::SearchRoot);
 
-    sout << "ObbTreeGPUCollisionDetection_Threaded::init(): Searched for instances of OBBTreeGPUDiscreteIntersection; found = " << moV.size() << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection_Threaded::init(): Searched for instances of OBBTreeGPUDiscreteIntersection; found = " << moV.size();
     if (moV.size() == 1)
     {
-        sout << " Using: " << moV[0]->getName() << " of type " << moV[0]->getTypeName() << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " Using: " << moV[0]->getName() << " of type " << moV[0]->getTypeName();
         m_intersection = moV[0];
     }
 
     m_scheduler_traversal = new ObbTreeGPU_MultiThread_Scheduler<BVHTraversalTask>(m_numWorkerThreads.getValue());
 
-    sout << "=== ObbTreeGPUCollisionDetection_Threaded::ObbTreeGPUCollisionDetection_Threaded(" << this->getName() << ") ===" << std::endl;
-    sout << " Worker Thread count = " << m_numWorkerThreads.getValue() << std::endl;
-    sout << " _numStreamedWorkerUnits = " << _numStreamedWorkerUnits.getValue() << std::endl;
-    sout << " _numStreamedWorkerResultBins = " << _numStreamedWorkerResultBins.getValue() << std::endl;
-    sout << " _streamedWorkerResultMinSize = " << _streamedWorkerResultMinSize.getValue() << std::endl;
-    sout << " _streamedWorkerResultMaxSize = " << _streamedWorkerResultMaxSize.getValue() << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== ObbTreeGPUCollisionDetection_Threaded::ObbTreeGPUCollisionDetection_Threaded(" << this->getName() << ") ===";
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " Worker Thread count = " << m_numWorkerThreads.getValue();
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " _numStreamedWorkerUnits = " << _numStreamedWorkerUnits.getValue();
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " _numStreamedWorkerResultBins = " << _numStreamedWorkerResultBins.getValue();
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " _streamedWorkerResultMinSize = " << _streamedWorkerResultMinSize.getValue();
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " _streamedWorkerResultMaxSize = " << _streamedWorkerResultMaxSize.getValue();
 
     for (int i = 0; i < m_numWorkerThreads.getValue(); i++)
         m_scheduler_traversal->getScheduler()->createWorkerThread(true, "BVHTraversal");
@@ -311,13 +311,13 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
     {
         _gpuTransforms = new gProximityGPUTransform*[obbTreeGPUCollisionModels.size()];
 
-        sout << "ObbTreeGPUCollisionDetection::init(): Searched for instances of OBBTreeGPUCollisionModel; found = " << obbTreeGPUCollisionModels.size() << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection::init(): Searched for instances of OBBTreeGPUCollisionModel; found = " << obbTreeGPUCollisionModels.size();
         for (unsigned int k = 0; k < obbTreeGPUCollisionModels.size(); k++)
         {
             _gpuTransforms[k] = new gProximityGPUTransform();
 
-            sout << " * " << k << ": " << obbTreeGPUCollisionModels[k]->getName() << std::endl;
-            sout << "   store in model map" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " * " << k << ": " << obbTreeGPUCollisionModels[k]->getName();
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   store in model map";
             //_modelTransforms.insert(std::make_pair(obbTreeGPUCollisionModels[k]->getName(), new gProximityGPUTransform()));
             m_obbTreeGPUModels.insert(std::make_pair(obbTreeGPUCollisionModels[k]->getName(), obbTreeGPUCollisionModels[k]));
 
@@ -337,10 +337,10 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
             h_modelOrientation.m_row[2].y = modelOrientation(2, 1);
             h_modelOrientation.m_row[2].z = modelOrientation(2, 2);
 
-            sout << "     model " << obbTreeGPUCollisionModels[k]->getName() << " position    = " << h_modelPosition.x << "," << h_modelPosition.y << "," << h_modelPosition.z << std::endl;
-            sout << "                                                             orientation = [" << h_modelOrientation.m_row[0].x << "," << h_modelOrientation.m_row[0].y << "," << h_modelOrientation.m_row[0].z << "],[" << h_modelOrientation.m_row[1].x << "," << h_modelOrientation.m_row[1].y << "," << h_modelOrientation.m_row[1].z << "],[" << h_modelOrientation.m_row[2].x << "," << h_modelOrientation.m_row[2].y << "," << h_modelOrientation.m_row[2].z << "]" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     model " << obbTreeGPUCollisionModels[k]->getName() << " position    = " << h_modelPosition.x << "," << h_modelPosition.y << "," << h_modelPosition.z;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "                                                             orientation = [" << h_modelOrientation.m_row[0].x << "," << h_modelOrientation.m_row[0].y << "," << h_modelOrientation.m_row[0].z << "],[" << h_modelOrientation.m_row[1].x << "," << h_modelOrientation.m_row[1].y << "," << h_modelOrientation.m_row[1].z << "],[" << h_modelOrientation.m_row[2].x << "," << h_modelOrientation.m_row[2].y << "," << h_modelOrientation.m_row[2].z << "]";
 
-            sout << "   Initial position upload to GPU memory" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   Initial position upload to GPU memory";
 
             gProximityGPUTransform* gpTransform = _gpuTransforms[k];
 
@@ -350,18 +350,18 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
             _gpuTransformIndices.insert(std::make_pair(obbTreeGPUCollisionModels[k]->getName(), k));
         }
 
-        sout << "Check all model combinations for number of possible triangle pair intersections" << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "Check all model combinations for number of possible triangle pair intersections";
         unsigned long maxTriPairs = 0;
         std::map<std::pair<sofa::component::collision::ObbTreeGPUCollisionModel<Vec3Types>*, sofa::component::collision::ObbTreeGPUCollisionModel<Vec3Types>*>, unsigned long> numTriPairCombinations;
         std::vector<unsigned long> numTriPairCombinations_all;
         unsigned long numTriPairCombinations_sum = 0;
         for (unsigned int k = 0; k < obbTreeGPUCollisionModels.size(); k++)
         {
-            sout << " model1 at index " << k << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " model1 at index " << k;
             sofa::component::collision::ObbTreeGPUCollisionModel<Vec3Types>* model_1 = obbTreeGPUCollisionModels[k];
             for (unsigned int l = 0; l < obbTreeGPUCollisionModels.size(); l++)
             {
-                sout << "   model2 at index " << l << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   model2 at index " << l;
                 sofa::component::collision::ObbTreeGPUCollisionModel<Vec3Types>* model_2 = obbTreeGPUCollisionModels[l];
 
                 if (model_1->getName().compare(model_2->getName()) == 0)
@@ -378,14 +378,14 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
 
                 unsigned long numTriPairs = model_1->numTriangles() * model_2->numTriangles();
 
-                sout << "  - combination " << model_1->getName() << " - " << model_2->getName() << " = " << numTriPairs << " possible combinations." << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  - combination " << model_1->getName() << " - " << model_2->getName() << " = " << numTriPairs << " possible combinations.";
 
                 numTriPairCombinations.insert(std::make_pair(std::make_pair(model_1, model_2), numTriPairs));
                 numTriPairCombinations_all.push_back(numTriPairs);
 
                 if (numTriPairs > maxTriPairs)
                 {
-                    sout << "   new max. value = " << numTriPairs << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   new max. value = " << numTriPairs;
                     maxTriPairs = numTriPairs;
                 }
 
@@ -393,7 +393,7 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
             }
         }
 
-        sout << "AFTER checking model pair combinations" << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "AFTER checking model pair combinations";
 
         unsigned int numBelowAvg = 0, numAboveAvg = 0;
         unsigned long totalBelowAvgSize = 0, totalAboveAvgSize = 0;
@@ -401,12 +401,12 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
         if (numTriPairCombinations_all.size() > 0)
         {
             std::sort(numTriPairCombinations_all.begin(), numTriPairCombinations_all.end(), std::greater<unsigned long>());
-            sout << " max. triangle pair count = " << numTriPairCombinations_all.at(0) << "; min. triangle pair count = " << numTriPairCombinations_all.at(numTriPairCombinations_all.size() - 1) << std::endl;
-            sout << " triangle pair counts per model pair combinations: " << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " max. triangle pair count = " << numTriPairCombinations_all.at(0) << "; min. triangle pair count = " << numTriPairCombinations_all.at(numTriPairCombinations_all.size() - 1);
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " triangle pair counts per model pair combinations: ";
 
             for (std::map<std::pair<sofa::component::collision::ObbTreeGPUCollisionModel<Vec3Types>*, sofa::component::collision::ObbTreeGPUCollisionModel<Vec3Types>*>, unsigned long>::const_iterator it = numTriPairCombinations.begin(); it != numTriPairCombinations.end(); it++)
             {
-                sout << "   - " << it->first.first->getName() << " -- " << it->first.second->getName() << ": " << it->second << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   - " << it->first.first->getName() << " -- " << it->first.second->getName() << ": " << it->second;
             }
 
             unsigned long avgNumTriangleCombinations = numTriPairCombinations_sum / numTriPairCombinations_all.size();
@@ -424,7 +424,7 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
                 }
             }
 
-            sout << "average triangle pair count = " << avgNumTriangleCombinations << "; below avg. = " << numBelowAvg << ", above avg. = " << numAboveAvg << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "average triangle pair count = " << avgNumTriangleCombinations << "; below avg. = " << numBelowAvg << ", above avg. = " << numAboveAvg;
             unsigned int numTotalWorkerUnits = m_numWorkerThreads.getValue() * _numStreamedWorkerUnits.getValue();
             float triangleCombinationSizeRatio = (numAboveAvg * 1.0f) / (numBelowAvg * 1.0f);
             numLargeTraversalUnits = (int)std::ceil(triangleCombinationSizeRatio * numTotalWorkerUnits);
@@ -436,7 +436,7 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
             if (numLargeTraversalUnits <= 0)
                 numLargeTraversalUnits = 2;
 
-            sout << "total worker units = " << numTotalWorkerUnits << ", small/large ratio = " << triangleCombinationSizeRatio << ", small units = " << numSmallTraversalUnits << ", large units = " << numLargeTraversalUnits << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "total worker units = " << numTotalWorkerUnits << ", small/large ratio = " << triangleCombinationSizeRatio << ", small units = " << numSmallTraversalUnits << ", large units = " << numLargeTraversalUnits;
         }
 
         if (numBelowAvg == 0)
@@ -447,7 +447,7 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
 
         unsigned long belowAvgSize = totalBelowAvgSize / numBelowAvg;
         unsigned long aboveAvgSize = totalAboveAvgSize / numAboveAvg;
-        sout << "avg. size for small units = " << belowAvgSize << "; avg. size for large units = " << aboveAvgSize << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "avg. size for small units = " << belowAvgSize << "; avg. size for large units = " << aboveAvgSize;
 
         finalBelowAvgSize = m_trianglePairSizeRatio.getValue() * belowAvgSize;
         finalAboveAvgSize = m_trianglePairSizeRatio.getValue() * aboveAvgSize;
@@ -461,20 +461,20 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
         if (finalAboveAvgSize == 0)
             finalAboveAvgSize = 2048;
 
-        sout << "final avg. size for small units = " << finalBelowAvgSize << "; for large units = " << finalAboveAvgSize << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "final avg. size for small units = " << finalBelowAvgSize << "; for large units = " << finalAboveAvgSize;
     }
 
-    sout << "ObbTreeGPUCollisionDetection::bwdInit(" << this->getName() << ")" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection::bwdInit(" << this->getName() << ")";
 
     std::vector<ObbTreeGPULocalMinDistance* > lmdNodes;
     sofa::core::objectmodel::BaseContext::GetObjectsCallBackT<ObbTreeGPULocalMinDistance, std::vector<ObbTreeGPULocalMinDistance* > > cb(&lmdNodes);
 
 	getContext()->getObjects(sofa::core::objectmodel::TClassInfo<ObbTreeGPULocalMinDistance>::get(), cb, sofa::core::objectmodel::TagSet(), sofa::core::objectmodel::BaseContext::SearchRoot);
 
-    sout << "ObbTreeGPUCollisionDetection::bwdInit(): ObbTreeGPULocalMinDistance instances found: " << lmdNodes.size() << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection::bwdInit(): ObbTreeGPULocalMinDistance instances found: " << lmdNodes.size();
     if (lmdNodes.size() > 0)
     {
-        sout << " alarmDistance = " << lmdNodes.at(0)->getAlarmDistance() << ", contactDistance = " << lmdNodes.at(0)->getContactDistance() << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " alarmDistance = " << lmdNodes.at(0)->getAlarmDistance() << ", contactDistance = " << lmdNodes.at(0)->getContactDistance();
         m_alarmDistance = lmdNodes.at(0)->getAlarmDistance();
         m_contactDistance = lmdNodes.at(0)->getContactDistance();
     }
@@ -484,7 +484,7 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
         m_contactDistance = 0.125f;
     }
 
-    sout << " allocate streamed worker units: " << _numStreamedWorkerUnits.getValue() << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " allocate streamed worker units: " << _numStreamedWorkerUnits.getValue();
     _workerStreams.resize(_numStreamedWorkerUnits.getValue());
     _workerEvents.resize(_numStreamedWorkerUnits.getValue());
 
@@ -533,19 +533,19 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
     std::string fakeGripping_Sequence = m_fakeGripping_EventSequence.getValue();
     if (!fakeGripping_Sequence.empty())
     {
-        sout << "Fake-gripping event sequence detected; split events and conditions" << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "Fake-gripping event sequence detected; split events and conditions";
         boost::regex eventSplit(";;;");
         boost::regex eventEntrySplit(";");
         boost::regex coEntrySplit("::");
 
         boost::sregex_token_iterator i(fakeGripping_Sequence.begin(), fakeGripping_Sequence.end(), eventSplit, -1);
         boost::sregex_token_iterator j;
-        sout << " detected events: " << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " detected events: ";
         while (i != j)
         {
             FakeGripping_Event_Container container;
             std::string eventEntryStr = i->str();
-            sout << "   - " << *i++ <<  ": ";
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   - " << *i++ <<  ": ";
             boost::sregex_token_iterator e_i(eventEntryStr.begin(), eventEntryStr.end(), eventEntrySplit, -1);
             boost::sregex_token_iterator e_j;
             unsigned int numTokens = 0;
@@ -554,28 +554,28 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
                 if (numTokens == 0)
                 {
                     container.activeModel = e_i->str();
-                    sout << " active object:" << *e_i << " ";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " active object:" << *e_i << " ";
                 }
                 else if (numTokens == 1)
                 {
                     container.leadingModel = e_i->str();
-                    sout << " leading object:" << *e_i << " ";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " leading object:" << *e_i << " ";
                 }
                 else if (numTokens == 2)
                 {
-                    sout << " colliding objects: " << *e_i << ": ";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " colliding objects: " << *e_i << ": ";
                     std::string coll_obj_str = e_i->str();
                     boost::sregex_token_iterator c_i(coll_obj_str.begin(), coll_obj_str.end(), coEntrySplit, -1);
                     boost::sregex_token_iterator c_j;
                     while (c_i != c_j)
                     {
                         container.contactModels.push_back(c_i->str());
-                        sout << " " << *c_i++;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " " << *c_i++;
                     }
                 }
                 else if (numTokens == 3)
                 {
-                    sout << " colliding objects condition: " << *e_i;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " colliding objects condition: " << *e_i;
                     if (e_i->str().compare("AND") == 0)
                         container.contactCondition = FG_AND;
                     else if (e_i->str().compare("OR") == 0)
@@ -587,12 +587,12 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
 
             this->m_fakeGripping_Events.push_back(container);
 
-            sout << sendl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded");
         }
     }
 
     testOutputFilename.setValue(sofa::helper::system::DataRepository.getFirstPath() + "/" + this->getName() + ".log");
-    sout << "testOutputFilename = " << testOutputFilename.getValue() << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "testOutputFilename = " << testOutputFilename.getValue();
 }
 
 void ObbTreeGPUCollisionDetection_Threaded::addCollisionModels(const sofa::helper::vector<core::CollisionModel *> collisionModels)
@@ -601,25 +601,25 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModels(const sofa::helpe
         this->f_printLog.setValue(true);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONMODELS
-    sout << "ObbTreeGPUCollisionDetection::addCollisionModels(): " << collisionModels.size() << " models." << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection::addCollisionModels(): " << collisionModels.size() << " models.";
 #endif
     for (sofa::helper::vector<core::CollisionModel *>::const_iterator it = collisionModels.begin(); it != collisionModels.end(); it++)
     {
         bool obbModelFound = false;
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONMODELS_VERBOSE
-        sout << " * Add model " << (*it)->getName() << " of type " << (*it)->getTypeName() << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " * Add model " << (*it)->getName() << " of type " << (*it)->getTypeName();
 #endif
         core::CollisionModel* cmc = (*it);
         do
         {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONMODELS_VERBOSE
-            sout << "   examine " << cmc->getName() << ", type " << cmc->getTypeName() << " if it's a ObbTreeGPUCollisionModel" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   examine " << cmc->getName() << ", type " << cmc->getTypeName() << " if it's a ObbTreeGPUCollisionModel";
 #endif
             ObbTreeGPUCollisionModel<Vec3Types>* obbModel = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(cmc);
             if (obbModel)
             {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONMODELS_VERBOSE
-                sout << "    it IS." << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    it IS.";
 #endif
                 addCollisionModel(cmc);
                 obbModelFound = true;
@@ -628,7 +628,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModels(const sofa::helpe
             else
             {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONMODELS_VERBOSE
-                sout << "    it IS NOT." << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    it IS NOT.";
 #endif
             }
             cmc = cmc->getNext();
@@ -637,7 +637,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModels(const sofa::helpe
         if (!obbModelFound)
         {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONMODELS_VERBOSE
-            sout << "No ObbTreeGPUCollisionModel found in hierarchy starting at " << (*it)->getName() << ", falling back to BruteForceDetection" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "No ObbTreeGPUCollisionModel found in hierarchy starting at " << (*it)->getName() << ", falling back to BruteForceDetection";
 #endif
             BruteForceDetection::addCollisionModel((*it));
         }
@@ -647,14 +647,14 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModels(const sofa::helpe
 void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionModel *cm)
 {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-    std::cout << "ObbTreeGPUCollisionDetection::addCollisionModel(" << cm->getName() << "), type = " << cm->getTypeName() << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection::addCollisionModel(" << cm->getName() << "), type = " << cm->getTypeName();
 #endif
 
     if (!cm)
         return;
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-    std::cout << "ObbTreeGPUCollisionDetection::addCollisionModel(" << cm->getName() << "), type = " << cm->getTypeName() << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection::addCollisionModel(" << cm->getName() << "), type = " << cm->getTypeName();
 #endif
 
     ObbTreeGPUCollisionModel<Vec3Types>* obbModel = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(cm);
@@ -662,7 +662,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
     if (obbModel)
     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-        std::cout << "  obbModel = " << obbModel->getName() << " of type " << obbModel->getTypeName() << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  obbModel = " << obbModel->getName() << " of type " << obbModel->getTypeName();
 #endif
         bool doGPUObbTest = true;
         if (cm->isSimulated() && cm->getLast()->canCollideWith(cm->getLast()))
@@ -670,7 +670,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
             // self collision
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-            std::cout << " Test for self-collision ability in broad-phase: " << cm->getLast()->getName() << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " Test for self-collision ability in broad-phase: " << cm->getLast()->getName();
 #endif
             bool swapModels = false;
             core::collision::ElementIntersector* intersector = intersectionMethod->findIntersector(cm, cm, swapModels);
@@ -679,7 +679,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
                 if (intersector->canIntersect(cm->begin(), cm->begin()))
                 {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-                    std::cout << " Self-collision capable: " << cm->getLast()->getName() << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " Self-collision capable: " << cm->getLast()->getName();
 #endif
                     cmPairs.push_back(std::make_pair(cm, cm));
                 }
@@ -693,7 +693,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
             if (!cm->isSimulated() && !cm2->isSimulated())
             {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-                std::cout << " simulated cm = " << cm->getName() << ": " << cm->isSimulated() << ", cm2 =  " << cm2->getName() << ": " << cm2->isSimulated() << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " simulated cm = " << cm->getName() << ": " << cm->isSimulated() << ", cm2 =  " << cm2->getName() << ": " << cm2->isSimulated();
 #endif
                 continue;
             }
@@ -702,7 +702,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
             if (!keepCollisionBetween(cm->getLast(), cm2->getLast()))
             {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-                std::cout << " collisions between cm = " << cm->getLast()->getName() << " and " << cm2->getLast()->getName() << " not kept!" << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " collisions between cm = " << cm->getLast()->getName() << " and " << cm2->getLast()->getName() << " not kept!";
 #endif
                 continue;
             }
@@ -712,7 +712,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
             if (intersector == NULL)
             {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-                std::cout << " no suitable intersector between cm = " << cm->getName() << " and " << cm2->getName() << " found!" << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " no suitable intersector between cm = " << cm->getName() << " and " << cm2->getName() << " found!";
 #endif
                 continue;
             }
@@ -722,19 +722,19 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
             // Here we assume a single root element is present in both models
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-            std::cout << " Intersector used for intersectability query: " << intersector->name() << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " Intersector used for intersectability query: " << intersector->name();
 #endif
             if (intersector->canIntersect(cm1->begin(), cm2->begin()))
             {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-                std::cout << "Broad phase " << cm1->getLast()->getName() << " - " << cm2->getLast()->getName() << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "Broad phase " << cm1->getLast()->getName() << " - " << cm2->getLast()->getName();
 #endif
                 cmPairs.push_back(std::make_pair(cm1, cm2));
             }
             else
             {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-                std::cout << " cm1 = " << cm->getName() << " and cm2 = " << cm2->getName() << " can't intersect!" << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " cm1 = " << cm->getName() << " and cm2 = " << cm2->getName() << " can't intersect!";
 #endif
                 doGPUObbTest = false;
             }
@@ -749,7 +749,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
             if (mit == m_obbModels.end())
             {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-                std::cout << "   registering OBB model " << obbModel->getName() << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   registering OBB model " << obbModel->getName();
 #endif
                 m_obbModels.insert(std::make_pair(obbModel->getName(), obbModel));
             }
@@ -758,7 +758,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
     else
     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_DEBUG_ADDCOLLISIONMODEL
-        std::cout << "Model " << cm->getName() << " is not a ObbTreeGPU model, fallback to BruteForceDetection" << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "Model " << cm->getName() << " is not a ObbTreeGPU model, fallback to BruteForceDetection";
 #endif
         BruteForceDetection::addCollisionModel(cm);
     }
@@ -767,7 +767,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
 void ObbTreeGPUCollisionDetection_Threaded::addCollisionPairs(const sofa::helper::vector<std::pair<core::CollisionModel *, core::CollisionModel *> > &v)
 {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONPAIRS
-    std::cout << "=== ObbTreeGPUCollisionDetection::addCollisionPairs(): " << v.size() << " possible pairs. ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== ObbTreeGPUCollisionDetection::addCollisionPairs(): " << v.size() << " possible pairs. ===";
     int addedPairs = 0;
 #endif
     for (sofa::helper::vector< std::pair<core::CollisionModel*, core::CollisionModel*> >::const_iterator it = v.begin(); it != v.end(); it++)
@@ -775,7 +775,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPairs(const sofa::helper
         addCollisionPair(*it);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONPAIRS
-        std::cout << " Add: " << it->first->getName() << " -- " << it->second->getName() << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " Add: " << it->first->getName() << " -- " << it->second->getName();
         addedPairs++;
 #endif
 
@@ -785,24 +785,24 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPairs(const sofa::helper
 	BruteForceDetection::createDetectionOutputs(this->_narrowPhasePairs_CPU);
 	const sofa::core::collision::NarrowPhaseDetection::DetectionOutputMap& detection_outputs = this->getDetectionOutputs();
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONPAIRS
-	std::cout << "=== Pre-created detection outputs: " << detection_outputs.size() << " ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== Pre-created detection outputs: " << detection_outputs.size() << " ===";
 	for (sofa::core::collision::NarrowPhaseDetection::DetectionOutputMap::const_iterator do_it = detection_outputs.begin(); do_it != detection_outputs.end(); ++do_it)
 	{
-		std::cout << " - " << do_it->first.first->getName() << " -- " << do_it->first.second->getName() << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - " << do_it->first.first->getName() << " -- " << do_it->first.second->getName();
 	}
 #endif
 #endif
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONPAIRS
-    std::cout << "=== ObbTreeGPUCollisionDetection::addCollisionPairs(): " << addedPairs << " pairs added. ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== ObbTreeGPUCollisionDetection::addCollisionPairs(): " << addedPairs << " pairs added. ===";
 #endif
 }
 
 void ObbTreeGPUCollisionDetection_Threaded::addCollisionPair(const std::pair<core::CollisionModel *, core::CollisionModel *> &cmPair)
 {
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-    std::cout << "ObbTreeGPUCollisionDetection::addCollisionPair(" << cmPair.first->getName() << "," << cmPair.second->getName() << ")" << std::endl;
-    std::cout << " model types: " << cmPair.first->getTypeName() << " - " << cmPair.second->getTypeName() << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection::addCollisionPair(" << cmPair.first->getName() << "," << cmPair.second->getName() << ")";
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " model types: " << cmPair.first->getTypeName() << " - " << cmPair.second->getTypeName();
 #endif
 
 	ObbTreeGPUCollisionModel<Vec3Types>* obbModel1 = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(cmPair.first);
@@ -817,7 +817,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPair(const std::pair<cor
 		if (intersector == NULL)
 		{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-			std::cout << " no suitable intersector between cm = " << cmPair.first->getName() << " and " << cmPair.second->getName() << " found!" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " no suitable intersector between cm = " << cmPair.first->getName() << " and " << cmPair.second->getName() << " found!";
 #endif
 			doGPUObbTest = false;
 		}
@@ -827,26 +827,26 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPair(const std::pair<cor
 
 
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-		std::cout << " Intersector used for intersectability query: " << intersector->name() << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " Intersector used for intersectability query: " << intersector->name();
 #endif
 		if (!intersector->canIntersect(cm1->begin(), cm2->begin()))
 		{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-			std::cout << " cm1 = " << cm1->getName() << " and cm2 = " << cm2->getName() << " can't intersect; skip narrow-phase check!" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " cm1 = " << cm1->getName() << " and cm2 = " << cm2->getName() << " can't intersect; skip narrow-phase check!";
 #endif
 			doGPUObbTest = false;
 		}
 		else
 		{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-			std::cout << " cm1 = " << cm1->getName() << " and cm2 = " << cm2->getName() << " CAN intersect: Do narrow-phase check!" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " cm1 = " << cm1->getName() << " and cm2 = " << cm2->getName() << " CAN intersect: Do narrow-phase check!";
 #endif
 		}
 
 		if (doGPUObbTest)
 		{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-			std::cout << " check using GPU-based implementation" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " check using GPU-based implementation";
 #endif
 			std::pair<std::string, std::string> pairCombo1 = std::make_pair(obbModel1->getName(), obbModel2->getName());
 			std::pair<std::string, std::string> pairCombo2 = std::make_pair(obbModel2->getName(), obbModel1->getName());
@@ -869,7 +869,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPair(const std::pair<cor
 			if (!combo1Found)
 			{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-				std::cout << " not tested yet: combo1 = " << pairCombo1.first << " -- " << pairCombo1.second << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " not tested yet: combo1 = " << pairCombo1.first << " -- " << pairCombo1.second;
 #endif
 				m_testedModelPairs.push_back(pairCombo1);
 				combo1Used = true;
@@ -877,7 +877,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPair(const std::pair<cor
 			else
 			{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-				std::cout << " already tested: combo1 = " << pairCombo1.first << " -- " << pairCombo1.second << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " already tested: combo1 = " << pairCombo1.first << " -- " << pairCombo1.second;
 #endif
 				return;
 			}
@@ -885,7 +885,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPair(const std::pair<cor
 			if (!combo2Found)
 			{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-				std::cout << " not tested yet: combo2 = " << pairCombo2.first << " -- " << pairCombo2.second << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " not tested yet: combo2 = " << pairCombo2.first << " -- " << pairCombo2.second;
 #endif
 				combo2Used = true;
 				m_testedModelPairs.push_back(pairCombo2);
@@ -893,7 +893,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPair(const std::pair<cor
 			else
 			{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-				std::cout << " already tested: combo2 = " << pairCombo2.first << " -- " << pairCombo2.second << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " already tested: combo2 = " << pairCombo2.first << " -- " << pairCombo2.second;
 #endif
 				return;
 			}
@@ -926,33 +926,33 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPair(const std::pair<cor
 			obbContainer2._obbCollisionModel = obbModel2;
 
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-			std::cout << " combo1Found = " << combo1Found << ", combo1Used = " << combo1Used << ";" << " combo2Found = " << combo2Found << ", combo2Used = " << combo2Used << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " combo1Found = " << combo1Found << ", combo1Used = " << combo1Used << ";" << " combo2Found = " << combo2Found << ", combo2Used = " << combo2Used;
 #endif
 
 			if (combo1Used && combo2Used)
 			{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-				std::cout << "  push combo1; no combo registered yet = " << obbModel1->getName() << " -- " << obbModel2->getName() << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  push combo1; no combo registered yet = " << obbModel1->getName() << " -- " << obbModel2->getName();
 #endif
 				_narrowPhasePairs.push_back(std::make_pair(obbContainer1, obbContainer2));
 			}
 			else if (combo1Used && !combo2Used)
 			{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-				std::cout << "  push combo1 = " << obbModel1->getName() << " -- " << obbModel2->getName() << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  push combo1 = " << obbModel1->getName() << " -- " << obbModel2->getName();
 #endif
 
 				_narrowPhasePairs.push_back(std::make_pair(obbContainer1, obbContainer2));
 			}
 			else if (combo2Used && !combo1Used)
 			{
-				std::cout << "  push combo2 = " << obbModel2->getName() << " -- " << obbModel1->getName() << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  push combo2 = " << obbModel2->getName() << " -- " << obbModel1->getName();
 				_narrowPhasePairs.push_back(std::make_pair(obbContainer2, obbContainer1));
 			}
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG            
 			else
 			{
-				std::cout << "  WARNING -- combo1/2 used flags not set, skipping: " << obbModel1->getName() << " -- " << obbModel2->getName() << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  WARNING -- combo1/2 used flags not set, skipping: " << obbModel1->getName() << " -- " << obbModel2->getName();
 			}
 #endif
 		}
@@ -960,11 +960,11 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPair(const std::pair<cor
 	else
 	{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-		sout << " BruteForceDetection (CPU-based models)" << cmPair.first->getName() << " (of type " << cmPair.first->getTypeName() << ") -- " << cmPair.second->getName() << " (of type " << cmPair.second->getTypeName() << ")" << sendl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " BruteForceDetection (CPU-based models)" << cmPair.first->getName() << " (of type " << cmPair.first->getTypeName() << ") -- " << cmPair.second->getName() << " (of type " << cmPair.second->getTypeName() << ")";
 #endif
 		_narrowPhasePairs_CPU.push_back(std::make_pair(cmPair.first, cmPair.second));
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-		sout << "  now registered in CPU pair vector: " << _narrowPhasePairs_CPU.size() << " pairs." << sendl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  now registered in CPU pair vector: " << _narrowPhasePairs_CPU.size() << " pairs.";
 #endif
 	}
 }
@@ -972,7 +972,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPair(const std::pair<cor
 void ObbTreeGPUCollisionDetection_Threaded::beginBroadPhase()
 {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_BEGINBROADPHASE_DEBUG
-    std::cout << "=== ObbTreeGPUCollisionDetection_Threaded::beginBroadPhase() ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== ObbTreeGPUCollisionDetection_Threaded::beginBroadPhase() ===";
 #endif
 
     BruteForceDetection::beginBroadPhase();
@@ -981,7 +981,7 @@ void ObbTreeGPUCollisionDetection_Threaded::beginBroadPhase()
 void ObbTreeGPUCollisionDetection_Threaded::endBroadPhase()
 {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDBROADPHASE_DEBUG
-    std::cout << "=== ObbTreeGPUCollisionDetection_Threaded::endBroadPhase() ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== ObbTreeGPUCollisionDetection_Threaded::endBroadPhase() ===";
 #endif
 
     BruteForceDetection::endBroadPhase();
@@ -990,7 +990,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endBroadPhase()
 void ObbTreeGPUCollisionDetection_Threaded::beginNarrowPhase()
 {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_BEGINNARROWPHASE_DEBUG
-    std::cout << "=== ObbTreeGPUCollisionDetection_Threaded::beginNarrowPhase() ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== ObbTreeGPUCollisionDetection_Threaded::beginNarrowPhase() ===";
 #endif
 
     BruteForceDetection::beginNarrowPhase();
@@ -1007,7 +1007,7 @@ void ObbTreeGPUCollisionDetection_Threaded::beginNarrowPhase()
         if (!cm->isSimulated() || !cm->isMoving())
         {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_BEGINNARROWPHASE_DEBUG
-            std::cout << " EXCEPTION HANDLING FOR STATIC COLLISION MODEL " << cm->getName() << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " EXCEPTION HANDLING FOR STATIC COLLISION MODEL " << cm->getName();
 #endif
             {
                 MechanicalObject<Vec3Types>* mob = dynamic_cast<MechanicalObject<Vec3Types>*>(cm->getMechanicalState());
@@ -1017,15 +1017,15 @@ void ObbTreeGPUCollisionDetection_Threaded::beginNarrowPhase()
                     Quaternion modelRotation(mob->getPosition()[0][3], mob->getPosition()[0][4], mob->getPosition()[0][5], mob->getPosition()[0][6]);
                     modelRotation.toMatrix(modelOrientation);
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_BEGINNARROWPHASE_DEBUG
-                    std::cout << " position = " << modelPosition << std::endl;
-                    std::cout << " orientation = " << modelOrientation << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " position = " << modelPosition;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " orientation = " << modelOrientation;
 #endif
                 }
                 else
                 {
                     skipPositionUpdate = true;
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_BEGINNARROWPHASE_DEBUG
-                    std::cout << "WARNING: SKIP position update for model " << cm->getName() << " (no position query possible from its MechanicalState); please check its definition in the SOFA scene for correctness!" << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "WARNING: SKIP position update for model " << cm->getName() << " (no position query possible from its MechanicalState); please check its definition in the SOFA scene for correctness!";
 #endif
                 }
             }
@@ -1050,17 +1050,17 @@ void ObbTreeGPUCollisionDetection_Threaded::beginNarrowPhase()
             TOGPU_ASYNC(_gpuTransforms[_gpuTransformIndices[cm->getName()]]->modelOrientation, &h_modelOrientation, sizeof(Matrix3x3_d), _transformStream);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_BEGINNARROWPHASE_DEBUG_VERBOSE
-            std::cout << " * model " << cm->getName() << " position    = " << h_modelPosition.x << "," << h_modelPosition.y << "," << h_modelPosition.z << std::endl;
-            std::cout << "                                 orientation = [" << h_modelOrientation.m_row[0].x << "," << h_modelOrientation.m_row[0].y << "," << h_modelOrientation.m_row[0].z << "],[" << h_modelOrientation.m_row[1].x << "," << h_modelOrientation.m_row[1].y << "," << h_modelOrientation.m_row[1].z << "],[" << h_modelOrientation.m_row[2].x << "," << h_modelOrientation.m_row[2].y << "," << h_modelOrientation.m_row[2].z << "]"<< std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " * model " << cm->getName() << " position    = " << h_modelPosition.x << "," << h_modelPosition.y << "," << h_modelPosition.z;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "                                 orientation = [" << h_modelOrientation.m_row[0].x << "," << h_modelOrientation.m_row[0].y << "," << h_modelOrientation.m_row[0].z << "],[" << h_modelOrientation.m_row[1].x << "," << h_modelOrientation.m_row[1].y << "," << h_modelOrientation.m_row[1].z << "],[" << h_modelOrientation.m_row[2].x << "," << h_modelOrientation.m_row[2].y << "," << h_modelOrientation.m_row[2].z << "]"<< std::endl;
 
             float3 h_modelPosition_Reread;
             Matrix3x3_d h_modelOrientation_Reread;
 
             FROMGPU(&h_modelPosition_Reread, _gpuTransforms[_gpuTransformIndices[cm->getName()]]->modelTranslation, sizeof(float3));
-            std::cout << "   position re-read_2: " << h_modelPosition_Reread.x << "," << h_modelPosition_Reread.y << "," << h_modelPosition_Reread.z << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   position re-read_2: " << h_modelPosition_Reread.x << "," << h_modelPosition_Reread.y << "," << h_modelPosition_Reread.z;
 
             FROMGPU(&h_modelOrientation_Reread, _gpuTransforms[_gpuTransformIndices[cm->getName()]]->modelOrientation, sizeof(Matrix3x3_d));
-            std::cout << "   orientation re-read_2: [" << h_modelOrientation_Reread.m_row[0].x << "," << h_modelOrientation_Reread.m_row[0].y << "," << h_modelOrientation_Reread.m_row[0].z << "],[" << h_modelOrientation_Reread.m_row[1].x << "," << h_modelOrientation_Reread.m_row[1].y << "," << h_modelOrientation_Reread.m_row[1].z << "],[" << h_modelOrientation_Reread.m_row[2].x << "," << h_modelOrientation_Reread.m_row[2].y << "," << h_modelOrientation_Reread.m_row[2].z << "]"<< std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   orientation re-read_2: [" << h_modelOrientation_Reread.m_row[0].x << "," << h_modelOrientation_Reread.m_row[0].y << "," << h_modelOrientation_Reread.m_row[0].z << "],[" << h_modelOrientation_Reread.m_row[1].x << "," << h_modelOrientation_Reread.m_row[1].y << "," << h_modelOrientation_Reread.m_row[1].z << "],[" << h_modelOrientation_Reread.m_row[2].x << "," << h_modelOrientation_Reread.m_row[2].y << "," << h_modelOrientation_Reread.m_row[2].z << "]"<< std::endl;
 #endif
 
 
@@ -1083,10 +1083,10 @@ void ObbTreeGPUCollisionDetection_Threaded::beginNarrowPhase()
 void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << "=== ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase() ===" << std::endl;
-    sout << "Run BVH traversal tasks: Using " << m_numWorkerThreads.getValue() << " threads." << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase() ===";
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "Run BVH traversal tasks: Using " << m_numWorkerThreads.getValue() << " threads.";
 
-    std::cout << "=== ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase(" << this->getTime() << ") ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase(" << this->getTime() << ") ===";
 #endif
 
 	m_scheduler_traversal->clearTasks();
@@ -1103,9 +1103,9 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #endif
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG    
-	sout << " assigned worker units = " << assignedWorkUnits << ", total pair checks = " << _narrowPhasePairs.size() << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " assigned worker units = " << assignedWorkUnits << ", total pair checks = " << _narrowPhasePairs.size();
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_THREADED_CPU_COLLISION_CHECKS
-	sout << " assigned CPU traversals = " << assignedCPUChecks << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " assigned CPU traversals = " << assignedCPUChecks;
 #endif
 #endif
 
@@ -1129,7 +1129,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 		{
 			BVHTraversalTask* task_k = m_traversalTasks[k];
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-			sout << " addTask(" << k << "): " << task_k->getNumTraversals() << " traversals assigned." << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " addTask(" << k << "): " << task_k->getNumTraversals() << " traversals assigned.";
 #endif
 			m_scheduler_traversal->addTask(m_traversalTasks[k]);
 		}
@@ -1154,23 +1154,23 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
     sofa::helper::AdvancedTimer::stepEnd("ObbTreeGPUCollisionDetection_Threaded_BVH_Traversal");
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << "=== GPU Traversal phase done ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== GPU Traversal phase done ===";
     for (unsigned int k = 0; k < m_traversalTasks.size(); k++)
     {
         BVHTraversalTask* task_k = m_traversalTasks[k];
-        sout << " - task " << k << ": CUDA runtime = " << task_k->getElapsedTime() << " ms, thread runtime = " << task_k->getElapsedTimeInThread() << "; traversals done = " << task_k->getTraversalCalls() << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - task " << k << ": CUDA runtime = " << task_k->getElapsedTime() << " ms, thread runtime = " << task_k->getElapsedTimeInThread() << "; traversals done = " << task_k->getTraversalCalls();
         const std::vector<int>& taskResults = task_k->getResults();
-        sout << "   results: ";
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   results: ";
         for (std::vector<int>::const_iterator it = taskResults.begin(); it != taskResults.end(); it++)
         {
-            sout << (int)*it << ";";
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << (int)*it << ";";
         }
-        sout << sendl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded");
     }
 #endif
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << "PAUSING traversal pool worker threads..." << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "PAUSING traversal pool worker threads...";
 #endif
 
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_THREADED_CPU_COLLISION_CHECKS
@@ -1186,7 +1186,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 	}
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << "=== Tasks processed by threads ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== Tasks processed by threads ===";
 #endif
 
     m_scheduler_traversal->getScheduler()->dumpProcessedTasks();
@@ -1204,7 +1204,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #endif
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << "=== Adding triangle check tasks ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== Adding triangle check tasks ===";
 #endif
 
 	/*for (unsigned int k = 0; k < m_traversalTasks.size(); k++)
@@ -1237,7 +1237,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
             if (taskResults[l] > 0)
             {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                sout << " - add check with " << taskResults[l] << " potentially overlapping triangles" << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - add check with " << taskResults[l] << " potentially overlapping triangles";
 #endif
 
                 NarrowPhaseGPUTask* triangle_task = m_triangleTasks[triTraversalIdx % m_triangleTasks.size()];
@@ -1248,13 +1248,13 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                 const std::string taskModelName2 = task_k->getModelName2(l);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                sout << "   taskWorkerUnit = " << taskWorkerUnit << ", taskContainer1 = " << taskContainer1 << ", taskContainer2 = " << taskContainer2 << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   taskWorkerUnit = " << taskWorkerUnit << ", taskContainer1 = " << taskContainer1 << ", taskContainer2 = " << taskContainer2;
 #endif
 
                 if (taskWorkerUnit && taskContainer1 && taskContainer2 && !taskModelName1.empty() && !taskModelName2.empty())
                 {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                    sout << "   adding task, all required arguments OK" << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   adding task, all required arguments OK";
 #endif
                     triangle_task->addTriangleCheck(taskWorkerUnit, taskContainer1, taskContainer2, task_k->getModel1(l), task_k->getModel2(l));
                     triangle_task->setBVHTraversalResult(addedTriChecksPerTask[triTraversalIdx % m_triangleTasks.size()], taskResults[l]);
@@ -1266,10 +1266,10 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
     }
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << " added triangle checks per task: " << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " added triangle checks per task: ";
     for (std::map<unsigned int, unsigned int>::const_iterator it = addedTriChecksPerTask.begin(); it != addedTriChecksPerTask.end(); it++)
     {
-        sout << " - task " << it->first << ": " << it->second << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - task " << it->first << ": " << it->second;
     }
 #endif
 
@@ -1278,7 +1278,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
         NarrowPhaseGPUTask* task_k = m_triangleTasks[k];
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-        sout << " addTask(" << k << "): Triangle traversal" << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " addTask(" << k << "): Triangle traversal";
 #endif
 
         m_scheduler_triangles->addTask(task_k);
@@ -1292,14 +1292,14 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
     m_scheduler_triangles->runTasks();
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << "=== running triangle check tasks ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== running triangle check tasks ===";
 #endif
 
     m_scheduler_triangles->getScheduler()->pauseThreads();
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << "=== triangle check tasks complete ===" << std::endl;
-    sout << "=== Tasks processed by threads ===" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== triangle check tasks complete ===";
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== Tasks processed by threads ===";
     m_scheduler_triangles->getScheduler()->dumpProcessedTasks();
 #endif
 
@@ -1313,9 +1313,9 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
     sofa::helper::AdvancedTimer::stepBegin("ObbTreeGPUCollisionDetection_Threaded_Contact_Processing");
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << "========================" << std::endl;
-    sout << " triangle task results (" << m_triangleTasks.size() << " tasks): " << std::endl;
-    sout << "========================" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "========================";
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " triangle task results (" << m_triangleTasks.size() << " tasks): ";
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "========================";
 #endif
 
     for (unsigned int k = 0; k < m_triangleTasks.size(); k++)
@@ -1333,17 +1333,17 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
         std::map<unsigned int, std::vector<std::pair<int, int> > >& contactElementsFeatures = task_k->getContactElementsFeatures();
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-        sout << "  - task " << k << ", id = " << task_k->getTaskID() << ": " << contactIDs.size() << " contacts vectors" << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  - task " << k << ", id = " << task_k->getTaskID() << ": " << contactIDs.size() << " contacts vectors";
 #endif
 
         if (contactIDs.size() > 0)
         {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-            sout << "     registered pair checks: " << m_pairChecks.size() << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     registered pair checks: " << m_pairChecks.size();
             for (std::map<unsigned int, std::pair<ObbTreeGPUCollisionModel<Vec3Types>*, ObbTreeGPUCollisionModel<Vec3Types>*> >::const_iterator it = m_pairChecks.begin(); it != m_pairChecks.end(); it++)
-                sout << "       - " << it->first << ": " << it->second.first->getName() << " -- " << it->second.second->getName() << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "       - " << it->first << ": " << it->second.first->getName() << " -- " << it->second.second->getName();
 
-            sout << "    contact ID vectors:" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    contact ID vectors:";
 #endif
             for (std::map<unsigned int, std::vector<int> >::iterator contacts_it = contactIDs.begin(); contacts_it != contactIDs.end(); contacts_it++)
             {
@@ -1352,30 +1352,30 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                 {
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                    sout << "     result index " << contacts_it->first << ": " << contactIDVec.size() << " contacts"; 					
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     result index " << contacts_it->first << ": " << contactIDVec.size() << " contacts";
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG_VERBOSE                    
-					sout << " -- ";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " -- ";
 					for (std::vector<int>::const_iterator id_it = contactIDVec.begin(); id_it != contactIDVec.end(); id_it++)
-						sout << (*id_it) << ";";
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << (*id_it) << ";";
 
-                    sout << sendl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded");
 #else
-					sout << sendl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded");
 #endif
-                    sout << "      for model pair " << task_k->getModelName1(contacts_it->first) << " -- " << task_k->getModelName2(contacts_it->first) << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "      for model pair " << task_k->getModelName1(contacts_it->first) << " -- " << task_k->getModelName2(contacts_it->first);
 #endif
                     bool allContactDataVectorsFound = true;
 
                     if (contactDistances.find(contacts_it->first) != contactDistances.end())
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     found matching contactDistances vector: " << contactDistances[contacts_it->first].size() << " entries" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     found matching contactDistances vector: " << contactDistances[contacts_it->first].size() << " entries";
 #endif
                     }
                     else
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     no contactDistances vector found for test index " << contacts_it->first << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     no contactDistances vector found for test index " << contacts_it->first;
 #endif
                         allContactDataVectorsFound = false;
                     }
@@ -1383,13 +1383,13 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                     if (contactPoints_0.find(contacts_it->first) != contactPoints_0.end())
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     found matching contactPoints_0 vector: " << contactPoints_0[contacts_it->first].size() << " entries" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     found matching contactPoints_0 vector: " << contactPoints_0[contacts_it->first].size() << " entries";
 #endif
                     }
                     else
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     no contactPoints_0 vector found for test index " << contacts_it->first << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     no contactPoints_0 vector found for test index " << contacts_it->first;
 #endif
                         allContactDataVectorsFound = false;
                     }
@@ -1397,13 +1397,13 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                     if (contactPoints_1.find(contacts_it->first) != contactPoints_1.end())
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     found matching contactPoints_1 vector: " << contactPoints_1[contacts_it->first].size() << " entries" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     found matching contactPoints_1 vector: " << contactPoints_1[contacts_it->first].size() << " entries";
 #endif
                     }
                     else
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     no contactPoints_1 vector found for test index " << contacts_it->first << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     no contactPoints_1 vector found for test index " << contacts_it->first;
 #endif
                         allContactDataVectorsFound = false;
                     }
@@ -1411,13 +1411,13 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                     if (contactNormals.find(contacts_it->first) != contactNormals.end())
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     found matching contactNormals vector: " << contactNormals[contacts_it->first].size() << " entries" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     found matching contactNormals vector: " << contactNormals[contacts_it->first].size() << " entries";
 #endif
                     }
                     else
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     no contactNormals vector found for test index " << contacts_it->first << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     no contactNormals vector found for test index " << contacts_it->first;
 #endif
                         allContactDataVectorsFound = false;
                     }
@@ -1425,13 +1425,13 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                     if (contactTypes.find(contacts_it->first) != contactTypes.end())
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     found matching contactTypes vector: " << contactTypes[contacts_it->first].size() << " entries" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     found matching contactTypes vector: " << contactTypes[contacts_it->first].size() << " entries";
 #endif
                     }
                     else
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     no contactTypes vector found for test index " << contacts_it->first << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     no contactTypes vector found for test index " << contacts_it->first;
 #endif
                         allContactDataVectorsFound = false;
                     }
@@ -1439,13 +1439,13 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                     if (contactElements.find(contacts_it->first) != contactElements.end())
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     found matching contactElements vector: " << contactElements[contacts_it->first].size() << " entries" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     found matching contactElements vector: " << contactElements[contacts_it->first].size() << " entries";
 #endif
                     }
                     else
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     no contactElements vector found for test index " << contacts_it->first << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     no contactElements vector found for test index " << contacts_it->first;
 #endif
                         allContactDataVectorsFound = false;
                     }
@@ -1453,13 +1453,13 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                     if (contactElementsFeatures.find(contacts_it->first) != contactElementsFeatures.end())
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     found matching contactElementsFeatures vector: " << contactElementsFeatures[contacts_it->first].size() << " entries" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     found matching contactElementsFeatures vector: " << contactElementsFeatures[contacts_it->first].size() << " entries";
 #endif
                     }
                     else
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     no contactElementsFeatures vector found for test index " << contacts_it->first << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     no contactElementsFeatures vector found for test index " << contacts_it->first;
 #endif
                         allContactDataVectorsFound = false;
                     }
@@ -1467,7 +1467,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                     if (allContactDataVectorsFound)
                     {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                        sout << "     all required data vectors present; proceed to contact point generation" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     all required data vectors present; proceed to contact point generation";
 #endif
                         ObbTreeGPUCollisionModel<Vec3Types>* obbModel1 = task_k->getModel1(contacts_it->first);
                         ObbTreeGPUCollisionModel<Vec3Types>* obbModel2 = task_k->getModel2(contacts_it->first);
@@ -1475,7 +1475,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                         if (obbModel1 && obbModel2)
                         {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                            sout << "     found matching pair check in checks map: " << obbModel1->getName() << " -- " << obbModel2->getName() << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     found matching pair check in checks map: " << obbModel1->getName() << " -- " << obbModel2->getName();
 #endif
                             std::pair<core::CollisionModel*,core::CollisionModel*> ghostPair(obbModel1,obbModel2);
 
@@ -1484,7 +1484,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                             {
                                 minDistance = std::min(minDistance, std::fabs(contactDistances[contacts_it->first][q]));
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG_VERBOSE
-                                sout << contactDistances[contacts_it->first][q] << " " << std::endl;
+                                msg_info("ObbTreeGPUCollisionDetection_Threaded") << contactDistances[contacts_it->first][q] << " ";
 #endif
                             }
                             double ghostTolerance = std::max(obbModel1->getGhostObjectTolerance(),obbModel2->getGhostObjectTolerance());
@@ -1514,12 +1514,12 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                             if (outputs && discreteOutputs)
                             {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG_VERBOSE
-                                sout << "     got DetectionOutputVector instance(s)" << std::endl;
+                                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     got DetectionOutputVector instance(s)";
 #endif
                                 for (unsigned int q = 0; q < contactIDVec.size(); q++)
                                 {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG_VERBOSE
-                                    sout << "      - add contact point " << q << ": id = " << contactIDVec[q] << ", type = " << contactTypes[contacts_it->first][q] << ", distance = " << contactDistances[contacts_it->first][q] << ";" <<
+                                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "      - add contact point " << q << ": id = " << contactIDVec[q] << ", type = " << contactTypes[contacts_it->first][q] << ", distance = " << contactDistances[contacts_it->first][q] << ";" <<
                                             "point0 = " << contactPoints_0[contacts_it->first][q] << ", point1 = " << contactPoints_1[contacts_it->first][q] << ", normal = " << contactNormals[contacts_it->first][q] << ";" <<
                                             " elements = " << contactElements[contacts_it->first][q].first << " - " << contactElements[contacts_it->first][q].second << ";" <<
                                             " features = " << contactElementsFeatures[contacts_it->first][q].first << " - " << contactElementsFeatures[contacts_it->first][q].second << ";" <<
@@ -1540,9 +1540,6 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                                     detection->value = detection->normal.norm();
                                     detection->normal /= detection->value;
 
-                                    //detection->value -= m_contactDistance; //!? (BE) this looks like nonsence -> commented out
-									// FA: Then it does not matter if this was copy/pasted from a default SOFA implementation, does it?
-
                                     detection->contactType = (sofa::core::collision::DetectionOutputContactType) contactTypes[contacts_it->first][q];
 
                                     if (detection->contactType == COLLISION_LINE_LINE)
@@ -1554,7 +1551,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                                         detection->elemFeatures.first = contactElementsFeatures[contacts_it->first][q].first;
                                         detection->elemFeatures.second = contactElementsFeatures[contacts_it->first][q].second;
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG_VERBOSE
-                                        sout << "        LINE_LINE contact: elements = " << detection->elem.first.getIndex() << "," << detection->elem.second.getIndex() << ", features = " << detection->elemFeatures.first << "," << detection->elemFeatures.second << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "        LINE_LINE contact: elements = " << detection->elem.first.getIndex() << "," << detection->elem.second.getIndex() << ", features = " << detection->elemFeatures.first << "," << detection->elemFeatures.second;
 #endif
                                     }
                                     else if (detection->contactType == COLLISION_VERTEX_FACE)
@@ -1573,10 +1570,10 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                                         }
 
                                         if (detection->elem.first.getIndex() < 0 || detection->elem.second.getIndex() < 0) {
-                                            std::cerr << "ERROR: Should not happen" << std::endl;
+                                            std::cerr << "ERROR: Should not happen";
                                         }
                                     } else {
-                                        std::cerr << "ERROR: contact: " << detection->contactType << std::endl;
+                                        std::cerr << "ERROR: contact: " << detection->contactType;
 										// FA: SERIOUSLY???
                                         // exit(0);
 										continue;
@@ -1587,7 +1584,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
                         else
                         {
-                            sout << "     NO matching pair check located in checks map: This should not happen!" << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     NO matching pair check located in checks map: This should not happen!";
                         }
 #endif
                     }
@@ -1595,7 +1592,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
                 else
                 {
-                    sout << "     result index " << contacts_it->first << ": No contacts detected" << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     result index " << contacts_it->first << ": No contacts detected";
                 }
 #endif
             }
@@ -1605,37 +1602,37 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
     sofa::helper::AdvancedTimer::stepEnd("ObbTreeGPUCollisionDetection_Threaded_Contact_Processing");
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << "==== Iteration summary ====" << sendl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "==== Iteration summary ====";
 
-    sout << " -- recorded pair check combinations --" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " -- recorded pair check combinations --";
     for (std::map<unsigned int, std::pair<ObbTreeGPUCollisionModel<Vec3Types>*, ObbTreeGPUCollisionModel<Vec3Types>*> >::const_iterator it = m_pairChecks.begin(); it != m_pairChecks.end(); it++)
     {
-        sout << " - " << it->first << ": " << it->second.first->getName() << " -- " << it->second.second->getName() << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - " << it->first << ": " << it->second.first->getName() << " -- " << it->second.second->getName();
     }
 
-    sout << " -- timing statistics for BVH tests --" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " -- timing statistics for BVH tests --";
     for (unsigned int k = 0; k < m_traversalTasks.size(); k++)
     {
         BVHTraversalTask* task_k = m_traversalTasks[k];
         const std::vector<float>& elapsedPerTest = task_k->getElapsedTimePerTest();
 
-        sout << " - task " << k << " (" << task_k->getTaskID() << "): total = " << (task_k->getElapsedTime() / 1000000.0f) << " ms; traversals = ";
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - task " << k << " (" << task_k->getTaskID() << "): total = " << (task_k->getElapsedTime() / 1000000.0f) << " ms; traversals = ";
         for (unsigned int m = 0; m < elapsedPerTest.size(); m++)
-			sout << elapsedPerTest[m] / 1000000.0f << " ms;";
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << elapsedPerTest[m] / 1000000.0f << " ms;";
 
-        sout << sendl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded");
 
-        sout << "   CPU step duration: ";
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   CPU step duration: ";
         const std::vector<std::pair<std::string, int64_t> >& elapsedCPUSteps = task_k->getElapsedTimeCPUStep();
         float cpuDuration_ms = 0.0f;
         for (std::vector<std::pair<std::string, int64_t> >::const_iterator it = elapsedCPUSteps.begin(); it != elapsedCPUSteps.end(); it++)
         {
             float stepDuration = it->second / 1000000.0f;
             cpuDuration_ms += stepDuration;
-            sout << it->first << ": " << stepDuration << " ms;";
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << it->first << ": " << stepDuration << " ms;";
         }
-        sout << sendl;
-        sout << "   Total CPU duration = " << cpuDuration_ms << " ms"<< sendl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded");
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   Total CPU duration = " << cpuDuration_ms << " ms"<< sendl;
     }
 #endif
 
@@ -1651,7 +1648,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 		{
 			if (intersections.at(i) > 0)
 			{
-				sout << sendl << "#collision between " << task_k->getModelName1(i) << " and " << task_k->getModelName2(i) << " : " << intersections.at(i) << sendl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "#collision between " << task_k->getModelName1(i) << " and " << task_k->getModelName2(i) << " : " << intersections.at(i);
 				sofa::component::visualmodel::OglModel::setOglObjectState(task_k->getModelName1(i), 1);
 				sofa::component::visualmodel::OglModel::setOglObjectState(task_k->getModelName2(i), 1);
 
@@ -1696,85 +1693,85 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #endif
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << " -- timing statistics for triangle tests --" << sendl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " -- timing statistics for triangle tests --";
     for (unsigned int k = 0; k < m_triangleTasks.size(); k++)
     {
         NarrowPhaseGPUTask* task_k = m_triangleTasks[k];
         const std::vector<float>& elapsedPerTest = task_k->getElapsedTimePerTest();
 
-		sout << " - task " << k << " (" << task_k->getTaskID() << "): total = " << task_k->getElapsedTime() / 1000000.0f << " ms" << sendl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - task " << k << " (" << task_k->getTaskID() << "): total = " << task_k->getElapsedTime() / 1000000.0f << " ms";
 		if (elapsedPerTest.size() > 0)
 		{
-			sout << "   bin checks = ";
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   bin checks = ";
 			for (unsigned int m = 0; m < elapsedPerTest.size(); m++)
-				sout << elapsedPerTest[m] / 1000000.0f << " ms;";
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << elapsedPerTest[m] / 1000000.0f << " ms;";
 		}
 
-        sout << sendl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded");
     }
 #endif
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-    sout << " -- tasks processed by traversal scheduler --" << sendl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " -- tasks processed by traversal scheduler --";
     m_scheduler_traversal->dumpProcessedTasks();
 
-    sout << " -- tasks processed by triangles scheduler --" << sendl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " -- tasks processed by triangles scheduler --";
     m_scheduler_triangles->dumpProcessedTasks();
 
-	sout << " -- tasks processed by CPU scheduler --" << sendl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " -- tasks processed by CPU scheduler --";
 	m_scheduler_cpu_traversal->dumpProcessedTasks();
 
-	sout << " ---- CPU scheduler task details ----" << sendl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " ---- CPU scheduler task details ----";
 	for (unsigned int k = 0; k < m_cpuTraversalTasks.size(); k++)
 	{
 		CPUCollisionCheckTask* task_k = m_cpuTraversalTasks[k];
 		const std::vector<float>& elapsedPerTest = task_k->getElapsedTimePerTest();
 
-		sout << " - task " << k << " (" << task_k->getTaskID() << "): total = " << task_k->getElapsedTime() / 1000000.0f << " ms" << sendl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - task " << k << " (" << task_k->getTaskID() << "): total = " << task_k->getElapsedTime() / 1000000.0f << " ms";
 		
 		if (elapsedPerTest.size() > 0)
 		{
-			sout << "   bin checks: " << sendl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   bin checks: ";
 
 			for (unsigned int m = 0; m < elapsedPerTest.size(); m++)
 			{
 				std::vector<std::pair<std::string, std::string> >& assignedPairs = _narrowPhasePairs_CPU_taskAssignment[k];
-				sout << "   * pair " << m << ": " << assignedPairs[m].first << " -- " << assignedPairs[m].second << " runtime = " << elapsedPerTest[m] / 1000000.0f << " ms" << sendl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   * pair " << m << ": " << assignedPairs[m].first << " -- " << assignedPairs[m].second << " runtime = " << elapsedPerTest[m] / 1000000.0f << " ms";
 			}
 		}
-		sout << sendl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded");
 	}
 
-	sout << " ---- Detection output vectors ----" << sendl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " ---- Detection output vectors ----";
 	for (unsigned int k = 0; k < m_cpuTraversalTasks.size(); k++)
 	{
 		CPUCollisionCheckTask* task_k = m_cpuTraversalTasks[k];
 		std::vector<core::collision::DetectionOutputVector*>& detection_outputs = task_k->getDetectionOutputs();
 		std::vector<std::pair<sofa::core::CollisionModel*, sofa::core::CollisionModel*> >& colliding_pairs = task_k->getCollidingPairs();
 
-		sout << " - task " << k << " (" << task_k->getTaskID() << ") detection outputs size =  " << detection_outputs.size() << " for colliding pairs size = " << colliding_pairs.size() << sendl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - task " << k << " (" << task_k->getTaskID() << ") detection outputs size =  " << detection_outputs.size() << " for colliding pairs size = " << colliding_pairs.size();
 		for (size_t l = 0; l < detection_outputs.size(); ++l)
 		{
 			if (detection_outputs[l] != NULL)
 			{
-				sout << "  - DetectionOutputVector " << l << " for pair " << colliding_pairs[l].first->getName() << " -- " << colliding_pairs[l].second->getName() << " empty: " << detection_outputs[l]->empty() << ", num.of elements = " << detection_outputs[l]->size() << sendl;
-				sout << "    -> Corresponds to: " << this->_narrowPhasePairs_CPU_modelAssociations[colliding_pairs[l]].first << " <-> " << this->_narrowPhasePairs_CPU_modelAssociations[colliding_pairs[l]].second << sendl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  - DetectionOutputVector " << l << " for pair " << colliding_pairs[l].first->getName() << " -- " << colliding_pairs[l].second->getName() << " empty: " << detection_outputs[l]->empty() << ", num.of elements = " << detection_outputs[l]->size();
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    -> Corresponds to: " << this->_narrowPhasePairs_CPU_modelAssociations[colliding_pairs[l]].first << " <-> " << this->_narrowPhasePairs_CPU_modelAssociations[colliding_pairs[l]].second;
 				std::pair<sofa::core::CollisionModel*, sofa::core::CollisionModel*> collision_pair = std::make_pair(colliding_pairs[l].first, colliding_pairs[l].second);
 				m_detectionOutputVectors->insert(std::make_pair(collision_pair, detection_outputs[l]));
 			}
 			/*else
 			{
-				sout << "  - DetectionOutputVector " << l << " for pair " << colliding_pairs[l].first->getName() << " -- " << colliding_pairs[l].second->getName() << " NOT INSTANTIATED!" << sendl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  - DetectionOutputVector " << l << " for pair " << colliding_pairs[l].first->getName() << " -- " << colliding_pairs[l].second->getName() << " NOT INSTANTIATED!";
 			}*/
 		}
 	}
 
-    sout << "==== Iteration summary ====" << sendl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "==== Iteration summary ====";
 #endif
 
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-	std::cout << " -- Fake-gripping --" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " -- Fake-gripping --";
 #endif
 
 	if (m_fakeGripping_Events.size() > 0)
@@ -1787,15 +1784,15 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 
 		// FAKE GRIPPING
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-		std::cout << "=========================================================================================" << std::endl;
-		std::cout << "FAKE GRIPPING RULE CHECKS BEGIN" << std::endl;
-		std::cout << "=========================================================================================" << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=========================================================================================";
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "FAKE GRIPPING RULE CHECKS BEGIN";
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=========================================================================================";
 #endif
 
 		for (std::vector<FakeGripping_Event_Container>::iterator fg_it = m_fakeGripping_Events.begin(); fg_it != m_fakeGripping_Events.end(); fg_it++)
 		{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-			std::cout << " check rule " << rulesChecked << ": " << fg_it->activeModel << ", m_active_FakeGripping_Event = " << m_active_FakeGripping_Event << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " check rule " << rulesChecked << ": " << fg_it->activeModel << ", m_active_FakeGripping_Event = " << m_active_FakeGripping_Event;
 #endif
 
 			bool orCondition_fulfilled = false;
@@ -1810,20 +1807,20 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 				ObbTreeGPUCollisionModel<Vec3Types>* model2 = it->second.second;
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-				std::cout << "  * check pair " << model1->getName() << " -- " << model2->getName() << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  * check pair " << model1->getName() << " -- " << model2->getName();
 #endif
 
 				if (!hasIntersections(model1->getName(), model2->getName()))
 					continue;
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-				std::cout << "  intersection between model1 = " << model1->getName() << " and model2 = " << model2->getName() << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  intersection between model1 = " << model1->getName() << " and model2 = " << model2->getName();
 #endif
 
 				if (fg_it->activeModel.compare(model1->getName()) == 0)
 				{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-					std::cout << "    - model1 = " << model1->getName() << " in collision; fake-gripping event check" << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    - model1 = " << model1->getName() << " in collision; fake-gripping event check";
 #endif
 
 					for (unsigned int k = 0; k < fg_it->contactModels.size(); k++)
@@ -1831,7 +1828,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 						if (model2->getName().compare(fg_it->contactModels[k]) == 0)
 						{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "       in collision with contactModel = " << model2->getName() << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "       in collision with contactModel = " << model2->getName();
 #endif
 
 							orCondition_fulfilled = true;
@@ -1844,14 +1841,14 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 				else if (fg_it->activeModel.compare(model2->getName()) == 0)
 				{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-					std::cout << "    - model2 = " << model1->getName() << " in collision; fake-gripping event check" << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    - model2 = " << model1->getName() << " in collision; fake-gripping event check";
 #endif
 					for (unsigned int k = 0; k < fg_it->contactModels.size(); k++)
 					{
 						if (model1->getName().compare(fg_it->contactModels[k]) == 0)
 						{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "       in collision with contactModel = " << model1->getName() << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "       in collision with contactModel = " << model1->getName();
 #endif
 							orCondition_fulfilled = true;
 							andCondition_fulfilled[k] = true;
@@ -1865,7 +1862,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 			if (fg_it->contactCondition == FG_OR)
 			{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-				std::cout << "  ==> rule " << rulesChecked << ": orCondition fulfilled = " << orCondition_fulfilled << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  ==> rule " << rulesChecked << ": orCondition fulfilled = " << orCondition_fulfilled;
 #endif
 				if (orCondition_fulfilled)
 				{
@@ -1885,7 +1882,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 				}
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-				std::cout << " ==> rule " << rulesChecked << ": andCondition_fulfilled = " << andFulfilled << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " ==> rule " << rulesChecked << ": andCondition_fulfilled = " << andFulfilled;
 #endif
 
 				if (andFulfilled)
@@ -1897,7 +1894,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
 			else
 			{
-				std::cout << " ==> rule " << rulesChecked << ": NO CONDITION fulfilled" << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " ==> rule " << rulesChecked << ": NO CONDITION fulfilled";
 			}
 #endif
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
@@ -1909,26 +1906,26 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 					{
 						if (m_active_FakeGripping_Event > m_previous_FakeGripping_Event && ruleTransitionDone)
 						{
-							std::cout << "  ==> Fake-Gripping RULE Transition from " << m_previous_FakeGripping_Event << " to " << m_active_FakeGripping_Event << "; THIS REMOVES AN EXISTING RigidMapping and CREATES a RigidMapping" << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  ==> Fake-Gripping RULE Transition from " << m_previous_FakeGripping_Event << " to " << m_active_FakeGripping_Event << "; THIS REMOVES AN EXISTING RigidMapping and CREATES a RigidMapping";
 						}
 						else
 						{
-							std::cout << "  ==> Remaining in fake-gripping rule = " << m_active_FakeGripping_Event << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  ==> Remaining in fake-gripping rule = " << m_active_FakeGripping_Event;
 						}
 					}
 					else
 					{
-						std::cout << " ==> FIRST Fake-Gripping rule activated: " << m_active_FakeGripping_Event << "; THIS CREATES a RigidMapping" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " ==> FIRST Fake-Gripping rule activated: " << m_active_FakeGripping_Event << "; THIS CREATES a RigidMapping";
 					}
 				}
 				else
 				{
-					std::cout << "  ==> Fake gripping not active" << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  ==> Fake gripping not active";
 				}
 			}
 			else
 			{
-				std::cout << "  ==> Fake-gripping rule " << rulesChecked << " NOT fulfilled" << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  ==> Fake-gripping rule " << rulesChecked << " NOT fulfilled";
 			}
 #endif
 
@@ -1936,16 +1933,16 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 		}
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-		std::cout << "highest/last rule is no. = " << ((rulesChecked - 1) > 0 ? (rulesChecked - 1) : -1) << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "highest/last rule is no. = " << ((rulesChecked - 1) > 0 ? (rulesChecked - 1) : -1);
 #endif
 
 		bool lastRuleFound = false;
 		if (matchingFakeGrippingRules.size() > 0)
 		{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-			std::cout << "==============================================" << std::endl;
-			std::cout << " Matching fake-gripping rules: " << matchingFakeGrippingRules.size() << ", highest in rule sequence = " << matchingFakeGrippingRules.at(matchingFakeGrippingRules.size() - 1) << std::endl;
-			std::cout << "==============================================" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "==============================================";
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " Matching fake-gripping rules: " << matchingFakeGrippingRules.size() << ", highest in rule sequence = " << matchingFakeGrippingRules.at(matchingFakeGrippingRules.size() - 1);
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "==============================================";
 #endif
 
 			for (unsigned int k = 0; k < matchingFakeGrippingRules.size(); k++)
@@ -1954,21 +1951,21 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 					lastRuleFound = true;
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-				std::cout << "  - " << matchingFakeGrippingRules[k] << "; already activated before = " << m_fakeGripping_Activated_Rules[matchingFakeGrippingRules[k]] << ": " << m_fakeGripping_Events[matchingFakeGrippingRules[k]].activeModel << " against ";
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  - " << matchingFakeGrippingRules[k] << "; already activated before = " << m_fakeGripping_Activated_Rules[matchingFakeGrippingRules[k]] << ": " << m_fakeGripping_Events[matchingFakeGrippingRules[k]].activeModel << " against ";
 				for (unsigned int l = 0; l < m_fakeGripping_Events[matchingFakeGrippingRules[k]].contactModels.size(); l++)
-					std::cout << m_fakeGripping_Events[matchingFakeGrippingRules[k]].contactModels[l] << ";";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << m_fakeGripping_Events[matchingFakeGrippingRules[k]].contactModels[l] << ";";
 
-				std::cout << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded");
 #endif
 			}
 		}
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-		std::cout << "highest/last rule active/to activate = " << lastRuleFound << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "highest/last rule active/to activate = " << lastRuleFound;
 
-		std::cout << "======================================================================================" << std::endl;
-		std::cout << "BEFORE RULE UPDATE: ACTIVE fake gripping rule = " << m_active_FakeGripping_Event << ", PREVIOUS fake gripping rule = " << m_previous_FakeGripping_Event << std::endl;
-		std::cout << "======================================================================================" << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "======================================================================================";
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "BEFORE RULE UPDATE: ACTIVE fake gripping rule = " << m_active_FakeGripping_Event << ", PREVIOUS fake gripping rule = " << m_previous_FakeGripping_Event;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "======================================================================================";
 #endif
 
 		if (matchingFakeGrippingRules.size() > 0)
@@ -1977,7 +1974,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 			if (!m_fakeGripping_Activated_Rules[matchingFakeGrippingRules.at(matchingFakeGrippingRules.size() - 1)])
 			{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-				std::cout << " FIRST ACTIVATION of new rule " << matchingFakeGrippingRules.at(matchingFakeGrippingRules.size() - 1) << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " FIRST ACTIVATION of new rule " << matchingFakeGrippingRules.at(matchingFakeGrippingRules.size() - 1);
 #endif
 
 				m_fakeGripping_Activated_Rules[matchingFakeGrippingRules.at(matchingFakeGrippingRules.size() - 1)] = true;
@@ -1990,12 +1987,12 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
 			else
 			{
-				std::cout << " REMAINING in active rule " << m_active_FakeGripping_Event << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " REMAINING in active rule " << m_active_FakeGripping_Event;
 			}
 
-			std::cout << "======================================================================================" << std::endl;
-			std::cout << "AFTER  RULE UPDATE: ACTIVE fake gripping rule = " << m_active_FakeGripping_Event << ", PREVIOUS fake gripping rule = " << m_previous_FakeGripping_Event << ", fakeGrippingRuleChanged = " << fakeGrippingRuleChanged << std::endl;
-			std::cout << "======================================================================================" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "======================================================================================";
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "AFTER  RULE UPDATE: ACTIVE fake gripping rule = " << m_active_FakeGripping_Event << ", PREVIOUS fake gripping rule = " << m_previous_FakeGripping_Event << ", fakeGrippingRuleChanged = " << fakeGrippingRuleChanged;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "======================================================================================";
 #endif
 
 			if (fakeGrippingRuleChanged && (m_previous_FakeGripping_Event != m_active_FakeGripping_Event))
@@ -2004,7 +2001,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 				sofa::simulation::Node* node2 = NULL;
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-				std::cout << " SWITCHING ACTIVE RULES: TO m_active_FakeGripping_Event = " << m_active_FakeGripping_Event << ", AWAY FROM m_previous_FakeGripping_Event = " << m_previous_FakeGripping_Event << std::endl;
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " SWITCHING ACTIVE RULES: TO m_active_FakeGripping_Event = " << m_active_FakeGripping_Event << ", AWAY FROM m_previous_FakeGripping_Event = " << m_previous_FakeGripping_Event;
 #endif
 
 				// AND condition
@@ -2014,12 +2011,12 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 					andConditionModels = matchingFakeGrippingAndModels.equal_range(m_active_FakeGripping_Event);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG                
-					std::cout << " found m_active_FakeGripping_Event in and-condition map; models = ";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " found m_active_FakeGripping_Event in and-condition map; models = ";
 					for (std::multimap<int, std::pair<ObbTreeGPUCollisionModel<Vec3Types>*, ObbTreeGPUCollisionModel<Vec3Types>*> >::iterator ac_it = andConditionModels.first; ac_it != andConditionModels.second; ac_it++)
 					{
-						std::cout << ac_it->second.first->getName() << " -- " << ac_it->second.second->getName() << ";";
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << ac_it->second.first->getName() << " -- " << ac_it->second.second->getName() << ";";
 					}
-					std::cout << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded");
 #endif
 
 					std::multimap<int, std::pair<ObbTreeGPUCollisionModel<Vec3Types>*, ObbTreeGPUCollisionModel<Vec3Types>*> >::iterator first_and_it = matchingFakeGrippingAndModels.find(m_active_FakeGripping_Event);
@@ -2030,7 +2027,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 					ObbTreeGPUCollisionModel<Vec3Types>* followingObject = first_and_it->second.second;
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-					std::cout << " ==> Collision models associated with rule: leadingObject = " << leadingObject->getName() << ", followingObject = " << followingObject->getName() << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " ==> Collision models associated with rule: leadingObject = " << leadingObject->getName() << ", followingObject = " << followingObject->getName();
 #endif
 
 					m_fakeGripping_CollisionCheck_Exceptions.insert(std::make_pair(leadingObject->getName(), followingObject->getName()));
@@ -2058,30 +2055,30 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 					parent2->getObjects(sofa::core::objectmodel::TClassInfo<sofa::component::container::MechanicalObject<Vec3Types> >::get(), inner_mobj_cb_2, sofa::core::objectmodel::TagSet(), sofa::core::objectmodel::BaseContext::SearchDown);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-					std::cout << "  MechanicalObject<Rigid3Types> instances:" << std::endl;
-					std::cout << "    parent1 child[0] = " << mobj_1[0]->getName() << " of type " << mobj_1[0]->getClassName() << std::endl;
-					std::cout << "    parent2 child[0] = " << mobj_2[0]->getName() << " of type " << mobj_2[0]->getClassName() << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  MechanicalObject<Rigid3Types> instances:";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    parent1 child[0] = " << mobj_1[0]->getName() << " of type " << mobj_1[0]->getClassName();
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    parent2 child[0] = " << mobj_2[0]->getName() << " of type " << mobj_2[0]->getClassName();
 
-					std::cout << " MechanicalObject<Vec3Types> instances:" << std::endl;
-					std::cout << "    parent1 " << parent1->getName() << " size() = " << inner_mobj_1.size() << ": ";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " MechanicalObject<Vec3Types> instances:";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    parent1 " << parent1->getName() << " size() = " << inner_mobj_1.size() << ": ";
 					for (unsigned int q = 0; q < inner_mobj_1.size(); q++)
-						std::cout << " " << inner_mobj_1[q]->getName() << ";";
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " " << inner_mobj_1[q]->getName() << ";";
 
-					std::cout << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded");
 
-					std::cout << "    parent2 " << parent2->getName() << " size() = " << inner_mobj_2.size() << ": ";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    parent2 " << parent2->getName() << " size() = " << inner_mobj_2.size() << ": ";
 					for (unsigned int q = 0; q < inner_mobj_2.size(); q++)
-						std::cout << " " << inner_mobj_2[q]->getName() << ";";
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " " << inner_mobj_2[q]->getName() << ";";
 
-					std::cout << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded");
 
-					std::cout << "==========================================================" << std::endl;
-					std::cout << " UniformMass<Rigid3Types, Rigid3dMass> instances:" << m_uniformMass_1.size() << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "==========================================================";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " UniformMass<Rigid3Types, Rigid3dMass> instances:" << m_uniformMass_1.size();
 					for (unsigned int q = 0; q < m_uniformMass_1.size(); q++)
-						std::cout << " " << m_uniformMass_1[q]->getName() << ";";
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " " << m_uniformMass_1[q]->getName() << ";";
 
-					std::cout << std::endl;
-					std::cout << "==========================================================" << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded");
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "==========================================================";
 #endif
 					// Detach Fake Gripping
 					if (m_activeFakeGrippingRules_Testing_Slaves.find(m_previous_FakeGripping_Event) != m_activeFakeGrippingRules_Testing_Slaves.end())
@@ -2134,11 +2131,11 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 							sofa::component::mapping::RigidMapping<Rigid3Types, Vec3Types>::SPtr prevRigidMapping = fuck_it->second.second; //m_activeFakeGrippingRules_Testing_Slaves[m_previous_FakeGripping_Event].second;
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "  Remove RigidMapping for previously active rule " << m_previous_FakeGripping_Event << " before switching to new RigidMapping" << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  Remove RigidMapping for previously active rule " << m_previous_FakeGripping_Event << " before switching to new RigidMapping";
 							sofa::simulation::Node* prevRigidMappingParent = fuck_it->second.first.first; //m_activeFakeGrippingRules_Testing_Slaves[m_previous_FakeGripping_Event].first.first;
 
-							std::cout << "   remove prevRigidMapping = " << prevRigidMapping->getName() << std::endl;
-							std::cout << "   remove from node = " << prevRigidMappingParent->getName() << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   remove prevRigidMapping = " << prevRigidMapping->getName();
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   remove from node = " << prevRigidMappingParent->getName();
 #endif
 
 							//prevRigidMapping->removeObject(prevRigidMapping->getName());
@@ -2165,7 +2162,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 									sofa::component::mapping::RigidMapping<Rigid3Types, Vec3Types>* prevInnerMapping = im_it->second.second; //m_activeFakeGrippingRules_InnerMappings[m_previous_FakeGripping_Event].second;
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG                                
-									std::cout << "  restore outer - inner mapping between " << im_it->second.first.first->getName() << " and " << im_it->second.first.second->getName() << ": " << prevInnerMapping->getName() << std::endl;
+                                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  restore outer - inner mapping between " << im_it->second.first.first->getName() << " and " << im_it->second.first.second->getName() << ": " << prevInnerMapping->getName();
 #endif
 									prevInnerMapping->setModels(im_it->second.first.first, im_it->second.first.second);
 
@@ -2175,21 +2172,21 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 									//if (m_fakeGripping_AttachedObjects.find(m_previous_FakeGripping_Event) != m_fakeGripping_AttachedObjects.end())
 									if (ato_it != attached_objects_ret.second)
 									{
-										//std::cout << "  remove AttachFromObject and AttachInnerMapping from CollisionModel" << m_fakeGripping_AttachedObjects[m_previous_FakeGripping_Event]->getName() << std::endl;
+                                        //msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  remove AttachFromObject and AttachInnerMapping from CollisionModel" << m_fakeGripping_AttachedObjects[m_previous_FakeGripping_Event]->getName();
 										//m_fakeGripping_AttachedObjects[m_previous_FakeGripping_Event]->setAttachFromObject(NULL);
 										//m_fakeGripping_AttachedObjects[m_previous_FakeGripping_Event]->setAttachFromInnerMapping(NULL);
 
 										if (ato_it->second.first != NULL && ato_it->second.second != NULL)
 										{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-											std::cout << "  remove AttachFromObject and AttachInnerMapping from CollisionModel " << ato_it->second.second->getName() << std::endl;
+                                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  remove AttachFromObject and AttachInnerMapping from CollisionModel " << ato_it->second.second->getName();
 #endif
 
 											ato_it->second.second->setAttachFromObject(NULL);
 											ato_it->second.second->setAttachFromInnerMapping(NULL);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-											std::cout << "  remove from m_fakeGripping_CollisionCheck_Exceptions: " << ato_it->second.first->getName() << ", " << ato_it->second.second->getName() << std::endl;
+                                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  remove from m_fakeGripping_CollisionCheck_Exceptions: " << ato_it->second.first->getName() << ", " << ato_it->second.second->getName();
 #endif
 											m_fakeGripping_CollisionCheck_Exceptions.erase(ato_it->second.first->getName());
 											m_fakeGripping_CollisionCheck_Exceptions.erase(ato_it->second.second->getName());
@@ -2197,7 +2194,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
 										else
 										{
-											std::cout << "  ERROR: Can't remove AttachFromObject and AttachInnerMapping from CollisionModel; Pointer = NULL, should never happen!" << std::endl;
+                                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  ERROR: Can't remove AttachFromObject and AttachInnerMapping from CollisionModel; Pointer = NULL, should never happen!";
 										}
 #endif
 
@@ -2209,7 +2206,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 										if (atn_it->second != NULL)
 										{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-											std::cout << "  remove attached node " << atn_it->second->getName() << " from " << prevRigidMappingParent->getName() << std::endl;
+                                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  remove attached node " << atn_it->second->getName() << " from " << prevRigidMappingParent->getName();
 #endif
 											atn_it->second->detachFromGraph();
 											prevRigidMappingParent->removeChild(atn_it->second);
@@ -2223,7 +2220,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 						}
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-						std::cout << "  remove rule " << m_previous_FakeGripping_Event << " from active gripping rules map" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  remove rule " << m_previous_FakeGripping_Event << " from active gripping rules map";
 #endif
 						m_activeFakeGrippingRules_InnerMappings.erase(m_previous_FakeGripping_Event);
 						m_activeFakeGrippingRules_Testing_Slaves.erase(m_previous_FakeGripping_Event);
@@ -2232,7 +2229,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 						m_fakeGripping_AttachedNodes.erase(m_previous_FakeGripping_Event);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-						std::cout << "  removed rule " << m_previous_FakeGripping_Event << " from active gripping rules map" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  removed rule " << m_previous_FakeGripping_Event << " from active gripping rules map";
 #endif
 
 						m_fakeGripping_StoredUniformMasses.erase(m_previous_FakeGripping_Event);
@@ -2244,8 +2241,8 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 						std::pair<sofa::simulation::Node*, sofa::simulation::Node*> nodePair = std::make_pair(parent1, parent2);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG					
-						std::cout << "  Redirect RigidMapping for currently active fake-gripping rule " << m_active_FakeGripping_Event << " to " << mobj_2[0]->getName() << " -- " << inner_mobj_1[0]->getName() << std::endl;
-						std::cout << "  inner_mobj_1.size() = " << inner_mobj_1.size() << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  Redirect RigidMapping for currently active fake-gripping rule " << m_active_FakeGripping_Event << " to " << mobj_2[0]->getName() << " -- " << inner_mobj_1[0]->getName();
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  inner_mobj_1.size() = " << inner_mobj_1.size();
 #endif
 
 						std::map<std::string, sofa::component::mapping::RigidMapping<Rigid3Types, Vec3Types>::SPtr> createdRigidMappings;
@@ -2254,7 +2251,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 
 							std::string mappingName = inner_mobj_1[p]->getName();
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG                        
-							std::cout << "  * " << mappingName << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  * " << mappingName;
 #endif
 
 							// Do not duplicate the wrong mappings
@@ -2267,7 +2264,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 							rigidMapping->setModels(mobj_2[0], inner_mobj_1[p]);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "    new rigidMapping fromModel = " << rigidMapping->getFromModel()->getName() << ", toModel = " << rigidMapping->getToModel()->getName() << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    new rigidMapping fromModel = " << rigidMapping->getFromModel()->getName() << ", toModel = " << rigidMapping->getToModel()->getName();
 #endif
 
 							std::stringstream rgNameStream;
@@ -2289,35 +2286,33 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 							Vector3 initialOffset = position_offset - obj_pos_1;
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "    obj_pos_1 = " << obj_pos_1 << ", obj_pos_2 = " << obj_pos_2 << std::endl;
-							std::cout << "    position_offset = " << position_offset << std::endl;
-							std::cout << "    initialOffset = " << initialOffset << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    obj_pos_1 = " << obj_pos_1 << ", obj_pos_2 = " << obj_pos_2;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    position_offset = " << position_offset;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    initialOffset = " << initialOffset;
 
-							std::cout << "    apply translation/rotation to inner mapping " << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    apply translation/rotation to inner mapping ";
 #endif
 
 							inner_mobj_1[p]->applyTranslation(-obj_pos_2.x(), -obj_pos_2.y(), -obj_pos_2.z());
 							inner_mobj_1[p]->applyRotation(rotation_2.inverse());
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "    apply translation/rotation to inner mapping done" << std::endl;
-							std::cout << "    init and add rigidMapping" << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    apply translation/rotation to inner mapping done";
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    init and add rigidMapping";
 #endif
-
-							rigidMapping->init();
-							rigidMapping->appliedTranslation.setValue(rotation_2.inverseRotate(position_offset));
+                            rigidMapping->appliedTranslation.setValue(rotation_2.inverseRotate(position_offset));
 							rigidMapping->appliedRotation.setValue(rotation_2.inverse()*rotation_1);
 
 							/// END FIXED BY BE
 
-							std::cout << "  apply translation/rotation to inner mapping done" << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  apply translation/rotation to inner mapping done";
 
 							// OLD
 							rigidMapping->lastObjPos.setValue(obj_pos_2);
 							rigidMapping->lastObjRot.setValue(rotation_2);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "  init and add rigidMapping" << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  init and add rigidMapping";
 #endif                        
 							rigidMapping->init();
 
@@ -2326,25 +2321,25 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 							createdRigidMappings.insert(std::make_pair(originOfRigidMapping, rigidMapping));
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "    add rigidMapping to rigidMappingNode" << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    add rigidMapping to rigidMappingNode";
 #endif
 							rigidMappingNode->addObject(rigidMapping);
 							parent1->addChild(rigidMappingNode);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG						
-							std::cout << "    attach rigidMappingNode = " << rigidMappingNode->getName() << " to parent1 = " << parent1->getName() << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    attach rigidMappingNode = " << rigidMappingNode->getName() << " to parent1 = " << parent1->getName();
 #endif
 
 							m_fakeGripping_AttachedNodes.insert(std::make_pair(m_active_FakeGripping_Event, rigidMappingNode));
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "    init and add rigidMapping done" << std::endl;
-							std::cout << "    set zero velocity for object " << mobj_1[0]->getName() << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    init and add rigidMapping done";
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    set zero velocity for object " << mobj_1[0]->getName();
 #endif
 
 							if (m_uniformMass_1.size() > 0)
 							{
-								std::cout << "    reset UniformMass to nearZero" << std::endl;
+                                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    reset UniformMass to nearZero";
 								m_uniformMass_1[0]->old_storedMass.setValue(m_uniformMass_1[0]->d_mass.getValue());
 								m_uniformMass_1[0]->d_mass.setValue(0.000001);
 
@@ -2364,13 +2359,13 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 							mobj_1[0]->vOp(core::ExecParams::defaultInstance(), core::VecId::freeVelocity(), core::VecId::velocity());
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "    insert new rigidMapping's in active rules map" << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    insert new rigidMapping's in active rules map";
 #endif
 
 							m_activeFakeGrippingRules_Testing_Slaves.insert(std::make_pair(m_active_FakeGripping_Event, std::make_pair(nodePair, rigidMapping)));
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << "    createdRigidMappings.size() = " << createdRigidMappings.size() << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    createdRigidMappings.size() = " << createdRigidMappings.size();
 #endif
 
 						} // for (unsigned int p = 0; p < inner_mobj_1.size(); p++)
@@ -2381,15 +2376,15 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 						parent1->getObjects(sofa::core::objectmodel::TClassInfo<sofa::component::mapping::RigidMapping<Rigid3Types, Vec3Types> >::get(), inner_mapping_1_cb, sofa::core::objectmodel::TagSet(), sofa::core::objectmodel::BaseContext::SearchDown);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-						std::cout << " Inner Mappings type RigidMapping<Rigid3Types, Vec3Types> instances:" << std::endl;
-						std::cout << "  parent1 " << parent1->getName() << " size() = " << inner_mapping_1.size() << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " Inner Mappings type RigidMapping<Rigid3Types, Vec3Types> instances:";
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  parent1 " << parent1->getName() << " size() = " << inner_mapping_1.size();
 						for (unsigned int q = 0; q < inner_mapping_1.size(); q++)
-							std::cout << "    * " << inner_mapping_1[q]->getName() << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    * " << inner_mapping_1[q]->getName();
 
-						std::cout << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded");
 
-						std::cout << "  ==> search for inner mapping to store; inner_mapping_1.size() = " << inner_mapping_1.size() << std::endl;
-						std::cout << "  ==> createdRigidMappings.size() = " << createdRigidMappings.size() << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  ==> search for inner mapping to store; inner_mapping_1.size() = " << inner_mapping_1.size();
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  ==> createdRigidMappings.size() = " << createdRigidMappings.size();
 #endif
 
 						for (size_t q = 0; q < inner_mapping_1.size(); ++q)
@@ -2398,13 +2393,13 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 							{
 								sofa::component::mapping::RigidMapping<Rigid3Types, Vec3Types>::SPtr rigidMapping = inner_mapping_1[q];
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-								std::cout << "  - possible candidate for inner mapping for later restoring " << q << ": " << inner_mapping_1[q]->getName() << std::endl;
+                                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  - possible candidate for inner mapping for later restoring " << q << ": " << inner_mapping_1[q]->getName();
 #endif
 
 								if (boost::algorithm::ends_with(inner_mapping_1[q]->getName(), "_Gripping"))
 								{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-									std::cout << "      WARNING: THIS IS NOT the right inner mapping; is this a leftover from the last active rule?: " << inner_mapping_1[q]->getName() << std::endl;
+                                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "      WARNING: THIS IS NOT the right inner mapping; is this a leftover from the last active rule?: " << inner_mapping_1[q]->getName();
 #endif
 									continue;
 								}
@@ -2412,13 +2407,13 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 								{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
 									if (inner_mapping_1[q]->getFromModel() != NULL && inner_mapping_1[q]->getToModel() != NULL)
-										std::cout << "     store for later restoration: " << inner_mapping_1[q]->getName() << ", fromModel = " << inner_mapping_1[q]->getFromModel()->getName() << ", toModel = " << inner_mapping_1[q]->getToModel()->getName() << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     store for later restoration: " << inner_mapping_1[q]->getName() << ", fromModel = " << inner_mapping_1[q]->getFromModel()->getName() << ", toModel = " << inner_mapping_1[q]->getToModel()->getName();
 #endif
 
 									if (inner_mapping_1[q]->getContext() != NULL)
 									{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-										std::cout << "     search for toModel-associated collision model under node = " << inner_mapping_1[q]->getContext()->getName() << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     search for toModel-associated collision model under node = " << inner_mapping_1[q]->getContext()->getName();
 #endif
 										sofa::simulation::Node* parentNode = (sofa::simulation::Node*)(inner_mapping_1[q]->getContext());
 
@@ -2427,19 +2422,19 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 										parentNode->getObjects(sofa::core::objectmodel::TClassInfo<ObbTreeGPUCollisionModel<Vec3Types> >::get(), col_objs_cb, sofa::core::objectmodel::TagSet(), sofa::core::objectmodel::BaseContext::SearchDown);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-										std::cout << "      found ObbTreeGPUCollisionModels: " << col_objs.size() << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "      found ObbTreeGPUCollisionModels: " << col_objs.size();
 #endif
 
 										sofa::component::mapping::RigidMapping<Rigid3Types, Vec3Types>::SPtr originalRigidMapping = createdRigidMappings[inner_mapping_1[q]->getName()];
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG									
-										std::cout << "      originalRigidMapping = " << originalRigidMapping->getName() << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "      originalRigidMapping = " << originalRigidMapping->getName();
 #endif
 
 										if (originalRigidMapping.get() == NULL)
 										{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-											serr << "originalRigidMapping == NULL for " << inner_mapping_1[q]->getName() << std::endl;
+                                            serr << "originalRigidMapping == NULL for " << inner_mapping_1[q]->getName();
 #endif
 											/// TODO: Assertion überprüfen. Bernd???
 											//assert(originalRigidMapping.get() != NULL);
@@ -2451,7 +2446,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 											for (unsigned int t = 0; t < col_objs.size(); t++)
 											{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-												std::cout << "      * " << col_objs[t]->getName() << std::endl;
+                                                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "      * " << col_objs[t]->getName();
 #endif
 
 												col_objs[t]->setAttachFromObject((sofa::component::container::MechanicalObject<Rigid3Types>*)(originalRigidMapping->getFromModel()));
@@ -2461,7 +2456,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 
 												m_fakeGripping_AttachedObjects.insert(std::make_pair(m_active_FakeGripping_Event, std::make_pair(leadingObject, col_objs[t])));
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-												std::cout << "        now stored in m_fakeGripping_AttachedObjects: " << m_fakeGripping_AttachedObjects.size() << " collision objects." << std::endl;
+                                                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "        now stored in m_fakeGripping_AttachedObjects: " << m_fakeGripping_AttachedObjects.size() << " collision objects.";
 #endif
 											}
 										}
@@ -2469,7 +2464,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
 									else
 									{
-										std::cout << "    search for toModel-associated collision model under node: NULL context pointer!!!" << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    search for toModel-associated collision model under node: NULL context pointer!!!";
 									}
 #endif
 								}
@@ -2477,25 +2472,25 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
 							else
 							{
-								std::cout << "      WARNING: THERE IS A NULL POINTER in inner_mapping_1 that doesn't belong there!!!, q = " << q << std::endl;
+                                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "      WARNING: THERE IS A NULL POINTER in inner_mapping_1 that doesn't belong there!!!, q = " << q;
 							}
 #endif
 						}
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-						std::cout << "CollisionObjects with AttachedFromObject/InnerMapping" << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "CollisionObjects with AttachedFromObject/InnerMapping";
 
-						std::cout << "  check which inner mapping we need to disable: We got " << inner_mapping_1.size() << " candidates." << std::endl;
+                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  check which inner mapping we need to disable: We got " << inner_mapping_1.size() << " candidates.";
 #endif
 						for (unsigned int q = 0; q < inner_mapping_1.size(); q++)
 						{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-							std::cout << " " << inner_mapping_1[q]->getName() << std::endl;
+                            msg_info("ObbTreeGPUCollisionDetection_Threaded") << " " << inner_mapping_1[q]->getName();
 #endif
 							if (boost::algorithm::ends_with(inner_mapping_1[q]->getName(), "_Gripping"))
 							{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-								std::cout << "  this is a fake-gripping created mapping; skip it: " << inner_mapping_1[q]->getName() << std::endl;
+                                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  this is a fake-gripping created mapping; skip it: " << inner_mapping_1[q]->getName();
 #endif
 								continue;
 							}
@@ -2504,7 +2499,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 								if ((inner_mapping_1[q]->getFromModel() != NULL) && (inner_mapping_1[q]->getToModel() != NULL))
 								{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-									std::cout << "  disable inner mapping " << inner_mapping_1[q]->getName() << "; points from " << inner_mapping_1[q]->getFromModel()->getName() << " to " << inner_mapping_1[q]->getToModel()->getName() << std::endl;
+                                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  disable inner mapping " << inner_mapping_1[q]->getName() << "; points from " << inner_mapping_1[q]->getFromModel()->getName() << " to " << inner_mapping_1[q]->getToModel()->getName();
 #endif
 
 									std::pair<sofa::core::State<Rigid3Types>*, sofa::core::State<Vec3Types>*> mechObjPair = std::make_pair(inner_mapping_1[q]->getFromModel(), inner_mapping_1[q]->getToModel());
@@ -2517,25 +2512,25 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 
 									static_cast<sofa::simulation::Node*>((inner_mapping_1[q]->getContext()))->getObjects(sofa::core::objectmodel::TClassInfo< sofa::component::collision::ObbTreeGPUCollisionModel< Vec3Types > >::get(), collision_model_1_cb, sofa::core::objectmodel::TagSet(), sofa::core::objectmodel::BaseContext::SearchDown);
 
-									//sout << "  collision_model_1.size() = " << collision_model_1.size() << std::endl;
+                                    //msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  collision_model_1.size() = " << collision_model_1.size();
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
 									if (collision_model_1.size() > 1)
 									{
-										std::cout << "  WARNING! More than one collision model found when looking for ghost model. First model is checked for ghost." << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  WARNING! More than one collision model found when looking for ghost model. First model is checked for ghost.";
 									}
 #endif
 									if (collision_model_1.size() == 0)
 									{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-										std::cout << "  WARNING! No collision model found when looking for ghost model. No mapping is disabled." << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  WARNING! No collision model found when looking for ghost model. No mapping is disabled.";
 #endif
 									}
 									else
 									{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-										std::cout << "  inner mapping for " << collision_model_1.at(0)->getName() << " is to be disabled" << std::endl;
-										std::cout << "  disable mapping " << inner_mapping_1[q]->getName() << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  inner mapping for " << collision_model_1.at(0)->getName() << " is to be disabled";
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  disable mapping " << inner_mapping_1[q]->getName();
 #endif
 										inner_mapping_1[q]->setModels(NULL, NULL);
 									}
@@ -2545,11 +2540,11 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 								{
 									if (inner_mapping_1[q]->getFromModel() == NULL)
 									{
-										std::cout << "    inner_mapping_1[" << q << "]->getFromModel() == NULL; mapping = " << inner_mapping_1[q]->getName() << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    inner_mapping_1[" << q << "]->getFromModel() == NULL; mapping = " << inner_mapping_1[q]->getName();
 									}
 									if (inner_mapping_1[q]->getToModel() == NULL)
 									{
-										std::cout << "    inner_mapping_1[" << q << "]->getToModel() == NULL; mapping = " << inner_mapping_1[q]->getName() << std::endl;
+                                        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    inner_mapping_1[" << q << "]->getToModel() == NULL; mapping = " << inner_mapping_1[q]->getName();
 									}
 								}
 #endif
@@ -2562,7 +2557,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 				else if (matchingFakeGrippingOrModels.find(m_active_FakeGripping_Event) != matchingFakeGrippingOrModels.end())  // OR condition (Not Implemented)
 				{
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-					std::cout << " found m_active_FakeGripping_Event in or-condition map: models = " << matchingFakeGrippingOrModels[m_active_FakeGripping_Event].first->getName() << " -- " << matchingFakeGrippingOrModels[m_active_FakeGripping_Event].second->getName() << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << " found m_active_FakeGripping_Event in or-condition map: models = " << matchingFakeGrippingOrModels[m_active_FakeGripping_Event].first->getName() << " -- " << matchingFakeGrippingOrModels[m_active_FakeGripping_Event].second->getName();
 #endif
 				}
 				else  // EXIT rule
@@ -2573,7 +2568,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 		}
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-		std::cout << "=== END OF FAKE-GRIPPING HANDLING ===" << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== END OF FAKE-GRIPPING HANDLING ===";
 #endif	
 	}
 
@@ -2649,7 +2644,7 @@ int ObbTreeGPUCollisionDetection_Threaded::scheduleBVHTraversals(std::vector< st
                                                                  std::vector<BVHTraversalTask*>& bvhTraversals)
 {
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-    sout << "ObbTreeGPUCollisionDetection_Threaded::scheduleBVHTraversals(): " << narrowPhasePairs.size() << " pair checks, " << numSlots << " slots" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection_Threaded::scheduleBVHTraversals(): " << narrowPhasePairs.size() << " pair checks, " << numSlots << " slots";
 #endif
     int workUnitsAssigned = 0;
 
@@ -2664,7 +2659,7 @@ int ObbTreeGPUCollisionDetection_Threaded::scheduleBVHTraversals(std::vector< st
         unsigned int traversalIndex = workUnitsAssigned % bvhTraversals.size();
 
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG        
-		sout << " - Obb model pair " << k << ": " << obbModel1->getName() << " - " << obbModel2->getName() << " bvhTraversal = " << traversalIndex << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - Obb model pair " << k << ": " << obbModel1->getName() << " - " << obbModel2->getName() << " bvhTraversal = " << traversalIndex;
 #endif
 
         bool addObbPair = true;
@@ -2677,7 +2672,7 @@ int ObbTreeGPUCollisionDetection_Threaded::scheduleBVHTraversals(std::vector< st
                 {
                     addObbPair = false;
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-                    sout << "   obbModel2 = " << obbModel2->getName() << " detected on fake gripping exception list, with obbModel1 = " << obbModel1->getName() << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   obbModel2 = " << obbModel2->getName() << " detected on fake gripping exception list, with obbModel1 = " << obbModel1->getName();
 #endif
                     break;
                 }
@@ -2693,7 +2688,7 @@ int ObbTreeGPUCollisionDetection_Threaded::scheduleBVHTraversals(std::vector< st
                 {
                     addObbPair = false;
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-                    sout << "   obbModel1 = " << obbModel1->getName() << " detected on fake gripping exception list, with obbModel2 = " << obbModel2->getName() << std::endl;
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   obbModel1 = " << obbModel1->getName() << " detected on fake gripping exception list, with obbModel2 = " << obbModel2->getName();
 #endif
                     break;
                 }
@@ -2701,7 +2696,7 @@ int ObbTreeGPUCollisionDetection_Threaded::scheduleBVHTraversals(std::vector< st
         }
 
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-        sout << "   add OBB pair = " << addObbPair << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   add OBB pair = " << addObbPair;
 #endif
 
         if (addObbPair)
@@ -2719,7 +2714,7 @@ int ObbTreeGPUCollisionDetection_Threaded::scheduleBVHTraversals(std::vector< st
             workUnitsAssigned++;
         }
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-        sout << "   workUnitsAssigned = " << workUnitsAssigned << std::endl;
+        msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   workUnitsAssigned = " << workUnitsAssigned;
 #endif
     }
 
@@ -2731,7 +2726,7 @@ int ObbTreeGPUCollisionDetection_Threaded::scheduleCPUCollisionChecks(std::vecto
 																	  unsigned int numSlots)
 {
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-	std::cout << "ObbTreeGPUCollisionDetection_Threaded::scheduleCPUCollisionChecks(): " << narrowPhasePairs.size() << " CPU pair checks, " << numSlots << " slots" << std::endl;
+    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "ObbTreeGPUCollisionDetection_Threaded::scheduleCPUCollisionChecks(): " << narrowPhasePairs.size() << " CPU pair checks, " << numSlots << " slots";
 #endif
 	if (narrowPhasePairs.size() == 0)
 		return 0;
@@ -2751,7 +2746,7 @@ int ObbTreeGPUCollisionDetection_Threaded::scheduleCPUCollisionChecks(std::vecto
 		if (outputVector != detectionOutputs.end())
 		{
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-			sout << "  - " << k << ": " << collisionPair.first->getName() << " <-> " << collisionPair.second->getName() << ": Found pre-created DetectionOutputVector, added to task " << traversalIndex << sendl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  - " << k << ": " << collisionPair.first->getName() << " <-> " << collisionPair.second->getName() << ": Found pre-created DetectionOutputVector, added to task " << traversalIndex;
 #endif
 			sofa::core::CollisionModel* model_1 = collisionPair.first;
 			sofa::core::CollisionModel* model_2 = collisionPair.second;
@@ -2766,7 +2761,7 @@ int ObbTreeGPUCollisionDetection_Threaded::scheduleCPUCollisionChecks(std::vecto
 			}
 
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
-			sout << "   --> Resolves to: " << model_1->getName() << " <-> " << model_2->getName() << sendl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   --> Resolves to: " << model_1->getName() << " <-> " << model_2->getName();
 #endif
 			//std::pair<sofa::core::CollisionModel*, sofa::core::CollisionModel*> parentPair = std::make_pair(model_1, model_2);
 			// Add what here: BVLevel7 instances (lowest elements of CubeModel)? Or the parent models (Triangle/Line/Point)? Seems: CubeModel is the right choice.
@@ -2782,7 +2777,7 @@ int ObbTreeGPUCollisionDetection_Threaded::scheduleCPUCollisionChecks(std::vecto
 #ifdef OBBTREE_GPU_COLLISION_DETECTION_DEBUG
 		else
 		{
-			std::cout << "  - " << k << ": " << collisionPair.first->getName() << " <-> " << collisionPair.second->getName() << ": NOT ADDED, no pre-created DetectionOutputVector found!!!" << std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  - " << k << ": " << collisionPair.first->getName() << " <-> " << collisionPair.second->getName() << ": NOT ADDED, no pre-created DetectionOutputVector found!!!";
 		}
 #endif
 	}

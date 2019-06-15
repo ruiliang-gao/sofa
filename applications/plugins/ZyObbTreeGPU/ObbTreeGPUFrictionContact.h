@@ -28,9 +28,16 @@ namespace sofa
             //#define OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
             //#define OBBTREEGPUBARYCENTRICCONTACTMAPPER_SUPPRESS_CONTACT_RESPONSE
             //#define OBBTREEGPUBARYCENTRICCONTACTMAPPER_SUPPRESS_LINE_LINE_CONTACTS
+
+            enum DetectionOutputContactType
+            {
+                CONTACT_LINE_LINE,
+                CONTACT_FACE_VERTEX,
+                CONTACT_LINE_VERTEX,
+                CONTACT_INVALID
+            };
             
-            // dummy contact mapper class 
-            // this must exist, so that the contact mappers for SOFA CPU-contact models (mapper1_default and mapper2_default) can be declared as ContactMapper 
+            // This class must exist so that the contact mappers for SOFA CPU-contact models (mapper1_default and mapper2_default) can be declared as ContactMapper
             template <class DataTypes>
             class ContactMapper<sofa::component::collision::ObbTreeGPUCollisionModel<Vec3Types>, DataTypes> : public BarycentricContactMapper<sofa::component::collision::ObbTreeGPUCollisionModel<Vec3Types>, DataTypes>{
                 typedef typename DataTypes::Real Real;
@@ -45,7 +52,7 @@ namespace sofa
             // 
 
             template < class TCollisionModel, class DataTypes >
-            class TestContactMapper : public BarycentricContactMapper<TCollisionModel, DataTypes>
+            class ObbTreeGPUContactMapper : public BarycentricContactMapper<TCollisionModel, DataTypes>
             {
             public:
                 typedef typename DataTypes::Real Real;
@@ -56,9 +63,9 @@ namespace sofa
                 typedef typename Inherit::MMechanicalState MMechanicalState;
                 typedef typename Inherit::MCollisionModel MCollisionModel;
 
-                int addPoint(const Coord &P, int index, Real& r, const sofa::core::collision::DetectionOutputContactType& type)
+                int addPoint(const Coord &P, int index, Real& r, const sofa::component::collision::DetectionOutputContactType& type)
                 {
-                    if (type == sofa::core::collision::CONTACT_LINE_LINE)
+                    if (type == sofa::component::collision::CONTACT_LINE_LINE)
                     {
 #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
                         std::cout << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPoint(" << P << "," << index << "," << r << ") as LINE_LINE" << std::endl;
@@ -78,7 +85,7 @@ namespace sofa
                             return this->mapper->createPointInLine(P, index, &this->model->getMechanicalState()->read(core::ConstVecCoordId::position())->getValue());
 #endif
                     }
-                    else if (type == sofa::core::collision::CONTACT_FACE_VERTEX)
+                    else if (type == sofa::component::collision::CONTACT_FACE_VERTEX)
                     {
                         int nbt = this->model->getMeshTopology()->getNbTriangles();
     #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
@@ -96,9 +103,9 @@ namespace sofa
                     return -1;
                 }
 
-                int addPointB(const Coord &P, int index, Real& r, const Vector3& baryP, const sofa::core::collision::DetectionOutputContactType& type)
+                int addPointB(const Coord &P, int index, Real& r, const Vector3& baryP, const sofa::component::collision::DetectionOutputContactType& type)
                 {
-                    if (type == sofa::core::collision::CONTACT_LINE_LINE)
+                    if (type == sofa::component::collision::CONTACT_LINE_LINE)
                     {
 #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
                         std::cout << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPointB(" << P << "," << index << "," << r << "," << baryP << ") as LINE_LINE" << std::endl;
@@ -113,7 +120,7 @@ namespace sofa
                             return this->mapper->addPointInLine((triIdx1 * 3) + edgeIdx1, baryP.ptr());
 #endif
                     }
-                    else if (type == sofa::core::collision::CONTACT_FACE_VERTEX)
+                    else if (type == sofa::component::collision::CONTACT_FACE_VERTEX)
                     {
                         int nbt = this->model->getMeshTopology()->getNbTriangles();
     #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
@@ -125,11 +132,11 @@ namespace sofa
                     return -1;
                 }
 
-                inline int addPointB(const Coord& P, int index, Real& r, const sofa::core::collision::DetectionOutputContactType& type){ return addPoint(P,index,r,type); }
+                inline int addPointB(const Coord& P, int index, Real& r, const sofa::component::collision::DetectionOutputContactType& type){ return addPoint(P,index,r,type); }
 #if 1
-                int addPointWithIndex(const Coord& P, int index, int featureId, const sofa::core::collision::DetectionOutputContactType& type)
+                int addPointWithIndex(const Coord& P, int index, int featureId, const sofa::component::collision::DetectionOutputContactType& type)
                 {
-                    if (type == sofa::core::collision::CONTACT_LINE_LINE)
+                    if (type == sofa::component::collision::CONTACT_LINE_LINE)
                     {
 #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
                         std::cout << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPointWithIndex(" << P << "," << index << "," << featureId << ") as LINE_LINE" << std::endl;
@@ -146,7 +153,7 @@ namespace sofa
                             return this->mapper->createPointInLine(P, targetEdge, this->model->getMechanicalState()->getX());
 #endif
                     }
-                    else if (type == sofa::core::collision::CONTACT_FACE_VERTEX)
+                    else if (type == sofa::component::collision::CONTACT_FACE_VERTEX)
                     {
                         int nbt = this->model->getMeshTopology()->getNbTriangles();
     #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
@@ -168,7 +175,7 @@ namespace sofa
                     return -1;
                 }
 
-                int addPointWithIndexB(const Coord& P, int index, int featureId, const sofa::core::collision::DetectionOutputContactType& type)
+                int addPointWithIndexB(const Coord& P, int index, int featureId, const sofa::component::collision::DetectionOutputContactType& type)
                 {
 
                     return 0;
@@ -241,6 +248,9 @@ namespace sofa
                 TCollisionModel1* model1;
                 TCollisionModel2* model2;
 
+                bool m_useModelContactTypes_model1;
+                bool m_useModelContactTypes_model2;
+
                 MechanicalState1* mmodel1;
                 MechanicalState1* mmodel2;
 
@@ -253,8 +263,8 @@ namespace sofa
                 ContactMapper<CollisionModel2, DataTypes2> mapper2_default;
 #endif
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
-                TestContactMapper<CollisionModel1, DataTypes1> mapper1_gpu_ll;
-                TestContactMapper<CollisionModel2, DataTypes2> mapper2_gpu_ll;
+                ObbTreeGPUContactMapper<CollisionModel1, DataTypes1> mapper1_gpu_ll;
+                ObbTreeGPUContactMapper<CollisionModel2, DataTypes2> mapper2_gpu_ll;
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINEVERTEX_CONSTRAINT
@@ -263,8 +273,8 @@ namespace sofa
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
-                TestContactMapper<CollisionModel1, DataTypes1> mapper1_gpu_vf;
-                TestContactMapper<CollisionModel2, DataTypes2> mapper2_gpu_vf;
+                ObbTreeGPUContactMapper<CollisionModel1, DataTypes1> mapper1_gpu_vf;
+                ObbTreeGPUContactMapper<CollisionModel2, DataTypes2> mapper2_gpu_vf;
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
@@ -301,8 +311,8 @@ namespace sofa
                 unsigned int m_numOtherContacts;
 #endif
 
-                Data<double> mu, tol;
-                std::vector< sofa::core::collision::DetectionOutput* > contacts;
+                Data<double> m_mu, m_tol;
+                std::vector< sofa::core::collision::DetectionOutput* > m_contacts;
 
                 typedef std::vector< sofa::core::collision::DetectionOutput* > manifold;
                 typedef std::vector< manifold > manifoldVector;
@@ -310,20 +320,20 @@ namespace sofa
                 typedef std::pair< manifold, Vector3 > clusterManifold;
                 typedef std::vector< clusterManifold > clusterManifoldVector;
 
-                clusterManifoldVector dynamicManifoldVector;
+                clusterManifoldVector m_dynamicManifoldVector;
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
-                manifoldVector faceVertexManifoldVector;
+                manifoldVector m_faceVertexManifoldVector;
 
 #endif
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
-                manifoldVector lineLineManifoldVector;
+                manifoldVector m_lineLineManifoldVector;
 #endif
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINEVERTEX_CONSTRAINT
                 manifoldVector lineVertexManifoldVector;
 #endif
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
-                manifoldVector defaultManifoldVector;
+                manifoldVector m_defaultManifoldVector;
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT

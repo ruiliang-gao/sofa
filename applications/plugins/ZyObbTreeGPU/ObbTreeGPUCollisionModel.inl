@@ -99,14 +99,14 @@ template <class DataTypes>
 ObbTreeGPUCollisionModel<DataTypes>::ObbTreeGPUCollisionModel(): core::CollisionModel(),
                                                                  m_gpModel(NULL), m_pqp_tree(NULL),
                                                                  m_scale(1.0f), m_modelLoaded(false),
-                                                                 _mState(NULL), _objectMState(NULL), _mObject(NULL),
+                                                                 m_objectMechanicalState(NULL), m_objectBaseMState(NULL), m_mechanicalObject(NULL),
                                                                  m_cubeModel(NULL), m_d(NULL),
                                                                  m_drawOBBHierarchy(initData(&m_drawOBBHierarchy, 0, "drawOBBHierarchy", "Draw the model's OBB hierarchy 0=off 1=box 2=full")),
                                                                  m_useVertexBuffer(initData(&m_useVertexBuffer, false, "useVertexBuffers", "Use vertex buffers to store mesh data in GPU device memory")), 
                                                                  m_updateVerticesInModel(initData(&m_updateVerticesInModel, true, "updateVerticesInModel", "Update GPU array of vertex coordinates from model")),
                                                                  m_edgeLabelScaleFactor(initData(&m_edgeLabelScaleFactor, 0.01, "edgeLabelScaleFactor", "Scale for edge labels", true, false)),
 																 m_oldCachedPosition(), m_oldCachedOrientation(),
-                                                                 cachedPositionChange(0), cachedOrientationChange(0),
+                                                                 m_cachedPositionChange(0), m_cachedOrientationChange(0),
                                                                  /*useContactManifolds(initData(&useContactManifolds, false, "useContactManifolds", "Create contact manifolds from detection output. Must be true in both collision models.")),*/
                                                                  /*maxNumberOfLineLineManifolds(initData(&maxNumberOfLineLineManifolds, 1u, "maxNumberOfLineLineManifolds", "Use instead of maxNumberOfManifolds. Maximum number of Line/Line contact manifolds that should be created. The lower number defined in both models is used. Cannot be smaller than 1.")),
                                                                  maxNumberOfFaceVertexManifolds(initData(&maxNumberOfFaceVertexManifolds, 1u, "maxNumberOfFaceVertexManifolds", "Use instead of maxNumberOfManifolds. Maximum number of Face/Vertex contact manifolds that should be created. The lower number defined in both models is used. Cannot be smaller than 1.")),*/
@@ -141,7 +141,7 @@ void ObbTreeGPUCollisionModel<DataTypes>::init()
 
     m_lastTimestep = -1.0;
 
-    _mState = dynamic_cast< core::behavior::MechanicalState<DataTypes>* >(getContext()->getMechanicalState());
+    m_objectMechanicalState = dynamic_cast< core::behavior::MechanicalState<DataTypes>* >(getContext()->getMechanicalState());
 
     Vector3 scale(1,1,1);
     Real uniformScale = 1.0f;
@@ -155,7 +155,7 @@ void ObbTreeGPUCollisionModel<DataTypes>::init()
     }
 
 
-    component::container::MechanicalObject<DataTypes>* mechanicalObject = dynamic_cast< component::container::MechanicalObject<DataTypes>* >(_mState);
+    component::container::MechanicalObject<DataTypes>* mechanicalObject = dynamic_cast< component::container::MechanicalObject<DataTypes>* >(m_objectMechanicalState);
     if (mechanicalObject != NULL)
     {
 
@@ -177,7 +177,7 @@ void ObbTreeGPUCollisionModel<DataTypes>::init()
 			if (scale.x() == scale.y() && scale.y() == scale.z()) {
 				  m_scale = scale.x();
 			}
-			_objectMState = current;
+			m_objectBaseMState = current;
 		}
 
         //std::cout << "WHAT AM I: " << this->getTypeName() << ", class = " << this->getClassName() << std::endl;
@@ -204,7 +204,7 @@ void ObbTreeGPUCollisionModel<DataTypes>::init()
                 //std::cout << "MECHANICAL OBJECT SEARCH 1 YIELDS: " << mo_vec.size() << " MODELS!!!" << std::endl;
 
 				if (mo_vec.size() > 0)
-					_mObject = mo_vec.at(0);
+					m_mechanicalObject = mo_vec.at(0);
 			}
 		}
 
@@ -560,7 +560,7 @@ defaulttype::Matrix3 ObbTreeGPUCollisionModel<DataTypes>::getCachedOrientationMa
 template <class DataTypes>
 void ObbTreeGPUCollisionModel<DataTypes>::setCachedPosition(const Vec3d &position)
 {
-    cachedPositionChange = (m_oldCachedPosition != position);
+    m_cachedPositionChange = (m_oldCachedPosition != position);
 #ifdef OBBTREEGPUCOLLISIONMODEL_DEBUG_UPDATE_INTERNAL_GEOMETRY
     if (!cachedPositionChange) { std::cout << "the position of " << this->getName() << "hasn't changed! old: " << m_oldCachedPosition << " new: " << position << " difference: " << (m_oldCachedPosition - position) << std::endl; }
 #endif
@@ -576,7 +576,7 @@ void ObbTreeGPUCollisionModel<DataTypes>::setCachedPosition(const Vec3d &positio
 template <class DataTypes>
 void ObbTreeGPUCollisionModel<DataTypes>::setCachedOrientation(const Quaternion &orientation)
 {
-    cachedOrientationChange = (m_oldCachedOrientation != orientation);
+    m_cachedOrientationChange = (m_oldCachedOrientation != orientation);
 #ifdef OBBTREEGPUCOLLISIONMODEL_DEBUG_UPDATE_INTERNAL_GEOMETRY
     if (!cachedOrientationChange) { std::cout << "the orientation of " << this->getName() << "hasn't changed! old: " << m_oldCachedOrientation << " new: " << orientation << std::endl; }
 #endif
@@ -597,7 +597,7 @@ bool ObbTreeGPUCollisionModel<DataTypes>::hasModelPositionChanged() const
     // Bootstrap!
     if (this->getContext()->getTime() == 0.0) return true;
 
-    return (cachedPositionChange || cachedOrientationChange) || (m_fromObject != NULL && m_innerMapping != NULL);
+    return (m_cachedPositionChange || m_cachedOrientationChange) || (m_fromObject != NULL && m_innerMapping != NULL);
 }
 
 template <class DataTypes>
@@ -610,12 +610,12 @@ void  ObbTreeGPUCollisionModel<DataTypes>::getCachedPositionAndOrientation() {
         const Rigid3Types::VecCoord c = m_fromObject->getPosition();
         Vec3d currentPos_From(c[0][0], c[0][1], c[0][2]);
         Quat quat_From(c[0][3], c[0][4], c[0][5], c[0][6]);
-        Vec3d newPos = currentPos_From + quat_From.rotate(m_innerMapping->appliedTranslation.getValue());
+        Vec3d newPos = currentPos_From + quat_From.rotate(this->m_appliedTranslation.getValue());
 
         setCachedPosition(newPos);
 
         // ORIENTATION
-        defaulttype::Quat quat_to = m_innerMapping->appliedRotation.getValue();
+        defaulttype::Quat quat_to = this->m_appliedRotation.getValue();
 
         setCachedOrientation(quat_From*quat_to);
 

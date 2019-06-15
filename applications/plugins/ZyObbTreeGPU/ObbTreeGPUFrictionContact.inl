@@ -13,9 +13,10 @@
 #include <sofa/simulation/Node.h>
 
 #include <SofaSimulationTree/GNode.h>
+#include <sofa/helper/system/FileRepository.h>
 
 // for intersection detection begin
-#include "Primitives/Triangle3.h"
+#include <Primitives/Triangle3.h>
 #include <Primitives/Segment3.h>
 // for intersection detection end
 
@@ -70,12 +71,20 @@ namespace sofa
                 , m_defaultConstraint(NULL)
     #endif
                 , parent(NULL)
-                , mu (initData(&mu, 0.8, "mu", "friction coefficient (0 for frictionless contacts)"))
-                , tol (initData(&tol, 0.0, "tol", "tolerance for the constraints resolution (0 for default tolerance)"))
+                , m_useModelContactTypes_model1(false)
+                , m_useModelContactTypes_model2(false)
+                , m_mu (initData(&m_mu, 0.8, "mu", "friction coefficient (0 for frictionless contacts)"))
+                , m_tol (initData(&m_tol, 0.0, "tol", "tolerance for the constraints resolution (0 for default tolerance)"))
             {
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG
-                std::cout << "ObbTreeGPUFrictionContact<" << model1->getTypeName() << "," << model2->getTypeName() << "," << typeid(ResponseDataTypes).name() << ">::ObbTreeGPUFrictionContact(" << model1->getName() << "," << model1->getName() << ", " << intersectionMethod->getTypeName() << ")" << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "ObbTreeGPUFrictionContact<" << model1->getTypeName() << "," << model2->getTypeName() << "," << typeid(ResponseDataTypes).name() << ">::ObbTreeGPUFrictionContact(" << model1->getName() << "," << model1->getName() << ", " << intersectionMethod->getTypeName() << ")" << std::endl;
 #endif
+
+                if (dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model1))
+                    m_useModelContactTypes_model1 = true;
+
+                if (dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model2))
+                    m_useModelContactTypes_model2 = true;
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
                 selfCollision = ((core::CollisionModel*)model1 == (core::CollisionModel*)model2);
@@ -102,7 +111,7 @@ namespace sofa
                 mapper1_gpu_vf.setCollisionModel(model1);
                 mapper2_gpu_vf.setCollisionModel(model2);
 #endif
-                contacts.clear();
+                m_contacts.clear();
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
                 mappedContacts.clear();
@@ -122,7 +131,7 @@ namespace sofa
 
                 this->setName(model1->getName() + "_" + model2->getName() + "_OBBTreeGPUFrictionContact");
 				testOutputFilename.setValue(sofa::helper::system::DataRepository.getFirstPath() + "/" + this->getName() + ".log");
-				std::cout << "testOutputFilename = " << testOutputFilename.getValue() << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "testOutputFilename = " << testOutputFilename.getValue() << std::endl;
 
                 if (testOutputFilename.getValue() != "")
                 {
@@ -144,34 +153,6 @@ namespace sofa
             {
             }
 
-            //template < class TCollisionModel1, class TCollisionModel2, class ResponseDataTypes  >
-            //void ObbTreeGPUFrictionContact<TCollisionModel1, TCollisionModel2, ResponseDataTypes>::setIntersectionOccurred(bool newSCRValue)
-            //{
-                //
-                // TODO: Delete this if it's no longer needed
-                // This method is no longer used for anything as far as I can tell. I want to delete it due to its general awfulness, 
-                // but I will leave it commented out for now, in case I am wrong and it is still needed somewhere.
-                // If it's still needed, it should be implemented differently, because currently it requires linking against the 
-                // Zyklio plugin.
-                //
-
-                //// TD: is mapper1_gpu_vf.mapper always there ?
-                //BaseContext* rootContext = mapper1_gpu_vf.mapper->getContext()->getRootContext();
-
-                //// starts in getRootContext, because the animation loop should always be there
-                //// (This is pretty crude and might be better done some other way - but it works.)
-                //// TD: Nowadays I know a better way to do this (but this function is not needed right now and I don't have time to fix it).
-                //for (sofa::helper::vector<BaseLink*>::const_iterator it = rootContext->getLinks().begin(); it!= rootContext->getLinks().end(); it++)
-                //{
-                //    //std::cout << (*it)->getName() << " " << std::endl;
-                //    if ((*it)->getName() == "animationLoop")
-                //    {
-                //        std::cout << "Setting intersectionOccurred in animation loop to " << newSCRValue << std::endl;
-                //        static_cast<sofa::core::objectmodel::SingleLink<sofa::simulation::Node,sofa::component::animationloop::ZyklioAnimationLoop,0>*>((*it))->get()->setIntersectionOccurred(newSCRValue);
-                //    }
-                //}
-
-            //}
             // code for intersection detection end
 
             // code for contact manifold begin
@@ -274,14 +255,14 @@ namespace sofa
                     Vector4 maxvec(fabs(res0),fabs(res1),fabs(res2),fabs(res3));
                     int biggestarea = maxAxis4(maxvec);
 
-                    /*std::cout << "inserting DetectionOutput of type " << o->contactType << std::endl;
-                    std::cout << "into vector with types ";
+                    /*msg_info("ObbTreeGPUFrictionContact") << "inserting DetectionOutput of type " << o->contactType << std::endl;
+                    msg_info("ObbTreeGPUFrictionContact") << "into vector with types ";
                     for (int bla = 0; bla < contactManifoldVector.size(); bla++)
                     {
-                        std::cout << contactManifoldVector.at(bla)->contactType << " ";
+                        msg_info("ObbTreeGPUFrictionContact") << contactManifoldVector.at(bla)->contactType << " ";
                     }
-                    std::cout << std::endl;
-                    std::cout << "at position " << biggestarea << std::endl;*/
+                    msg_info("ObbTreeGPUFrictionContact") << std::endl;
+                    msg_info("ObbTreeGPUFrictionContact") << "at position " << biggestarea << std::endl;*/
                     contactManifoldVector.at(biggestarea) = o;
                 }
             }
@@ -402,7 +383,7 @@ namespace sofa
                 mapper2_gpu_vf.cleanup();
 #endif
 
-                contacts.clear();
+                m_contacts.clear();
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
                 mappedContacts.clear();
@@ -441,19 +422,19 @@ namespace sofa
 #endif
 
 #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
-                std::cout << "=== ObbTreeFrictionContact::setDetectionOutputs(" << this->getName() << ") ===" << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "=== ObbTreeFrictionContact::setDetectionOutputs(" << this->getName() << ") ===" << std::endl;
 #endif
                 TOutputVector& outputs = *static_cast<TOutputVector*>(o);
                 // We need to remove duplicate contacts
 				const double minDist2 = 0.0001f /*0.00000001f*/;
 
-                contacts.clear();
+                m_contacts.clear();
 
                 if (model1->getContactStiffness(0) == 0 || model2->getContactStiffness(0) == 0)
                 {
                     serr << "Disabled ObbTreeGPUFrictionContact with " << (outputs.size()) << " collision points." << sendl;
 #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
-                    std::cerr << "Disabled FrictionContact with " << (outputs.size()) << " collision points." << std::endl;
+                    msg_warning("ObbTreeGPUFrictionContact") << "Disabled FrictionContact with " << (outputs.size()) << " collision points." << std::endl;
 #endif
                     return;
                 }
@@ -495,12 +476,12 @@ namespace sofa
                             std::min(model1->getMaxNumberOfManifolds(),
                             model2->getMaxNumberOfManifolds())
                             );
-                        lineLineManifoldVector.clear();
-                        lineLineManifoldVector.resize(lineLineCount);
+                        m_lineLineManifoldVector.clear();
+                        m_lineLineManifoldVector.resize(lineLineCount);
                         for (unsigned int u = 0; u < lineLineCount; u++)
                         {
-                            lineLineManifoldVector.at(u).clear();
-                            lineLineManifoldVector.at(u).reserve(4);
+                            m_lineLineManifoldVector.at(u).clear();
+                            m_lineLineManifoldVector.at(u).reserve(4);
                             maximumContactNumber += 4;
                         }
     #endif
@@ -513,12 +494,12 @@ namespace sofa
                             std::min(model1->getMaxNumberOfManifolds(),
                             model2->getMaxNumberOfManifolds())
                             );
-                        faceVertexManifoldVector.clear();
-                        faceVertexManifoldVector.resize(vertexFaceCount);
+                        m_faceVertexManifoldVector.clear();
+                        m_faceVertexManifoldVector.resize(vertexFaceCount);
                         for (unsigned int u = 0; u < vertexFaceCount; u++)
                         {
-                            faceVertexManifoldVector.at(u).clear();
-                            faceVertexManifoldVector.at(u).reserve(4);
+                            m_faceVertexManifoldVector.at(u).clear();
+                            m_faceVertexManifoldVector.at(u).reserve(4);
                             maximumContactNumber += 4;
                         }
     #endif
@@ -534,46 +515,45 @@ namespace sofa
                         }
     #endif
     #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
-                        /*defaultCount = 1;*/
                         defaultCount = std::max<int>(1,  // needs to be at least 1
                             std::min(model1->getMaxNumberOfManifolds(),
                             model2->getMaxNumberOfManifolds())
                             );
-                        defaultManifoldVector.clear();
-                        defaultManifoldVector.resize(defaultCount);
+                        m_defaultManifoldVector.clear();
+                        m_defaultManifoldVector.resize(defaultCount);
                         for (unsigned int u = 0; u < defaultCount; u++)
                         {
-                            defaultManifoldVector.at(u).clear();
-                            defaultManifoldVector.at(u).reserve(4);
+                            m_defaultManifoldVector.at(u).clear();
+                            m_defaultManifoldVector.at(u).reserve(4);
                             maximumContactNumber += 4;
                         }
     #endif
-                        contacts.reserve(maximumContactNumber);
+                        m_contacts.reserve(maximumContactNumber);
                     }
                     else
                     {
                         dynamicManifoldCount = 4; // TODO, replace with configurable value
-                        dynamicManifoldVector.clear();
-                        dynamicManifoldVector.resize(dynamicManifoldCount);
+                        m_dynamicManifoldVector.clear();
+                        m_dynamicManifoldVector.resize(dynamicManifoldCount);
                         for (unsigned int u = 0; u < dynamicManifoldCount; u++)
                         {
-                            dynamicManifoldVector.at(u).first.clear();
-                            dynamicManifoldVector.at(u).first.reserve(4);
-                            dynamicManifoldVector.at(u).second = Vector3(0,0,0);
+                            m_dynamicManifoldVector.at(u).first.clear();
+                            m_dynamicManifoldVector.at(u).first.reserve(4);
+                            m_dynamicManifoldVector.at(u).second = Vector3(0,0,0);
                             maximumContactNumber += 4;
                         }
-                        contacts.reserve(maximumContactNumber);
+                        m_contacts.reserve(maximumContactNumber);
                     }
                 }
                 else
                 {
                     // if contact manifolds are switched off, standard contact creation is done
-                    contacts.reserve(outputs.size());
+                    m_contacts.reserve(outputs.size());
                 }
 
                 int SIZE = outputs.size();
 #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
-                std::cout << " contacts output size = " << SIZE << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << " contacts output size = " << SIZE << std::endl;
 #endif
 
 #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
@@ -591,18 +571,14 @@ namespace sofa
 
 				int contactsAdded = 0, contactsIgnored = 0;
                 // the following procedure cancels the duplicated detection outputs
-                for (int cpt=0; cpt<SIZE; cpt++)
+                for (int cpt = 0; cpt < SIZE; cpt++)
                 {
-					// Max. 10 contacts, testing!
-					//if (contacts.size() > 10)
-					//	break;
-
                     DetectionOutput* o = &outputs[cpt];
 
                     bool found = false;
-                    for (unsigned int i=0; i<contacts.size() && !found; i++)
+                    for (unsigned int i=0; i<m_contacts.size() && !found; i++)
                     {
-                        DetectionOutput* p = contacts[i];
+                        DetectionOutput* p = m_contacts[i];
 
                         Vector3 op0 = o->point[0] - p->point[0];
                         Vector3 op1 = o->point[1] - p->point[1];
@@ -630,12 +606,10 @@ namespace sofa
                         }
 #endif
                         if (op0.norm2() + op1.norm2() < minDist2 ||
-                            po0.norm2() + po1.norm2() < minDist2 /*||
-                            po0.norm2() < minDist2 ||
-                            po1.norm2() < minDist2*/)
+                            po0.norm2() + po1.norm2() < minDist2)
                         {
             #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
-							std::cout << " - ignore " << cpt << ": " << *o << "; " << op0.norm2() + op1.norm2() << " <= " << minDist2 << ", " << po0.norm2() + po1.norm2()  << " <= " << minDist2 << std::endl;
+                            msg_info("ObbTreeGPUFrictionContact") << " - ignore " << cpt << ": " << *o << "; " << op0.norm2() + op1.norm2() << " <= " << minDist2 << ", " << po0.norm2() + po1.norm2()  << " <= " << minDist2 << std::endl;
             #endif
 							contactsIgnored++;
                             found = true;
@@ -666,25 +640,25 @@ namespace sofa
                     if (!found)
                     {
             #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
-                            std::cout << " - add " << cpt << ": " << *o << std::endl;
+                            msg_info("ObbTreeGPUFrictionContact") << " - add " << cpt << ": " << *o << std::endl;
             #endif
                             if (createContactManifold)
                             {
                                 if (!useDynamicManifolds)
                                 {
             #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
-                                    if (o->contactType == sofa::core::collision::CONTACT_FACE_VERTEX)
+                                    if (o->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
                                     {
-                                        addDetectionToSingleTypeManifold(faceVertexManifoldVector.at(currentVFManifold),o);
+                                        addDetectionToSingleTypeManifold(m_faceVertexManifoldVector.at(currentVFManifold),o);
                                         currentVFManifold++;
                                         currentVFManifold = currentVFManifold % vertexFaceCount;
                                     }
             #endif
 
             #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
-                                    if (o->contactType == sofa::core::collision::CONTACT_LINE_LINE)
+                                    if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
                                     {
-                                        addDetectionToSingleTypeManifold(lineLineManifoldVector.at(currentLLManifold),o);
+                                        addDetectionToSingleTypeManifold(m_lineLineManifoldVector.at(currentLLManifold),o);
                                         currentLLManifold++;
                                         currentLLManifold = currentLLManifold % lineLineCount;
                                     }
@@ -700,9 +674,9 @@ namespace sofa
             #endif
 
             #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
-                                    if (o->contactType == sofa::core::collision::CONTACT_INVALID)
+                                    if (o->contactType == sofa::component::collision::CONTACT_INVALID)
                                     {
-                                        addDetectionToSingleTypeManifold(defaultManifoldVector.at(currentDManifold),o);
+                                        addDetectionToSingleTypeManifold(m_defaultManifoldVector.at(currentDManifold),o);
                                         currentDManifold++;
                                         currentDManifold = currentDManifold % defaultCount;
                                     }
@@ -710,31 +684,31 @@ namespace sofa
                                 }
                                 else
                                 {
-                                    addDetectionToClusterManifold(dynamicManifoldVector,o);
+                                    addDetectionToClusterManifold(m_dynamicManifoldVector,o);
                                 }
                             }
                             else
                             {
-                                contacts.push_back(o);
+                                m_contacts.push_back(o);
                                 contactsAdded++;
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
-                                if (o->contactType == sofa::core::collision::CONTACT_FACE_VERTEX)
+                                if (o->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
                                     m_numVertexFaceContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
-                                if (o->contactType == sofa::core::collision::CONTACT_LINE_LINE)
+                                if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
                                     m_numLineLineContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINEVERTEX_CONSTRAINT
-                                if (o->contactType == sofa::core::collision::CONTACT_LINE_VERTEX)
+                                if (o->contactType == sofa::component::collision::CONTACT_LINE_VERTEX)
                                     m_numLineVertexContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
-                                if (o->contactType == sofa::core::collision::CONTACT_INVALID)
+                                if (o->contactType == sofa::component::collision::CONTACT_INVALID)
                                     m_numOtherContacts++;
         #endif
                             }
@@ -781,11 +755,11 @@ namespace sofa
                         m_numVertexFaceContacts = 0;
                         for (unsigned int u = 0; u < vertexFaceCount; u++)
                         {
-                            for (unsigned int k=0; k<faceVertexManifoldVector.at(u).size(); k++)
+                            for (unsigned int k=0; k<m_faceVertexManifoldVector.at(u).size(); k++)
                             {
-                                contacts.push_back(faceVertexManifoldVector.at(u).at(k));
+                                m_contacts.push_back(m_faceVertexManifoldVector.at(u).at(k));
                             }
-                            m_numVertexFaceContacts += faceVertexManifoldVector.at(u).size();
+                            m_numVertexFaceContacts += m_faceVertexManifoldVector.at(u).size();
                         }
                         contactsAdded += m_numVertexFaceContacts;
             #endif
@@ -794,11 +768,11 @@ namespace sofa
                         m_numLineLineContacts = 0;
                         for (unsigned int u = 0; u < lineLineCount; u++)
                         {
-                            for (unsigned int k=0; k<lineLineManifoldVector.at(u).size(); k++)
+                            for (unsigned int k=0; k<m_lineLineManifoldVector.at(u).size(); k++)
                             {
-                                contacts.push_back(lineLineManifoldVector.at(u).at(k));
+                                m_contacts.push_back(m_lineLineManifoldVector.at(u).at(k));
                             }
-                            m_numLineLineContacts += lineLineManifoldVector.at(u).size();
+                            m_numLineLineContacts += m_lineLineManifoldVector.at(u).size();
                         }
                         contactsAdded += m_numLineLineContacts;
             #endif
@@ -820,11 +794,11 @@ namespace sofa
                         m_numOtherContacts = 0;
                         for (unsigned int u = 0; u < defaultCount; u++)
                         {
-                            for (unsigned int k=0; k<defaultManifoldVector.at(u).size(); k++)
+                            for (unsigned int k=0; k<m_defaultManifoldVector.at(u).size(); k++)
                             {
-                                contacts.push_back(defaultManifoldVector.at(u).at(k));
+                                m_contacts.push_back(m_defaultManifoldVector.at(u).at(k));
                             }
-                            m_numOtherContacts += defaultManifoldVector.at(u).size();
+                            m_numOtherContacts += m_defaultManifoldVector.at(u).size();
                         }
                         contactsAdded += m_numOtherContacts;
             #endif
@@ -833,43 +807,43 @@ namespace sofa
                     {
                         for (unsigned int u = 0; u < dynamicManifoldCount; u++)
                         {
-                            for (unsigned int k=0; k<dynamicManifoldVector.at(u).first.size(); k++)
+                            for (unsigned int k=0; k<m_dynamicManifoldVector.at(u).first.size(); k++)
                             {
-                                DetectionOutput* currentO = dynamicManifoldVector.at(u).first.at(k);
+                                DetectionOutput* currentO = m_dynamicManifoldVector.at(u).first.at(k);
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
-                                if (currentO->contactType == sofa::core::collision::CONTACT_FACE_VERTEX)
+                                if (currentO->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
                                     m_numVertexFaceContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
-                                if (currentO->contactType == sofa::core::collision::CONTACT_LINE_LINE)
+                                if (currentO->contactType == sofa::component::collision::CONTACT_LINE_LINE)
                                     m_numLineLineContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINEVERTEX_CONSTRAINT
-                                if (currentO->contactType == sofa::core::collision::CONTACT_LINE_VERTEX)
+                                if (currentO->contactType == sofa::component::collision::CONTACT_LINE_VERTEX)
                                     m_numLineVertexContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
-                                if (currentO->contactType == sofa::core::collision::CONTACT_INVALID)
+                                if (currentO->contactType == sofa::component::collision::CONTACT_INVALID)
                                     m_numOtherContacts++;
         #endif
-                                contacts.push_back(currentO);
+                                m_contacts.push_back(currentO);
                                 contactsAdded++;
                             }
                         }
                     }
                 }
-                //std::cout << "contactsAdded=" << contactsAdded << std::endl;
-                //std::cout << "contacts.size()=" << contacts.size() << std::endl;
+                //msg_info("ObbTreeGPUFrictionContact") << "contactsAdded=" << contactsAdded << std::endl;
+                //msg_info("ObbTreeGPUFrictionContact") << "contacts.size()=" << contacts.size() << std::endl;
 
-                if (contacts.size() < outputs.size() && this->f_printLog.getValue())
+                if (m_contacts.size() < outputs.size() && this->f_printLog.getValue())
                 {
                     // DUPLICATED CONTACTS FOUND
-                    sout << "Removed " << (outputs.size()-contacts.size()) <<" / " << outputs.size() << " collision points." << sendl;
+                    sout << "Removed " << (outputs.size()-m_contacts.size()) <<" / " << outputs.size() << " collision points." << sendl;
 #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
-                    std::cout << "Removed " << (outputs.size()-contacts.size()) <<" / " << outputs.size() << " collision points." << std::endl;
+                    msg_info("ObbTreeGPUFrictionContact") << "Removed " << (outputs.size()-contacts.size()) <<" / " << outputs.size() << " collision points." << std::endl;
 #endif
                 }
 
@@ -914,7 +888,7 @@ namespace sofa
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
-                std::cout << "=== " << this->getName() << ": begin activateMappers call ===" << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "=== " << this->getName() << ": begin activateMappers call ===" << std::endl;
 #endif
                 mmodel1 = NULL;
                 mmodel2 = NULL;
@@ -932,7 +906,7 @@ namespace sofa
                     m_defaultConstraint = sofa::core::objectmodel::New<constraintset::UnilateralInteractionConstraint<ResponseDataTypes> >(mmodel1, mmodel2);
                     m_defaultConstraint->setName( getName() + "_defaultConstraint" );
                     setInteractionTags(mmodel1, mmodel2, m_defaultConstraint.get());
-                    m_defaultConstraint->setCustomTolerance( tol.getValue() );
+                    m_defaultConstraint->setCustomTolerance( m_tol.getValue() );
                 }
 #endif
 
@@ -946,7 +920,7 @@ namespace sofa
                     m_constraintGPU_ll = sofa::core::objectmodel::New<constraintset::UnilateralInteractionConstraint<ResponseDataTypes> >(mmodel1, mmodel2);
                     m_constraintGPU_ll->setName( getName() + "_constraintGPU_LineLine" );
                     setInteractionTags(mmodel1, mmodel2, m_constraintGPU_ll.get());
-                    m_constraintGPU_ll->setCustomTolerance( tol.getValue() );
+                    m_constraintGPU_ll->setCustomTolerance( m_tol.getValue() );
                 }
 #endif
 
@@ -974,7 +948,7 @@ namespace sofa
                     m_constraintGPU_vf = sofa::core::objectmodel::New<constraintset::UnilateralInteractionConstraint<ResponseDataTypes> >(mmodel1, mmodel2);
                     m_constraintGPU_vf->setName( getName() + "_constraintGPU_VertexFace" );
                     setInteractionTags(mmodel1, mmodel2, m_constraintGPU_vf.get());
-                    m_constraintGPU_vf->setCustomTolerance( tol.getValue() );
+                    m_constraintGPU_vf->setCustomTolerance( m_tol.getValue() );
                 }
 #endif
 
@@ -1005,18 +979,18 @@ namespace sofa
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
-                std::cout << "==> Contact type counts <==" << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "==> Contact type counts <==" << std::endl;
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
-                std::cout << " other = " << m_numOtherContacts << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << " other = " << m_numOtherContacts << std::endl;
 #endif
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
-                std::cout << " line_line = " << m_numLineLineContacts << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << " line_line = " << m_numLineLineContacts << std::endl;
 #endif
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINEVERTEX_CONSTRAINT
-                std::cout << " line_line = " << m_numLineLineContacts << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << " line_line = " << m_numLineLineContacts << std::endl;
 #endif
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
-                std::cout << " vertex_face = " << m_numVertexFaceContacts << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << " vertex_face = " << m_numVertexFaceContacts << std::endl;
 #endif
 #endif
 
@@ -1048,10 +1022,10 @@ namespace sofa
                 const double d0 = intersectionMethod->getContactDistance() + model1->getProximity() + model2->getProximity(); // - 0.001;
 
                 /*
-                std::cout<<"m_numLineLineContacts = "<<m_numLineLineContacts<<std::endl;
-                std::cout<<"m_numVertexFaceContacts = "<<m_numVertexFaceContacts<<std::endl;
-                std::cout<<"m_numOtherContacts = "<<m_numOtherContacts<<std::endl;
-                std::cout<<" d0 = "<<d0<<std::endl;
+                msg_info("ObbTreeGPUFrictionContact")<<"m_numLineLineContacts = "<<m_numLineLineContacts<<std::endl;
+                msg_info("ObbTreeGPUFrictionContact")<<"m_numVertexFaceContacts = "<<m_numVertexFaceContacts<<std::endl;
+                msg_info("ObbTreeGPUFrictionContact")<<"m_numOtherContacts = "<<m_numOtherContacts<<std::endl;
+                msg_info("ObbTreeGPUFrictionContact")<<" d0 = "<<d0<<std::endl;
                 */
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
@@ -1087,27 +1061,27 @@ namespace sofa
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
-                std::cout << "Add contacts: " << contacts.size() << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "Add contacts: " << contacts.size() << std::endl;
 #endif
 				m_numContacts = 0;
                 int lineLineIdx = 0, vertexFaceIdx = 0, lineVertexIdx = 0;
-                for (std::vector<DetectionOutput*>::const_iterator it = contacts.begin(); it!=contacts.end(); it++, i++)
+                for (std::vector<DetectionOutput*>::const_iterator it = m_contacts.begin(); it!=m_contacts.end(); it++, i++)
                 {
                     DetectionOutput* o = *it;
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
-                    std::cout << " * type: ";
+                    msg_info("ObbTreeGPUFrictionContact") << " * type: ";
                     if (o->contactType == sofa::core::collision::CONTACT_LINE_LINE)
-                        std::cout << "LINE_LINE";
+                        msg_info("ObbTreeGPUFrictionContact") << "LINE_LINE";
                     else if (o->contactType == sofa::core::collision::CONTACT_FACE_VERTEX)
-                        std::cout << "FACE_VERTEX";
+                        msg_info("ObbTreeGPUFrictionContact") << "FACE_VERTEX";
                     else
-                        std::cout << "INVALID";
+                        msg_info("ObbTreeGPUFrictionContact") << "INVALID";
 
-                    std::cout <<  ", collisionElements: " << o->elem.first.getIndex() << " - " << o->elem.second.getIndex() << std::endl;
+                    msg_info("ObbTreeGPUFrictionContact") <<  ", collisionElements: " << o->elem.first.getIndex() << " - " << o->elem.second.getIndex() << std::endl;
 #endif
                     int index1, index2;
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
-                    if (o->contactType == sofa::core::collision::CONTACT_FACE_VERTEX)
+                    if (o->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
                     {
                         int triIdx1 = o->elem.first.getIndex() / 3;
                         int triIdx2 = o->elem.second.getIndex() / 3;
@@ -1115,7 +1089,7 @@ namespace sofa
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
                         int vertexIdx1 = o->elem.first.getIndex() % 3;
                         int vertexIdx2 = o->elem.second.getIndex() % 3;
-                        std::cout << "   indices: triangle " << triIdx1 << ", vertex " << vertexIdx1 << " - triangle " << triIdx2 << ", vertex " << vertexIdx2 << std::endl;
+                        msg_info("ObbTreeGPUFrictionContact") << "   indices: triangle " << triIdx1 << ", vertex " << vertexIdx1 << " - triangle " << triIdx2 << ", vertex " << vertexIdx2 << std::endl;
 #endif
                         typename DataTypes1::Real r1 = 0.;
                         typename DataTypes2::Real r2 = 0.;
@@ -1158,7 +1132,7 @@ namespace sofa
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
-                    if (o->contactType == sofa::core::collision::CONTACT_LINE_LINE)
+                    if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
                     {
                         int triIdx1 = o->elem.first.getIndex() / 3;
                         int triIdx2 = o->elem.second.getIndex() / 3;
@@ -1166,13 +1140,13 @@ namespace sofa
                         int edgeIdx1 = o->elem.first.getIndex() % 3;
                         int edgeIdx2 = o->elem.second.getIndex() % 3;
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
-                        std::cout << "   indices: triangle1 " << triIdx1 << ", EDGE1 " << edgeIdx1 << " - triangle2 " << triIdx2 << ", EDGE2 " << edgeIdx2 << std::endl;
+                        msg_info("ObbTreeGPUFrictionContact") << "   indices: triangle1 " << triIdx1 << ", EDGE1 " << edgeIdx1 << " - triangle2 " << triIdx2 << ", EDGE2 " << edgeIdx2 << std::endl;
 #endif
                         if (triIdx1 < this->model1->getMeshTopology()->getNbTriangles() &&
                             triIdx2 < this->model2->getMeshTopology()->getNbTriangles())
                         {
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
-                            std::cout << "   triangle1 = " << triIdx1 << " AND triangle2 = " << triIdx2 << " valid." << std::endl;
+                            msg_info("ObbTreeGPUFrictionContact") << "   triangle1 = " << triIdx1 << " AND triangle2 = " << triIdx2 << " valid." << std::endl;
 #endif
                             const sofa::core::topology::BaseMeshTopology::EdgesInTriangle& e1 = this->model1->getMeshTopology()->getEdgesInTriangle(triIdx1);
                             const sofa::core::topology::BaseMeshTopology::EdgesInTriangle& e2 = this->model2->getMeshTopology()->getEdgesInTriangle(triIdx2);
@@ -1183,7 +1157,7 @@ namespace sofa
                                 edgeId2 < this->model2->getMeshTopology()->getNbEdges())
                             {
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
-                                std::cout << "   edgeIdx1 = " << edgeIdx1 << " AND edgeIdx2 = " << edgeIdx2 << " valid: Correspond to edgeID1 = " << edgeId1 << " and edgeID2 = " << edgeId2 << std::endl;
+                                msg_info("ObbTreeGPUFrictionContact") << "   edgeIdx1 = " << edgeIdx1 << " AND edgeIdx2 = " << edgeIdx2 << " valid: Correspond to edgeID1 = " << edgeId1 << " and edgeID2 = " << edgeId2 << std::endl;
 #endif
                                 typename DataTypes1::Real r1 = 0.;
                                 typename DataTypes2::Real r2 = 0.;
@@ -1240,7 +1214,7 @@ namespace sofa
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
                         int vertexIdx1 = o->elem.first.getIndex() % 3;
                         int vertexIdx2 = o->elem.second.getIndex() % 3;
-                        std::cout << "   indices: triangle " << triIdx1 << ", vertex " << vertexIdx1 << " - triangle " << triIdx2 << ", vertex " << vertexIdx2 << std::endl;
+                        msg_info("ObbTreeGPUFrictionContact") << "   indices: triangle " << triIdx1 << ", vertex " << vertexIdx1 << " - triangle " << triIdx2 << ", vertex " << vertexIdx2 << std::endl;
 #endif
                         // Create mapping for first point
                         index1 = mapper1_gpu_lv.addPointB(o->point[0], triIdx2, r1
@@ -1268,7 +1242,7 @@ namespace sofa
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
-                    if (o->contactType == sofa::core::collision::CONTACT_INVALID)
+                    if (o->contactType == sofa::component::collision::CONTACT_INVALID)
                     {
                         CollisionElement1 elem1(o->elem.first);
                         CollisionElement2 elem2(o->elem.second);
@@ -1276,7 +1250,7 @@ namespace sofa
                         index1 = elem1.getIndex();
                         index2 = elem2.getIndex();
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
-                        std::cout << ", indices: " << index1 << " - " << index2 << std::endl;
+                        msg_info("ObbTreeGPUFrictionContact") << ", indices: " << index1 << " - " << index2 << std::endl;
 #endif
 
                         typename DataTypes1::Real r1 = 0.;
@@ -1326,9 +1300,9 @@ namespace sofa
 					m_numContacts++;
                 }
 
-				std::cout << "======================================================" << std::endl;
-				std::cout << this->getName() << ": " << m_numContacts << " contacts." << std::endl;
-				std::cout << "======================================================" << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "======================================================" << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << this->getName() << ": " << m_numContacts << " contacts." << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "======================================================" << std::endl;
 
                 // Update mappings
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
@@ -1364,7 +1338,7 @@ namespace sofa
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
-                std::cout << "=== " << this->getName() << ": end activateMappers call ===" << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "=== " << this->getName() << ": end activateMappers call ===" << std::endl;
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
@@ -1389,7 +1363,7 @@ namespace sofa
             {
 #ifndef OBBTREEGPUFRICTIONCONTACT_SUPPRESS_CONTACT_RESPONSE
                 activateMappers();
-                const double mu_ = this->mu.getValue();
+                const double mu_ = this->m_mu.getValue();
                 // Checks if friction is considered
                 if ( mu_ < 0.0 )
                     serr << sendl << "Error: mu has to take positive values" << sendl;
@@ -1409,7 +1383,7 @@ namespace sofa
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
-                std::cout << "=== begin ObbTreeGPUFrictionContact::createResponse(" << this->getName() << ") call ===" << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "=== begin ObbTreeGPUFrictionContact::createResponse(" << this->getName() << ") call ===" << std::endl;
 #endif
 
                 int i = 0;
@@ -1417,7 +1391,7 @@ namespace sofa
                 double distance;
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
-                std::cout << "=== process contacts: " << this->getName() << "; size = " << contacts.size() << " ===" << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "=== process contacts: " << this->getName() << "; size = " << contacts.size() << " ===" << std::endl;
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
@@ -1436,18 +1410,18 @@ namespace sofa
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
                 if (m_constraintGPU_ll)
                 {
-                    for (std::vector<DetectionOutput*>::const_iterator it = contacts.begin(); it!=contacts.end(); it++)
+                    for (std::vector<DetectionOutput*>::const_iterator it = m_contacts.begin(); it != m_contacts.end(); it++)
                     {
                         DetectionOutput* o = *it;
 
-                        if (o->contactType == sofa::core::collision::CONTACT_LINE_LINE)
+                        if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
                         {
                             index1 = mappedContacts_LineLine[i].first.first;
                             index2 = mappedContacts_LineLine[i].first.second;
                             distance = mappedContacts_LineLine[i].second;
 
                             //==================================================================================
-                            //std::cout << "Banane! BANANE!" << std::endl;
+                            //msg_info("ObbTreeGPUFrictionContact") << "Banane! BANANE!" << std::endl;
 
                             int triIdx1 = o->elem.first.getIndex() / 3;
                             int triIdx2 = o->elem.second.getIndex() / 3;
@@ -1466,11 +1440,11 @@ namespace sofa
                             {
                                 if (triIdx1 >= this->model1->getMeshTopology()->getNbTriangles())
                                 {
-                                    std::cout << "ERROR: triIdx1 >= this->model1->getMeshTopology()->getNbTriangles(); triIdx1 = " << triIdx1 << "this->model1->getMeshTopology()->getNbTriangles() = " << this->model1->getMeshTopology()->getNbTriangles() << std::endl;
+                                    msg_info("ObbTreeGPUFrictionContact") << "ERROR: triIdx1 >= this->model1->getMeshTopology()->getNbTriangles(); triIdx1 = " << triIdx1 << "this->model1->getMeshTopology()->getNbTriangles() = " << this->model1->getMeshTopology()->getNbTriangles() << std::endl;
                                 }
                                 if (triIdx2 >= this->model2->getMeshTopology()->getNbTriangles())
                                 {
-                                    std::cout << "ERROR: triIdx2 >= this->model2->getMeshTopology()->getNbTriangles(); triIdx2 = " << triIdx2 << "this->model2->getMeshTopology()->getNbTriangles() = " << this->model2->getMeshTopology()->getNbTriangles() << std::endl;
+                                    msg_info("ObbTreeGPUFrictionContact") << "ERROR: triIdx2 >= this->model2->getMeshTopology()->getNbTriangles(); triIdx2 = " << triIdx2 << "this->model2->getMeshTopology()->getNbTriangles() = " << this->model2->getMeshTopology()->getNbTriangles() << std::endl;
                                 }
                             }
                             else
@@ -1487,11 +1461,11 @@ namespace sofa
                                 {
                                     if (!model1MechanicalState)
                                     {
-                                        std::cout << "ERROR: dynamic_cast from 'model1->getContext()->getMechanicalState()' failed.";
+                                        msg_info("ObbTreeGPUFrictionContact") << "ERROR: dynamic_cast from 'model1->getContext()->getMechanicalState()' failed.";
                                     }
                                     if (!model2MechanicalState)
                                     {
-                                        std::cout << "ERROR: dynamic_cast from 'model2->getContext()->getMechanicalState()' failed.";
+                                        msg_info("ObbTreeGPUFrictionContact") << "ERROR: dynamic_cast from 'model2->getContext()->getMechanicalState()' failed.";
                                     }
                                 }
                                 else
@@ -1513,42 +1487,42 @@ namespace sofa
                                                                                model2PositionVector.at(contactTriangle2.at(2)));
                                                                 //always check against the triangle of the same model;
 
-                                    //std::cout << "firstTriangle " << firstTriangle.V[0] << ", " << firstTriangle.V[1] << ", " << firstTriangle.V[2] <<  std::endl;
-                                    //std::cout << "secondTriangle " << secondTriangle.V[0] << ", " << secondTriangle.V[1] << ", " << secondTriangle.V[2] <<  std::endl;
+                                    //msg_info("ObbTreeGPUFrictionContact") << "firstTriangle " << firstTriangle.V[0] << ", " << firstTriangle.V[1] << ", " << firstTriangle.V[2] <<  std::endl;
+                                    //msg_info("ObbTreeGPUFrictionContact") << "secondTriangle " << secondTriangle.V[0] << ", " << secondTriangle.V[1] << ", " << secondTriangle.V[2] <<  std::endl;
 
                                     BVHModels::Triangle3IntersectionResult<SReal> intersectionResult;
 
                                     if (firstTriangle.Find(secondTriangle,intersectionResult))
                                     {
                                         // TODO
-                                        std::cout << "Edge intersetion." << std::endl;
+                                        msg_info("ObbTreeGPUFrictionContact") << "Edge intersetion." << std::endl;
                                         setIntersectionOccurred(true);
                                         /*
-                                        std::cout << "intersectionResult.mQuantity: " << intersectionResult.mQuantity << std::endl;
+                                        msg_info("ObbTreeGPUFrictionContact") << "intersectionResult.mQuantity: " << intersectionResult.mQuantity << std::endl;
                                         for (int i=0; i<intersectionResult.mQuantity; i++)
                                         {
-                                            std::cout << "intersectionResult.mPoint[" << i << "]: ";
-                                            std::cout << intersectionResult.mPoint[i];
-                                            std::cout << std::endl;
+                                            msg_info("ObbTreeGPUFrictionContact") << "intersectionResult.mPoint[" << i << "]: ";
+                                            msg_info("ObbTreeGPUFrictionContact") << intersectionResult.mPoint[i];
+                                            msg_info("ObbTreeGPUFrictionContact") << std::endl;
                                         }
-                                        std::cout << "intersectionResult.GetIntersectionType(): " << intersectionResult.GetIntersectionType() << std::endl;
+                                        msg_info("ObbTreeGPUFrictionContact") << "intersectionResult.GetIntersectionType(): " << intersectionResult.GetIntersectionType() << std::endl;
                                         */
                                     }
                                     else
                                     {
                                         //setIntersectionOccurred(false);
-                                        //std::cout << "Triangles do not intersect." << std::endl;
+                                        //msg_info("ObbTreeGPUFrictionContact") << "Triangles do not intersect." << std::endl;
                                     }
 
                                     /*for (int i=0; i<10; i++)
                                     {
-                                        std::cout << "BananeEnde" << std::endl;
+                                        msg_info("ObbTreeGPUFrictionContact") << "BananeEnde" << std::endl;
                                     }*/
                                     // duplicate code? end
                                 }
                             }
 
-                            //std::cout << "BANAAAAAAAAANE!" << std::endl;
+                            //msg_info("ObbTreeGPUFrictionContact") << "BANAAAAAAAAANE!" << std::endl;
                             //==================================================================================
 #endif
                             typename ResponseDataTypes::Deriv normalVec(o->normal.x(), o->normal.y(), o->normal.z());
@@ -1556,10 +1530,10 @@ namespace sofa
                             // Polynome de Cantor de NxN sur N bijectif f(x,y)=((x+y)^2+3x+y)/2
                             long index = cantorPolynomia(o->id /*cantorPolynomia(index1, index2)*/,id);
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
-                            std::cout << " * contact " << i << ": index1 = " << index1 << ", index2 = " << index2 <<  " id = " << o->id << ", elem1 = " << o->elem.first.getIndex() << ", elem2 = " << o->elem.second.getIndex() << ", distance = " << o->value;
-                            std::cout << ", point0 = " << o->point[0] << ", point1 = " << o->point[1] << ", normal = " << o->normal << std::endl;
+                            msg_info("ObbTreeGPUFrictionContact") << " * contact " << i << ": index1 = " << index1 << ", index2 = " << index2 <<  " id = " << o->id << ", elem1 = " << o->elem.first.getIndex() << ", elem2 = " << o->elem.second.getIndex() << ", distance = " << o->value;
+                            msg_info("ObbTreeGPUFrictionContact") << ", point0 = " << o->point[0] << ", point1 = " << o->point[1] << ", normal = " << o->normal << std::endl;
 
-                            std::cout << "    add LINE_LINE contact to m_constraintGPU_ll" << std::endl;
+                            msg_info("ObbTreeGPUFrictionContact") << "    add LINE_LINE contact to m_constraintGPU_ll" << std::endl;
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
@@ -1595,11 +1569,11 @@ namespace sofa
                 if (m_constraintGPU_vf)
                 {
                     i = 0;
-                    for (std::vector<DetectionOutput*>::const_iterator it = contacts.begin(); it!=contacts.end(); it++)
+                    for (std::vector<DetectionOutput*>::const_iterator it = m_contacts.begin(); it!=m_contacts.end(); it++)
                     {
                         DetectionOutput* o = *it;
 
-                        if (o->contactType == sofa::core::collision::CONTACT_FACE_VERTEX)
+                        if (o->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
                         {
                             index1 = mappedContacts_VertexFace[i].first.first;
                             index2 = mappedContacts_VertexFace[i].first.second;
@@ -1607,7 +1581,7 @@ namespace sofa
 
 #ifdef DO_INTERSECTION_TEST_FOR_TRIANGLES
                             //==================================================================================
-                            //std::cout << "Banane2! BANANE2!" << std::endl;
+                            //msg_info("ObbTreeGPUFrictionContact") << "Banane2! BANANE2!" << std::endl;
 
                             int triIdx1 = o->elem.first.getIndex() / 3;
                             int triIdx2 = o->elem.second.getIndex() / 3;
@@ -1617,11 +1591,11 @@ namespace sofa
                             {
                                 if (triIdx1 >= this->model1->getMeshTopology()->getNbTriangles())
                                 {
-                                    std::cout << "ERROR: triIdx1 >= this->model1->getMeshTopology()->getNbTriangles(); triIdx1 = " << triIdx1 << "this->model1->getMeshTopology()->getNbTriangles() = " << this->model1->getMeshTopology()->getNbTriangles() << std::endl;
+                                    msg_info("ObbTreeGPUFrictionContact") << "ERROR: triIdx1 >= this->model1->getMeshTopology()->getNbTriangles(); triIdx1 = " << triIdx1 << "this->model1->getMeshTopology()->getNbTriangles() = " << this->model1->getMeshTopology()->getNbTriangles() << std::endl;
                                 }
                                 if (triIdx2 >= this->model2->getMeshTopology()->getNbTriangles())
                                 {
-                                    std::cout << "ERROR: triIdx2 >= this->model2->getMeshTopology()->getNbTriangles(); triIdx2 = " << triIdx2 << "this->model2->getMeshTopology()->getNbTriangles() = " << this->model2->getMeshTopology()->getNbTriangles() << std::endl;
+                                    msg_info("ObbTreeGPUFrictionContact") << "ERROR: triIdx2 >= this->model2->getMeshTopology()->getNbTriangles(); triIdx2 = " << triIdx2 << "this->model2->getMeshTopology()->getNbTriangles() = " << this->model2->getMeshTopology()->getNbTriangles() << std::endl;
                                 }
                             }
                             else
@@ -1638,11 +1612,11 @@ namespace sofa
                                 {
                                     if (!model1MechanicalState)
                                     {
-                                        std::cout << "ERROR: dynamic_cast from 'model1->getContext()->getMechanicalState()' failed.";
+                                        msg_info("ObbTreeGPUFrictionContact") << "ERROR: dynamic_cast from 'model1->getContext()->getMechanicalState()' failed.";
                                     }
                                     if (!model2MechanicalState)
                                     {
-                                        std::cout << "ERROR: dynamic_cast from 'model2->getContext()->getMechanicalState()' failed.";
+                                        msg_info("ObbTreeGPUFrictionContact") << "ERROR: dynamic_cast from 'model2->getContext()->getMechanicalState()' failed.";
                                     }
                                 }
                                 else
@@ -1663,47 +1637,47 @@ namespace sofa
                                                                                model2PositionVector.at(contactTriangle2.at(2)));*/
                                                                 //always check against the triangle of the other model;
 
-                                    //std::cout << "firstTriangle " << firstTriangle.V[0] << ", " << firstTriangle.V[1] << ", " << firstTriangle.V[2] <<  std::endl;
-                                    //std::cout << "secondTriangle " << secondTriangle.V[0] << ", " << secondTriangle.V[1] << ", " << secondTriangle.V[2] <<  std::endl;
+                                    //msg_info("ObbTreeGPUFrictionContact") << "firstTriangle " << firstTriangle.V[0] << ", " << firstTriangle.V[1] << ", " << firstTriangle.V[2] <<  std::endl;
+                                    //msg_info("ObbTreeGPUFrictionContact") << "secondTriangle " << secondTriangle.V[0] << ", " << secondTriangle.V[1] << ", " << secondTriangle.V[2] <<  std::endl;
 
                                     BVHModels::Triangle3IntersectionResult<SReal> intersectionResult;
 
                                     if (firstTriangle.Find(secondTriangle,intersectionResult))
                                     {
                                         // TODO
-                                        std::cout << "Triangle intersetion." << std::endl;
+                                        msg_info("ObbTreeGPUFrictionContact") << "Triangle intersetion." << std::endl;
                                         setIntersectionOccurred(true);
                                         /*
-                                        std::cout << "intersectionResult.mQuantity: " << intersectionResult.mQuantity << std::endl;
+                                        msg_info("ObbTreeGPUFrictionContact") << "intersectionResult.mQuantity: " << intersectionResult.mQuantity << std::endl;
                                         for (int i=0; i<intersectionResult.mQuantity; i++)
                                         {
-                                            std::cout << "intersectionResult.mPoint[" << i << "]: ";
-                                            std::cout << intersectionResult.mPoint[i];
-                                            std::cout << std::endl;
+                                            msg_info("ObbTreeGPUFrictionContact") << "intersectionResult.mPoint[" << i << "]: ";
+                                            msg_info("ObbTreeGPUFrictionContact") << intersectionResult.mPoint[i];
+                                            msg_info("ObbTreeGPUFrictionContact") << std::endl;
                                         }
-                                        std::cout << "intersectionResult.GetIntersectionType(): " << intersectionResult.GetIntersectionType() << std::endl;
+                                        msg_info("ObbTreeGPUFrictionContact") << "intersectionResult.GetIntersectionType(): " << intersectionResult.GetIntersectionType() << std::endl;
                                         */
                                     }
                                     else
                                     {
                                         //setIntersectionOccurred(false);
-                                        //std::cout << "Triangles do not intersect." << std::endl;
+                                        //msg_info("ObbTreeGPUFrictionContact") << "Triangles do not intersect." << std::endl;
                                     }
 
                                     /*for (int i=0; i<10; i++)
                                     {
-                                        std::cout << "BananeEnde" << std::endl;
+                                        msg_info("ObbTreeGPUFrictionContact") << "BananeEnde" << std::endl;
                                     }*/
                                 }
                             }
-                            //std::cout << "BANAAAAAAAAANE2!" << std::endl;
+                            //msg_info("ObbTreeGPUFrictionContact") << "BANAAAAAAAAANE2!" << std::endl;
                             //==================================================================================
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
-                            std::cout << " * contact " << i << ": index1 = " << index1 << ", index2 = " << index2 <<  ", id = " << o->id << ", elem1 = " << o->elem.first.getIndex() << ", elem2 = " << o->elem.second.getIndex() << ", feature1 = " << o->elemFeatures.first << ", feature2 = " << o->elemFeatures.second << ", distance = " << o->value;
-                            std::cout << ", point0 = " << o->point[0] << ", point1 = " << o->point[1] << ", normal = " << o->normal << std::endl;
-                            std::cout << "   add FACE_VERTEX contact to m_constraintGPU_vf" << std::endl;
+                            msg_info("ObbTreeGPUFrictionContact") << " * contact " << i << ": index1 = " << index1 << ", index2 = " << index2 <<  ", id = " << o->id << ", elem1 = " << o->elem.first.getIndex() << ", elem2 = " << o->elem.second.getIndex() << ", feature1 = " << o->elemFeatures.first << ", feature2 = " << o->elemFeatures.second << ", distance = " << o->value;
+                            msg_info("ObbTreeGPUFrictionContact") << ", point0 = " << o->point[0] << ", point1 = " << o->point[1] << ", normal = " << o->normal << std::endl;
+                            msg_info("ObbTreeGPUFrictionContact") << "   add FACE_VERTEX contact to m_constraintGPU_vf" << std::endl;
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
@@ -1736,12 +1710,12 @@ namespace sofa
                 if (m_defaultConstraint)
                 {
                     i = 0;
-                    for (std::vector<DetectionOutput*>::const_iterator it = contacts.begin(); it!=contacts.end(); it++)
+                    for (std::vector<DetectionOutput*>::const_iterator it = m_contacts.begin(); it!=m_contacts.end(); it++)
                     {
                         DetectionOutput* o = *it;
-                        if (o->contactType != sofa::core::collision::CONTACT_FACE_VERTEX &&
-                            o->contactType != sofa::core::collision::CONTACT_LINE_LINE &&
-                            o->contactType != sofa::core::collision::CONTACT_LINE_VERTEX)
+                        if (o->contactType != sofa::component::collision::CONTACT_FACE_VERTEX &&
+                            o->contactType != sofa::component::collision::CONTACT_LINE_LINE &&
+                            o->contactType != sofa::component::collision::CONTACT_LINE_VERTEX)
                         {
                             index1 = mappedContacts[i].first.first;
                             index2 = mappedContacts[i].first.second;
@@ -1752,9 +1726,9 @@ namespace sofa
                             long index = cantorPolynomia(o->id /*cantorPolynomia(index1, index2)*/,id);
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
-                            std::cout << " * contact " << i << ": index1 = " << index1 << ", index2 = " << index2 <<  " id = " << o->id << ", elem1 = " << o->elem.first.getIndex() << ", elem2 = " << o->elem.second.getIndex() << ", distance = " << o->value;
-                            std::cout << ", point0 = " << o->point[0] << ", point1 = " << o->point[1] << ", normal = " << o->normal << std::endl;
-                            std::cout << "   add OTHER contact to m_constraint1" << std::endl;
+                            msg_info("ObbTreeGPUFrictionContact") << " * contact " << i << ": index1 = " << index1 << ", index2 = " << index2 <<  " id = " << o->id << ", elem1 = " << o->elem.first.getIndex() << ", elem2 = " << o->elem.second.getIndex() << ", distance = " << o->value;
+                            msg_info("ObbTreeGPUFrictionContact") << ", point0 = " << o->point[0] << ", point1 = " << o->point[1] << ", normal = " << o->normal << std::endl;
+                            msg_info("ObbTreeGPUFrictionContact") << "   add OTHER contact to m_constraint1" << std::endl;
 #endif
                             
                             m_defaultConstraint->addContact(mu_, normalVec, distance, index1, index2, index, o->id);
@@ -1787,7 +1761,7 @@ namespace sofa
                 {
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
                     sout << "ObbTreeGPUFrictionContact " << this->getName() << ": Attaching contact response to " << parent->getName() << sendl;
-                    std::cout << "ObbTreeGPUFrictionContact " << this->getName() << ": Attaching contact response to " << parent->getName() << std::endl;
+                    msg_info("ObbTreeGPUFrictionContact") << "ObbTreeGPUFrictionContact " << this->getName() << ": Attaching contact response to " << parent->getName() << std::endl;
 #endif
                     parent->addObject(this);
 
@@ -1808,7 +1782,7 @@ namespace sofa
 #endif
                 }
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
-            std::cout << "=== end   ObbTreeGPUFrictionContact::createResponse(" << this->getName() << ") call ===" << std::endl;
+            msg_info("ObbTreeGPUFrictionContact") << "=== end   ObbTreeGPUFrictionContact::createResponse(" << this->getName() << ") call ===" << std::endl;
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
@@ -1827,7 +1801,7 @@ namespace sofa
 
 #else
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
-                std::cout << "ObbTreeGPUFrictionContact " << this->getName() << ": Would create " << contacts.size() << " contacts." << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "ObbTreeGPUFrictionContact " << this->getName() << ": Would create " << contacts.size() << " contacts." << std::endl;
                 int i=0;
                 for (std::vector<DetectionOutput*>::const_iterator it = contacts.begin(); it != contacts.end(); it++, i++)
                 {
@@ -1835,8 +1809,8 @@ namespace sofa
                     //int index1 = mappedContacts[i].first.first;
                     //int index2 = mappedContacts[i].first.second;
                     //double distance = mappedContacts[i].second;
-                    std::cout << " * contact " << i << ": id = " << o->id << ", elem1 = " << o->elem.first.getIndex() << ", elem2 = " << o->elem.second.getIndex() << ", distance = " << o->value;
-                    std::cout << ", point0 = " << o->point[0] << ", point1 = " << o->point[1] << ", normal = " << o->normal << std::endl;
+                    msg_info("ObbTreeGPUFrictionContact") << " * contact " << i << ": id = " << o->id << ", elem1 = " << o->elem.first.getIndex() << ", elem2 = " << o->elem.second.getIndex() << ", distance = " << o->value;
+                    msg_info("ObbTreeGPUFrictionContact") << ", point0 = " << o->point[0] << ", point1 = " << o->point[1] << ", normal = " << o->normal << std::endl;
                 }
 #endif
 #endif
@@ -1887,7 +1861,7 @@ namespace sofa
                 {
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_REMOVERESPONSE
                     sout << "ObbTreeGPUFrictionContact " << this->getName() << ": Removing contact response from " << parent->getName() << sendl;
-                    std::cout << "ObbTreeGPUFrictionContact " << this->getName() << ": Removing contact response from " << parent->getName() << std::endl;
+                    msg_info("ObbTreeGPUFrictionContact") << "ObbTreeGPUFrictionContact " << this->getName() << ": Removing contact response from " << parent->getName() << std::endl;
 #endif
                     parent->removeObject(this);
 
@@ -1937,7 +1911,7 @@ namespace sofa
                 typename core::behavior::MechanicalState<Vec3Types>::ReadVecCoord pos2 = this->model2->getMechanicalState()->readPositions();
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DRAW_CONTACT_POINTS
-                if (contacts.size() > 0)
+                if (m_contacts.size() > 0)
                 {
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_DRAW
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
@@ -1956,15 +1930,15 @@ namespace sofa
                     std::stringstream labelStream;
 #endif
                     int contactCount = 0;
-                    for (std::vector<DetectionOutput*>::const_iterator it = contacts.begin(); it!=contacts.end(); it++)
+                    for (std::vector<DetectionOutput*>::const_iterator it = m_contacts.begin(); it!=m_contacts.end(); it++)
                     {
                         DetectionOutput* o = *it;
                         contactCount++;
                         sofa::defaulttype::Vec3f color;
 
-                        if (o->contactType == sofa::core::collision::CONTACT_FACE_VERTEX)
+                        if (o->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
                             color = Vec3f(0,0.8,0);
-                        else if (o->contactType == sofa::core::collision::CONTACT_LINE_LINE)
+                        else if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
                             color = Vec3f(0.8,0,0);
 
 
@@ -2009,7 +1983,7 @@ namespace sofa
                         //const sofa::defaulttype::BoundingBox& bbox = this->getContext()->f_bbox.getValue();
                         float scale = 0.15f * 0.01f; //(float)((bbox.maxBBox() - bbox.minBBox()).norm() * 0.0001);
 
-                        //std::cout << "  minBBox = " << bbox.minBBox() << ", maxBBox = " << bbox.maxBBox() << ", scale = " << scale << std::endl;
+                        //msg_info("ObbTreeGPUFrictionContact") << "  minBBox = " << bbox.minBBox() << ", maxBBox = " << bbox.maxBBox() << ", scale = " << scale << std::endl;
 
                         labelStream << this->getName();
                         if (o->contactType == sofa::core::collision::CONTACT_FACE_VERTEX)
@@ -2076,10 +2050,10 @@ namespace sofa
                         int edgeIdx1 = idx1 % 3;
                         int edgeIdx2 = idx2 % 3;
 
-                        if (o->contactType == sofa::core::collision::CONTACT_LINE_LINE)
+                        if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
                         {
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_DRAW
-                            // std::cout << " * LINE_LINE contact " << contactCount << ": idx1 = " << idx1 << ", idx2 = " << idx2 << "; triIdx1 = " << triIdx1 << ", triIdx2 = " << triIdx2 << "; edgeIdx1 = " << edgeIdx1 << ", edgeIdx2 = " << edgeIdx2 << std::endl;
+                            // msg_info("ObbTreeGPUFrictionContact") << " * LINE_LINE contact " << contactCount << ": idx1 = " << idx1 << ", idx2 = " << idx2 << "; triIdx1 = " << triIdx1 << ", triIdx2 = " << triIdx2 << "; edgeIdx1 = " << edgeIdx1 << ", edgeIdx2 = " << edgeIdx2 << std::endl;
 #endif
                             if (triIdx1 >= this->model1->getMeshTopology()->getNbTriangles() ||
                                 triIdx2 >= this->model2->getMeshTopology()->getNbTriangles())
@@ -2088,19 +2062,19 @@ namespace sofa
                             const sofa::core::topology::BaseMeshTopology::EdgesInTriangle& e1 = this->model1->getMeshTopology()->getEdgesInTriangle(triIdx1);
                             const sofa::core::topology::BaseMeshTopology::EdgesInTriangle& e2 = this->model2->getMeshTopology()->getEdgesInTriangle(triIdx2);
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_DRAW
-                            // std::cout << "   edges e1 = " << e1 << "; edges e2 = " << e2 << std::endl;
+                            // msg_info("ObbTreeGPUFrictionContact") << "   edges e1 = " << e1 << "; edges e2 = " << e2 << std::endl;
 #endif
                             if (e1[edgeIdx1] >= this->model1->getMeshTopology()->getNbEdges() ||
                                 e2[edgeIdx2] >= this->model2->getMeshTopology()->getNbEdges())
                                 continue;
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_DRAW
-                            // std::cout << "   GETEDGE model1: " << e1[edgeIdx1] << ", numEdges = " << this->model1->getMeshTopology()->getNbEdges() << std::endl;
+                            // msg_info("ObbTreeGPUFrictionContact") << "   GETEDGE model1: " << e1[edgeIdx1] << ", numEdges = " << this->model1->getMeshTopology()->getNbEdges() << std::endl;
 #endif
                             const sofa::core::topology::BaseMeshTopology::Edge& edge1 = this->model1->getMeshTopology()->getEdge(e1[edgeIdx1]);
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_DRAW
-                            // std::cout << "   GETEDGE model2: " << e1[edgeIdx2] << ", numEdges = " << this->model2->getMeshTopology()->getNbEdges() << std::endl;
+                            // msg_info("ObbTreeGPUFrictionContact") << "   GETEDGE model2: " << e1[edgeIdx2] << ", numEdges = " << this->model2->getMeshTopology()->getNbEdges() << std::endl;
 #endif
                             const sofa::core::topology::BaseMeshTopology::Edge& edge2 = this->model2->getMeshTopology()->getEdge(e2[edgeIdx2]);
 

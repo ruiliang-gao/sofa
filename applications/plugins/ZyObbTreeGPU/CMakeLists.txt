@@ -113,6 +113,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/CyberX3D/include
     ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cutil/include
     ${CMAKE_SOURCE_DIR}/extlibs/ZyPQP/include
+    ${CMAKE_SOURCE_DIR}/extlibs/ZyBVHModels
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
 )

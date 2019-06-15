@@ -92,9 +92,9 @@ namespace sofa
                     bool getOrientation(Matrix3&) const;
                     bool getOrientation(Quaternion&) const;
 
-                    sofa::core::behavior::BaseMechanicalState* getObjectMState() { return _objectMState; }
-                    sofa::core::behavior::MechanicalState<DataTypes>* getMState() { return _mState; }
-                    sofa::core::behavior::MechanicalState<DataTypes>* getMechanicalState() { return _mState; }
+                    sofa::core::behavior::BaseMechanicalState* getObjectMState() { return m_objectBaseMState; }
+                    sofa::core::behavior::MechanicalState<DataTypes>* getMState() { return m_objectMechanicalState; }
+                    sofa::core::behavior::MechanicalState<DataTypes>* getMechanicalState() { return m_objectMechanicalState; }
 
                     PQP_Model* getPqpModel() { return m_pqp_tree; }
 
@@ -167,15 +167,15 @@ namespace sofa
 
                     ObbTreeGPUCollisionModelPrivate* m_d;
 
-                    sofa::core::behavior::MechanicalState<DataTypes>* _mState;
-                    sofa::core::behavior::BaseMechanicalState* _objectMState;
+                    sofa::core::behavior::MechanicalState<DataTypes>* m_objectMechanicalState;
+                    sofa::core::behavior::BaseMechanicalState* m_objectBaseMState;
 
-                    sofa::component::container::MechanicalObject<DataTypes>* _mObject;
+                    sofa::component::container::MechanicalObject<DataTypes>* m_mechanicalObject;
 
 					defaulttype::Vec3d m_oldCachedPosition;
 					defaulttype::Quaternion m_oldCachedOrientation;
-					bool cachedPositionChange;
-					bool cachedOrientationChange;
+                    bool m_cachedPositionChange;
+                    bool m_cachedOrientationChange;
 
                     /*Data<bool> useContactManifolds;*/
                     Data<unsigned int> maxNumberOfLineLineManifolds;
@@ -184,6 +184,9 @@ namespace sofa
 					// Fake gripping convenience member variables and accessors
 					sofa::component::container::MechanicalObject<Rigid3Types>* m_fromObject;
 					sofa::component::mapping::RigidMapping<Rigid3Types, Vec3Types>* m_innerMapping;
+
+                    Data<sofa::defaulttype::Vector3> m_appliedTranslation;
+                    Data<sofa::defaulttype::Quaternion> m_appliedRotation;
 
 				public:
 					sofa::component::container::MechanicalObject<Rigid3Types>* getAttachFromObject() { return m_fromObject; }
