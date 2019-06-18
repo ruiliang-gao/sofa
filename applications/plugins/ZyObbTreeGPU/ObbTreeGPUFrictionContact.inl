@@ -81,10 +81,15 @@ namespace sofa
 #endif
 
                 if (dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model1))
+                {
+                    msg_info("ObbTreeGPUFrictionContact") << "Using contact type flags for model1, it is-a ObbTreeGPUCollisionModel<Vec3Types>";
                     m_useModelContactTypes_model1 = true;
-
+                }
                 if (dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model2))
+                {
+                    msg_info("ObbTreeGPUFrictionContact") << "Using contact type flags for model2, it is-a ObbTreeGPUCollisionModel<Vec3Types>";
                     m_useModelContactTypes_model2 = true;
+                }
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
                 selfCollision = ((core::CollisionModel*)model1 == (core::CollisionModel*)model2);
@@ -131,7 +136,7 @@ namespace sofa
 
                 this->setName(model1->getName() + "_" + model2->getName() + "_OBBTreeGPUFrictionContact");
 				testOutputFilename.setValue(sofa::helper::system::DataRepository.getFirstPath() + "/" + this->getName() + ".log");
-                msg_info("ObbTreeGPUFrictionContact") << "testOutputFilename = " << testOutputFilename.getValue() << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "testOutputFilename = " << testOutputFilename.getValue();
 
                 if (testOutputFilename.getValue() != "")
                 {
@@ -407,6 +412,21 @@ namespace sofa
             void ObbTreeGPUFrictionContact<TCollisionModel1,TCollisionModel2,ResponseDataTypes>::setDetectionOutputs(OutputVector* o)
             {
 
+                if (!this->m_useModelContactTypes_model1 || !this->m_useModelContactTypes_model2)
+                {
+                    msg_warning("ObbTreeGPUFrictionContact") << "setDetectionOutputs called for collision model pairing where one or both models are not of type ObbTreeGPUCollisionModel<Vec3Types>! This is not supported for this contact type.";
+                    return;
+                }
+
+                ObbTreeGPUCollisionModel<Vec3Types>* collisionModel1 = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model1);
+                ObbTreeGPUCollisionModel<Vec3Types>* collisionModel2 = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model2);
+
+                if (!collisionModel1 || !collisionModel2)
+                {
+                    msg_warning("ObbTreeGPUFrictionContact") << "dynamic_cast to ObbTreeGPUCollisionModel<Vec3Types> failed for given collision model pairing! collisionModel1 == nullptr: " << (collisionModel1 == nullptr) << ", collisionModel2 == nullptr: " << (collisionModel2 == nullptr);
+                    return;
+                }
+
 #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
                 if (testOutputFilename.getValue() != "")
                 {
@@ -426,11 +446,11 @@ namespace sofa
 #endif
                 TOutputVector& outputs = *static_cast<TOutputVector*>(o);
                 // We need to remove duplicate contacts
-				const double minDist2 = 0.0001f /*0.00000001f*/;
+                const double minDist2 = 0.0001f;
 
                 m_contacts.clear();
 
-                if (model1->getContactStiffness(0) == 0 || model2->getContactStiffness(0) == 0)
+                if (collisionModel1->getContactStiffness(0) == 0 || collisionModel2->getContactStiffness(0) == 0)
                 {
                     serr << "Disabled ObbTreeGPUFrictionContact with " << (outputs.size()) << " collision points." << sendl;
 #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
@@ -441,7 +461,7 @@ namespace sofa
 
                 // check if contact manifolds should be used.
                 // (manifold creation rules are explained below)
-                bool createContactManifold = (model1->getUseContactManifolds() && model2->getUseContactManifolds());
+                bool createContactManifold = (collisionModel1->getUseContactManifolds() && collisionModel2->getUseContactManifolds());
 
                 bool useDynamicManifolds = false; // experimental
                 unsigned int dynamicManifoldCount = 0;
@@ -473,8 +493,8 @@ namespace sofa
                         //                             model2->getMaxNumberOfLineLineManifolds())
                         //                    );
                         lineLineCount = std::max<int>(1,  // needs to be at least 1
-                            std::min(model1->getMaxNumberOfManifolds(),
-                            model2->getMaxNumberOfManifolds())
+                            std::min(collisionModel1->getMaxNumberOfManifolds(),
+                            collisionModel2->getMaxNumberOfManifolds())
                             );
                         m_lineLineManifoldVector.clear();
                         m_lineLineManifoldVector.resize(lineLineCount);
@@ -491,8 +511,8 @@ namespace sofa
                         //                               model2->getMaxNumberOfFaceVertexManifolds())
                         //                      );
                         vertexFaceCount = std::max<int>(1,  // needs to be at least 1
-                            std::min(model1->getMaxNumberOfManifolds(),
-                            model2->getMaxNumberOfManifolds())
+                            std::min(collisionModel1->getMaxNumberOfManifolds(),
+                            collisionModel2->getMaxNumberOfManifolds())
                             );
                         m_faceVertexManifoldVector.clear();
                         m_faceVertexManifoldVector.resize(vertexFaceCount);
@@ -516,8 +536,8 @@ namespace sofa
     #endif
     #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
                         defaultCount = std::max<int>(1,  // needs to be at least 1
-                            std::min(model1->getMaxNumberOfManifolds(),
-                            model2->getMaxNumberOfManifolds())
+                            std::min(collisionModel1->getMaxNumberOfManifolds(),
+                            collisionModel2->getMaxNumberOfManifolds())
                             );
                         m_defaultManifoldVector.clear();
                         m_defaultManifoldVector.resize(defaultCount);
@@ -576,7 +596,7 @@ namespace sofa
                     DetectionOutput* o = &outputs[cpt];
 
                     bool found = false;
-                    for (unsigned int i=0; i<m_contacts.size() && !found; i++)
+                    for (unsigned int i = 0; i < m_contacts.size() && !found; i++)
                     {
                         DetectionOutput* p = m_contacts[i];
 
@@ -647,36 +667,53 @@ namespace sofa
                                 if (!useDynamicManifolds)
                                 {
             #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
+
+            #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                     if (o->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
+            #else
+                                    if (collisionModel1->getContactType(collisionModel2->getUuid(), cpt) == COLLISION_VERTEX_FACE)
+            #endif
                                     {
-                                        addDetectionToSingleTypeManifold(m_faceVertexManifoldVector.at(currentVFManifold),o);
+                                        addDetectionToSingleTypeManifold(m_faceVertexManifoldVector.at(currentVFManifold), o);
                                         currentVFManifold++;
                                         currentVFManifold = currentVFManifold % vertexFaceCount;
                                     }
             #endif
 
             #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
+            #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                     if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
+            #else
+                                    if (collisionModel1->getContactType(collisionModel2->getUuid(), cpt) == COLLISION_LINE_LINE)
+            #endif
                                     {
-                                        addDetectionToSingleTypeManifold(m_lineLineManifoldVector.at(currentLLManifold),o);
+                                        addDetectionToSingleTypeManifold(m_lineLineManifoldVector.at(currentLLManifold), o);
                                         currentLLManifold++;
                                         currentLLManifold = currentLLManifold % lineLineCount;
                                     }
             #endif
 
             #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINEVERTEX_CONSTRAINT
+            #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                     if (o->contactType == sofa::core::collision::CONTACT_LINE_VERTEX)
+            #else
+                                    if (collisionModel1->getContactType(collisionModel2->getUuid(), cpt) == COLLISION_LINE_POINT)
+            #endif
                                     {
-                                        addDetectionToSingleTypeManifold(lineVertexManifoldVector.at(currentLVManifold),o);
+                                        addDetectionToSingleTypeManifold(lineVertexManifoldVector.at(currentLVManifold), o);
                                         currentLVManifold++;
                                         currentLVManifold = currentLVManifold % lineVertexCount;
                                     }
             #endif
 
             #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
+            #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                     if (o->contactType == sofa::component::collision::CONTACT_INVALID)
+            #else
+                                    if (collisionModel1->getContactType(collisionModel2->getUuid(), cpt) == COLLISION_INVALID)
+            #endif
                                     {
-                                        addDetectionToSingleTypeManifold(m_defaultManifoldVector.at(currentDManifold),o);
+                                        addDetectionToSingleTypeManifold(m_defaultManifoldVector.at(currentDManifold), o);
                                         currentDManifold++;
                                         currentDManifold = currentDManifold % defaultCount;
                                     }
@@ -693,36 +730,41 @@ namespace sofa
                                 contactsAdded++;
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
+        #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                 if (o->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
+        #else
+                                if (collisionModel1->getContactType(collisionModel2->getUuid(), cpt) == COLLISION_VERTEX_FACE)
+        #endif
                                     m_numVertexFaceContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
+        #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                 if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
+        #else
+                                if (collisionModel1->getContactType(collisionModel2->getUuid(), cpt) == COLLISION_LINE_LINE)
+        #endif
                                     m_numLineLineContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINEVERTEX_CONSTRAINT
+        #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                 if (o->contactType == sofa::component::collision::CONTACT_LINE_VERTEX)
+        #else
+                                if (collisionModel1->getContactType(collisionModel2->getUuid(), cpt) == COLLISION_LINE_POINT)
+        #endif
                                     m_numLineVertexContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
+        #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                 if (o->contactType == sofa::component::collision::CONTACT_INVALID)
+        #else
+                                if (collisionModel1->getContactType(collisionModel2->getUuid(), cpt) == COLLISION_INVALID)
+        #endif
                                     m_numOtherContacts++;
         #endif
                             }
-/*
-#ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINEVERTEX_CONSTRAINT
-                        if (o->contactType == sofa::core::collision::CONTACT_LINE_VERTEX)
-                            m_numLineVertexContacts++;
-#endif
-
-#ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
-                        if (o->contactType == sofa::core::collision::CONTACT_INVALID)
-                            m_numOtherContacts++;
-#endif
-*/
 
 #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
                         if (testOutputFilename.getValue() != "")
@@ -807,26 +849,43 @@ namespace sofa
                     {
                         for (unsigned int u = 0; u < dynamicManifoldCount; u++)
                         {
-                            for (unsigned int k=0; k<m_dynamicManifoldVector.at(u).first.size(); k++)
+                            for (unsigned int k = 0; k < m_dynamicManifoldVector.at(u).first.size(); k++)
                             {
                                 DetectionOutput* currentO = m_dynamicManifoldVector.at(u).first.at(k);
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
+        #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                 if (currentO->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
+        #else
+                                if (collisionModel1->getContactType(collisionModel2->getUuid(), k) == COLLISION_VERTEX_FACE)
+        #endif
                                     m_numVertexFaceContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
+        #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                 if (currentO->contactType == sofa::component::collision::CONTACT_LINE_LINE)
+        #else
+                                if (collisionModel1->getContactType(collisionModel2->getUuid(), k) == COLLISION_LINE_LINE)
+        #endif
                                     m_numLineLineContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINEVERTEX_CONSTRAINT
+        #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                 if (currentO->contactType == sofa::component::collision::CONTACT_LINE_VERTEX)
+        #else
+                                if (collisionModel1->getContactType(collisionModel2->getUuid(), k) == COLLISION_LINE_POINT)
+        #endif
                                     m_numLineVertexContacts++;
         #endif
 
         #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
+        #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                 if (currentO->contactType == sofa::component::collision::CONTACT_INVALID)
+        #else
+                                if (collisionModel1->getContactType(collisionModel2->getUuid(), k) == COLLISION_INVALID)
+        #endif
+
                                     m_numOtherContacts++;
         #endif
                                 m_contacts.push_back(currentO);
@@ -835,15 +894,15 @@ namespace sofa
                         }
                     }
                 }
-                //msg_info("ObbTreeGPUFrictionContact") << "contactsAdded=" << contactsAdded << std::endl;
-                //msg_info("ObbTreeGPUFrictionContact") << "contacts.size()=" << contacts.size() << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "contactsAdded = " << contactsAdded;
+                msg_info("ObbTreeGPUFrictionContact") << "contacts.size() = " << m_contacts.size();
 
                 if (m_contacts.size() < outputs.size() && this->f_printLog.getValue())
                 {
                     // DUPLICATED CONTACTS FOUND
-                    sout << "Removed " << (outputs.size()-m_contacts.size()) <<" / " << outputs.size() << " collision points." << sendl;
+                    msg_info("ObbTreeGPUFrictionContact") << "Removed " << (outputs.size() - m_contacts.size()) <<" / " << outputs.size() << " collision points.";
 #ifdef FRICTIONCONTACT_DEBUG_SETDETECTIONOUTPUTS
-                    msg_info("ObbTreeGPUFrictionContact") << "Removed " << (outputs.size()-contacts.size()) <<" / " << outputs.size() << " collision points." << std::endl;
+                    msg_info("ObbTreeGPUFrictionContact") << "Removed " << (outputs.size() - contacts.size()) <<" / " << outputs.size() << " collision points.";
 #endif
                 }
 
@@ -869,10 +928,24 @@ namespace sofa
 #endif
             }
 
-//#define OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
             template < class TCollisionModel1, class TCollisionModel2, class ResponseDataTypes  >
             void ObbTreeGPUFrictionContact<TCollisionModel1,TCollisionModel2,ResponseDataTypes>::activateMappers()
             {
+                if (!this->m_useModelContactTypes_model1 || !this->m_useModelContactTypes_model2)
+                {
+                    msg_warning("ObbTreeGPUFrictionContact") << "activateMappers called for collision model pairing where one or both models are not of type ObbTreeGPUCollisionModel<Vec3Types>! This is not supported for this contact type.";
+                    return;
+                }
+
+                ObbTreeGPUCollisionModel<Vec3Types>* collisionModel1 = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model1);
+                ObbTreeGPUCollisionModel<Vec3Types>* collisionModel2 = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model2);
+
+                if (!collisionModel1 || !collisionModel2)
+                {
+                    msg_warning("ObbTreeGPUFrictionContact") << "dynamic_cast to ObbTreeGPUCollisionModel<Vec3Types> failed for given collision model pairing! collisionModel1 == nullptr: " << (collisionModel1 == nullptr) << ", collisionModel2 == nullptr: " << (collisionModel2 == nullptr);
+                    return;
+                }
+
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
                 if (testOutputFilename.getValue() != "")
                 {
@@ -904,9 +977,9 @@ namespace sofa
                     mmodel2 = selfCollision ? mmodel1 : mapper2_default.createMapping(mapping_name2.c_str());
 
                     m_defaultConstraint = sofa::core::objectmodel::New<constraintset::UnilateralInteractionConstraint<ResponseDataTypes> >(mmodel1, mmodel2);
-                    m_defaultConstraint->setName( getName() + "_defaultConstraint" );
+                    m_defaultConstraint->setName(getName() + "_defaultConstraint");
                     setInteractionTags(mmodel1, mmodel2, m_defaultConstraint.get());
-                    m_defaultConstraint->setCustomTolerance( m_tol.getValue() );
+                    m_defaultConstraint->setCustomTolerance(m_tol.getValue());
                 }
 #endif
 
@@ -918,7 +991,7 @@ namespace sofa
                     std::string mapping_name2(this->getName() + "_Mapping2_GPU_LineLine");
                     mmodel2 = mapper2_gpu_ll.createMapping(mapping_name2.c_str());
                     m_constraintGPU_ll = sofa::core::objectmodel::New<constraintset::UnilateralInteractionConstraint<ResponseDataTypes> >(mmodel1, mmodel2);
-                    m_constraintGPU_ll->setName( getName() + "_constraintGPU_LineLine" );
+                    m_constraintGPU_ll->setName(getName() + "_constraintGPU_LineLine");
                     setInteractionTags(mmodel1, mmodel2, m_constraintGPU_ll.get());
                     m_constraintGPU_ll->setCustomTolerance( m_tol.getValue() );
                 }
@@ -1021,13 +1094,6 @@ namespace sofa
                 int i = 0;
                 const double d0 = intersectionMethod->getContactDistance() + model1->getProximity() + model2->getProximity(); // - 0.001;
 
-                /*
-                msg_info("ObbTreeGPUFrictionContact")<<"m_numLineLineContacts = "<<m_numLineLineContacts<<std::endl;
-                msg_info("ObbTreeGPUFrictionContact")<<"m_numVertexFaceContacts = "<<m_numVertexFaceContacts<<std::endl;
-                msg_info("ObbTreeGPUFrictionContact")<<"m_numOtherContacts = "<<m_numOtherContacts<<std::endl;
-                msg_info("ObbTreeGPUFrictionContact")<<" d0 = "<<d0<<std::endl;
-                */
-
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
                 m_constraintGPU_ll->clear(m_numLineLineContacts);
 #endif
@@ -1081,7 +1147,12 @@ namespace sofa
 #endif
                     int index1, index2;
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                     if (o->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
+#else
+                    if (collisionModel1->getContactType(collisionModel2->getUuid(), i) == COLLISION_VERTEX_FACE)
+#endif
+
                     {
                         int triIdx1 = o->elem.first.getIndex() / 3;
                         int triIdx2 = o->elem.second.getIndex() / 3;
@@ -1089,7 +1160,7 @@ namespace sofa
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
                         int vertexIdx1 = o->elem.first.getIndex() % 3;
                         int vertexIdx2 = o->elem.second.getIndex() % 3;
-                        msg_info("ObbTreeGPUFrictionContact") << "   indices: triangle " << triIdx1 << ", vertex " << vertexIdx1 << " - triangle " << triIdx2 << ", vertex " << vertexIdx2 << std::endl;
+                        msg_info("ObbTreeGPUFrictionContact") << "   indices: triangle " << triIdx1 << ", vertex " << vertexIdx1 << " - triangle " << triIdx2 << ", vertex " << vertexIdx2;
 #endif
                         typename DataTypes1::Real r1 = 0.;
                         typename DataTypes2::Real r2 = 0.;
@@ -1098,14 +1169,18 @@ namespace sofa
                     #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
                                     , o->baryCoords[0]
                     #endif
+                    #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                     , o->contactType
+                    #endif
                                                       );
                         // Create mapping for second point
                         index2 = mapper2_gpu_vf.addPointB(o->point[1], triIdx1, r2
                 #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
                                     , o->baryCoords[1]
                 #endif
+                #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                     , o->contactType
+                #endif
                                                       );
 
                         double distance = d0 + r1 + r2;
@@ -1132,7 +1207,12 @@ namespace sofa
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                     if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
+#else
+                    if (collisionModel1->getContactType(collisionModel2->getUuid(), i) == COLLISION_LINE_LINE)
+#endif
+
                     {
                         int triIdx1 = o->elem.first.getIndex() / 3;
                         int triIdx2 = o->elem.second.getIndex() / 3;
@@ -1166,14 +1246,18 @@ namespace sofa
                             #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
                                             , o->baryCoords[0]
                             #endif
+                            #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                             , o->contactType
+                            #endif
                                                               );
                                 // Create mapping for second point
                                 index2 = mapper2_gpu_ll.addPointB(o->point[1], edgeId2, r2
                         #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
                                             , o->baryCoords[1]
                         #endif
+                        #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                             , o->contactType
+                        #endif
                                                               );
 
                                 double distance = d0 + r1 + r2;
@@ -1300,9 +1384,9 @@ namespace sofa
 					m_numContacts++;
                 }
 
-                msg_info("ObbTreeGPUFrictionContact") << "======================================================" << std::endl;
-                msg_info("ObbTreeGPUFrictionContact") << this->getName() << ": " << m_numContacts << " contacts." << std::endl;
-                msg_info("ObbTreeGPUFrictionContact") << "======================================================" << std::endl;
+                msg_info("ObbTreeGPUFrictionContact") << "======================================================";
+                msg_info("ObbTreeGPUFrictionContact") << this->getName() << ": " << m_numContacts << " contacts.";
+                msg_info("ObbTreeGPUFrictionContact") << "======================================================";
 
                 // Update mappings
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT

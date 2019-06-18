@@ -9,6 +9,10 @@
 
 #include <SofaBaseCollision/CubeModel.h>
 
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+
+#include <gProximity/cuda_collision.h>
 #include <PQP.h>
 #include "SofaMeshCollision/Triangle.h"
 
@@ -98,7 +102,8 @@ namespace sofa
 
                     PQP_Model* getPqpModel() { return m_pqp_tree; }
 
-					void setDrawObbHierarchy(bool on) {
+                    void setDrawObbHierarchy(bool on)
+                    {
 						m_drawOBBHierarchy.setValue(on);
 					}
 
@@ -127,14 +132,22 @@ namespace sofa
                     void setCachedOrientation(const defaulttype::Quaternion& orientation);
 
                     bool hasModelPositionChanged() const;
-                    /*const bool& getUseContactManifolds () const { return useContactManifolds.getValue(); }*/
-                    /*const unsigned int& getMaxNumberOfLineLineManifolds () const { return maxNumberOfLineLineManifolds.getValue(); }
-                    const unsigned int& getMaxNumberOfFaceVertexManifolds () const { return maxNumberOfFaceVertexManifolds.getValue(); }*/
 
-                    /*void setUseContactManifolds (bool on) { useContactManifolds.setValue(on); }*/
-                    /*void setMaxNumberOfLineLineManifolds( unsigned int num) { maxNumberOfLineLineManifolds.setValue(num); }
-                    void setMaxNumberOfFaceVertexManifolds( unsigned int num) { maxNumberOfFaceVertexManifolds.setValue(num); }*/
+                    const bool& getUseContactManifolds () const { return useContactManifolds.getValue(); }
+                    const unsigned int& getMaxNumberOfLineLineManifolds () const { return maxNumberOfLineLineManifolds.getValue(); }
+                    const unsigned int& getMaxNumberOfFaceVertexManifolds () const { return maxNumberOfFaceVertexManifolds.getValue(); }
 
+                    void setUseContactManifolds (bool on) { useContactManifolds.setValue(on); }
+                    void setMaxNumberOfLineLineManifolds(unsigned int num) { maxNumberOfLineLineManifolds.setValue(num); }
+                    void setMaxNumberOfFaceVertexManifolds(unsigned int num) { maxNumberOfFaceVertexManifolds.setValue(num); }
+
+                    const boost::uuids::uuid& getUuid() { return m_uuid; }
+
+                    gProximityContactType getContactType(const boost::uuids::uuid&, const int);
+                    void setContactType(const boost::uuids::uuid&, const int, const gProximityContactType);
+
+                    std::pair<int,int> getContactFeatures(const boost::uuids::uuid&, const int);
+                    void setContactFeatures(const boost::uuids::uuid&, const int, const int, const int);
 
                 private:
                     void computeOBBHierarchy(bool fromFile = true);
@@ -177,7 +190,7 @@ namespace sofa
                     bool m_cachedPositionChange;
                     bool m_cachedOrientationChange;
 
-                    /*Data<bool> useContactManifolds;*/
+                    Data<bool> useContactManifolds;
                     Data<unsigned int> maxNumberOfLineLineManifolds;
                     Data<unsigned int> maxNumberOfFaceVertexManifolds;
 
@@ -187,6 +200,8 @@ namespace sofa
 
                     Data<sofa::defaulttype::Vector3> m_appliedTranslation;
                     Data<sofa::defaulttype::Quaternion> m_appliedRotation;
+
+                    boost::uuids::uuid m_uuid;
 
 				public:
 					sofa::component::container::MechanicalObject<Rigid3Types>* getAttachFromObject() { return m_fromObject; }

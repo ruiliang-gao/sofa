@@ -107,9 +107,10 @@ ObbTreeGPUCollisionModel<DataTypes>::ObbTreeGPUCollisionModel(): core::Collision
                                                                  m_edgeLabelScaleFactor(initData(&m_edgeLabelScaleFactor, 0.01, "edgeLabelScaleFactor", "Scale for edge labels", true, false)),
 																 m_oldCachedPosition(), m_oldCachedOrientation(),
                                                                  m_cachedPositionChange(0), m_cachedOrientationChange(0),
-                                                                 /*useContactManifolds(initData(&useContactManifolds, false, "useContactManifolds", "Create contact manifolds from detection output. Must be true in both collision models.")),*/
-                                                                 /*maxNumberOfLineLineManifolds(initData(&maxNumberOfLineLineManifolds, 1u, "maxNumberOfLineLineManifolds", "Use instead of maxNumberOfManifolds. Maximum number of Line/Line contact manifolds that should be created. The lower number defined in both models is used. Cannot be smaller than 1.")),
-                                                                 maxNumberOfFaceVertexManifolds(initData(&maxNumberOfFaceVertexManifolds, 1u, "maxNumberOfFaceVertexManifolds", "Use instead of maxNumberOfManifolds. Maximum number of Face/Vertex contact manifolds that should be created. The lower number defined in both models is used. Cannot be smaller than 1.")),*/
+                                                                 useContactManifolds(initData(&useContactManifolds, false, "useContactManifolds", "Create contact manifolds from detection output. Must be true in both collision models.")),
+                                                                 maxNumberOfLineLineManifolds(initData(&maxNumberOfLineLineManifolds, 1u, "maxNumberOfLineLineManifolds", "Use instead of maxNumberOfManifolds. Maximum number of Line/Line contact manifolds that should be created. The lower number defined in both models is used. Cannot be smaller than 1.")),
+                                                                 maxNumberOfFaceVertexManifolds(initData(&maxNumberOfFaceVertexManifolds, 1u, "maxNumberOfFaceVertexManifolds", "Use instead of maxNumberOfManifolds. Maximum number of Face/Vertex contact manifolds that should be created. The lower number defined in both models is used. Cannot be smaller than 1.")),
+                                                                 m_uuid(boost::uuids::random_generator()()),
 																 m_innerMapping(NULL), m_fromObject(NULL)
 {
 }
@@ -207,135 +208,6 @@ void ObbTreeGPUCollisionModel<DataTypes>::init()
 					m_mechanicalObject = mo_vec.at(0);
 			}
 		}
-
-
-#if 0 // the whole section is substituted with code above
-        std::vector<sofa::core::behavior::BaseMechanicalState* > moV;
-        sofa::core::objectmodel::BaseContext::GetObjectsCallBackT<sofa::core::behavior::BaseMechanicalState,std::vector<sofa::core::behavior::BaseMechanicalState* > > cb(&moV);
-
-        if (getContext() && getContext()->getRootContext())
-        {
-            std::cout << "Our context: " << getContext()->getName() << std::endl;
-            std::cout << "Our root context: " << getContext()->getRootContext()->getName() << std::endl;
-
-            getContext()->getObjects(TClassInfo<sofa::core::behavior::BaseMechanicalState>::get(), cb, TagSet(), BaseContext::SearchParents);
-        }
-
-        std::cout << "Search for mech. objects upwards in scene: Got " << moV.size() << std::endl;
-
-        for (std::vector<sofa::core::behavior::BaseMechanicalState* >::iterator it = moV.begin(); it != moV.end(); it++)
-        {
-            sofa::core::behavior::BaseMechanicalState* bms = *it;
-            /*std::cout << " * " << bms->getName() << std::endl;
-            std::cout << "    tags count: " << bms->getTags().size() << std::endl;
-            const VecData& fieldData = bms->getDataFields();
-            std::cout << "    fieldData size: " << fieldData.size() << std::endl;
-            for (VecData::const_iterator fit = fieldData.begin(); fit != fieldData.end(); fit++)
-                std::cout << "       " << (*fit)->getName() << std::endl;
-
-            std::cout << "    translation field present: " << bms->hasField("translation") << std::endl;
-            std::cout << "    rotation field present: " << bms->hasField("rotation") << std::endl;
-            std::cout << "    scale field present: " << bms->hasField("scale3d") << std::endl;*/
-            BaseData* trData = bms->findField("translation");
-            BaseData* rotData = bms->findField("rotation");
-			BaseData* quatData = bms->findField("quaternion");
-            BaseData* scData = bms->findField("scale3d");
-		//	std::cout << "   ----------STATE: " << X.size() << "        " << X << std::endl;
-
-            if (trData)
-            {
-                std::cout << "       Translation value field size: " << trData->getValueTypeInfo()->size() << std::endl;
-                const void* tr_value = trData->getValueVoidPtr();
-                double tr0 = trData->getValueTypeInfo()->getScalarValue(tr_value, 0);
-                double tr1 = trData->getValueTypeInfo()->getScalarValue(tr_value, 1);
-                double tr2 = trData->getValueTypeInfo()->getScalarValue(tr_value, 2);
-
-                std::cout << "       Translation read: " << tr0 << "," << tr1 << "," << tr2 << std::endl;
-                m_initialPosition = Vector3(tr0,tr1,tr2);
-            }
-
-			if(quatData)
-			{
-				std::cout << "       Quaternion field: " << rotData->getValueTypeInfo()->size() << std::endl;
-				const void* tr_value = quatData->getValueVoidPtr();
-                double x = rotData->getValueTypeInfo()->getScalarValue(tr_value, 0);
-                double y = rotData->getValueTypeInfo()->getScalarValue(tr_value, 1);
-                double z = rotData->getValueTypeInfo()->getScalarValue(tr_value, 2);
-				double w = rotData->getValueTypeInfo()->getScalarValue(tr_value, 3);
-
-				std::cout << "       Quaternion read: " << x << "," << y << "," << z << "," << w << std::endl;
-				if (Quat(x,y,z,w) == Quat()) {
-					std::cout << "Read Rotation" << std::endl;
-				}
-			}
-
-            if (rotData)
-            {
-                std::cout << "       Rotation value field size: " << rotData->getValueTypeInfo()->size() << std::endl;
-                const void* tr_value = rotData->getValueVoidPtr();
-                double r0 = rotData->getValueTypeInfo()->getScalarValue(tr_value, 0);
-                double r1 = rotData->getValueTypeInfo()->getScalarValue(tr_value, 1);
-                double r2 = rotData->getValueTypeInfo()->getScalarValue(tr_value, 2);
-
-                std::cout << "       Rotation read: " << r0 << "," << r1 << "," << r2 << std::endl;
-                m_initialOrientation = Quaternion::fromEuler(r0 * (float)(M_PI/180), r1 * (float)(M_PI/180), r2 * (float)(M_PI/180));
-                std::cout << "       Quaternion for initial orientation: " << m_initialOrientation << std::endl;
-            }
-
-            if (scData)
-            {
-                std::cout << "       Scale value field size: " << scData->getValueTypeInfo()->size() << std::endl;
-                const void* tr_value = scData->getValueVoidPtr();
-                double sc0 = scData->getValueTypeInfo()->getScalarValue(tr_value, 0);
-                double sc1 = scData->getValueTypeInfo()->getScalarValue(tr_value, 1);
-                double sc2 = scData->getValueTypeInfo()->getScalarValue(tr_value, 2);
-
-                std::cout << "       Scale read: " << sc0 << "," << sc1 << "," << sc2 << std::endl;
-                if (sc0 != 0.0f || sc1 != 0.0f || sc2 != 0.0f)
-                {
-                    scale = Vector3(sc0,sc1,sc2);
-                    if (sc0 == sc1 && sc1 == sc2 && sc0 == sc2)
-                        uniformScale = sc0;
-                }
-                std::cout << "       uniform scale set: " << uniformScale << std::endl;
-            }
-
-            if (uniformScale != 1.0f)
-                m_scale = uniformScale;
-
-            _objectMState = bms;
-
-
-            std::cout << "WHAT AM I: " << this->getTypeName() << ", class = " << this->getClassName() << std::endl;
-            std::cout << "WHAT IS MY PARENT, named " << this->getContext()->getName() << ": " << this->getContext()->getTypeName() << ", class = " << this->getContext()->getClassName() << std::endl;
-            simulation::Node* parentNode = dynamic_cast<simulation::Node*>(this->getContext());
-
-            if (parentNode)
-            {
-                core::objectmodel::BaseNode::Parents grandParents = parentNode->getParents();
-                std::cout << " PARENT NODE parents count = " << grandParents.size() << std::endl;
-                for (int k = 0; k < grandParents.size(); k++)
-                {
-                    std::cout << " * " << k << ": " << grandParents[k]->getName() << std::endl;
-                }
-                if (grandParents.size() == 1)
-                {
-                    simulation::Node* grandParentNode = dynamic_cast<simulation::Node*>(grandParents[0]);
-
-                    std::vector<sofa::component::container::MechanicalObject<DataTypes>* > mo_vec;
-                    sofa::core::objectmodel::BaseContext::GetObjectsCallBackT<sofa::component::container::MechanicalObject<DataTypes>, std::vector<sofa::component::container::MechanicalObject<DataTypes>* > > mo_cb(&mo_vec);
-
-                    grandParentNode->getObjects(TClassInfo<sofa::component::container::MechanicalObject<DataTypes> >::get(), mo_cb, TagSet(), BaseContext::SearchDown);
-
-                    std::cout << "MECHANICAL OBJECT SEARCH 1 YIELDS: " << mo_vec.size() << " MODELS!!!" << std::endl;
-
-                    if (mo_vec.size() > 0)
-                        _mObject = mo_vec.at(0);
-                }
-            }
-        }
-#endif
-
     }
 
     if (getContext() && getContext()->getRootContext())
@@ -385,6 +257,30 @@ void ObbTreeGPUCollisionModel<DataTypes>::init()
 
 template <class DataTypes>
 void ObbTreeGPUCollisionModel<DataTypes>::cleanup()
+{
+
+}
+
+template <class DataTypes>
+gProximityContactType ObbTreeGPUCollisionModel<DataTypes>::getContactType(const boost::uuids::uuid& model_uuid, const int contact_index)
+{
+    return COLLISION_INVALID;
+}
+
+template <class DataTypes>
+void ObbTreeGPUCollisionModel<DataTypes>::setContactType(const boost::uuids::uuid& model_uuid, const int contact_index, const gProximityContactType contact_type)
+{
+
+}
+
+template <class DataTypes>
+std::pair<int,int> ObbTreeGPUCollisionModel<DataTypes>::getContactFeatures(const boost::uuids::uuid& model_uuid, const int contact_index)
+{
+    return std::pair<int, int>(-1, -1);
+}
+
+template <class DataTypes>
+void ObbTreeGPUCollisionModel<DataTypes>::setContactFeatures(const boost::uuids::uuid& model_uuid, const int contact_index, const int feature_1, const int feature_2)
 {
 
 }

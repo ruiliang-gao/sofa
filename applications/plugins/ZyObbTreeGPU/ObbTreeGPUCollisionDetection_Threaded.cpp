@@ -1051,7 +1051,7 @@ void ObbTreeGPUCollisionDetection_Threaded::beginNarrowPhase()
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_BEGINNARROWPHASE_DEBUG_VERBOSE
             msg_info("ObbTreeGPUCollisionDetection_Threaded") << " * model " << cm->getName() << " position    = " << h_modelPosition.x << "," << h_modelPosition.y << "," << h_modelPosition.z;
-            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "                                 orientation = [" << h_modelOrientation.m_row[0].x << "," << h_modelOrientation.m_row[0].y << "," << h_modelOrientation.m_row[0].z << "],[" << h_modelOrientation.m_row[1].x << "," << h_modelOrientation.m_row[1].y << "," << h_modelOrientation.m_row[1].z << "],[" << h_modelOrientation.m_row[2].x << "," << h_modelOrientation.m_row[2].y << "," << h_modelOrientation.m_row[2].z << "]"<< std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "                                 orientation = [" << h_modelOrientation.m_row[0].x << "," << h_modelOrientation.m_row[0].y << "," << h_modelOrientation.m_row[0].z << "],[" << h_modelOrientation.m_row[1].x << "," << h_modelOrientation.m_row[1].y << "," << h_modelOrientation.m_row[1].z << "],[" << h_modelOrientation.m_row[2].x << "," << h_modelOrientation.m_row[2].y << "," << h_modelOrientation.m_row[2].z << "]";
 
             float3 h_modelPosition_Reread;
             Matrix3x3_d h_modelOrientation_Reread;
@@ -1060,7 +1060,7 @@ void ObbTreeGPUCollisionDetection_Threaded::beginNarrowPhase()
             msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   position re-read_2: " << h_modelPosition_Reread.x << "," << h_modelPosition_Reread.y << "," << h_modelPosition_Reread.z;
 
             FROMGPU(&h_modelOrientation_Reread, _gpuTransforms[_gpuTransformIndices[cm->getName()]]->modelOrientation, sizeof(Matrix3x3_d));
-            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   orientation re-read_2: [" << h_modelOrientation_Reread.m_row[0].x << "," << h_modelOrientation_Reread.m_row[0].y << "," << h_modelOrientation_Reread.m_row[0].z << "],[" << h_modelOrientation_Reread.m_row[1].x << "," << h_modelOrientation_Reread.m_row[1].y << "," << h_modelOrientation_Reread.m_row[1].z << "],[" << h_modelOrientation_Reread.m_row[2].x << "," << h_modelOrientation_Reread.m_row[2].y << "," << h_modelOrientation_Reread.m_row[2].z << "]"<< std::endl;
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "   orientation re-read_2: [" << h_modelOrientation_Reread.m_row[0].x << "," << h_modelOrientation_Reread.m_row[0].y << "," << h_modelOrientation_Reread.m_row[0].z << "],[" << h_modelOrientation_Reread.m_row[1].x << "," << h_modelOrientation_Reread.m_row[1].y << "," << h_modelOrientation_Reread.m_row[1].z << "],[" << h_modelOrientation_Reread.m_row[2].x << "," << h_modelOrientation_Reread.m_row[2].y << "," << h_modelOrientation_Reread.m_row[2].z << "]";
 #endif
 
 
@@ -1165,7 +1165,6 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
         {
             msg_info("ObbTreeGPUCollisionDetection_Threaded") << (int)*it << ";";
         }
-        msg_info("ObbTreeGPUCollisionDetection_Threaded");
     }
 #endif
 
@@ -1536,20 +1535,29 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 
                                     detection->normal = contactNormals[contacts_it->first][q];
 
-                                    /**** ???? */
                                     detection->value = detection->normal.norm();
                                     detection->normal /= detection->value;
 
+#ifdef OBBTREEGPUCOLLISIONDETECTION_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                     detection->contactType = (sofa::core::collision::DetectionOutputContactType) contactTypes[contacts_it->first][q];
+#else
+                                    obbModel1->setContactType(obbModel2->getUuid(), q, contactTypes[contacts_it->first][q]);
+                                    obbModel2->setContactType(obbModel1->getUuid(), q, contactTypes[contacts_it->first][q]);
+#endif
 
                                     if (detection->contactType == COLLISION_LINE_LINE)
                                     {
                                         detection->elem.first = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel1, contactElements[contacts_it->first][q].first); // << CollisionElementIterator
-
                                         detection->elem.second = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel2, contactElements[contacts_it->first][q].second); // << CollisionElementIterator
 
+#ifdef OBBTREEGPUCOLLISIONDETECTION_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                         detection->elemFeatures.first = contactElementsFeatures[contacts_it->first][q].first;
                                         detection->elemFeatures.second = contactElementsFeatures[contacts_it->first][q].second;
+#else
+                                        obbModel1->setContactFeatures(obbModel2->getUuid(), q, contactElementsFeatures[contacts_it->first][q].first, contactElementsFeatures[contacts_it->first][q].second);
+                                        obbModel2->setContactFeatures(obbModel1->getUuid(), q, contactElementsFeatures[contacts_it->first][q].second, contactElementsFeatures[contacts_it->first][q].first);
+#endif
+
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG_VERBOSE
                                         msg_info("ObbTreeGPUCollisionDetection_Threaded") << "        LINE_LINE contact: elements = " << detection->elem.first.getIndex() << "," << detection->elem.second.getIndex() << ", features = " << detection->elemFeatures.first << "," << detection->elemFeatures.second;
 #endif
@@ -1560,22 +1568,31 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                                         {
                                             detection->elem.first = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel1, contactElements[contacts_it->first][q].first); // << CollisionElementIterator
                                             detection->elem.second = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel2, contactElements[contacts_it->first][q].second); // << CollisionElementIterator
+#ifdef OBBTREEGPUCOLLISIONDETECTION_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                             detection->elemFeatures.first = contactElementsFeatures[contacts_it->first][q].first;
+#else
+
+#endif
                                         }
                                         else if (contactElementsFeatures[contacts_it->first][q].first == -1)
                                         {
                                             detection->elem.first = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel1, contactElements[contacts_it->first][q].first); // << CollisionElementIterator
                                             detection->elem.second = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel2, contactElements[contacts_it->first][q].second); // << CollisionElementIterator
+#ifdef OBBTREEGPUCOLLISIONDETECTION_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                             detection->elemFeatures.second = contactElementsFeatures[contacts_it->first][q].second;
+#else
+
+#endif
                                         }
 
-                                        if (detection->elem.first.getIndex() < 0 || detection->elem.second.getIndex() < 0) {
-                                            std::cerr << "ERROR: Should not happen";
+                                        if (detection->elem.first.getIndex() < 0 || detection->elem.second.getIndex() < 0)
+                                        {
+                                            msg_error("ObbTreeGPUCollisionDetection_Threaded") << "ERROR: Should not happen";
                                         }
-                                    } else {
-                                        std::cerr << "ERROR: contact: " << detection->contactType;
-										// FA: SERIOUSLY???
-                                        // exit(0);
+                                    }
+                                    else
+                                    {
+                                        msg_error("ObbTreeGPUCollisionDetection_Threaded") << "ERROR: contact: " << detection->contactType;
 										continue;
                                     }
                                 }
