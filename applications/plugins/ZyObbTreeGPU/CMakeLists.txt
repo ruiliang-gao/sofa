@@ -170,7 +170,7 @@ endif()
 
 cuda_add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${MOC_FILES} ${HEADER_FILES} ${FORM_FILES} ${CUDA_SOURCES} ${README_FILES})
 
-target_link_libraries(${PROJECT_NAME} gProximity CyberX3D PQP SofaDefaultType SofaBaseCollision SofaCore SofaLoader SofaHelper SofaGeneralAnimationLoop SofaConstraint)
+target_link_libraries(${PROJECT_NAME} gProximity CyberX3D ZyPQP SofaDefaultType SofaBaseCollision SofaCore SofaLoader SofaHelper SofaGeneralAnimationLoop SofaConstraint)
 
 if (NOT WIN32)
     target_link_libraries(${PROJECT_NAME} gomp)
@@ -178,7 +178,7 @@ if (NOT WIN32)
 endif (NOT WIN32)
 
 target_link_libraries(${PROJECT_NAME} cudpp ${Boost_THREAD_LIBRARY} ${Boost_REGEX_LIBRARY} ${QT_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} ZyMultiThreading ZyBVHModels cutil)
+target_link_libraries(${PROJECT_NAME} ZyWorkerThreads ZyBVHModels cutil)
 
 target_link_libraries(${PROJECT_NAME} SofaOpenglVisual)
 

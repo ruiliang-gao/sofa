@@ -34,7 +34,8 @@ namespace BVHModels
         PT_OBB,
         PT_TRIANGLE2,
         PT_TRIANGLE3,
-        PT_RECTANGLE3
+        PT_RECTANGLE3,
+        PT_CAPSULE3
     };
 
 	template <typename Real>

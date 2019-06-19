@@ -442,7 +442,17 @@ Node::SPtr Simulation::load ( const char *filename )
 
     SceneLoader *loader = SceneLoaderFactory::getInstance()->getEntryFileName(filename);
 
-    if (loader) return loader->load(filename);
+    // Zykl.io begin
+    if (loader)
+    {
+        Node::SPtr root = loader->load(filename);
+
+        m_currentRootNode = root;
+        m_rootNodes[filename] = root;
+
+        return root;
+    }
+    // Zykl.io end
 
     // unable to load file
     serr << "extension ("<<sofa::helper::system::SetDirectory::GetExtension(filename)<<") not handled" << sendl;
@@ -457,7 +467,98 @@ void Simulation::unload(Node::SPtr root)
     root->detachFromGraph();
     root->execute<CleanupVisitor>(params);
     root->execute<DeleteVisitor>(params);
+
+    // Zykl.io begin
+    // Check if the node we're unloading is registered in the m_rootNodes map
+    std::string keyToDelete;
+    for (std::map<std::string, Node::SPtr>::iterator it = m_rootNodes.begin(); it != m_rootNodes.end(); ++it)
+    {
+        if (it->second == root)
+        {
+            keyToDelete = it->first;
+            break;
+        }
+    }
+
+    // If yes, remove it
+    if (!keyToDelete.empty())
+    {
+        m_rootNodes.erase(keyToDelete);
+    }
+
+    // Invalidate current root node pointer, if it points to the node we're currently unloading
+    if (m_currentRootNode == root)
+        m_currentRootNode.reset();
+    // Zykl.io end
 }
+
+// Zykl.io begin
+std::map<std::string, Node::SPtr> mRootNodes;
+
+bool Simulation::hasRootNode(const std::string& name)
+{
+    return (m_rootNodes.find(name) != m_rootNodes.end());
+}
+
+Node::SPtr Simulation::getRootNode(const std::string& name)
+{
+    if (m_rootNodes.find(name) != m_rootNodes.end())
+        return m_rootNodes[name];
+
+    return NULL;
+}
+
+Node::SPtr Simulation::getCurrentRootNode()
+{
+    return m_currentRootNode;
+}
+
+#ifdef ZY_SIMULATION_CONCURRENT_COMPONENT
+void Simulation::startConcurrentComponents()
+{
+    for (size_t k = 0; k < m_simulationConcurrentComponents.size(); ++k)
+    {
+        if (m_simulationConcurrentComponents[k])
+        {
+            m_simulationConcurrentComponents[k]->startComponent();
+        }
+    }
+}
+
+void Simulation::stopConcurrentComponents()
+{
+    for (size_t k = 0; k < m_simulationConcurrentComponents.size(); ++k)
+    {
+        if (m_simulationConcurrentComponents[k])
+        {
+            m_simulationConcurrentComponents[k]->stopComponent();
+        }
+    }
+}
+
+void Simulation::pauseConcurrentComponents()
+{
+    for (size_t k = 0; k < m_simulationConcurrentComponents.size(); ++k)
+    {
+        if (m_simulationConcurrentComponents[k])
+        {
+            m_simulationConcurrentComponents[k]->pauseComponent();
+        }
+    }
+}
+
+void Simulation::resumeConcurrentComponents()
+{
+    for (size_t k = 0; k < m_simulationConcurrentComponents.size(); ++k)
+    {
+        if (m_simulationConcurrentComponents[k])
+        {
+            m_simulationConcurrentComponents[k]->resumeComponent();
+        }
+    }
+}
+#endif //ZY_SIMULATION_CONCURRENT_COMPONENT
+// Zykl.io end
 
 } // namespace simulation
 

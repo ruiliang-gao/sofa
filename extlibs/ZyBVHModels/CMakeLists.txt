@@ -23,6 +23,8 @@ set(libPrimitives_HEADER_FILES
     Primitives/Plane3.inl
     Primitives/Point3.h
     Primitives/Point3.inl
+    Primitives/Capsule3.h
+    Primitives/Capsule3.inl
 
     Primitives/Utils_2D.h
     Primitives/Utils_2D.inl
@@ -40,6 +42,7 @@ set(libPrimitives_SOURCE_FILES
     Primitives/Triangle2.cpp
     Primitives/Segment2.cpp
     Primitives/Point3.cpp
+    Primitives/Capsule3.cpp
 
     Primitives/Utils_2D.cpp
 )

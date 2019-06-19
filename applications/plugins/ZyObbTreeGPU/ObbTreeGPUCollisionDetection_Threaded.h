@@ -204,6 +204,11 @@ protected:
 
     NarrowPhaseDetection::DetectionOutputMap* m_detectionOutputVectors;
 
+    // Needed as class member in derived class because the list in the super class is declared private
+    sofa::helper::vector<core::CollisionModel*> m_collisionModels;
+
+    void createDetectionOutputs(const std::vector< std::pair<sofa::core::CollisionModel*, sofa::core::CollisionModel*> >& _cmPairs);
+
     std::ofstream testOutput;
     sofa::core::objectmodel::DataFileName testOutputFilename;
 

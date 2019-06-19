@@ -50,7 +50,11 @@ public:
 
     /// get the set of response available with the current collision pipeline
     std::set< std::string > getResponseList() const override;
-protected:
+// Zykl.io begin
+// For access from derived classes
+// protected:
+public:
+// Zykl.io end
     // -- Pipeline interface
     /// Remove collision response from last step
     void doCollisionReset() override;

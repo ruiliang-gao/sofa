@@ -53,7 +53,6 @@ namespace BVHModels
 
 			}
 
-            //TRU Box3 (const Vec<3,Real>& center, const Vec<3,Real> axis[3],                const Vec<3, Real> extent[3]);
             Box3 (const Vec<3,Real>& center, const Vec<3,Real> axis[3],
                 const Real extent[3]);
 

@@ -30,6 +30,7 @@ namespace sofa
             //#define OBBTREEGPUBARYCENTRICCONTACTMAPPER_SUPPRESS_LINE_LINE_CONTACTS
             //#define OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
             //#define OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
+            //#define OBBTREEGPUFRICTIONCONTACT_DEBUG_REMOVERESPONSE
 
             enum DetectionOutputContactType
             {
@@ -47,7 +48,7 @@ namespace sofa
 
             public:
                 int addPoint(const Coord& P, int index, Real& r){
-                    std::cout << "ERRROR! ContactMapper<sofa::component::collision::ObbTreeGPUCollisionModel<Vec3Types>, DataTypes> should never be called." << std::endl;
+                    msg_info("ObbTreeGPUContactMapper") << "ERRROR! ContactMapper<sofa::component::collision::ObbTreeGPUCollisionModel<Vec3Types>, DataTypes> should never be called." ;
                     return -1;
                 }
             };
@@ -65,21 +66,27 @@ namespace sofa
                 typedef typename Inherit::MMechanicalState MMechanicalState;
                 typedef typename Inherit::MCollisionModel MCollisionModel;
 
-                int addPoint(const Coord &P, int index, Real& r, const sofa::component::collision::DetectionOutputContactType& type)
+                int addPoint(const Coord &P, int index, Real& r,
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
+                             const sofa::component::collision::DetectionOutputContactType& type
+#else
+                             const gProximityContactType& type
+#endif
+                             )
                 {
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                     if (type == sofa::component::collision::CONTACT_LINE_LINE)
+#else
+                    if (type == COLLISION_LINE_LINE)
+#endif
                     {
 #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
-                        std::cout << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPoint(" << P << "," << index << "," << r << ") as LINE_LINE" << std::endl;
+                        msg_info("ObbTreeGPUContactMapper") << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPoint(" << P << "," << index << "," << r << ") as LINE_LINE" ;
 #endif
-                        /*int edgeIdx1 = index % 3;
-                        int triIdx1 = index / 3;
-                        const sofa::core::topology::BaseMeshTopology::EdgesInTriangle& e1 = this->model->getMeshTopology()->getEdgesInTriangle(triIdx1);
-                        int targetEdge = e1[edgeIdx1];*/
 
                         int nbe = this->model->getMeshTopology()->getNbEdges();
 #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
-                        std::cout << "   edge index = " << index << "; edges in topology: " << nbe << std::endl;
+                        msg_info("ObbTreeGPUContactMapper") << "   edge index = " << index << "; edges in topology: " << nbe ;
 #endif
 
 #ifndef OBBTREEGPUBARYCENTRICCONTACTMAPPER_SUPPRESS_LINE_LINE_CONTACTS
@@ -87,30 +94,48 @@ namespace sofa
                             return this->mapper->createPointInLine(P, index, &this->model->getMechanicalState()->read(core::ConstVecCoordId::position())->getValue());
 #endif
                     }
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                     else if (type == sofa::component::collision::CONTACT_FACE_VERTEX)
+#else
+                    else if (type == COLLISION_VERTEX_FACE)
+#endif
                     {
                         int nbt = this->model->getMeshTopology()->getNbTriangles();
     #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
-                        std::cout << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPoint(" << P << "," << index << "," << r << ") as VERTEX_FACE; nbt = " << nbt << std::endl;
+                        msg_info("ObbTreeGPUContactMapper") << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPoint(" << P << "," << index << "," << r << ") as VERTEX_FACE; nbt = " << nbt ;
     #endif
     #ifndef OBBTREEGPUBARYCENTRICCONTACTMAPPER_SUPPRESS_CONTACT_RESPONSE
                         if (index < nbt)
                             return this->mapper->createPointInTriangle(P, index, &this->model->getMechanicalState()->read(core::ConstVecCoordId::position())->getValue());
     #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
                         else
-                            std::cout << " index " << index << " >= " << nbt << ", NOT ADDING this contact point!" << std::endl;
+                            msg_info("ObbTreeGPUContactMapper") << " index " << index << " >= " << nbt << ", NOT ADDING this contact point!" ;
     #endif
     #endif
                     }
                     return -1;
                 }
 
-                int addPointB(const Coord &P, int index, Real& r, const Vector3& baryP, const sofa::component::collision::DetectionOutputContactType& type)
+                int addPointB(const Coord &P, int index, Real& r,
+#ifdef DETECTIONOUTPUT_BARYCENTRICINFO
+                              const Vector3& baryP,
+#endif
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
+                              const sofa::component::collision::DetectionOutputContactType& type
+#else
+                              const gProximityContactType& type
+#endif
+                            )
                 {
+
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                     if (type == sofa::component::collision::CONTACT_LINE_LINE)
+#else
+                    if (type == COLLISION_LINE_LINE)
+#endif
                     {
 #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
-                        std::cout << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPointB(" << P << "," << index << "," << r << "," << baryP << ") as LINE_LINE" << std::endl;
+                        msg_info("ObbTreeGPUContactMapper") << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPointB(" << P << "," << index << "," << r << "," << baryP << ") as LINE_LINE" ;
 #endif
 #ifndef OBBTREEGPUBARYCENTRICCONTACTMAPPER_SUPPRESS_LINE_LINE_CONTACTS
                         int edgeIdx1 = index % 3;
@@ -119,33 +144,62 @@ namespace sofa
                         int nbe = this->model->getMeshTopology()->getNbEdges();
 
                         if ((triIdx1 * 3) + edgeIdx1 < nbe)
-                            return this->mapper->addPointInLine((triIdx1 * 3) + edgeIdx1, baryP.ptr());
+                            return this->mapper->addPointInLine((triIdx1 * 3) + edgeIdx1,
+#ifdef DETECTIONOUTPUT_BARYCENTRICINFO
+                                                                    baryP.ptr()
+#else
+                                                                    nullptr
+#endif
+                                                                );
 #endif
                     }
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                     else if (type == sofa::component::collision::CONTACT_FACE_VERTEX)
+#else
+                    else if (type == COLLISION_VERTEX_FACE)
+#endif
                     {
                         int nbt = this->model->getMeshTopology()->getNbTriangles();
-    #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
-                        std::cout << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPointB(" << P << "," << index << "," << r << "," << baryP << ") as VERTEX_FACE; nbt = " << nbt << std::endl;
-    #endif
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
+                        msg_info("ObbTreeGPUContactMapper") << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPointB(" << P << "," << index << "," << r << "," << baryP << ") as VERTEX_FACE; nbt = " << nbt ;
+#endif
                         if (index < nbt)
-                            return this->mapper->addPointInTriangle(index, baryP.ptr());
+                            return this->mapper->addPointInTriangle(index,
+#ifdef DETECTIONOUTPUT_BARYCENTRICINFO
+                                                                    baryP.ptr()
+#else
+                                                                    nullptr
+#endif
+                                                                    );
                     }
                     return -1;
                 }
 
-                inline int addPointB(const Coord& P, int index, Real& r, const sofa::component::collision::DetectionOutputContactType& type){ return addPoint(P,index,r,type); }
-#if 1
-                int addPointWithIndex(const Coord& P, int index, int featureId, const sofa::component::collision::DetectionOutputContactType& type)
+
+                inline int addPointB(const Coord& P, int index, Real& r,
+                                     const sofa::component::collision::DetectionOutputContactType& type)
                 {
+                    return addPoint(P,index,r,type);
+                }
+
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
+                int addPointWithIndex(const Coord& P, int index, int featureId, const sofa::component::collision::DetectionOutputContactType& type)
+#else
+                int addPointWithIndex(const Coord& P, int index, int featureId, const gProximityContactType& type)
+#endif
+                {
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                     if (type == sofa::component::collision::CONTACT_LINE_LINE)
+#else
+                    if (type == COLLISION_LINE_LINE)
+#endif
                     {
 #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
-                        std::cout << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPointWithIndex(" << P << "," << index << "," << featureId << ") as LINE_LINE" << std::endl;
+                        msg_info("ObbTreeGPUContactMapper") << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPointWithIndex(" << P << "," << index << "," << featureId << ") as LINE_LINE" ;
 #endif
                         int nbe = this->model->getMeshTopology()->getNbEdges();
 #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
-                        std::cout << "  edge in triangle " << index << ", edge id = " << featureId << "; edges in topology: " << nbe << std::endl;
+                        msg_info("ObbTreeGPUContactMapper") << "  edge in triangle " << index << ", edge id = " << featureId << "; edges in topology: " << nbe ;
 #endif
                         const sofa::core::topology::BaseMeshTopology::EdgesInTriangle& e1 = this->model->getMeshTopology()->getEdgesInTriangle(index);
                         int targetEdge = e1[featureId];
@@ -155,11 +209,15 @@ namespace sofa
                             return this->mapper->createPointInLine(P, targetEdge, this->model->getMechanicalState()->getX());
 #endif
                     }
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                     else if (type == sofa::component::collision::CONTACT_FACE_VERTEX)
+#else
+                    if (type == COLLISION_VERTEX_FACE)
+#endif
                     {
                         int nbt = this->model->getMeshTopology()->getNbTriangles();
     #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
-                        std::cout << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPointWithIndex(" << P << "," << index << "," << featureId << ") as VERTEX_FACE; nbt = " << nbt << std::endl;
+                        msg_info("ObbTreeGPUContactMapper") << "   ObbTreeGPUContactMapper<ObbTreeGPUCollisionModel,DataTypes>::addPointWithIndex(" << P << "," << index << "," << featureId << ") as VERTEX_FACE; nbt = " << nbt ;
     #endif
     #ifndef OBBTREEGPUBARYCENTRICCONTACTMAPPER_SUPPRESS_CONTACT_RESPONSE
                         if (index < nbt)
@@ -169,7 +227,7 @@ namespace sofa
     #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_DEBUG
                         else
                         {
-                            std::cout << " index " << index << " >= " << nbt << ", NOT ADDING this contact point!" << std::endl;
+                            msg_info("ObbTreeGPUContactMapper") << " index " << index << " >= " << nbt << ", NOT ADDING this contact point!" ;
                         }
     #endif
     #endif
@@ -177,12 +235,14 @@ namespace sofa
                     return -1;
                 }
 
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                 int addPointWithIndexB(const Coord& P, int index, int featureId, const sofa::component::collision::DetectionOutputContactType& type)
-                {
-
-                    return 0;
-                }
+#else
+                int addPointWithIndexB(const Coord& P, int index, int featureId, const gProximityContactType& type)
 #endif
+                {
+                    return addPointWithIndex(P, index, featureId, type);
+                }
             };
         }
     }
@@ -259,19 +319,12 @@ namespace sofa
                 Intersection* intersectionMethod;
                 bool selfCollision; ///< true if model1==model2 (in this case, only mapper1 is used)
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
-                //TestContactMapper<CollisionModel1, DataTypes1> mapper1_default;
-                //TestContactMapper<CollisionModel2, DataTypes2> mapper2_default;
                 ContactMapper<CollisionModel1, DataTypes1> mapper1_default;
                 ContactMapper<CollisionModel2, DataTypes2> mapper2_default;
 #endif
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINELINE_CONSTRAINT
                 ObbTreeGPUContactMapper<CollisionModel1, DataTypes1> mapper1_gpu_ll;
                 ObbTreeGPUContactMapper<CollisionModel2, DataTypes2> mapper2_gpu_ll;
-#endif
-
-#ifdef OBBTREEGPUFRICTIONCONTACT_USE_LINEVERTEX_CONSTRAINT
-                TestContactMapper<CollisionModel1, DataTypes1> mapper1_gpu_lv;
-                TestContactMapper<CollisionModel2, DataTypes2> mapper2_gpu_lv;
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_VERTEXFACE_CONSTRAINT

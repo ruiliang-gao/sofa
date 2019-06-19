@@ -421,16 +421,11 @@ if (WIN32)
 else (WIN32)
     add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${BISON_CyberX3DParser_OUTPUTS} ${FLEX_CyberX3DScanner_OUTPUTS})
 endif (WIN32)
+
 SET_TARGET_PROPERTIES (CyberX3D PROPERTIES DEFINE_SYMBOL "SOFA_BUILD_OBBTREEGPUPLUGIN" )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "TruExtlibs")
-
-if (TRUPHYSICS_INSTALLER)
-    sofa_install_external_library(LIBRARY_NAME ${PROJECT_NAME} LIBRARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}" LIBRARY_HEADER_FILES ${HEADER_FILES})
-else()
-    ## Install rules for the library and headers; CMake package configurations files
-    sofa_create_package(${PROJECT_NAME} "1.3.0" ${PROJECT_NAME} ${PROJECT_NAME})
-endif()
+## Install rules for the library and headers; CMake package configurations files
+sofa_create_package(${PROJECT_NAME} "1.3.0" ${PROJECT_NAME} ${PROJECT_NAME})
 
 if(NOT WIN32)
     target_link_libraries(CyberX3D Coin)

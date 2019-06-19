@@ -1166,21 +1166,25 @@ namespace sofa
                         typename DataTypes2::Real r2 = 0.;
                         // Create mapping for first point
                         index1 = mapper1_gpu_vf.addPointB(o->point[0], triIdx2, r1
-                    #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
-                                    , o->baryCoords[0]
-                    #endif
-                    #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
-                                    , o->contactType
-                    #endif
-                                                      );
+#ifdef DETECTIONOUTPUT_BARYCENTRICINFO
+                                , o->baryCoords[0]
+#endif
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
+                                , o->contactType
+#else
+                                , COLLISION_LINE_LINE
+#endif
+                                                         );
                         // Create mapping for second point
                         index2 = mapper2_gpu_vf.addPointB(o->point[1], triIdx1, r2
-                #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
-                                    , o->baryCoords[1]
-                #endif
-                #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
-                                    , o->contactType
-                #endif
+#ifdef DETECTIONOUTPUT_BARYCENTRICINFO
+                                , o->baryCoords[0]
+#endif
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
+                                , o->contactType
+#else
+                                , COLLISION_LINE_LINE
+#endif
                                                       );
 
                         double distance = d0 + r1 + r2;
@@ -1243,21 +1247,25 @@ namespace sofa
                                 typename DataTypes2::Real r2 = 0.;
                                 // Create mapping for first point
                                 index1 = mapper1_gpu_ll.addPointB(o->point[0], edgeId1, r1
-                            #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
+#ifdef DETECTIONOUTPUT_BARYCENTRICINFO
                                             , o->baryCoords[0]
-                            #endif
-                            #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
+#endif
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                             , o->contactType
-                            #endif
-                                                              );
+#else
+                                            , COLLISION_LINE_LINE
+#endif
+                                                                 );
                                 // Create mapping for second point
                                 index2 = mapper2_gpu_ll.addPointB(o->point[1], edgeId2, r2
-                        #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
+#ifdef DETECTIONOUTPUT_BARYCENTRICINFO
                                             , o->baryCoords[1]
-                        #endif
-                        #ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
+#endif
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                             , o->contactType
-                        #endif
+#else
+                                            , COLLISION_LINE_LINE
+#endif
                                                               );
 
                                 double distance = d0 + r1 + r2;
@@ -1265,19 +1273,6 @@ namespace sofa
                                 mappedContacts_LineLine[lineLineIdx].first.first = index1;
                                 mappedContacts_LineLine[lineLineIdx].first.second = index2;
                                 mappedContacts_LineLine[lineLineIdx].second = distance;
-
-#ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_ACTIVATEMAPPERS
-                                if (testOutputFilename.getValue() != "")
-                                {
-                            #ifndef _WIN32
-                                    //testOutput.open(testOutputFilename.getValue().c_str(), std::ofstream::out | std::ofstream::app);
-                            #else
-                                    //testOutput.open(testOutputFilename.getValue(), std::ofstream::out | std::ofstream::app);
-                            #endif
-                                    //testOutput << " * LINE_LINE contact stored as mappedContacts_LineLine[" << lineLineIdx << "]: triangles " << triIdx1 << " - " << triIdx2 << ", edges " << edgeId1 << " - " << edgeId2 << "; index1 = " << index1 << ", index2 = " << index2 << ", distance = " << distance << " (" << d0 << " + " << r1 << " + " << r2 << ")" << std::endl;
-                                    //testOutput.close();
-                                }
-#endif
 
                                 lineLineIdx++;
                             }
@@ -1302,16 +1297,16 @@ namespace sofa
 #endif
                         // Create mapping for first point
                         index1 = mapper1_gpu_lv.addPointB(o->point[0], triIdx2, r1
-                    #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
+#ifdef DETECTIONOUTPUT_BARYCENTRICINFO
                                     , o->baryCoords[0]
-                    #endif
+#endif
                                     , o->contactType
                                                       );
                         // Create mapping for second point
                         index2 = mapper2_gpu_lv.addPointB(o->point[1], triIdx1, r2
-                #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
+#ifdef DETECTIONOUTPUT_BARYCENTRICINFO
                                     , o->baryCoords[1]
-                #endif
+#endif
                                     , o->contactType
                                                       );*/
 
@@ -1326,7 +1321,12 @@ namespace sofa
 #endif
 
 #ifdef OBBTREEGPUFRICTIONCONTACT_USE_DEFAULT_CONSTRAINT
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                     if (o->contactType == sofa::component::collision::CONTACT_INVALID)
+#else
+                    if (collisionModel1->getContactType(collisionModel2->getUuid(), i) == COLLISION_INVALID)
+#endif
+
                     {
                         CollisionElement1 elem1(o->elem.first);
                         CollisionElement2 elem2(o->elem.second);
@@ -1347,7 +1347,6 @@ namespace sofa
                     #ifdef DETECTIONOUTPUT_BARYCENTRICINFO
                                     , o->baryCoords[0]
                     #endif
-                                    //, o->contactType // a mapper for SOFA CPU-contact models is used, which does not take a contactType
                                                       );
                         }
                         // Create mapping for second point
@@ -1446,7 +1445,24 @@ namespace sofa
             void ObbTreeGPUFrictionContact<TCollisionModel1,TCollisionModel2,ResponseDataTypes>::createResponse(core::objectmodel::BaseContext* group)
             {
 #ifndef OBBTREEGPUFRICTIONCONTACT_SUPPRESS_CONTACT_RESPONSE
+
+                if (!this->m_useModelContactTypes_model1 || !this->m_useModelContactTypes_model2)
+                {
+                    msg_warning("ObbTreeGPUFrictionContact") << "activateMappers called for collision model pairing where one or both models are not of type ObbTreeGPUCollisionModel<Vec3Types>! This is not supported for this contact type.";
+                    return;
+                }
+
+                ObbTreeGPUCollisionModel<Vec3Types>* collisionModel1 = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model1);
+                ObbTreeGPUCollisionModel<Vec3Types>* collisionModel2 = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model2);
+
+                if (!collisionModel1 || !collisionModel2)
+                {
+                    msg_warning("ObbTreeGPUFrictionContact") << "dynamic_cast to ObbTreeGPUCollisionModel<Vec3Types> failed for given collision model pairing! collisionModel1 == nullptr: " << (collisionModel1 == nullptr) << ", collisionModel2 == nullptr: " << (collisionModel2 == nullptr);
+                    return;
+                }
+
                 activateMappers();
+
                 const double mu_ = this->m_mu.getValue();
                 // Checks if friction is considered
                 if ( mu_ < 0.0 )
@@ -1497,8 +1513,12 @@ namespace sofa
                     for (std::vector<DetectionOutput*>::const_iterator it = m_contacts.begin(); it != m_contacts.end(); it++)
                     {
                         DetectionOutput* o = *it;
-
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                         if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
+#else
+                        if (collisionModel1->getContactType(collisionModel2->getUuid(), i) == COLLISION_LINE_LINE)
+#endif
+
                         {
                             index1 = mappedContacts_LineLine[i].first.first;
                             index2 = mappedContacts_LineLine[i].first.second;
@@ -1656,8 +1676,12 @@ namespace sofa
                     for (std::vector<DetectionOutput*>::const_iterator it = m_contacts.begin(); it!=m_contacts.end(); it++)
                     {
                         DetectionOutput* o = *it;
-
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                         if (o->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
+#else
+                        if (collisionModel1->getContactType(collisionModel2->getUuid(), i) == COLLISION_VERTEX_FACE)
+#endif
+
                         {
                             index1 = mappedContacts_VertexFace[i].first.first;
                             index2 = mappedContacts_VertexFace[i].first.second;
@@ -1797,9 +1821,17 @@ namespace sofa
                     for (std::vector<DetectionOutput*>::const_iterator it = m_contacts.begin(); it!=m_contacts.end(); it++)
                     {
                         DetectionOutput* o = *it;
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                         if (o->contactType != sofa::component::collision::CONTACT_FACE_VERTEX &&
                             o->contactType != sofa::component::collision::CONTACT_LINE_LINE &&
                             o->contactType != sofa::component::collision::CONTACT_LINE_VERTEX)
+#else
+                        const gProximityContactType contactType = collisionModel1->getContactType(collisionModel2->getUuid(), i);
+                        if (contactType != COLLISION_VERTEX_FACE &&
+                            contactType != COLLISION_LINE_LINE &&
+                            contactType != COLLISION_LINE_POINT)
+#endif
+
                         {
                             index1 = mappedContacts[i].first.first;
                             index2 = mappedContacts[i].first.second;
@@ -1844,8 +1876,7 @@ namespace sofa
                 if (parent!=NULL)
                 {
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_CREATERESPONSE
-                    sout << "ObbTreeGPUFrictionContact " << this->getName() << ": Attaching contact response to " << parent->getName() << sendl;
-                    msg_info("ObbTreeGPUFrictionContact") << "ObbTreeGPUFrictionContact " << this->getName() << ": Attaching contact response to " << parent->getName() << std::endl;
+                    msg_info("ObbTreeGPUFrictionContact") << this->getName() << ": Attaching contact response to " << parent->getName() << std::endl;
 #endif
                     parent->addObject(this);
 
@@ -1901,7 +1932,6 @@ namespace sofa
 
             }
 
-//#define OBBTREEGPUFRICTIONCONTACT_DEBUG_REMOVERESPONSE
             template < class TCollisionModel1, class TCollisionModel2, class ResponseDataTypes  >
             void ObbTreeGPUFrictionContact<TCollisionModel1,TCollisionModel2,ResponseDataTypes>::removeResponse()
             {
@@ -1991,6 +2021,21 @@ namespace sofa
             template < class TCollisionModel1, class TCollisionModel2, class ResponseDataTypes  >
             void ObbTreeGPUFrictionContact<TCollisionModel1,TCollisionModel2,ResponseDataTypes>::draw(const core::visual::VisualParams* vparams)
             {
+                if (!this->m_useModelContactTypes_model1 || !this->m_useModelContactTypes_model2)
+                {
+                    msg_warning("ObbTreeGPUFrictionContact") << "activateMappers called for collision model pairing where one or both models are not of type ObbTreeGPUCollisionModel<Vec3Types>! This is not supported for this contact type.";
+                    return;
+                }
+
+                ObbTreeGPUCollisionModel<Vec3Types>* collisionModel1 = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model1);
+                ObbTreeGPUCollisionModel<Vec3Types>* collisionModel2 = dynamic_cast<ObbTreeGPUCollisionModel<Vec3Types>*>(model2);
+
+                if (!collisionModel1 || !collisionModel2)
+                {
+                    msg_warning("ObbTreeGPUFrictionContact") << "dynamic_cast to ObbTreeGPUCollisionModel<Vec3Types> failed for given collision model pairing! collisionModel1 == nullptr: " << (collisionModel1 == nullptr) << ", collisionModel2 == nullptr: " << (collisionModel2 == nullptr);
+                    return;
+                }
+
                 typename core::behavior::MechanicalState<Vec3Types>::ReadVecCoord pos1 = this->model1->getMechanicalState()->readPositions();
                 typename core::behavior::MechanicalState<Vec3Types>::ReadVecCoord pos2 = this->model2->getMechanicalState()->readPositions();
 
@@ -2020,10 +2065,21 @@ namespace sofa
                         contactCount++;
                         sofa::defaulttype::Vec3f color;
 
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                         if (o->contactType == sofa::component::collision::CONTACT_FACE_VERTEX)
+#else
+                        const gProximityContactType contactType = collisionModel1->getContactType(collisionModel2->getUuid(), contactCount);
+                        if (contactType == COLLISION_VERTEX_FACE)
+#endif
                             color = Vec3f(0,0.8,0);
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                         else if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
+#else
+                        else if (contactType == COLLISION_LINE_LINE)
+#endif
                             color = Vec3f(0.8,0,0);
+                        else
+                            color = Vec3f(0, 0, 0.8);
 
 
                         int idx1 = o->elem.first.getIndex();
@@ -2134,7 +2190,11 @@ namespace sofa
                         int edgeIdx1 = idx1 % 3;
                         int edgeIdx2 = idx2 % 3;
 
+#ifdef OBBTREEGPUBARYCENTRICCONTACTMAPPER_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                         if (o->contactType == sofa::component::collision::CONTACT_LINE_LINE)
+#else
+                        if (contactType == COLLISION_LINE_LINE)
+#endif
                         {
 #ifdef OBBTREEGPUFRICTIONCONTACT_DEBUG_DRAW
                             // msg_info("ObbTreeGPUFrictionContact") << " * LINE_LINE contact " << contactCount << ": idx1 = " << idx1 << ", idx2 = " << idx2 << "; triIdx1 = " << triIdx1 << ", triIdx2 = " << triIdx2 << "; edgeIdx1 = " << edgeIdx1 << ", edgeIdx2 = " << edgeIdx2 << std::endl;

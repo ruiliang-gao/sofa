@@ -49,7 +49,36 @@ public:
 private:
 	Simulation(const Simulation& n) ;
 	Simulation& operator=(const Simulation& n) ;
-	
+
+// Zykl.io begin
+protected:
+    /// Stores pointers to all generated root nodes from load() calls
+    std::map<std::string, Node::SPtr> m_rootNodes;
+    /// Stores a pointer to the last generated root node from a load() call
+    Node::SPtr m_currentRootNode;
+
+#ifdef ZY_SIMULATION_CONCURRENT_COMPONENT
+    /// Stores pointers to SimulationConcurrentComponent-derived classes
+    std::vector<SimulationConcurrentComponent*> m_simulationConcurrentComponents;
+#endif //ZY_SIMULATION_CONCURRENT_COMPONENT
+
+public:
+    /// Check if a root node loaded from a given file name exists
+    bool hasRootNode(const std::string& /*name*/);
+    /// Get root node for a simulation loaded from a given file name
+    Node::SPtr getRootNode(const std::string& /*name*/);
+    /// Get the root node for the currently active simulation
+    Node::SPtr getCurrentRootNode();
+
+#ifdef ZY_SIMULATION_CONCURRENT_COMPONENT
+    void startConcurrentComponents();
+    void stopConcurrentComponents();
+    void pauseConcurrentComponents();
+    void resumeConcurrentComponents();
+#endif
+
+// Zykl.io end
+
 public:
     /// Print all object in the graph
     virtual void print(Node* root);

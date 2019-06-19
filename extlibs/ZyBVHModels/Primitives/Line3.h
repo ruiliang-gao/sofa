@@ -6,6 +6,7 @@
 using namespace sofa::defaulttype;
 
 #include "DistanceComputable.h"
+#include "Capsule3.h"
 
 namespace BVHModels
 {
@@ -58,28 +59,50 @@ namespace BVHModels
     };
 
     template <typename Real>
+    class Line3Capsule3IntersectionResult: public IntersectionResult<Real>
+    {
+        public:
+            Line3Capsule3IntersectionResult(): IntersectionResult<Real>()
+            {
+                this->intersectionType = IT_EMPTY;
+                this->primitiveType1 = PT_LINE3;
+                this->primitiveType2 = PT_CAPSULE3;
+            }
+
+            int mQuantity;
+            Vec<3,Real> mPoint[2];
+    };
+
+    template <typename Real>
     class Line3: public Intersectable<Real, Vec<3,Real> >, public DistanceComputable<Real, Vec<3,Real> >
     {
-    public:
-        // The line is represented as P+t*D where P is the line origin, D is a
-        // unit-length direction vector, and t is any real number.  The user must
-        // ensure that D is indeed unit length.
+        public:
+            // The line is represented as P+t*D where P is the line origin, D is a
+            // unit-length direction vector, and t is any real number.  The user must
+            // ensure that D is indeed unit length.
 
-        // Construction and destruction.
-        Line3 ();  // uninitialized
-        ~Line3 ();
+            // Construction and destruction.
+            Line3 ();  // uninitialized
+            ~Line3 ();
 
-        Line3 (const Vec<3,Real>& origin, const Vec<3,Real>& direction);
+            Line3 (const Vec<3,Real>& origin, const Vec<3,Real>& direction);
 
-        PrimitiveType GetIntersectableType() const { return PT_LINE3; }
+            PrimitiveType GetIntersectableType() const { return PT_LINE3; }
+            bool IsIntersectionQuerySupported(const PrimitiveType &other);
 
-        virtual Real GetDistance(const DistanceComputable<Real, Vec<3,Real> >& other, DistanceResult& result);
-        virtual Real GetSquaredDistance(const DistanceComputable<Real, Vec<3,Real> >& other, DistanceResult& result);
+            virtual Real GetDistance(const DistanceComputable<Real, Vec<3,Real> >& other, DistanceResult& result);
+            virtual Real GetSquaredDistance(const DistanceComputable<Real, Vec<3,Real> >& other, DistanceResult& result);
 
-        virtual Real GetDistance(const DistanceComputable<Real, Vec<3, Real> > &other, Real t, const Vec<3,Real>& velocity0, const Vec<3,Real>& velocity1, DistanceResult& result);
-        virtual Real GetSquaredDistance(const DistanceComputable<Real, Vec<3, Real> > &other, Real t, const Vec<3,Real>& velocity0, const Vec<3,Real>& velocity1, DistanceResult& result);
+            virtual Real GetDistance(const DistanceComputable<Real, Vec<3, Real> > &other, Real t, const Vec<3,Real>& velocity0, const Vec<3,Real>& velocity1, DistanceResult& result);
+            virtual Real GetSquaredDistance(const DistanceComputable<Real, Vec<3, Real> > &other, Real t, const Vec<3,Real>& velocity0, const Vec<3,Real>& velocity1, DistanceResult& result);
 
-        Vec<3,Real> Origin, Direction;
+            bool Test(const Intersectable<Real, Vec<3,Real> >& other);
+            bool Find(const Intersectable<Real, Vec<3,Real> >& other, IntersectionResult<Real>& result);
+
+            Vec<3,Real> Origin, Direction;
+
+        private:
+            int FindIntersectionWithCapsule3(const Vec<3, Real>& origin, const Vec<3, Real>& dir, const Capsule3<Real>& capsule, Real t[2]);
     };
 
     typedef Line3<float> Line3f;

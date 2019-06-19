@@ -40,7 +40,6 @@ namespace BVHModels
 
             Line2 (const Vec<2,Real>& origin, const Vec<2,Real>& direction);
 
-            //TRU int GetIntersectableType() const { return PT_LINE2; }
             PrimitiveType GetIntersectableType() const { return PT_LINE2; }
             bool IsIntersectionQuerySupported(const PrimitiveType &other);
 
@@ -50,7 +49,6 @@ namespace BVHModels
             Vec<2,Real> Origin, Direction;
 
         private:
-            //TRU int Classify (const Vec<2,Real>& P0,                const Vec<2,Real>& D0, const Vec<2,Real>& P1, const Vec<2,Real>& D1,                Real dotThreshold, Real* s);
             IntersectionType Classify (const Vec<2,Real>& P0,
                 const Vec<2,Real>& D0, const Vec<2,Real>& P1, const Vec<2,Real>& D1,
                 Real dotThreshold, Real* s);

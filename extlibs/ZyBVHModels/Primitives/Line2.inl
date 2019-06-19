@@ -42,22 +42,8 @@ bool Line2<Real>::Test(const Intersectable<Real, Vec<2,Real> >& other)
     if (other.GetIntersectableType() == PT_LINE2)
     {
         const Line2<Real>* mLine1 = static_cast<const Line2<Real>*>(&other);
-        //TRU int mIntersectionType = Classify(this->Origin, this->Direction,            mLine1->Origin, mLine1->Direction, MathUtils<Real>::ZERO_TOLERANCE);
         int mIntersectionType = Classify(this->Origin, this->Direction,
             mLine1->Origin, mLine1->Direction, MathUtils<Real>::ZERO_TOLERANCE, NULL);
-
-        /*if (mIntersectionType == IT_POINT)
-        {
-            mQuantity = 1;
-        }
-        else if (mIntersectionType == IT_LINE)
-        {
-            mQuantity = INT_MAX;
-        }
-        else
-        {
-            mQuantity = 0;
-        }*/
 
         return mIntersectionType != IT_EMPTY;
     }
@@ -74,23 +60,19 @@ bool Line2<Real>::Find(const Intersectable<Real, Vec<2,Real> >& other, Intersect
     {
         const Line2<Real>* mLine1 = static_cast<const Line2<Real>*>(&other);
 
-        //TRU Line2Line2IntersectionResult<Real>* line2Res = dynamic_cast<Line2Line2IntersectionResult<Real>*>(&result);
         Line2Line2IntersectionResult<Real>* line2Res = static_cast<Line2Line2IntersectionResult<Real>*>(&result);
         if (!line2Res)
             return false;
 
         Real s[2];
-        //TRU line2Res->mIntersectionType = Classify(this->Origin, this->Direction,            mLine1->Origin, mLine1->Direction, line2Res->mDotThreshold, s);
-         line2Res->SetMIntersectionType(Classify(this->Origin, this->Direction,
+        line2Res->SetMIntersectionType(Classify(this->Origin, this->Direction,
                                                 mLine1->Origin, mLine1->Direction, line2Res->mDotThreshold, s));
 
-        //TRU if (line2Res->mIntersectionType == IT_POINT)
         if (line2Res->GetMIntersectionType() == IT_POINT)
         {
             line2Res->mQuantity = 1;
             line2Res->mPoint = this->Origin + s[0] * this->Direction;
         }
-        //TRU else if (line2Res->mIntersectionType == IT_LINE)
         else if (line2Res->GetMIntersectionType() == IT_LINE)
         {
             line2Res->mQuantity = MathUtils<Real>::MAX_INT;
@@ -100,7 +82,6 @@ bool Line2<Real>::Find(const Intersectable<Real, Vec<2,Real> >& other, Intersect
             line2Res->mQuantity = 0;
         }
 
-        //TRU return line2Res->mIntersectionType != IT_EMPTY;
         return (line2Res->GetMIntersectionType() != IT_EMPTY);
     }
     return false;

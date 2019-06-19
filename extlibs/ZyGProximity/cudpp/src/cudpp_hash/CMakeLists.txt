@@ -76,24 +76,5 @@ cuda_add_library(cudpp_hash ${LIB_TYPE}
   ${CUFILES} 
   OPTIONS ${GENCODE_SM20} ${VERBOSE_PTXAS}
   )
-  
-set_target_properties(cudpp_hash PROPERTIES FOLDER "TruExtlibs")
 
 target_link_libraries(cudpp_hash cudpp)
-
-if (TRUPHYSICS_INSTALLER)
-    sofa_install_external_library(LIBRARY_NAME "cudpp_hash" LIBRARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}" LIBRARY_HEADER_FILES ${CUDPP_HASH_HEADER_FILES})
-endif()
-
-#install(FILES ${HFILES_PUBLIC}
-#  DESTINATION include
-#  )
-
-#install(TARGETS cudpp_hash
-#  DESTINATION lib
-#  EXPORT cudpp-targets
-#  )
-
-#install(EXPORT cudpp-targets
-#  DESTINATION lib
-#  )

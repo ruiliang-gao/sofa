@@ -8,6 +8,8 @@
 #include <cutil/cutil.h>
 
 #include <sofa/core/ObjectFactory.h>
+#include <sofa/helper/system/FileRepository.h>
+
 #include <sofa/core/visual/DrawTool.h>
 #include <sofa/core/visual/DrawToolGL.h>
 #include <SofaOpenglVisual/OglModel.h>
@@ -595,6 +597,14 @@ void ObbTreeGPUCollisionDetection_Threaded::bwdInit()
     msg_info("ObbTreeGPUCollisionDetection_Threaded") << "testOutputFilename = " << testOutputFilename.getValue();
 }
 
+void ObbTreeGPUCollisionDetection_Threaded::createDetectionOutputs(const std::vector< std::pair<sofa::core::CollisionModel*, sofa::core::CollisionModel*> >& _cmPairs)
+{
+    for (size_t k = 0; k < _cmPairs.size(); ++k)
+    {
+        this->getDetectionOutputs(_cmPairs[k].first, _cmPairs[k].second);
+    }
+}
+
 void ObbTreeGPUCollisionDetection_Threaded::addCollisionModels(const sofa::helper::vector<core::CollisionModel *> collisionModels)
 {
     if (!this->f_printLog.getValue())
@@ -686,7 +696,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
             }
         }
 
-        for (sofa::helper::vector<core::CollisionModel*>::iterator it = collisionModels.begin(); it != collisionModels.end(); ++it)
+        for (sofa::helper::vector<core::CollisionModel*>::iterator it = m_collisionModels.begin(); it != m_collisionModels.end(); ++it)
         {
             core::CollisionModel* cm2 = *it;
 
@@ -740,7 +750,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionModel(core::CollisionMod
             }
         }
 
-        collisionModels.push_back(cm);
+        m_collisionModels.push_back(cm);
 
         if (doGPUObbTest)
         {
@@ -782,7 +792,7 @@ void ObbTreeGPUCollisionDetection_Threaded::addCollisionPairs(const sofa::helper
     }
 
 #ifndef	OBBTREE_GPU_COLLISION_DETECTION_SEQUENTIAL_CPU_COLLISION_CHECKS
-	BruteForceDetection::createDetectionOutputs(this->_narrowPhasePairs_CPU);
+    this->createDetectionOutputs(this->_narrowPhasePairs_CPU);
 	const sofa::core::collision::NarrowPhaseDetection::DetectionOutputMap& detection_outputs = this->getDetectionOutputs();
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_DEBUG_ADDCOLLISIONPAIRS
     msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== Pre-created detection outputs: " << detection_outputs.size() << " ===";
@@ -1545,7 +1555,11 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                                     obbModel2->setContactType(obbModel1->getUuid(), q, contactTypes[contacts_it->first][q]);
 #endif
 
+#ifdef OBBTREEGPUCOLLISIONDETECTION_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                     if (detection->contactType == COLLISION_LINE_LINE)
+#else
+                                    if (contactTypes[contacts_it->first][q] == COLLISION_LINE_LINE)
+#endif
                                     {
                                         detection->elem.first = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel1, contactElements[contacts_it->first][q].first); // << CollisionElementIterator
                                         detection->elem.second = sofa::core::TCollisionElementIterator<ObbTreeGPUCollisionModel<Vec3Types> >(obbModel2, contactElements[contacts_it->first][q].second); // << CollisionElementIterator
@@ -1562,7 +1576,12 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                                         msg_info("ObbTreeGPUCollisionDetection_Threaded") << "        LINE_LINE contact: elements = " << detection->elem.first.getIndex() << "," << detection->elem.second.getIndex() << ", features = " << detection->elemFeatures.first << "," << detection->elemFeatures.second;
 #endif
                                     }
+
+#ifdef OBBTREEGPUCOLLISIONDETECTION_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
                                     else if (detection->contactType == COLLISION_VERTEX_FACE)
+#else
+                                    else if (contactTypes[contacts_it->first][q] == COLLISION_VERTEX_FACE)
+#endif
                                     {
                                         if (contactElementsFeatures[contacts_it->first][q].second == -1)
                                         {
@@ -1592,7 +1611,11 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                                     }
                                     else
                                     {
-                                        msg_error("ObbTreeGPUCollisionDetection_Threaded") << "ERROR: contact: " << detection->contactType;
+#ifdef OBBTREEGPUCOLLISIONDETECTION_USE_CONTACTTYPE_FROM_DETECTIONOUTPUT
+                                        msg_error("ObbTreeGPUCollisionDetection_Threaded") << "Contact: " << detection->contactType;
+#else
+                                        msg_error("ObbTreeGPUCollisionDetection_Threaded") << "Contact: " << contactTypes[contacts_it->first][q];
+#endif
 										continue;
                                     }
                                 }
@@ -1653,7 +1676,9 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
     }
 #endif
 
+#if ROBOTCONNECTOR_COLLISION_STOP_ENABLED
 	sofa::component::visualmodel::OglModel::resetOglObjectStates(0);
+#endif
 
 #ifdef _WIN32
 #if ROBOTCONNECTOR_COLLISION_STOP_ENABLED
@@ -1786,7 +1811,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
     msg_info("ObbTreeGPUCollisionDetection_Threaded") << "==== Iteration summary ====";
 #endif
 
-
+#ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_FAKE_GRIPPING_RULES_SUPPORT
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
     msg_info("ObbTreeGPUCollisionDetection_Threaded") << " -- Fake-gripping --";
 #endif
@@ -2125,7 +2150,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 						Vec3d newObjectPos(n[0][0], n[0][1], n[0][2]);
 						Quat newObjectRot(n[0][3], n[0][4], n[0][5], n[0][6]);
 
-						// Translate back by laseLeading, rotate back by lastLeading, rotate to currentLeading, translate to currentLeadinng)
+                        // Translate back by laseLeading, rotate back by lastLeading, rotate to currentLeading, translate to currentLeading)
 						newObjectPos = currentLeadingObjectRot.rotate(lastLeadingObjectRot.inverseRotate(newObjectPos - lastLeadingObjectPos)) + currentLeadingObjectPos;
 						// And the same only for the rotation quaternion
 						newObjectRot = currentLeadingObjectRot*lastLeadingObjectRot.inverse()*newObjectRot;
@@ -2183,7 +2208,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #endif
 									prevInnerMapping->setModels(im_it->second.first.first, im_it->second.first.second);
 
-									sofa::simulation::MechanicalPropagatePositionAndVelocityVisitor(core::MechanicalParams::defaultInstance()).execute(im_it->second.first.first->getContext());
+                                    sofa::simulation::MechanicalPropagateOnlyPositionAndVelocityVisitor(core::MechanicalParams::defaultInstance()).execute(im_it->second.first.first->getContext());
 									sofa::simulation::UpdateMappingVisitor(core::ExecParams::defaultInstance()).execute(im_it->second.first.first->getContext());
 
 									//if (m_fakeGripping_AttachedObjects.find(m_previous_FakeGripping_Event) != m_fakeGripping_AttachedObjects.end())
@@ -2292,7 +2317,6 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 
 							sofa::simulation::Node::SPtr rigidMappingNode = parent1->createChild(rgNameStream.str());
 
-							/// START FIXED BY BE
 							Vector3 obj_pos_1(mobj_1[0]->getPosition()[0][0], mobj_1[0]->getPosition()[0][1], mobj_1[0]->getPosition()[0][2]);
 							Vector3 obj_pos_2(mobj_2[0]->getPosition()[0][0], mobj_2[0]->getPosition()[0][1], mobj_2[0]->getPosition()[0][2]);
 
@@ -2320,13 +2344,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                             rigidMapping->appliedTranslation.setValue(rotation_2.inverseRotate(position_offset));
 							rigidMapping->appliedRotation.setValue(rotation_2.inverse()*rotation_1);
 
-							/// END FIXED BY BE
-
                             msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  apply translation/rotation to inner mapping done";
-
-							// OLD
-							rigidMapping->lastObjPos.setValue(obj_pos_2);
-							rigidMapping->lastObjRot.setValue(rotation_2);
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
                             msg_info("ObbTreeGPUCollisionDetection_Threaded") << "  init and add rigidMapping";
@@ -2358,7 +2376,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 							{
                                 msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    reset UniformMass to nearZero";
 								m_uniformMass_1[0]->old_storedMass.setValue(m_uniformMass_1[0]->d_mass.getValue());
-								m_uniformMass_1[0]->d_mass.setValue(0.000001);
+                                m_uniformMass_1[0]->d_totalMass.setValue(0.000001);
 
 								m_fakeGripping_StoredUniformMasses.insert(std::make_pair(m_active_FakeGripping_Event, m_uniformMass_1[0]));
 							}
@@ -2587,11 +2605,12 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
         msg_info("ObbTreeGPUCollisionDetection_Threaded") << "=== END OF FAKE-GRIPPING HANDLING ===";
 #endif	
-	}
+    }
 
 #ifdef _WIN32
     updateRuleVis();
 #endif
+#endif //OBBTREEGPUCOLLISIONDETECTION_THREADED_FAKE_GRIPPING_RULES_SUPPORT
 
     for (unsigned int k = 0; k < m_traversalTasks.size(); k++)
     {
