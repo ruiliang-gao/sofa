@@ -141,6 +141,7 @@ endmacro()
 
 
 macro(sofa_add_plugin directory plugin_name)
+    message(STATUS "Adding plugin: ${plugin_name} in directory ${directory}")
     sofa_add_generic( ${directory} ${plugin_name} "Plugin" ${ARGV2} )
 endmacro()
 

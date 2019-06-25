@@ -4,3 +4,6 @@
 [submodule "applications/plugins/SoftRobots"]
 	path = applications/plugins/SoftRobots
 	url = https://github.com/SofaDefrost/SoftRobots.git
+[submodule "applications/plugins/PDBSofaPlugin"]
+	path = applications/plugins/PDBSofaPlugin
+	url = https://github.com/AlbanOdot/PBDSofaPlugin
