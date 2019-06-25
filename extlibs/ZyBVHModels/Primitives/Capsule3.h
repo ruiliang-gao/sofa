@@ -16,7 +16,7 @@ namespace BVHModels
 {
 
     template <typename Real>
-    class Capsule3: public Intersectable<Real, Vec<3,Real> >, public DistanceComputable<Real, Vec<3,Real> >
+    class Capsule3: public Intersectable<Real, Vec<3,Real> >
     {
         public:
             // Construction and destruction.  A capsule is the set of points that are
@@ -29,11 +29,12 @@ namespace BVHModels
             Segment3<Real> Segment;
             Real Radius;
 
-            /*virtual Real GetDistance(const DistanceComputable<Real, Vec<3,Real> >& other, DistanceResult& result);
-            virtual Real GetSquaredDistance(const DistanceComputable<Real, Vec<3,Real> >& other, DistanceResult& result);
+            PrimitiveType GetIntersectableType() const { return PT_CAPSULE3; }
+            bool IsIntersectionQuerySupported(const PrimitiveType &other);
 
-            virtual Real GetDistance(const DistanceComputable<Real, Vec<3, Real> > &other, Real t, const Vec<3,Real>& velocity0, const Vec<3,Real>& velocity1, DistanceResult& result);
-            virtual Real GetSquaredDistance(const DistanceComputable<Real, Vec<3, Real> > &other, Real t, const Vec<3,Real>& velocity0, const Vec<3,Real>& velocity1, DistanceResult& result);*/
+            // Static test-intersection query.
+            virtual bool Test(const Intersectable<Real, Vec<3,Real> >& other);
+
     };
 
     typedef Capsule3<float> Capsule3f;

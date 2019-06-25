@@ -11,19 +11,19 @@ using namespace BVHModels;
 
 //----------------------------------------------------------------------------
 template <typename Real>
-Segment3<Real>::Segment3 ()
+Segment3<Real>::Segment3()
 {
 }
 
 //----------------------------------------------------------------------------
 template <typename Real>
-Segment3<Real>::~Segment3 ()
+Segment3<Real>::~Segment3()
 {
 }
 
 //----------------------------------------------------------------------------
 template <typename Real>
-Segment3<Real>::Segment3 (const Vec<3,Real>& p0, const Vec<3,Real>& p1)
+Segment3<Real>::Segment3(const Vec<3,Real>& p0, const Vec<3,Real>& p1)
     :
     P0(p0),
     P1(p1)
@@ -45,21 +45,20 @@ Segment3<Real>::Segment3 (const Vec<3,Real>& center,
 
 //----------------------------------------------------------------------------
 template <typename Real>
-void Segment3<Real>::ComputeCenterDirectionExtent ()
+void Segment3<Real>::ComputeCenterDirectionExtent()
 {
     Center = ((Real)0.5)*(P0 + P1);
     Direction = P1 - P0;
-    //TRU Extent = ((Real)0.5)*Direction.Normalize();
     Extent = ((Real)0.5)*Direction.norm();
     Direction.normalize();
 }
 
 //----------------------------------------------------------------------------
 template <typename Real>
-void Segment3<Real>::ComputeEndPoints ()
+void Segment3<Real>::ComputeEndPoints()
 {
-    P0 = Center - Extent*Direction;
-    P1 = Center + Extent*Direction;
+    P0 = Center - Extent * Direction;
+    P1 = Center + Extent * Direction;
 }
 
 //----------------------------------------------------------------------------
@@ -73,19 +72,342 @@ Real Segment3<Real>::GetDistance(const DistanceComputable<Real, Vec<3,Real> >& o
 template <typename Real>
 Real Segment3<Real>::GetSquaredDistance(const DistanceComputable<Real, Vec<3,Real> >& other, DistanceResult& result)
 {
+    const Segment3<Real>* mSegment1 = dynamic_cast<const Segment3<Real>*>(&other);
+    Segment3Segment3DistanceResult* seg3Seg3Res = dynamic_cast<Segment3Segment3DistanceResult*>(&result);
+
+    if (mSegment1 && seg3Seg3Res)
+    {
+        const Segment3<Real>* mSegment0 = this;
+        Vec<3, Real> diff = mSegment0->Center - mSegment1->Center;
+        Real a01 = -mSegment0->Direction * mSegment1->Direction;
+        Real b0 = diff * mSegment0->Direction;
+        Real b1 = -diff * mSegment1->Direction;
+        Real c = diff.norm2();
+        Real det = MathUtils<Real>::FAbs((Real)1 - a01 * a01);
+        Real s0, s1, sqrDist, extDet0, extDet1, tmpS0, tmpS1;
+
+        if (det >= MathUtils<Real>::ZERO_TOLERANCE)
+        {
+            // Segments are not parallel.
+            s0 = a01 * b1 - b0;
+            s1 = a01 * b0 - b1;
+            extDet0 = mSegment0->Extent * det;
+            extDet1 = mSegment1->Extent * det;
+
+            if (s0 >= -extDet0)
+            {
+                if (s0 <= extDet0)
+                {
+                    if (s1 >= -extDet1)
+                    {
+                        if (s1 <= extDet1)  // region 0 (interior)
+                        {
+                            // Minimum at interior points of segments.
+                            Real invDet = ((Real)1)/det;
+                            s0 *= invDet;
+                            s1 *= invDet;
+                            sqrDist = s0*(s0 + a01*s1 + ((Real)2)*b0) +
+                                s1*(a01*s0 + s1 + ((Real)2)*b1) + c;
+                        }
+                        else  // region 3 (side)
+                        {
+                            s1 = mSegment1->Extent;
+                            tmpS0 = -(a01*s1 + b0);
+                            if (tmpS0 < -mSegment0->Extent)
+                            {
+                                s0 = -mSegment0->Extent;
+                                sqrDist = s0*(s0 - ((Real)2)*tmpS0) +
+                                    s1*(s1 + ((Real)2)*b1) + c;
+                            }
+                            else if (tmpS0 <= mSegment0->Extent)
+                            {
+                                s0 = tmpS0;
+                                sqrDist = -s0*s0 + s1*(s1 + ((Real)2)*b1) + c;
+                            }
+                            else
+                            {
+                                s0 = mSegment0->Extent;
+                                sqrDist = s0*(s0 - ((Real)2)*tmpS0) +
+                                    s1*(s1 + ((Real)2)*b1) + c;
+                            }
+                        }
+                    }
+                    else  // region 7 (side)
+                    {
+                        s1 = -mSegment1->Extent;
+                        tmpS0 = -(a01*s1 + b0);
+                        if (tmpS0 < -mSegment0->Extent)
+                        {
+                            s0 = -mSegment0->Extent;
+                            sqrDist = s0*(s0 - ((Real)2)*tmpS0) +
+                                s1*(s1 + ((Real)2)*b1) + c;
+                        }
+                        else if (tmpS0 <= mSegment0->Extent)
+                        {
+                            s0 = tmpS0;
+                            sqrDist = -s0*s0 + s1*(s1 + ((Real)2)*b1) + c;
+                        }
+                        else
+                        {
+                            s0 = mSegment0->Extent;
+                            sqrDist = s0*(s0 - ((Real)2)*tmpS0) +
+                                s1*(s1 + ((Real)2)*b1) + c;
+                        }
+                    }
+                }
+                else
+                {
+                    if (s1 >= -extDet1)
+                    {
+                        if (s1 <= extDet1)  // region 1 (side)
+                        {
+                            s0 = mSegment0->Extent;
+                            tmpS1 = -(a01*s0 + b1);
+                            if (tmpS1 < -mSegment1->Extent)
+                            {
+                                s1 = -mSegment1->Extent;
+                                sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                    s0*(s0 + ((Real)2)*b0) + c;
+                            }
+                            else if (tmpS1 <= mSegment1->Extent)
+                            {
+                                s1 = tmpS1;
+                                sqrDist = -s1*s1 + s0*(s0 + ((Real)2)*b0) + c;
+                            }
+                            else
+                            {
+                                s1 = mSegment1->Extent;
+                                sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                    s0*(s0 + ((Real)2)*b0) + c;
+                            }
+                        }
+                        else  // region 2 (corner)
+                        {
+                            s1 = mSegment1->Extent;
+                            tmpS0 = -(a01*s1 + b0);
+                            if (tmpS0 < -mSegment0->Extent)
+                            {
+                                s0 = -mSegment0->Extent;
+                                sqrDist = s0*(s0 - ((Real)2)*tmpS0) +
+                                    s1*(s1 + ((Real)2)*b1) + c;
+                            }
+                            else if (tmpS0 <= mSegment0->Extent)
+                            {
+                                s0 = tmpS0;
+                                sqrDist = -s0*s0 + s1*(s1 + ((Real)2)*b1) + c;
+                            }
+                            else
+                            {
+                                s0 = mSegment0->Extent;
+                                tmpS1 = -(a01*s0 + b1);
+                                if (tmpS1 < -mSegment1->Extent)
+                                {
+                                    s1 = -mSegment1->Extent;
+                                    sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                        s0*(s0 + ((Real)2)*b0) + c;
+                                }
+                                else if (tmpS1 <= mSegment1->Extent)
+                                {
+                                    s1 = tmpS1;
+                                    sqrDist = -s1*s1 + s0*(s0 + ((Real)2)*b0) + c;
+                                }
+                                else
+                                {
+                                    s1 = mSegment1->Extent;
+                                    sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                        s0*(s0 + ((Real)2)*b0) + c;
+                                }
+                            }
+                        }
+                    }
+                    else  // region 8 (corner)
+                    {
+                        s1 = -mSegment1->Extent;
+                        tmpS0 = -(a01*s1 + b0);
+                        if (tmpS0 < -mSegment0->Extent)
+                        {
+                            s0 = -mSegment0->Extent;
+                            sqrDist = s0*(s0 - ((Real)2)*tmpS0) +
+                                s1*(s1 + ((Real)2)*b1) + c;
+                        }
+                        else if (tmpS0 <= mSegment0->Extent)
+                        {
+                            s0 = tmpS0;
+                            sqrDist = -s0*s0 + s1*(s1 + ((Real)2)*b1) + c;
+                        }
+                        else
+                        {
+                            s0 = mSegment0->Extent;
+                            tmpS1 = -(a01*s0 + b1);
+                            if (tmpS1 > mSegment1->Extent)
+                            {
+                                s1 = mSegment1->Extent;
+                                sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                    s0*(s0 + ((Real)2)*b0) + c;
+                            }
+                            else if (tmpS1 >= -mSegment1->Extent)
+                            {
+                                s1 = tmpS1;
+                                sqrDist = -s1*s1 + s0*(s0 + ((Real)2)*b0) + c;
+                            }
+                            else
+                            {
+                                s1 = -mSegment1->Extent;
+                                sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                    s0*(s0 + ((Real)2)*b0) + c;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (s1 >= -extDet1)
+                {
+                    if (s1 <= extDet1)  // region 5 (side)
+                    {
+                        s0 = -mSegment0->Extent;
+                        tmpS1 = -(a01*s0 + b1);
+                        if (tmpS1 < -mSegment1->Extent)
+                        {
+                            s1 = -mSegment1->Extent;
+                            sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                s0*(s0 + ((Real)2)*b0) + c;
+                        }
+                        else if (tmpS1 <= mSegment1->Extent)
+                        {
+                            s1 = tmpS1;
+                            sqrDist = -s1*s1 + s0*(s0 + ((Real)2)*b0) + c;
+                        }
+                        else
+                        {
+                            s1 = mSegment1->Extent;
+                            sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                s0*(s0 + ((Real)2)*b0) + c;
+                        }
+                    }
+                    else  // region 4 (corner)
+                    {
+                        s1 = mSegment1->Extent;
+                        tmpS0 = -(a01*s1 + b0);
+                        if (tmpS0 > mSegment0->Extent)
+                        {
+                            s0 = mSegment0->Extent;
+                            sqrDist = s0*(s0 - ((Real)2)*tmpS0) +
+                                s1*(s1 + ((Real)2)*b1) + c;
+                        }
+                        else if (tmpS0 >= -mSegment0->Extent)
+                        {
+                            s0 = tmpS0;
+                            sqrDist = -s0*s0 + s1*(s1 + ((Real)2)*b1) + c;
+                        }
+                        else
+                        {
+                            s0 = -mSegment0->Extent;
+                            tmpS1 = -(a01*s0 + b1);
+                            if (tmpS1 < -mSegment1->Extent)
+                            {
+                                s1 = -mSegment1->Extent;
+                                sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                    s0*(s0 + ((Real)2)*b0) + c;
+                            }
+                            else if (tmpS1 <= mSegment1->Extent)
+                            {
+                                s1 = tmpS1;
+                                sqrDist = -s1*s1 + s0*(s0 + ((Real)2)*b0) + c;
+                            }
+                            else
+                            {
+                                s1 = mSegment1->Extent;
+                                sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                    s0*(s0 + ((Real)2)*b0) + c;
+                            }
+                        }
+                    }
+                }
+                else   // region 6 (corner)
+                {
+                    s1 = -mSegment1->Extent;
+                    tmpS0 = -(a01*s1 + b0);
+                    if (tmpS0 > mSegment0->Extent)
+                    {
+                        s0 = mSegment0->Extent;
+                        sqrDist = s0*(s0 - ((Real)2)*tmpS0) +
+                            s1*(s1 + ((Real)2)*b1) + c;
+                    }
+                    else if (tmpS0 >= -mSegment0->Extent)
+                    {
+                        s0 = tmpS0;
+                        sqrDist = -s0*s0 + s1*(s1 + ((Real)2)*b1) + c;
+                    }
+                    else
+                    {
+                        s0 = -mSegment0->Extent;
+                        tmpS1 = -(a01*s0 + b1);
+                        if (tmpS1 < -mSegment1->Extent)
+                        {
+                            s1 = -mSegment1->Extent;
+                            sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                s0*(s0 + ((Real)2)*b0) + c;
+                        }
+                        else if (tmpS1 <= mSegment1->Extent)
+                        {
+                            s1 = tmpS1;
+                            sqrDist = -s1*s1 + s0*(s0 + ((Real)2)*b0) + c;
+                        }
+                        else
+                        {
+                            s1 = mSegment1->Extent;
+                            sqrDist = s1*(s1 - ((Real)2)*tmpS1) +
+                                s0*(s0 + ((Real)2)*b0) + c;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            // The segments are parallel.  The average b0 term is designed to
+            // ensure symmetry of the function.  That is, dist(seg0,seg1) and
+            // dist(seg1,seg0) should produce the same number.
+            Real e0pe1 = mSegment0->Extent + mSegment1->Extent;
+            Real sign = (a01 > (Real)0 ? (Real)-1 : (Real)1);
+            Real b0Avr = ((Real)0.5)*(b0 - sign*b1);
+            Real lambda = -b0Avr;
+            if (lambda < -e0pe1)
+            {
+                lambda = -e0pe1;
+            }
+            else if (lambda > e0pe1)
+            {
+                lambda = e0pe1;
+            }
+
+            s1 = -sign*lambda*mSegment1->Extent/e0pe1;
+            s0 = lambda + sign*s1;
+            sqrDist = lambda*(lambda + ((Real)2)*b0Avr) + c;
+        }
+
+        seg3Seg3Res->mClosestPoint0 = mSegment0->Center + s0 * mSegment0->Direction;
+        seg3Seg3Res->mClosestPoint1 = mSegment1->Center + s1 * mSegment1->Direction;
+        seg3Seg3Res->mSegment0Parameter = s0;
+        seg3Seg3Res->mSegment1Parameter = s1;
+
+        // Account for numerical round-off errors.
+        if (sqrDist < (Real)0)
+        {
+            sqrDist = (Real)0;
+        }
+        return sqrDist;
+    }
+
     const Triangle3<Real>* mTriangle = dynamic_cast<const Triangle3<Real>*>(&other);
     Segment3Triangle3DistanceResult* seg3Tri3Res = dynamic_cast<Segment3Triangle3DistanceResult*>(&result);
     if (mTriangle && seg3Tri3Res)
     {
-        // DistLine3Triangle3<Real> queryLT(line, *mTriangle);
         Line3<Real> line(this->Center, this->Direction);
         Line3Triangle3DistanceResult line3Tri3Res;
-        //TRU Real sqrDist = line.GetDistance(*mTriangle, line3Tri3Res);
         Real sqrDist = line.GetDistance(other, line3Tri3Res);
-        //Real sqrDist = line.GetDistance(dynamic_cast<const DistanceComputable<Real, Vec<3,Real> >&>(*mTriangle), line3Tri3Res);
-
-        //    Real sqrDist = queryLT.GetSquaredDistance();
-        //    mSegmentParameter = queryLT.GetLineParameter();
 
         if (line3Tri3Res.mLineParameter >= -this->Extent)
         {
@@ -115,14 +437,6 @@ Real Segment3<Real>::GetSquaredDistance(const DistanceComputable<Real, Vec<3,Rea
                 seg3Tri3Res->mTriangleBary[0] = pt3Tri3Res.mTriangleBary[0];
                 seg3Tri3Res->mTriangleBary[1] = pt3Tri3Res.mTriangleBary[1];
                 seg3Tri3Res->mTriangleBary[2] = pt3Tri3Res.mTriangleBary[2];
-
-                /*DistPoint3Triangle3<Real> queryPT(mClosestPoint0, *mTriangle);
-                sqrDist = queryPT.GetSquared();
-                mClosestPoint1 = queryPT.GetClosestPoint1();
-                mSegmentParameter = mSegment->Extent;
-                mTriangleBary[0] = queryPT.GetTriangleBary(0);
-                mTriangleBary[1] = queryPT.GetTriangleBary(1);
-                mTriangleBary[2] = queryPT.GetTriangleBary(2);*/
             }
         }
         else
@@ -131,7 +445,6 @@ Real Segment3<Real>::GetSquaredDistance(const DistanceComputable<Real, Vec<3,Rea
 
             Point3<Real> closestPoint0(seg3Tri3Res->mClosestPoint0);
             Point3Triangle3DistanceResult pt3Tri3Res;
-            //TRU sqrDist = closestPoint0.GetSquaredDistance(*mTriangle, pt3Tri3Res);
             sqrDist = closestPoint0.GetSquaredDistance(other, pt3Tri3Res);
 
             seg3Tri3Res->mClosestPoint1 = pt3Tri3Res.GetClosestPoint1();
@@ -139,14 +452,6 @@ Real Segment3<Real>::GetSquaredDistance(const DistanceComputable<Real, Vec<3,Rea
             seg3Tri3Res->mTriangleBary[0] = pt3Tri3Res.mTriangleBary[0];
             seg3Tri3Res->mTriangleBary[1] = pt3Tri3Res.mTriangleBary[1];
             seg3Tri3Res->mTriangleBary[2] = pt3Tri3Res.mTriangleBary[2];
-
-            /*DistPoint3Triangle3<Real> queryPT(mClosestPoint0, *mTriangle);
-            sqrDist = queryPT.GetSquared();
-            mClosestPoint1 = queryPT.GetClosestPoint1();
-            mSegmentParameter = -mSegment->Extent;
-            mTriangleBary[0] = queryPT.GetTriangleBary(0);
-            mTriangleBary[1] = queryPT.GetTriangleBary(1);
-            mTriangleBary[2] = queryPT.GetTriangleBary(2);*/
         }
 
         return sqrDist;

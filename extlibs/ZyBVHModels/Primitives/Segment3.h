@@ -43,6 +43,25 @@ namespace BVHModels
             double mRectCoord[2];
     };
 
+    struct Segment3Segment3DistanceResult: public DistanceResult
+    {
+        public:
+
+            Segment3Segment3DistanceResult(): DistanceResult()
+            {
+                distanceType = DS_EMPTY;
+                primitiveType1 = PT_SEGMENT3;
+                primitiveType2 = PT_SEGMENT3;
+            }
+
+            using DistanceResult::mClosestPoint0;
+            using DistanceResult::mClosestPoint1;
+
+            // Information about the closest points.
+            double mSegment0Parameter;  // closest0 = seg0.origin+param*seg0.direction
+            double mSegment1Parameter;  // closest1 = seg1.origin+param*seg1.direction
+    };
+
     template <typename Real>
     class Segment3: public DistanceComputable<Real, Vec<3,Real> >
     {
@@ -65,16 +84,15 @@ namespace BVHModels
         Segment3 (const Vec<3,Real>& p0, const Vec<3,Real>& p1);
 
         // The constructor computes P0 and P1 from C, D, and E.
-        Segment3 (const Vec<3,Real>& center, const Vec<3,Real>& direction,
-            Real extent);
+        Segment3 (const Vec<3,Real>& center, const Vec<3,Real>& direction, Real extent);
 
         int GetIntersectableType() const { return PT_SEGMENT3; }
 
         // Call this function when you change P0 or P1.
-        void ComputeCenterDirectionExtent ();
+        void ComputeCenterDirectionExtent();
 
         // Call this function when you change C, D, or e.
-        void ComputeEndPoints ();
+        void ComputeEndPoints();
 
         Real Length() const { return (P1 - P0).norm(); }
         Real SquaredLength() const { return (P1 - P0).norm2(); }
@@ -86,8 +104,6 @@ namespace BVHModels
 
         virtual Real GetDistance(const DistanceComputable<Real, Vec<3, Real> > &other, Real t, const Vec<3,Real>& velocity0, const Vec<3,Real>& velocity1, DistanceResult& result);
         virtual Real GetSquaredDistance(const DistanceComputable<Real, Vec<3, Real> > &other, Real t, const Vec<3,Real>& velocity0, const Vec<3,Real>& velocity1, DistanceResult& result);
-
-        //virtual Real GetDistance(const Intersectable<Real, Vec<3,Real> >& other, DistanceResult& result);
 
         // End-point representation.
         Vec<3,Real> P0, P1;
