@@ -1778,20 +1778,31 @@ namespace BVHModels
     // Explicit instantiation.
     //----------------------------------------------------------------------------
     template
-    class IntrConfiguration<SReal>;
+    class IntrConfiguration<float>;
+    template
+    class IntrConfiguration<double>;
 
     template 
-    class IntrAxis<SReal>;
+    class IntrAxis<float>;
+    template
+    class IntrAxis<double>;
 
     template 
-    class FindContactSet<SReal>;
+    class FindContactSet<float>;
+    template
+    class FindContactSet<double>;
 
     template 
-    void ClipConvexPolygonAgainstPlane<SReal> (const Vec<3,SReal>&, SReal,
-        int&, Vec<3,SReal>*);
+    void ClipConvexPolygonAgainstPlane<float> (const Vec<3, float>&, float,
+        int&, Vec<3, float>*);
+    template
+    void ClipConvexPolygonAgainstPlane<double> (const Vec<3, double>&, double,
+        int&, Vec<3, double>*);
 
     template 
-    Vec<3,SReal> GetPointFromIndex<SReal> (int, const Box3<SReal>&);
+    Vec<3, float> GetPointFromIndex<float> (int, const Box3<float>&);
+    template
+    Vec<3, double> GetPointFromIndex<double> (int, const Box3<double>&);
 
     //----------------------------------------------------------------------------
     template <typename Real>
@@ -2059,5 +2070,7 @@ namespace BVHModels
     // Explicit instantiation.
     //----------------------------------------------------------------------------
     template 
-    class Interval1Intersector<SReal>;
+    class Interval1Intersector<float>;
+    template
+    class Interval1Intersector<double>;
 }

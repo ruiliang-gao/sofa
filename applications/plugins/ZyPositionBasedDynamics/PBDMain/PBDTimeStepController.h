@@ -3,7 +3,7 @@
 
 #include "PBDCommon/PBDCommon.h"
 #include "PBDTimeStep.h"
-#include "PBDSimulationModel.h"
+#include "PBDModels/PBDSimulationModel.h"
 
 #include <sofa/helper/OptionsGroup.h>
 

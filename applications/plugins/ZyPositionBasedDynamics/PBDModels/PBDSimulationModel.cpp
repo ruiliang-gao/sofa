@@ -4,21 +4,6 @@ using namespace sofa::simulation::PBDSimulation;
 
 PBDSimulationModel::PBDSimulationModel(): sofa::core::objectmodel::BaseObject()
 {
-    /*m_cloth_stiffness = static_cast<Real>(1.0);
-    m_cloth_bendingStiffness = static_cast<Real>(0.01);
-    m_cloth_xxStiffness = static_cast<Real>(1.0);
-    m_cloth_yyStiffness = static_cast<Real>(1.0);
-    m_cloth_xyStiffness = static_cast<Real>(1.0);
-    m_cloth_xyPoissonRatio = static_cast<Real>(0.3);
-    m_cloth_yxPoissonRatio = static_cast<Real>(0.3);
-    m_cloth_normalizeShear = false;
-    m_cloth_normalizeStretch = false;
-
-    m_solid_stiffness = static_cast<Real>(1.0);
-    m_solid_poissonRatio = static_cast<Real>(0.3);
-    m_solid_normalizeShear = false;
-    m_solid_normalizeStretch = false;*/
-
     m_contactStiffnessRigidBody = 1.0;
     m_contactStiffnessParticleRigidBody = 100.0;
 
@@ -34,6 +19,11 @@ PBDSimulationModel::PBDSimulationModel(): sofa::core::objectmodel::BaseObject()
     m_rigidBodyContactConstraints.reserve(10000);
     m_particleRigidBodyContactConstraints.reserve(10000);
     m_particleSolidContactConstraints.reserve(10000);
+}
+
+PBDSimulationModel::~PBDSimulationModel()
+{
+
 }
 
 void PBDSimulationModel::init()

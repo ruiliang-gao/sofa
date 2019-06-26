@@ -2,4 +2,5 @@
 
 using namespace BVHModels;
 
-template class Segment2<SReal>;
+template class Segment2<float>;
+template class Segment2<double>;

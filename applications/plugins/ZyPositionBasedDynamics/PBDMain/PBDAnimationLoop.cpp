@@ -1,5 +1,5 @@
 #include "PBDAnimationLoop.h"
-#include "PBDSimulationModel.h"
+#include "PBDModels/PBDSimulationModel.h"
 
 using namespace sofa::simulation::PBDSimulation;
 

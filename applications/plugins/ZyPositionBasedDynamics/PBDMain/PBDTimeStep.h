@@ -4,7 +4,7 @@
 #include <sofa/core/objectmodel/BaseObject.h>
 #include "initZyPositionBasedDynamicsPlugin.h"
 
-#include "PBDSimulationModel.h"
+#include "PBDModels/PBDSimulationModel.h"
 #include "CollisionDetection.h"
 
 namespace sofa

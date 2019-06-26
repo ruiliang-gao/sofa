@@ -10,14 +10,14 @@
 #include "PBDCommon/PBDCommon.h"
 #include "PBDSimulation/PBDRigidBody.h"
 #include "PBDSimulation/PBDParticleData.h"
-#include "PBDSimulation/PBDTriangleModel.h"
-#include "PBDSimulation/PBDTetrahedronModel.h"
-#include "PBDSimulation/PBDLineModel.h"
+#include "PBDModels/PBDTriangleModel.h"
+#include "PBDModels/PBDTetrahedronModel.h"
+#include "PBDModels/PBDLineModel.h"
 
 // Replaceable with SOFA's Data mechanism
 // #include "ParameterObject.h"
 
-#include "PBDynamics/PBDConstraints.h"
+#include "PBDConstraints/PBDConstraints.h"
 
 namespace sofa
 {
@@ -78,21 +78,6 @@ namespace sofa
                     ParticleRigidBodyContactConstraintVector m_particleRigidBodyContactConstraints;
                     ParticleSolidContactConstraintVector m_particleSolidContactConstraints;
                     ConstraintGroupVector m_constraintGroups;
-
-                    /*Real m_cloth_stiffness;
-                    Real m_cloth_bendingStiffness;
-                    Real m_cloth_xxStiffness;
-                    Real m_cloth_yyStiffness;
-                    Real m_cloth_xyStiffness;
-                    Real m_cloth_xyPoissonRatio;
-                    Real m_cloth_yxPoissonRatio;
-                    bool  m_cloth_normalizeStretch;
-                    bool  m_cloth_normalizeShear;
-
-                    Real m_solid_stiffness;
-                    Real m_solid_poissonRatio;
-                    bool m_solid_normalizeStretch;
-                    bool m_solid_normalizeShear;*/
 
                     Real m_contactStiffnessRigidBody;
                     Real m_contactStiffnessParticleRigidBody;

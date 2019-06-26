@@ -11,12 +11,12 @@ namespace sofa
               */
             class IDFactory
             {
-            private:
-                    /** Current id */
-                    static int id;
+                private:
+                        /** Current id */
+                        static int id;
 
-            public:
-                    static int getId() { return id++; }
+                public:
+                        static int getId();
             };
         }
     }

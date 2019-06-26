@@ -2,4 +2,5 @@
 
 using namespace BVHModels;
 
-template class Plane3<SReal>;
+template class Plane3<float>;
+template class Plane3<double>;

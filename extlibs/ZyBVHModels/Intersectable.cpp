@@ -66,7 +66,7 @@ namespace BVHModels
     // Explicit instantiation.
     //----------------------------------------------------------------------------
 
-    /*
+
     template 
     class Intersectable<float,Vec<2, float> >;
 
@@ -78,14 +78,7 @@ namespace BVHModels
 
     template 
     class Intersectable<double,Vec<3,double> >;
-    */
 
-    template class IntersectionResult<SReal>;
 
-    template
-    class Intersectable<SReal,Vec<2,SReal> >;
-
-    template
-    class Intersectable<SReal,Vec<3,SReal> >;
     //----------------------------------------------------------------------------
 }

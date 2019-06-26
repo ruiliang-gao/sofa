@@ -6,4 +6,5 @@
 
 using namespace BVHModels;
 
-template class Box3<SReal>;
+template class Box3<float>;
+template class Box3<double>;

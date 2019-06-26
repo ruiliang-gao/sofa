@@ -2,7 +2,7 @@
 #include "PBDUtils/PBDTimeManager.h"
 
 #include "PBDTimeStep.h"
-#include "PBDUtils/PBDTimeStepController.h"
+#include "PBDMain/PBDTimeStepController.h"
 
 // #include "Utils/Timing.h"
 
@@ -14,7 +14,7 @@ PBDSimulation* PBDSimulation::current = nullptr;
 PBDSimulation::PBDSimulation(): sofa::core::objectmodel::BaseObject()
 {
     m_timeStep = nullptr;
-    m_simulationMethodChanged = NULL;
+    m_simulationMethodChanged = nullptr;
 }
 
 PBDSimulation::~PBDSimulation()

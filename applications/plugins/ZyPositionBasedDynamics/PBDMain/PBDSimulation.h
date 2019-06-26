@@ -5,7 +5,7 @@
 #include "initZyPositionBasedDynamicsPlugin.h"
 
 #include <PBDCommon/PBDCommon.h>
-#include "PBDSimulationModel.h"
+#include "PBDModels/PBDSimulationModel.h"
 #include "PBDTimeStep.h"
 
 #include <sofa/defaulttype/Vec.h>

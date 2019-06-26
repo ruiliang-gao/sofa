@@ -12,7 +12,7 @@
 #include <sofa/simulation/CollisionBeginEvent.h>
 #include <sofa/simulation/CollisionEndEvent.h>
 
-#include "PBDSimulationModel.h"
+#include "PBDModels/PBDSimulationModel.h"
 #include "PBDSimulation.h"
 #include "PBDTimeStep.h"
 

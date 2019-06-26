@@ -2,4 +2,5 @@
 
 using namespace BVHModels;
 
-template class Query2<SReal>;
+template class Query2<float>;
+template class Query2<double>;

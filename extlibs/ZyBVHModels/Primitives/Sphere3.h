@@ -20,9 +20,9 @@ namespace BVHModels
             Sphere3();  // uninitialized
             ~Sphere3();
 
-            Sphere3(const Vector3<Real>& center, Real radius);
+            Sphere3(const Vec<3,Real>& center, Real radius);
 
-            Vector3<Real> Center;
+            Vec<3,Real> Center;
             Real Radius;
     };
 

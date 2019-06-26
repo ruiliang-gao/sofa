@@ -6,7 +6,7 @@
 #include "PBDSimulation/PBDRigidBody.h"
 #include "PBDUtils/PBDIndexedFaceMesh.h"
 #include "PBDSimulation/PBDParticleData.h"
-#include "PBDynamics/PBDConstraints.h"
+#include "PBDConstraints/PBDConstraints.h"
 
 namespace sofa
 {

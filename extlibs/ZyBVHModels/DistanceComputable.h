@@ -74,7 +74,7 @@ namespace BVHModels
     {
         public:
             // Abstract base class.
-            virtual ~DistanceComputable ();
+            virtual ~DistanceComputable();
 
             // Static distance queries.
             virtual Real GetDistance(const DistanceComputable<Real, Vec<3,Real> >& other, DistanceResult& result) = 0;     // distance
@@ -110,10 +110,8 @@ namespace BVHModels
             Real ZeroThreshold;     // default = Math<Real>::ZERO_TOLERANCE
 
             // For derivative approximations.
-            void SetDifferenceStep (Real differenceStep);  // default = 1e-03
-            Real GetDifferenceStep () const;
-
-
+            void SetDifferenceStep(Real differenceStep);  // default = 1e-03
+            Real GetDifferenceStep() const;
 
         protected:
             DistanceComputable();

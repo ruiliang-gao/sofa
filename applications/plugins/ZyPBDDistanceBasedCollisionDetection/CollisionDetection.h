@@ -4,7 +4,7 @@
 #include <PBDCommon/PBDCommon.h>
 #include <PBDCommon/IdFactory.h>
 
-#include <PBDSimulationModel.h>
+#include <PBDModels/PBDSimulationModel.h>
 
 #include <vector>
 

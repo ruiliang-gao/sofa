@@ -2,4 +2,5 @@
 
 using namespace BVHModels;
 
-template class Rectangle3<SReal>;
+template class Rectangle3<float>;
+template class Rectangle3<double>;

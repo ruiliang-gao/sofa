@@ -1,8 +1,6 @@
 #include "DistanceComputable.h"
-
 #include "Math/MathUtils.h"
 
-//using namespace BVHModels;
 using namespace BVHModels;
 
 //----------------------------------------------------------------------------
@@ -37,7 +35,7 @@ bool DistanceResult::HasMultipleClosestPoints1 () const
 
 
 template <typename Real, typename TVector>
-DistanceComputable<Real,TVector>::DistanceComputable ()
+DistanceComputable<Real,TVector>::DistanceComputable()
     :
     MaximumIterations(8),
     ZeroThreshold(MathUtils<Real>::ZERO_TOLERANCE)
@@ -49,7 +47,7 @@ DistanceComputable<Real,TVector>::DistanceComputable ()
 }
 //----------------------------------------------------------------------------
 template <typename Real, typename TVector>
-DistanceComputable<Real,TVector>::~DistanceComputable ()
+DistanceComputable<Real,TVector>::~DistanceComputable()
 {
 
 }
@@ -390,7 +388,7 @@ Real DistanceComputable<Real,TVector>::GetSquaredDistance(Real fT, const TVector
 	// Explicit instantiation.
 	//----------------------------------------------------------------------------
 
-/*
+
 template 
 class DistanceComputable<float, Vec<2, float> >;
 
@@ -401,13 +399,7 @@ template
 class DistanceComputable<double, Vec<2, double> >;
 
 template 
-class DistanceComputable<double, Vec<3, double> >; */
+class DistanceComputable<double, Vec<3, double> >;
 
-
-template 
-class DistanceComputable<SReal, Vec<2, SReal> >;
-
-template 
-class DistanceComputable<SReal, Vec<3, SReal> >;
 
 //----------------------------------------------------------------------------

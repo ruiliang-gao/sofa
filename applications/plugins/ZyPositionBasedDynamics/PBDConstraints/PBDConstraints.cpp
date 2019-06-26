@@ -1,6 +1,6 @@
 #include "PBDConstraints.h"
 
-#include "PBDSimulationModel.h"
+#include "PBDModels/PBDSimulationModel.h"
 #include "PBDUtils/PBDTimeManager.h"
 #include "PBDCommon/IdFactory.h"
 

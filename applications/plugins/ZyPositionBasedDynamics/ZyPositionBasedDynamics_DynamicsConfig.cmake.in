@@ -1,0 +1,8 @@
+# CMake package configuration file for the ZyPositionBasedDynamics_Dynamics plugin
+
+@PACKAGE_INIT@
+if(NOT TARGET ZyPositionBasedDynamics_Dynamics)
+	include("${CMAKE_CURRENT_LIST_DIR}/ZyPositionBasedDynamics_Dynamics.cmake")
+endif()
+
+check_required_components(ZyPositionBasedDynamics_Dynamics)

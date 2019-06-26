@@ -6,4 +6,5 @@
 	url = https://github.com/SofaDefrost/SoftRobots.git
 [submodule "applications/plugins/PDBSofaPlugin"]
 	path = applications/plugins/PDBSofaPlugin
-	url = https://github.com/AlbanOdot/PBDSofaPlugin
+	url = git@github.com:faichele/PBDSofaPlugin.git
+	branch = master

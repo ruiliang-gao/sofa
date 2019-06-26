@@ -2,5 +2,7 @@
 
 using namespace BVHModels;
 
-template class Triangle3<SReal>;
-template class Triangle3IntersectionResult<SReal>;
+template class Triangle3<float>;
+template class Triangle3<double>;
+template class Triangle3IntersectionResult<float>;
+template class Triangle3IntersectionResult<double>;
