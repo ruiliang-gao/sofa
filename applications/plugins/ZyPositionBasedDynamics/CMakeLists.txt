@@ -64,10 +64,13 @@ set(MODELS_SOURCE_FILES
     PBDModels/PBDSimulationModel.cpp)
 
 set(CONSTRAINTS_HEADER_FILES
-    PBDConstraints/PBDConstraints.h)
+    PBDConstraints/PBDConstraintBase.h
+    PBDConstraints/PBDConstraints.h
+    PBDConstraints/PBDFixedConstraint.h)
 
 set(CONSTRAINTS_SOURCE_FILES
-    PBDConstraints/PBDConstraints.cpp)
+    PBDConstraints/PBDConstraints.cpp
+    PBDConstraints/PBDFixedConstraint.cpp)
 
 set(SIMULATION_HEADER_FILES
     PBDSimulation/PBDParticleData.h

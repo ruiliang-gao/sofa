@@ -26,9 +26,18 @@ namespace sofa
             {
                 public:
                     PBDAnimationLoop(sofa::simulation::Node* = nullptr);
+                    virtual ~PBDAnimationLoop();
+
+                    typedef sofa::simulation::DefaultAnimationLoop Inherit;
+                    typedef sofa::core::objectmodel::BaseContext BaseContext;
+                    typedef sofa::core::objectmodel::BaseObjectDescription BaseObjectDescription;
+
+                    SOFA_CLASS(PBDAnimationLoop,sofa::simulation::DefaultAnimationLoop);
+
+                    virtual void setNode(simulation::Node*);
 
                     virtual void init() override;
-                    virtual void bwdInit () override;
+                    virtual void bwdInit() override;
 
                     /// perform one animation step
                     /*

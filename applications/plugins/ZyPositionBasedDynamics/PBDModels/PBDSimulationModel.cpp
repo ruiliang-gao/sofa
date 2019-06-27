@@ -617,7 +617,7 @@ void PBDSimulationModel::initConstraintGroups()
 
     for (unsigned int i = 0; i < numConstraints; i++)
     {
-        Constraint *constraint = m_constraints[i];
+        PBDConstraintBase *constraint = m_constraints[i];
 
         bool addToNewGroup = true;
         for (unsigned int j = 0; j < m_constraintGroups.size(); j++)

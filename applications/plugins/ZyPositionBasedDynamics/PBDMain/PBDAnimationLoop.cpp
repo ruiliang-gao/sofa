@@ -8,6 +8,27 @@ PBDAnimationLoop::PBDAnimationLoop(sofa::simulation::Node* gnode): sofa::simulat
 
 }
 
+PBDAnimationLoop::~PBDAnimationLoop()
+{
+    if (m_timeStep)
+    {
+        delete m_timeStep;
+        m_timeStep = NULL;
+    }
+
+    if (m_simulation)
+    {
+        delete m_simulation;
+        m_simulation = NULL;
+    }
+
+    if (m_simulationModel)
+    {
+        delete m_simulationModel;
+        m_simulationModel = NULL;
+    }
+}
+
 void PBDAnimationLoop::init()
 {
     m_simulationModel = new PBDSimulationModel();

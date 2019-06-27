@@ -8,7 +8,7 @@
 #include <memory>
 
 #include "PBDCommon/PBDCommon.h"
-
+#include "PBDConstraintBase.h"
 #include "PBDynamics/DirectPositionBasedSolverForStiffRodsInterface.h"
 
 namespace sofa
@@ -19,35 +19,13 @@ namespace sofa
         {
             class PBDSimulationModel;
 
-            class Constraint
-            {
-                public:
-                    unsigned int m_numberOfBodies;
-                    /** indices of the linked bodies */
-                    unsigned int *m_bodies;
-
-                    Constraint(const unsigned int numberOfBodies)
-                    {
-                            m_numberOfBodies = numberOfBodies;
-                            m_bodies = new unsigned int[numberOfBodies];
-                    }
-
-                    virtual ~Constraint() { delete[] m_bodies; }
-                    virtual int &getTypeId() const = 0;
-
-                    virtual bool initConstraintBeforeProjection(PBDSimulationModel &model) { return true; }
-                    virtual bool updateConstraint(PBDSimulationModel &model) { return true; }
-                    virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter) { return true; }
-                    virtual bool solveVelocityConstraint(PBDSimulationModel &model, const unsigned int iter) { return true; }
-            };
-
-            class BallJoint : public Constraint
+            class BallJoint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Eigen::Matrix<Real, 3, 4> m_jointInfo;
 
-                    BallJoint() : Constraint(2) {}
+                    BallJoint() : PBDConstraintBase(2) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     bool initConstraint(PBDSimulationModel &model, const unsigned int rbIndex1, const unsigned int rbIndex2, const Vector3r &pos);
@@ -55,13 +33,13 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class BallOnLineJoint : public Constraint
+            class BallOnLineJoint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Eigen::Matrix<Real, 3, 10> m_jointInfo;
 
-                    BallOnLineJoint() : Constraint(2) {}
+                    BallOnLineJoint() : PBDConstraintBase(2) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     bool initConstraint(PBDSimulationModel &model, const unsigned int rbIndex1, const unsigned int rbIndex2, const Vector3r &pos, const Vector3r &dir);
@@ -69,13 +47,13 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class HingeJoint : public Constraint
+            class HingeJoint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Eigen::Matrix<Real, 3, 12> m_jointInfo;
 
-                    HingeJoint() : Constraint(2) {}
+                    HingeJoint() : PBDConstraintBase(2) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     bool initConstraint(PBDSimulationModel &model, const unsigned int rbIndex1, const unsigned int rbIndex2, const Vector3r &pos, const Vector3r &axis);
@@ -83,13 +61,13 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class UniversalJoint : public Constraint
+            class UniversalJoint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Eigen::Matrix<Real, 3, 8> m_jointInfo;
 
-                    UniversalJoint() : Constraint(2) {}
+                    UniversalJoint() : PBDConstraintBase(2) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     bool initConstraint(PBDSimulationModel &model, const unsigned int rbIndex1, const unsigned int rbIndex2, const Vector3r &pos, const Vector3r &axis1, const Vector3r &axis2);
@@ -97,13 +75,13 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class SliderJoint : public Constraint
+            class SliderJoint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Eigen::Matrix<Real, 3, 14> m_jointInfo;
 
-                    SliderJoint() : Constraint(2) {}
+                    SliderJoint() : PBDConstraintBase(2) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     bool initConstraint(PBDSimulationModel &model, const unsigned int rbIndex1, const unsigned int rbIndex2, const Vector3r &pos, const Vector3r &axis);
@@ -111,12 +89,12 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class MotorJoint: public Constraint
+            class MotorJoint: public PBDConstraintBase
             {
                 public:
                     Real m_target;
                     std::vector<Real> m_targetSequence;
-                    MotorJoint() : Constraint(2) { m_target = 0.0; }
+                    MotorJoint() : PBDConstraintBase(2) { m_target = 0.0; }
 
                     virtual Real getTarget() const { return m_target; }
                     virtual void setTarget(const Real val) { m_target = val; }
@@ -196,13 +174,13 @@ namespace sofa
                     virtual bool solveVelocityConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class RigidBodyParticleBallJoint : public Constraint
+            class RigidBodyParticleBallJoint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Eigen::Matrix<Real, 3, 2> m_jointInfo;
 
-                    RigidBodyParticleBallJoint() : Constraint(2) {}
+                    RigidBodyParticleBallJoint() : PBDConstraintBase(2) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     bool initConstraint(PBDSimulationModel &model, const unsigned int rbIndex, const unsigned int particleIndex);
@@ -210,7 +188,7 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class RigidBodySpring : public Constraint
+            class RigidBodySpring : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
@@ -218,7 +196,7 @@ namespace sofa
                     Real m_restLength;
                     Real m_stiffness;
 
-                    RigidBodySpring() : Constraint(2) {}
+                    RigidBodySpring() : PBDConstraintBase(2) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     bool initConstraint(PBDSimulationModel &model, const unsigned int rbIndex1, const unsigned int rbIndex2, const Vector3r &pos1, const Vector3r &pos2, const Real stiffness);
@@ -226,26 +204,26 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class DistanceConstraint : public Constraint
+            class DistanceConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Real m_restLength;
 
-                    DistanceConstraint() : Constraint(2) {}
+                    DistanceConstraint() : PBDConstraintBase(2) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     virtual bool initConstraint(PBDSimulationModel &model, const unsigned int particle1, const unsigned int particle2);
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class DihedralConstraint : public Constraint
+            class DihedralConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Real m_restAngle;
 
-                    DihedralConstraint() : Constraint(4) {}
+                    DihedralConstraint() : PBDConstraintBase(4) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     virtual bool initConstraint(PBDSimulationModel &model, const unsigned int particle1, const unsigned int particle2,
@@ -253,13 +231,13 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class IsometricBendingConstraint : public Constraint
+            class IsometricBendingConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Matrix4r m_Q;
 
-                    IsometricBendingConstraint() : Constraint(4) {}
+                    IsometricBendingConstraint() : PBDConstraintBase(4) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     virtual bool initConstraint(PBDSimulationModel &model, const unsigned int particle1, const unsigned int particle2,
@@ -267,14 +245,14 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class FEMTriangleConstraint : public Constraint
+            class FEMTriangleConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Real m_area;
                     Matrix2r m_invRestMat;
 
-                    FEMTriangleConstraint() : Constraint(3) {}
+                    FEMTriangleConstraint() : PBDConstraintBase(3) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     virtual bool initConstraint(PBDSimulationModel &model, const unsigned int particle1, const unsigned int particle2,
@@ -282,13 +260,13 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class StrainTriangleConstraint : public Constraint
+            class StrainTriangleConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Matrix2r m_invRestMat;
 
-                    StrainTriangleConstraint() : Constraint(3) {}
+                    StrainTriangleConstraint() : PBDConstraintBase(3) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     virtual bool initConstraint(PBDSimulationModel &model, const unsigned int particle1, const unsigned int particle2,
@@ -296,13 +274,13 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class VolumeConstraint : public Constraint
+            class VolumeConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Real m_restVolume;
 
-                    VolumeConstraint() : Constraint(4) {}
+                    VolumeConstraint() : PBDConstraintBase(4) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     virtual bool initConstraint(PBDSimulationModel &model, const unsigned int particle1, const unsigned int particle2,
@@ -310,14 +288,14 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class FEMTetConstraint : public Constraint
+            class FEMTetConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Real m_volume;
                     Matrix3r m_invRestMat;
 
-                    FEMTetConstraint() : Constraint(4) {}
+                    FEMTetConstraint() : PBDConstraintBase(4) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     virtual bool initConstraint(PBDSimulationModel &model, const unsigned int particle1, const unsigned int particle2,
@@ -325,13 +303,13 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class StrainTetConstraint : public Constraint
+            class StrainTetConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Matrix3r m_invRestMat;
 
-                    StrainTetConstraint() : Constraint(4) {}
+                    StrainTetConstraint() : PBDConstraintBase(4) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     virtual bool initConstraint(PBDSimulationModel &model, const unsigned int particle1, const unsigned int particle2,
@@ -339,7 +317,7 @@ namespace sofa
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class ShapeMatchingConstraint : public Constraint
+            class ShapeMatchingConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
@@ -351,7 +329,7 @@ namespace sofa
                     Vector3r *m_corr;
                     unsigned int *m_numClusters;
 
-                    ShapeMatchingConstraint(const unsigned int numberOfParticles) : Constraint(numberOfParticles)
+                    ShapeMatchingConstraint(const unsigned int numberOfParticles) : PBDConstraintBase(numberOfParticles)
                     {
                             m_x = new Vector3r[numberOfParticles];
                             m_x0 = new Vector3r[numberOfParticles];
@@ -446,33 +424,33 @@ namespace sofa
                     virtual bool solveVelocityConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class StretchShearConstraint : public Constraint
+            class StretchShearConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Real m_restLength;
 
-                    StretchShearConstraint() : Constraint(3) {}
+                    StretchShearConstraint() : PBDConstraintBase(3) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     virtual bool initConstraint(PBDSimulationModel &model, const unsigned int particle1, const unsigned int particle2, const unsigned int quaternion1);
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class BendTwistConstraint : public Constraint
+            class BendTwistConstraint : public PBDConstraintBase
             {
                 public:
                     static int TYPE_ID;
                     Quaternionr m_restDarbouxVector;
 
-                    BendTwistConstraint() : Constraint(2) {}
+                    BendTwistConstraint() : PBDConstraintBase(2) {}
                     virtual int &getTypeId() const { return TYPE_ID; }
 
                     virtual bool initConstraint(PBDSimulationModel &model, const unsigned int quaternion1, const unsigned int quaternion2);
                     virtual bool solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter);
             };
 
-            class StretchBendingTwistingConstraint : public Constraint
+            class StretchBendingTwistingConstraint : public PBDConstraintBase
             {
                     using Matrix6r = Eigen::Matrix<Real, 6, 6>;
                     using Vector6r = Eigen::Matrix<Real, 6, 1>;
@@ -488,7 +466,7 @@ namespace sofa
                     Vector3r m_bendingAndTorsionCompliance;
                     Vector6r m_lambdaSum;
 
-                    StretchBendingTwistingConstraint() : Constraint(2){}
+                    StretchBendingTwistingConstraint() : PBDConstraintBase(2){}
 
                     virtual int &getTypeId() const { return TYPE_ID; }
 
@@ -504,7 +482,7 @@ namespace sofa
             class PBDSimulationModel;
             using Vector6r = Eigen::Matrix<Real, 6, 1>;
 
-            class DirectPositionBasedSolverForStiffRodsConstraint : public Constraint
+            class DirectPositionBasedSolverForStiffRodsConstraint : public PBDConstraintBase
             {
                     class RodSegmentImpl : public RodSegment
                     {
@@ -552,7 +530,7 @@ namespace sofa
                 public:
                     static int TYPE_ID;
 
-                    DirectPositionBasedSolverForStiffRodsConstraint() :  Constraint(2),
+                    DirectPositionBasedSolverForStiffRodsConstraint() :  PBDConstraintBase(2),
                             root(NULL), numberOfIntervals(0), intervals(NULL), forward(NULL), backward(NULL){}
                     ~DirectPositionBasedSolverForStiffRodsConstraint();
 

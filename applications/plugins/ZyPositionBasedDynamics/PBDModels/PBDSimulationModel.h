@@ -27,7 +27,7 @@ namespace sofa
         {
             using namespace sofa::core::objectmodel;
 
-            class Constraint;
+            class PBDConstraintBase;
 
             class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API PBDSimulationModel: public sofa::core::objectmodel::BaseObject
             {
@@ -39,7 +39,7 @@ namespace sofa
                     void reset();
                     void cleanup();
 
-                    typedef std::vector<Constraint*> ConstraintVector;
+                    typedef std::vector<PBDConstraintBase*> ConstraintVector;
                     typedef std::vector<RigidBodyContactConstraint> RigidBodyContactConstraintVector;
                     typedef std::vector<ParticleRigidBodyContactConstraint> ParticleRigidBodyContactConstraintVector;
                     typedef std::vector<ParticleTetContactConstraint> ParticleSolidContactConstraintVector;
