@@ -1,4 +1,4 @@
-#include "PBDTimeStepController.h"
+#include "SofaPBDTimeStepController.h"
 
 #include <iostream>
 
@@ -6,15 +6,22 @@
 #include "PBDynamics/PositionBasedRigidBodyDynamics.h"
 #include "PBDynamics/PBDTimeIntegration.h"
 #include "PBDynamics/PositionBasedDynamics.h"
+
 // #include "Utils/Timing.h"
 
 #include "DistanceFieldCollisionDetection.h"
 
+#include <sofa/core/ObjectFactory.h>
+
 using namespace sofa::simulation::PBDSimulation;
+
+int SofaPBDTimeStepControllerClass = sofa::core::RegisterObject("Wrapper class for the PBD TimeStepController.")
+                            .add< SofaPBDTimeStepController >()
+                            .addDescription("Wrapper class for the PBD TimeStepController.");
 using namespace std;
 
 
-PBDTimeStepController::PBDTimeStepController()
+SofaPBDTimeStepController::SofaPBDTimeStepController()
 {
     m_velocityUpdateMethod = 0;
     m_iterations = 0;
@@ -25,13 +32,13 @@ PBDTimeStepController::PBDTimeStepController()
     m_collisionDetection = NULL;
 }
 
-PBDTimeStepController::~PBDTimeStepController(void)
+SofaPBDTimeStepController::~SofaPBDTimeStepController(void)
 {
 }
 
-void PBDTimeStepController::initParameters()
+void SofaPBDTimeStepController::initParameters()
 {
-    PBDTimeStep::initParameters();
+    SofaPBDTimeStep::initParameters();
 
     initData(&MAX_ITERATIONS, 5, "Max. iterations", "Maximal number of iterations of the solver.");
     MAX_ITERATIONS.setGroup("PBD");
@@ -48,7 +55,7 @@ void PBDTimeStepController::initParameters()
     VELOCITY_UPDATE_METHOD.setValue(methodOptions);
 }
 
-void PBDTimeStepController::step(PBDSimulationModel &model)
+void SofaPBDTimeStepController::step(PBDSimulationModel &model)
 {
     // START_TIMING("simulation step");
     PBDTimeManager *tm = PBDTimeManager::getCurrent ();
@@ -245,7 +252,7 @@ void PBDTimeStepController::step(PBDSimulationModel &model)
     // STOP_TIMING_AVG;
 }
 
-void PBDTimeStepController::reset()
+void SofaPBDTimeStepController::reset()
 {
     m_iterations = 0;
     m_iterationsV = 0;
@@ -253,7 +260,7 @@ void PBDTimeStepController::reset()
     m_maxIterationsV = 5;
 }
 
-void PBDTimeStepController::positionConstraintProjection(PBDSimulationModel &model)
+void SofaPBDTimeStepController::positionConstraintProjection(PBDSimulationModel &model)
 {
     m_iterations = 0;
 
@@ -300,7 +307,7 @@ void PBDTimeStepController::positionConstraintProjection(PBDSimulationModel &mod
 }
 
 
-void PBDTimeStepController::velocityConstraintProjection(PBDSimulationModel &model)
+void SofaPBDTimeStepController::velocityConstraintProjection(PBDSimulationModel &model)
 {
     m_iterationsV = 0;
 

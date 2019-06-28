@@ -17,8 +17,8 @@ namespace sofa
                     Real h;
 
                 public:
-                    PBDTimeManager ();
-                    ~PBDTimeManager ();
+                    PBDTimeManager();
+                    ~PBDTimeManager();
 
                     // Singleton
                     static PBDTimeManager* getCurrent ();

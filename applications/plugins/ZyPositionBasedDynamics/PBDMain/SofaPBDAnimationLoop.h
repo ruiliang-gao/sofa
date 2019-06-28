@@ -12,9 +12,8 @@
 #include <sofa/simulation/CollisionBeginEvent.h>
 #include <sofa/simulation/CollisionEndEvent.h>
 
-#include "PBDModels/PBDSimulationModel.h"
-#include "PBDSimulation.h"
-#include "PBDTimeStep.h"
+#include "SofaPBDSimulation.h"
+#include "PBDUtils/PBDTimeManager.h"
 
 namespace sofa
 {
@@ -22,17 +21,17 @@ namespace sofa
     {
         namespace PBDSimulation
         {
-            class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API PBDAnimationLoop: public sofa::simulation::DefaultAnimationLoop
+            class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API SofaPBDAnimationLoop: public sofa::simulation::DefaultAnimationLoop
             {
                 public:
-                    PBDAnimationLoop(sofa::simulation::Node* = nullptr);
-                    virtual ~PBDAnimationLoop();
+                    SOFA_CLASS(SofaPBDAnimationLoop, sofa::simulation::DefaultAnimationLoop);
+
+                    SofaPBDAnimationLoop(sofa::simulation::Node*&);
+                    virtual ~SofaPBDAnimationLoop();
 
                     typedef sofa::simulation::DefaultAnimationLoop Inherit;
                     typedef sofa::core::objectmodel::BaseContext BaseContext;
                     typedef sofa::core::objectmodel::BaseObjectDescription BaseObjectDescription;
-
-                    SOFA_CLASS(PBDAnimationLoop,sofa::simulation::DefaultAnimationLoop);
 
                     virtual void setNode(simulation::Node*);
 
@@ -49,9 +48,8 @@ namespace sofa
                     virtual void step(const sofa::core::ExecParams* params, SReal dt) override;
 
                protected:
-                    PBDSimulationModel* m_simulationModel;
-                    PBDSimulation* m_simulation;
-                    PBDTimeStep* m_timeStep;
+                    SofaPBDSimulation* m_simulation;
+                    BaseContext* m_context;
 
             };
         }

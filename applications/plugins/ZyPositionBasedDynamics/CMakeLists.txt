@@ -55,13 +55,17 @@ set(MODELS_HEADER_FILES
     PBDModels/PBDLineModel.h
     PBDModels/PBDTriangleModel.h
     PBDModels/PBDTetrahedronModel.h
-    PBDModels/PBDSimulationModel.h)
+    PBDModels/PBDSimulationModel.h
+    PBDModels/SofaPBDLineModel.h
+    PBDModels/SofaPBDTriangleModel.h)
 
 set(MODELS_SOURCE_FILES
     PBDModels/PBDLineModel.cpp
     PBDModels/PBDTriangleModel.cpp
     PBDModels/PBDTetrahedronModel.cpp
-    PBDModels/PBDSimulationModel.cpp)
+    PBDModels/PBDSimulationModel.cpp
+    PBDModels/SofaPBDLineModel.cpp
+    PBDModels/SofaPBDTriangleModel.cpp)
 
 set(CONSTRAINTS_HEADER_FILES
     PBDConstraints/PBDConstraintBase.h
@@ -95,17 +99,24 @@ set(DYNAMICS_SOURCE_FILES
     PBDynamics/PBDTimeIntegration.cpp)
 
 set(HEADER_FILES initZyPositionBasedDynamicsPlugin.h
-                 PBDMain/PBDAnimationLoop.h
-                 PBDMain/PBDTimeStep.h
-                 PBDMain/PBDSimulation.h
-                 PBDMain/PBDTimeStepController.h
+                 PBDMain/SofaPBDAnimationLoop.h
+                 PBDMain/SofaPBDTimeStep.h
+                 PBDMain/SofaPBDSimulation.h
+                 # PBDMain/SofaPBDTimeStepController.h
+
+                 PBDIntegration/GeometryConversion.h
+                 PBDIntegration/MechObjConversion.h
+
                  )
 
 set(SOURCE_FILES initZyPositionBasedDynamicsPlugin.cpp
-                 PBDMain/PBDAnimationLoop.cpp
-                 PBDMain/PBDTimeStep.cpp
-                 PBDMain/PBDSimulation.cpp
-                 PBDMain/PBDTimeStepController.cpp
+                 PBDMain/SofaPBDAnimationLoop.cpp
+                 PBDMain/SofaPBDTimeStep.cpp
+                 PBDMain/SofaPBDSimulation.cpp
+                 # PBDMain/SofaPBDTimeStepController.cpp
+
+                 PBDIntegration/GeometryConversion.cpp
+                 PBDIntegration/MechObjConversion.cpp
                  )
 
 add_library(${PROJECT_NAME}_CommonUtils STATIC ${COMMON_UTIL_HEADER_FILES} ${COMMON_UTIL_SOURCE_FILES})

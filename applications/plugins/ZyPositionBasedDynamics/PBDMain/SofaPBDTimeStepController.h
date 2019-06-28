@@ -2,7 +2,7 @@
 #define PBDTIMESTEPCONTROLLER_H
 
 #include "PBDCommon/PBDCommon.h"
-#include "PBDTimeStep.h"
+#include "SofaPBDTimeStep.h"
 #include "PBDModels/PBDSimulationModel.h"
 
 #include <sofa/helper/OptionsGroup.h>
@@ -15,7 +15,7 @@ namespace sofa
     {
         namespace PBDSimulation
         {
-            class PBDTimeStepController : public PBDTimeStep
+            class SofaPBDTimeStepController : public SofaPBDTimeStep
             {
             public:
                 Data<int> MAX_ITERATIONS;
@@ -36,8 +36,10 @@ namespace sofa
 
 
             public:
-                PBDTimeStepController();
-                virtual ~PBDTimeStepController(void);
+                SOFA_CLASS(SofaPBDTimeStepController, sofa::core::objectmodel::BaseObject);
+
+                SofaPBDTimeStepController();
+                virtual ~SofaPBDTimeStepController(void);
 
                 virtual void step(PBDSimulationModel &model);
                 virtual void reset();

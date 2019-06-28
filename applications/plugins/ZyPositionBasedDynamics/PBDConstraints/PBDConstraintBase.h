@@ -5,6 +5,7 @@
 #include <sofa/core/objectmodel/Data.h>
 
 #include <sofa/defaulttype/Vec3Types.h>
+#include <sofa/defaulttype/BaseMatrix.h>
 
 namespace sofa
 {

@@ -6,8 +6,13 @@
 
 #include <PBDCommon/PBDCommon.h>
 #include "PBDModels/PBDSimulationModel.h"
-#include "PBDTimeStep.h"
+#include "SofaPBDTimeStep.h"
 
+#include "PBDIntegration/GeometryConversion.h"
+#include "PBDIntegration/MechObjConversion.h"
+
+#include <sofa/core/topology/BaseMeshTopology.h>
+#include <SofaBaseMechanics/MechanicalObject.h>
 #include <sofa/defaulttype/Vec.h>
 #include <sofa/defaulttype/Vec3Types.h>
 #include <sofa/helper/OptionsGroup.h>
@@ -20,21 +25,24 @@ namespace sofa
         {
             enum PBDSimulationMethods { PBD = 0, XPBD, IBDS, NumSimulationMethods };
 
-            class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API PBDSimulation: public sofa::core::objectmodel::BaseObject
+            class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API SofaPBDSimulation: public sofa::core::objectmodel::BaseObject
             {
                 public:
+                    SOFA_CLASS(SofaPBDSimulation, sofa::core::objectmodel::BaseObject);
+
                     Data<sofa::defaulttype::Vec3d> GRAVITATION;
                     Data<sofa::helper::OptionsGroup> SIMULATION_METHOD;
 
-                    PBDSimulation();
-                    ~PBDSimulation();
+                    SofaPBDSimulation(BaseContext* context = nullptr);
+                    ~SofaPBDSimulation();
 
                     void init();
+                    void bwdInit();
                     void reset();
 
                     // Singleton
-                    static PBDSimulation* getCurrent ();
-                    static void setCurrent(PBDSimulation* tm);
+                    static SofaPBDSimulation* getCurrent ();
+                    static void setCurrent(SofaPBDSimulation* tm);
                     static bool hasCurrent();
 
                     PBDSimulationModel *getModel() { return m_model; }
@@ -45,18 +53,23 @@ namespace sofa
 
                     void setSimulationMethodChangedCallback(std::function<void()> const& callBackFct);
 
-                    PBDTimeStep *getTimeStep() { return m_timeStep; }
-                    void setTimeStep(PBDTimeStep *ts) { m_timeStep = ts; }
+                    SofaPBDTimeStep *getTimeStep() { return m_timeStep; }
+                    void setTimeStep(SofaPBDTimeStep *ts) { m_timeStep = ts; }
 
                 protected:
+                    BaseContext* m_context;
+
                     PBDSimulationModel *m_model;
-                    PBDTimeStep *m_timeStep;
+                    SofaPBDTimeStep *m_timeStep;
                     std::function<void()> m_simulationMethodChanged;
 
                     virtual void initParameters();
 
+                    std::shared_ptr<GeometryConversion> m_geometryConverter;
+                    std::shared_ptr<MechObjConversion> m_mechObjConverter;
+
                 private:
-                    static PBDSimulation *current;
+                    static SofaPBDSimulation *current;
             };
         }
     }
