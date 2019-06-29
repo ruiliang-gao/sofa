@@ -88,14 +88,22 @@ void BaseObject::parse( BaseObjectDescription* arg )
     {
         std::string valueString(arg->getAttribute("src"));
 
+        msg_info("BaseObject") << "'src' attribute given for BaseObject '" << this->getName() << ": " << valueString;
+
         if (valueString[0] != '@')
         {
-            msg_error() <<"'src' attribute value should be a link using '@'";
+            msg_error("BaseObject") <<"'src' attribute value should be a link using '@'";
         }
         else
         {
             std::vector< std::string > attributeList;
             arg->getAttributeList(attributeList);
+
+            msg_info("BaseObject") << "setSrc with attributeList:";
+
+            for (size_t k = 0; k < attributeList.size(); k++)
+                msg_info("BaseObject") << "Attribute " << k << ": " << attributeList[k];
+
             setSrc(valueString, &attributeList);
         }
         arg->removeAttribute("src");
@@ -105,6 +113,7 @@ void BaseObject::parse( BaseObjectDescription* arg )
 
 void BaseObject::setSrc(const std::string &valueString, std::vector< std::string > *attributeList)
 {
+    msg_info("BaseObject") << "setSrc(" << valueString << ")";
     BaseObject* loader = NULL;
 
     std::size_t posAt = valueString.rfind('@');
@@ -112,12 +121,18 @@ void BaseObject::setSrc(const std::string &valueString, std::vector< std::string
     std::string objectName;
 
     objectName = valueString.substr(posAt+1);
+
+    msg_info("BaseObject") << "Looking for loader object named: " << objectName;
+
     loader = getContext()->get<BaseObject>(objectName);
     if (!loader)
     {
-        msg_error() << "Source object \"" << valueString << "\" NOT FOUND.";
+        msg_error("BaseObject") << "Source object \"" << valueString << "\" NOT FOUND.";
         return;
     }
+
+    msg_info("BaseObject") << "Found matching loader object named: " << objectName << ", proceeding to set Links.";
+
     setSrc(valueString, loader, attributeList);
 }
 
@@ -130,11 +145,15 @@ void BaseObject::setSrc(const std::string &valueString, const BaseObject *loader
 
     if (attributeList != 0)
     {
+        msg_info("BaseObject") << "attributeList argument passed: " << attributeList->size() << " entries. Removing duplicate attributes...";
         for (unsigned int j = 0; j<attributeList->size(); ++j)
         {
-            it_map = dataLoaderMap.find ((*attributeList)[j]);
+            it_map = dataLoaderMap.find((*attributeList)[j]);
             if (it_map != dataLoaderMap.end())
-                dataLoaderMap.erase (it_map);
+            {
+                msg_info("BaseObject") << "Removing attribute: " << (*attributeList)[j];
+                dataLoaderMap.erase(it_map);
+            }
         }
     }
 
@@ -142,28 +161,42 @@ void BaseObject::setSrc(const std::string &valueString, const BaseObject *loader
     //{
     it_map = dataLoaderMap.find ("type");
     if (it_map != dataLoaderMap.end())
+    {
+        msg_info("BaseObject") << "Removing 'type' attribute.";
         dataLoaderMap.erase (it_map);
+    }
 
     it_map = dataLoaderMap.find ("filename");
     if (it_map != dataLoaderMap.end())
+    {
+        msg_info("BaseObject") << "Removing 'filename' attribute.";
         dataLoaderMap.erase (it_map);
+    }
     //}
 
 
+    msg_info("BaseObject") << "Creating links.";
     for (it_map = dataLoaderMap.begin(); it_map != dataLoaderMap.end(); ++it_map)
     {
-        BaseData* data = obj->findData( (*it_map).first );
+        msg_info("BaseObject") << "Searching for Data attribute " << (*it_map).first << " in loader instance.";
+        BaseData* data = obj->findData((*it_map).first);
         if (data != NULL)
         {
+            msg_info("BaseObject") << "Found Data attribute named " << (*it_map).first;
             if (!(*it_map).second->isAutoLink())
             {
-                msg_info() << "Disabling autolink for Data '" << data->getName() << "'";
+                msg_info("BaseObject") << "Disabling autolink for Data '" << data->getName() << "'";
             }
             else
             {
-                std::string linkPath = valueString+"."+(*it_map).first;
+                std::string linkPath = valueString + "." + (*it_map).first;
+                msg_info("BaseObject") << "Creating link to loader: " << linkPath;
                 data->setParent( (*it_map).second, linkPath);
             }
+        }
+        else
+        {
+            msg_info("BaseObject") << "Data attribute named " << (*it_map).first << " not found in loader instance!";
         }
     }
 }

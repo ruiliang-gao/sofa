@@ -2,6 +2,26 @@
 
 #include <sofa/core/ObjectFactory.h>
 
+namespace sofa
+{
+    namespace simulation
+    {
+        namespace PBDSimulation
+        {
+            class SofaPBDTriangleModelPrivate
+            {
+                public:
+                    SofaPBDTriangleModelPrivate()
+                    {
+                        m_pbdTriangleModel.reset(new PBDTriangleModel());
+                    }
+
+                    std::shared_ptr<PBDTriangleModel> m_pbdTriangleModel;
+            };
+        }
+    }
+}
+
 using namespace sofa::simulation::PBDSimulation;
 
 int SofaPBDTriangleModelClass = sofa::core::RegisterObject("Wrapper class for PBD TriangleModels.")
@@ -10,5 +30,5 @@ int SofaPBDTriangleModelClass = sofa::core::RegisterObject("Wrapper class for PB
 
 SofaPBDTriangleModel::SofaPBDTriangleModel(): sofa::core::objectmodel::BaseObject()
 {
-
+    m_d.reset(new SofaPBDTriangleModelPrivate());
 }
