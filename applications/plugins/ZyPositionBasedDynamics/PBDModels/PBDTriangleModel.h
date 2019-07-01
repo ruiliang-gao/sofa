@@ -8,7 +8,10 @@
 #include "PBDUtils/PBDIndexedFaceMesh.h"
 #include "PBDSimulation/PBDParticleData.h"
 
-//#include "Constraints.h"
+#include "PBDConstraints/PBDConstraints.h"
+
+#include <sofa/core/objectmodel/BaseObject.h>
+#include <sofa/core/objectmodel/BaseObjectDescription.h>
 
 namespace sofa
 {
@@ -16,7 +19,7 @@ namespace sofa
     {
         namespace PBDSimulation
         {
-            class PBDTriangleModel
+            class PBDTriangleModel: public sofa::core::objectmodel::BaseObject
             {
                 public:
                     PBDTriangleModel();
@@ -32,6 +35,8 @@ namespace sofa
                     Real m_restitutionCoeff;
                     Real m_frictionCoeff;
 
+                    std::string m_srcLoader;
+
                 public:
                     void updateConstraints();
 
@@ -41,7 +46,7 @@ namespace sofa
                     unsigned int getIndexOffset() const;
 
                     void initMesh(const unsigned int nPoints, const unsigned int nFaces, const unsigned int indexOffset, unsigned int* indices, const ParticleMesh::UVIndices& uvIndices, const ParticleMesh::UVs& uvs);
-                    void updateMeshNormals(const ParticleData &pd);
+                    void updateMeshNormals(const PBDParticleData &pd);
 
                     FORCE_INLINE Real getRestitutionCoeff() const
                     {

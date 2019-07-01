@@ -38,7 +38,7 @@ PBDTetrahedronModel::SurfaceMesh &PBDTetrahedronModel::getSurfaceMesh()
     return m_surfaceMesh;
 }
 
-VertexData & PBDTetrahedronModel::getVisVertices()
+PBDVertexData & PBDTetrahedronModel::getVisVertices()
 {
     return m_visVertices;
 }
@@ -89,13 +89,13 @@ void PBDTetrahedronModel::createSurfaceMesh()
     m_surfaceMesh.buildNeighbors();
 }
 
-void PBDTetrahedronModel::updateMeshNormals(const ParticleData &pd)
+void PBDTetrahedronModel::updateMeshNormals(const PBDParticleData &pd)
 {
     m_surfaceMesh.updateNormals(pd, m_indexOffset);
     m_surfaceMesh.updateVertexNormals(pd);
 }
 
-void PBDTetrahedronModel::attachVisMesh(const ParticleData &pd)
+void PBDTetrahedronModel::attachVisMesh(const PBDParticleData &pd)
 {
     const Real eps = static_cast<Real>(1.0e-6);
 
@@ -287,7 +287,7 @@ void PBDTetrahedronModel::solveQuadraticForZero(const Vector3r& F, const Vector3
     }
 }
 
-void PBDTetrahedronModel::updateVisMesh(const ParticleData &pd)
+void PBDTetrahedronModel::updateVisMesh(const PBDParticleData &pd)
 {
     if (m_attachments.size() == 0)
         return;

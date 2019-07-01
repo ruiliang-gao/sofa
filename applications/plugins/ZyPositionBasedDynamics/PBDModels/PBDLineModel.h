@@ -8,13 +8,16 @@
 #include "PBDSimulation/PBDParticleData.h"
 #include "PBDConstraints/PBDConstraints.h"
 
+#include <sofa/core/objectmodel/BaseObject.h>
+#include <sofa/core/objectmodel/BaseObjectDescription.h>
+
 namespace sofa
 {
     namespace simulation
     {
         namespace PBDSimulation
         {
-            class PBDLineModel
+            class PBDLineModel: public sofa::core::objectmodel::BaseObject
             {
                 struct OrientedEdge
                 {

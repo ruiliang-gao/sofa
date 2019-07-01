@@ -71,8 +71,8 @@ namespace sofa
                     TriangleModelVector m_triangleModels;
                     TetModelVector m_tetModels;
                     LineModelVector m_lineModels;
-                    ParticleData m_particles;
-                    OrientationData m_orientations;
+                    PBDParticleData m_particles;
+                    PBDOrientationData m_orientations;
                     ConstraintVector m_constraints;
                     RigidBodyContactConstraintVector m_rigidBodyContactConstraints;
                     ParticleRigidBodyContactConstraintVector m_particleRigidBodyContactConstraints;
@@ -94,8 +94,8 @@ namespace sofa
             public:
 
                     RigidBodyVector &getRigidBodies();
-                    ParticleData &getParticles();
-                    OrientationData &getOrientations();
+                    PBDParticleData &getParticles();
+                    PBDOrientationData &getOrientations();
                     TriangleModelVector &getTriangleModels();
                     TetModelVector &getTetModels();
                     LineModelVector &getLineModels();

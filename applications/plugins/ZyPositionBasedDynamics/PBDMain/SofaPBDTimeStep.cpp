@@ -75,7 +75,7 @@ void SofaPBDTimeStep::clearAccelerations(PBDSimulationModel &model)
     // particle model
     //////////////////////////////////////////////////////////////////////////
 
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
     const unsigned int count = pd.size();
     for (unsigned int i = 0; i < count; i++)
     {
@@ -122,8 +122,8 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
     //////////////////////////////////////////////////////////////////////////
     clearAccelerations(model);
     PBDSimulationModel::RigidBodyVector &rb = model.getRigidBodies();
-    ParticleData &pd = model.getParticles();
-    OrientationData &od = model.getOrientations();
+    PBDParticleData &pd = model.getParticles();
+    PBDOrientationData &od = model.getOrientations();
 
     const int numBodies = (int)rb.size();
     const int numParticles = (int) pd.size();

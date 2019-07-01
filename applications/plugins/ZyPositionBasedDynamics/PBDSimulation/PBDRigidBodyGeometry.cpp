@@ -38,7 +38,7 @@ void PBDRigidBodyGeometry::initMesh(const unsigned int nVertices, const unsigned
     updateMeshNormals(m_vertexData);
 }
 
-void PBDRigidBodyGeometry::updateMeshNormals(const VertexData &vd)
+void PBDRigidBodyGeometry::updateMeshNormals(const PBDVertexData &vd)
 {
     m_mesh.updateNormals(vd, 0);
     m_mesh.updateVertexNormals(vd);
@@ -53,22 +53,22 @@ void PBDRigidBodyGeometry::updateMeshTransformation(const Vector3r &x, const Mat
     updateMeshNormals(m_vertexData);
 }
 
-VertexData & PBDRigidBodyGeometry::getVertexData()
+PBDVertexData & PBDRigidBodyGeometry::getVertexData()
 {
     return m_vertexData;
 }
 
-const VertexData & PBDRigidBodyGeometry::getVertexData() const
+const PBDVertexData & PBDRigidBodyGeometry::getVertexData() const
 {
     return m_vertexData;
 }
 
-VertexData & PBDRigidBodyGeometry::getVertexDataLocal()
+PBDVertexData & PBDRigidBodyGeometry::getVertexDataLocal()
 {
     return m_vertexData_local;
 }
 
-const VertexData & PBDRigidBodyGeometry::getVertexDataLocal() const
+const PBDVertexData & PBDRigidBodyGeometry::getVertexDataLocal() const
 {
     return m_vertexData_local;
 }

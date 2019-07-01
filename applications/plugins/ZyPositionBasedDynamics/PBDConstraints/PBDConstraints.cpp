@@ -831,7 +831,7 @@ bool RigidBodyParticleBallJoint::initConstraint(PBDSimulationModel &model, const
     m_bodies[0] = rbIndex;
     m_bodies[1] = particleIndex;
     PBDSimulationModel::RigidBodyVector &rbs = model.getRigidBodies();
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
     PBDRigidBody &rb = *rbs[m_bodies[0]];
     return PositionBasedRigidBodyDynamics::init_RigidBodyParticleBallJoint(
                 rb.getPosition(),
@@ -843,7 +843,7 @@ bool RigidBodyParticleBallJoint::initConstraint(PBDSimulationModel &model, const
 bool RigidBodyParticleBallJoint::updateConstraint(PBDSimulationModel &model)
 {
     PBDSimulationModel::RigidBodyVector &rb = model.getRigidBodies();
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
     PBDRigidBody &rb1 = *rb[m_bodies[0]];
     return PositionBasedRigidBodyDynamics::update_RigidBodyParticleBallJoint(
                 rb1.getPosition(),
@@ -855,7 +855,7 @@ bool RigidBodyParticleBallJoint::updateConstraint(PBDSimulationModel &model)
 bool RigidBodyParticleBallJoint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
     PBDSimulationModel::RigidBodyVector &rb = model.getRigidBodies();
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     PBDRigidBody &rb1 = *rb[m_bodies[0]];
 
@@ -979,7 +979,7 @@ bool DistanceConstraint::initConstraint(PBDSimulationModel &model, const unsigne
 {
     m_bodies[0] = particle1;
     m_bodies[1] = particle2;
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const Vector3r &x1_0 = pd.getPosition0(particle1);
     const Vector3r &x2_0 = pd.getPosition0(particle2);
@@ -991,7 +991,7 @@ bool DistanceConstraint::initConstraint(PBDSimulationModel &model, const unsigne
 
 bool DistanceConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const unsigned i1 = m_bodies[0];
     const unsigned i2 = m_bodies[1];
@@ -1031,7 +1031,7 @@ bool DihedralConstraint::initConstraint(PBDSimulationModel &model, const unsigne
     m_bodies[1] = particle2;
     m_bodies[2] = particle3;
     m_bodies[3] = particle4;
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const Vector3r &p0 = pd.getPosition0(particle1);
     const Vector3r &p1 = pd.getPosition0(particle2);
@@ -1062,7 +1062,7 @@ bool DihedralConstraint::initConstraint(PBDSimulationModel &model, const unsigne
 
 bool DihedralConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const unsigned i1 = m_bodies[0];
     const unsigned i2 = m_bodies[1];
@@ -1113,7 +1113,7 @@ bool IsometricBendingConstraint::initConstraint(PBDSimulationModel &model, const
     m_bodies[2] = particle3;
     m_bodies[3] = particle4;
 
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const Vector3r &x1 = pd.getPosition0(particle1);
     const Vector3r &x2 = pd.getPosition0(particle2);
@@ -1125,7 +1125,7 @@ bool IsometricBendingConstraint::initConstraint(PBDSimulationModel &model, const
 
 bool IsometricBendingConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const unsigned i1 = m_bodies[0];
     const unsigned i2 = m_bodies[1];
@@ -1174,7 +1174,7 @@ bool FEMTriangleConstraint::initConstraint(PBDSimulationModel &model, const unsi
     m_bodies[1] = particle2;
     m_bodies[2] = particle3;
 
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     Vector3r &x1 = pd.getPosition0(particle1);
     Vector3r &x2 = pd.getPosition0(particle2);
@@ -1185,7 +1185,7 @@ bool FEMTriangleConstraint::initConstraint(PBDSimulationModel &model, const unsi
 
 bool FEMTriangleConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const unsigned i1 = m_bodies[0];
     const unsigned i2 = m_bodies[1];
@@ -1241,7 +1241,7 @@ bool StrainTriangleConstraint::initConstraint(PBDSimulationModel &model, const u
     m_bodies[1] = particle2;
     m_bodies[2] = particle3;
 
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     Vector3r &x1 = pd.getPosition0(particle1);
     Vector3r &x2 = pd.getPosition0(particle2);
@@ -1257,7 +1257,7 @@ bool StrainTriangleConstraint::initConstraint(PBDSimulationModel &model, const u
 
 bool StrainTriangleConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const unsigned i1 = m_bodies[0];
     const unsigned i2 = m_bodies[1];
@@ -1313,7 +1313,7 @@ bool VolumeConstraint::initConstraint(PBDSimulationModel &model, const unsigned 
     m_bodies[1] = particle2;
     m_bodies[2] = particle3;
     m_bodies[3] = particle4;
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const Vector3r &p0 = pd.getPosition0(particle1);
     const Vector3r &p1 = pd.getPosition0(particle2);
@@ -1327,7 +1327,7 @@ bool VolumeConstraint::initConstraint(PBDSimulationModel &model, const unsigned 
 
 bool VolumeConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const unsigned i1 = m_bodies[0];
     const unsigned i2 = m_bodies[1];
@@ -1382,7 +1382,7 @@ bool FEMTetConstraint::initConstraint(PBDSimulationModel &model, const unsigned 
     m_bodies[2] = particle3;
     m_bodies[3] = particle4;
 
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     Vector3r &x1 = pd.getPosition0(particle1);
     Vector3r &x2 = pd.getPosition0(particle2);
@@ -1394,7 +1394,7 @@ bool FEMTetConstraint::initConstraint(PBDSimulationModel &model, const unsigned 
 
 bool FEMTetConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const unsigned i1 = m_bodies[0];
     const unsigned i2 = m_bodies[1];
@@ -1458,7 +1458,7 @@ bool StrainTetConstraint::initConstraint(PBDSimulationModel &model, const unsign
     m_bodies[2] = particle3;
     m_bodies[3] = particle4;
 
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     Vector3r &x1 = pd.getPosition0(particle1);
     Vector3r &x2 = pd.getPosition0(particle2);
@@ -1470,7 +1470,7 @@ bool StrainTetConstraint::initConstraint(PBDSimulationModel &model, const unsign
 
 bool StrainTetConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const unsigned i1 = m_bodies[0];
     const unsigned i2 = m_bodies[1];
@@ -1525,7 +1525,7 @@ bool StrainTetConstraint::solvePositionConstraint(PBDSimulationModel &model, con
 bool ShapeMatchingConstraint::initConstraint(PBDSimulationModel &model,
                                              const unsigned int particleIndices[], const unsigned int numClusters[])
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
     for (unsigned int i = 0; i < m_numberOfBodies; i++)
     {
         m_bodies[i] = particleIndices[i];
@@ -1540,7 +1540,7 @@ bool ShapeMatchingConstraint::initConstraint(PBDSimulationModel &model,
 
 bool ShapeMatchingConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
     for (unsigned int i = 0; i < m_numberOfBodies; i++)
     {
         m_x[i] = pd.getPosition(m_bodies[i]);
@@ -1664,7 +1664,7 @@ bool ParticleRigidBodyContactConstraint::initConstraint(PBDSimulationModel &mode
     m_bodies[0] = particleIndex;
     m_bodies[1] = rbIndex;
     PBDSimulationModel::RigidBodyVector &rbs = model.getRigidBodies();
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     PBDRigidBody &rb = *rbs[m_bodies[1]];
 
@@ -1687,7 +1687,7 @@ bool ParticleRigidBodyContactConstraint::initConstraint(PBDSimulationModel &mode
 bool ParticleRigidBodyContactConstraint::solveVelocityConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
     PBDSimulationModel::RigidBodyVector &rbs = model.getRigidBodies();
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     PBDRigidBody &rb = *rbs[m_bodies[1]];
 
@@ -1742,7 +1742,7 @@ bool ParticleTetContactConstraint::initConstraint(PBDSimulationModel &model,
     m_tetIndex = tetIndex;
     m_solidIndex = solidIndex;
     m_bary = bary;
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const PBDSimulationModel::TetModelVector &tetModels = model.getTetModels();
     PBDTetrahedronModel *tm = tetModels[solidIndex];
@@ -1774,7 +1774,7 @@ bool ParticleTetContactConstraint::initConstraint(PBDSimulationModel &model,
 
 bool ParticleTetContactConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const PBDSimulationModel::TetModelVector &tetModels = model.getTetModels();
     PBDTetrahedronModel *tm = tetModels[m_solidIndex];
@@ -1816,7 +1816,7 @@ bool ParticleTetContactConstraint::solvePositionConstraint(PBDSimulationModel &m
 
 bool ParticleTetContactConstraint::solveVelocityConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const PBDSimulationModel::TetModelVector &tetModels = model.getTetModels();
     PBDTetrahedronModel *tm = tetModels[m_solidIndex];
@@ -1872,7 +1872,7 @@ bool StretchShearConstraint::initConstraint(PBDSimulationModel &model, const uns
     m_bodies[0] = particle1;
     m_bodies[1] = particle2;
     m_bodies[2] = quaternion1;
-    ParticleData &pd = model.getParticles();
+    PBDParticleData &pd = model.getParticles();
 
     const Vector3r &x1_0 = pd.getPosition0(particle1);
     const Vector3r &x2_0 = pd.getPosition0(particle2);
@@ -1884,8 +1884,8 @@ bool StretchShearConstraint::initConstraint(PBDSimulationModel &model, const uns
 
 bool StretchShearConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    ParticleData &pd = model.getParticles();
-    OrientationData &od = model.getOrientations();
+    PBDParticleData &pd = model.getParticles();
+    PBDOrientationData &od = model.getOrientations();
 
     const unsigned i1 = m_bodies[0];
     const unsigned i2 = m_bodies[1];
@@ -1930,7 +1930,7 @@ bool BendTwistConstraint::initConstraint(PBDSimulationModel &model, const unsign
 {
     m_bodies[0] = quaternion1;
     m_bodies[1] = quaternion2;
-    OrientationData &od = model.getOrientations();
+    PBDOrientationData &od = model.getOrientations();
 
     const Quaternionr &q1_0 = od.getQuaternion(quaternion1);
     const Quaternionr &q2_0 = od.getQuaternion(quaternion2);
@@ -1947,7 +1947,7 @@ bool BendTwistConstraint::initConstraint(PBDSimulationModel &model, const unsign
 
 bool BendTwistConstraint::solvePositionConstraint(PBDSimulationModel &model, const unsigned int iter)
 {
-    OrientationData &od = model.getOrientations();
+    PBDOrientationData &od = model.getOrientations();
 
     const unsigned i1 = m_bodies[0];
     const unsigned i2 = m_bodies[1];

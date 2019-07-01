@@ -18,6 +18,13 @@ namespace sofa
                     SOFA_CLASS(SofaPBDTriangleModel,sofa::core::objectmodel::BaseObject);
                     SofaPBDTriangleModel();
 
+                    void init();
+                    void bwdInit();
+
+                    void parse(sofa::core::objectmodel::BaseObjectDescription *arg);
+
+                    void draw(const core::visual::VisualParams*) override;
+
                 private:
                     std::shared_ptr<SofaPBDTriangleModelPrivate> m_d;
             };

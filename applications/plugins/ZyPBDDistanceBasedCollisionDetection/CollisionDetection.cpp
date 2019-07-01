@@ -81,7 +81,7 @@ void CollisionDetection::updateAABBs(PBDSimulationModel &model)
     const PBDSimulationModel::RigidBodyVector &rigidBodies = model.getRigidBodies();
     const PBDSimulationModel::TriangleModelVector &triModels = model.getTriangleModels();
     const PBDSimulationModel::TetModelVector &tetModels = model.getTetModels();
-    const ParticleData &pd = model.getParticles();
+    const PBDParticleData &pd = model.getParticles();
 
     for (unsigned int i = 0; i < m_collisionObjects.size(); i++)
     {
@@ -95,12 +95,12 @@ void CollisionDetection::updateAABB(PBDSimulationModel &model, CollisionDetectio
     const PBDSimulationModel::RigidBodyVector &rigidBodies = model.getRigidBodies();
     const PBDSimulationModel::TriangleModelVector &triModels = model.getTriangleModels();
     const PBDSimulationModel::TetModelVector &tetModels = model.getTetModels();
-    const ParticleData &pd = model.getParticles();
+    const PBDParticleData &pd = model.getParticles();
     if (co->m_bodyType == CollisionDetection::CollisionObject::RigidBodyCollisionObjectType)
     {
         const unsigned int rbIndex = co->m_bodyIndex;
         PBDRigidBody *rb = rigidBodies[rbIndex];
-        const VertexData &vd = rb->getGeometry().getVertexData();
+        const PBDVertexData &vd = rb->getGeometry().getVertexData();
 
         co->m_aabb.m_p[0] = vd.getPosition(0);
         co->m_aabb.m_p[1] = vd.getPosition(0);

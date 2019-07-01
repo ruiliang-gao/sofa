@@ -150,19 +150,19 @@ namespace sofa
                     const Real restitutionCoeff, const Real frictionCoeff
                     , std::vector<std::vector<ContactData> > &contacts_mt
                     );
-                void collisionDetectionRBSolid(const ParticleData &pd, const unsigned int offset, const unsigned int numVert,
+                void collisionDetectionRBSolid(const PBDParticleData &pd, const unsigned int offset, const unsigned int numVert,
                     DistanceFieldCollisionObject *co1, PBDRigidBody *rb2, DistanceFieldCollisionObject *co2,
                     const Real restitutionCoeff, const Real frictionCoeff
                     , std::vector<std::vector<ContactData> > &contacts_mt
                     );
 
-                void collisionDetectionSolidSolid(const ParticleData &pd, const unsigned int offset, const unsigned int numVert,
+                void collisionDetectionSolidSolid(const PBDParticleData &pd, const unsigned int offset, const unsigned int numVert,
                     DistanceFieldCollisionObject *co1, PBDTetrahedronModel *tm2, DistanceFieldCollisionObject *co2,
                     const Real restitutionCoeff, const Real frictionCoeff
                     , std::vector<std::vector<ContactData> > &contacts_mt
                 );
 
-                bool findRefTetAt(const ParticleData &pd, PBDTetrahedronModel *tm, const DistanceFieldCollisionDetection::DistanceFieldCollisionObject *co, const Vector3r &X,
+                bool findRefTetAt(const PBDParticleData &pd, PBDTetrahedronModel *tm, const DistanceFieldCollisionDetection::DistanceFieldCollisionObject *co, const Vector3r &X,
                     unsigned int &tetIndex, Vector3r &barycentricCoordinates);
 
 

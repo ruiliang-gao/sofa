@@ -87,7 +87,7 @@ namespace sofa
 
                     void initBody(const Real mass, const Vector3r &x,
                         const Vector3r &inertiaTensor, const Quaternionr &rotation,
-                        const VertexData &vertices, const Utilities::PBDIndexedFaceMesh &mesh,
+                        const PBDVertexData &vertices, const Utilities::PBDIndexedFaceMesh &mesh,
                         const Vector3r &scale = Vector3r(1.0, 1.0, 1.0))
                     {
                         setMass(mass);
@@ -119,7 +119,7 @@ namespace sofa
                     }
 
                     void initBody(const Real density, const Vector3r &x, const Quaternionr &rotation,
-                        const VertexData &vertices, const Utilities::PBDIndexedFaceMesh &mesh, const Vector3r &scale = Vector3r(1.0, 1.0, 1.0))
+                        const PBDVertexData &vertices, const Utilities::PBDIndexedFaceMesh &mesh, const Vector3r &scale = Vector3r(1.0, 1.0, 1.0))
                     {
                         m_mass = 1.0;
                         m_inertiaTensor = Vector3r(1.0, 1.0, 1.0);
@@ -207,7 +207,7 @@ namespace sofa
                     void determineMassProperties(const Real density)
                     {
                         // apply initial rotation
-                        VertexData &vd = m_geometry.getVertexDataLocal();
+                        PBDVertexData &vd = m_geometry.getVertexDataLocal();
                         for (unsigned int i = 0; i < vd.size(); i++)
                             vd.getPosition(i) = m_rot * vd.getPosition(i) + m_x0;
 

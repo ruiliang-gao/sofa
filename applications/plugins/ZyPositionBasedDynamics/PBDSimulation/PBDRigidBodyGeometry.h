@@ -25,19 +25,19 @@ namespace sofa
 
                 protected:
                     Mesh m_mesh;
-                    VertexData m_vertexData_local;
-                    VertexData m_vertexData;
+                    PBDVertexData m_vertexData_local;
+                    PBDVertexData m_vertexData;
 
                 public:
                     Mesh &getMesh();
-                    VertexData &getVertexData();
-                    const VertexData &getVertexData() const;
-                    VertexData &getVertexDataLocal();
-                    const VertexData &getVertexDataLocal() const;
+                    PBDVertexData &getVertexData();
+                    const PBDVertexData &getVertexData() const;
+                    PBDVertexData &getVertexDataLocal();
+                    const PBDVertexData &getVertexDataLocal() const;
 
                     void initMesh(const unsigned int nVertices, const unsigned int nFaces, const Vector3r *vertices, const unsigned int* indices, const Mesh::UVIndices& uvIndices, const Mesh::UVs& uvs, const Vector3r &scale = Vector3r(1.0, 1.0, 1.0));
                     void updateMeshTransformation(const Vector3r &x, const Matrix3r &R);
-                    void updateMeshNormals(const VertexData &vd);
+                    void updateMeshNormals(const PBDVertexData &vd);
 
             };
         }

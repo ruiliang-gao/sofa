@@ -44,7 +44,7 @@ namespace sofa
                     /** Tet mesh of particles which represents the simulation model */
                     ParticleMesh m_particleMesh;
                     SurfaceMesh m_surfaceMesh;
-                    VertexData m_visVertices;
+                    PBDVertexData m_visVertices;
                     SurfaceMesh m_visMesh;
                     Real m_restitutionCoeff;
                     Real m_frictionCoeff;
@@ -66,7 +66,7 @@ namespace sofa
                     void updateConstraints();
 
                     SurfaceMesh &getSurfaceMesh();
-                    VertexData &getVisVertices();
+                    PBDVertexData &getVisVertices();
                     SurfaceMesh &getVisMesh();
                     ParticleMesh &getParticleMesh();
                     void cleanupModel();
@@ -74,19 +74,19 @@ namespace sofa
                     unsigned int getIndexOffset() const;
 
                     void initMesh(const unsigned int nPoints, const unsigned int nTets, const unsigned int indexOffset, unsigned int* indices);
-                    void updateMeshNormals(const ParticleData &pd);
+                    void updateMeshNormals(const PBDParticleData &pd);
 
                     /** Attach a visualization mesh to the surface of the body.
                      * Important: The vertex normals have to be updated before
                      * calling this function by calling updateMeshNormals().
                      */
-                    void attachVisMesh(const ParticleData &pd);
+                    void attachVisMesh(const PBDParticleData &pd);
 
                     /** Update the visualization mesh of the body.
                     * Important: The vertex normals have to be updated before
                     * calling this function by calling updateMeshNormals().
                     */
-                    void updateVisMesh(const ParticleData &pd);
+                    void updateVisMesh(const PBDParticleData &pd);
 
                     FORCE_INLINE Real getRestitutionCoeff() const
                     {

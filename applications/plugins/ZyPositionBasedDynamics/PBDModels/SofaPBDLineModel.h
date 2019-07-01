@@ -18,6 +18,13 @@ namespace sofa
                     SOFA_CLASS(SofaPBDLineModel,sofa::core::objectmodel::BaseObject);
                     SofaPBDLineModel();
 
+                    void init();
+                    void bwdInit();
+
+                    void parse(sofa::core::objectmodel::BaseObjectDescription *arg);
+
+                    void draw(const core::visual::VisualParams*) override;
+
                 private:
                     std::shared_ptr<SofaPBDLineModelPrivate> m_d;
             };

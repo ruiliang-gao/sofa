@@ -13,18 +13,18 @@ namespace sofa
             /** This class encapsulates the state of all vertices.
             * All parameters are stored in individual arrays.
             */
-            class VertexData
+            class PBDVertexData
             {
             private:
                 std::vector<Vector3r> m_x;
 
             public:
-                FORCE_INLINE VertexData(void) :
+                FORCE_INLINE PBDVertexData(void) :
                     m_x()
                 {
                 }
 
-                FORCE_INLINE ~VertexData(void)
+                FORCE_INLINE ~PBDVertexData(void)
                 {
                     m_x.clear();
                 }
@@ -86,7 +86,7 @@ namespace sofa
             /** This class encapsulates the state of all particles of a particle model.
              * All parameters are stored in individual arrays.
              */
-            class ParticleData
+            class PBDParticleData
             {
                 private:
                     // Mass
@@ -103,7 +103,7 @@ namespace sofa
                     std::vector<Vector3r> m_lastX;
 
                 public:
-                    FORCE_INLINE ParticleData(void)	:
+                    FORCE_INLINE PBDParticleData(void)	:
                           m_masses(),
                           m_invMasses(),
                           m_x0(),
@@ -115,7 +115,7 @@ namespace sofa
                     {
                     }
 
-                    FORCE_INLINE ~ParticleData(void)
+                    FORCE_INLINE ~PBDParticleData(void)
                     {
                         m_masses.clear();
                         m_invMasses.clear();
@@ -311,7 +311,7 @@ namespace sofa
             /** This class encapsulates the state of all orientations of a quaternion model.
             * All parameters are stored in individual arrays.
             */
-            class OrientationData
+            class PBDOrientationData
             {
             private:
                 // Mass
@@ -328,7 +328,7 @@ namespace sofa
                 std::vector<Quaternionr> m_lastQ;
 
             public:
-                FORCE_INLINE OrientationData(void) :
+                FORCE_INLINE PBDOrientationData(void) :
                     m_masses(),
                     m_invMasses(),
                     m_q0(),
@@ -340,7 +340,7 @@ namespace sofa
                 {
                 }
 
-                FORCE_INLINE ~OrientationData(void)
+                FORCE_INLINE ~PBDOrientationData(void)
                 {
                     m_masses.clear();
                     m_invMasses.clear();

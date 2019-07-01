@@ -125,12 +125,12 @@ PBDSimulationModel::RigidBodyVector & PBDSimulationModel::getRigidBodies()
     return m_rigidBodies;
 }
 
-ParticleData & PBDSimulationModel::getParticles()
+PBDParticleData & PBDSimulationModel::getParticles()
 {
     return m_particles;
 }
 
-OrientationData & PBDSimulationModel::getOrientations()
+PBDOrientationData & PBDSimulationModel::getOrientations()
 {
     return m_orientations;
 }

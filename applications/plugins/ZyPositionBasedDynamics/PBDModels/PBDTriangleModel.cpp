@@ -22,7 +22,7 @@ void PBDTriangleModel::cleanupModel()
     m_particleMesh.release();
 }
 
-void PBDTriangleModel::updateMeshNormals(const ParticleData &pd)
+void PBDTriangleModel::updateMeshNormals(const PBDParticleData &pd)
 {
     m_particleMesh.updateNormals(pd, m_indexOffset);
     m_particleMesh.updateVertexNormals(pd);
