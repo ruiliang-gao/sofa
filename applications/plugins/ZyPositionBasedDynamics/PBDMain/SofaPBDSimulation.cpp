@@ -82,20 +82,6 @@ void SofaPBDSimulation::init()
 
     if (!m_context)
         m_context = dynamic_cast<sofa::simulation::Node*>(this->getContext());
-
-    auto topologies = m_context->getObjects<sofa::core::topology::BaseMeshTopology>(BaseContext::SearchDown);
-    auto mechanicalObjects = m_context->getObjects<sofa::component::container::MechanicalObject<sofa::defaulttype::Vec3Types>>(BaseContext::SearchDown);
-
-    msg_info("PBDSimulation") << "Found BaseMeshTopology instances: " << topologies.size();
-    msg_info("PBDSimulation") << "Found MechanicalObject<sofa::defaulttype::Vec3Types> instances: " << mechanicalObjects.size();
-
-    m_geometryConverter->setMeshTopologies(topologies);
-    m_mechObjConverter->setMechanicalObjects(mechanicalObjects);
-
-    bool convGeoResult = m_geometryConverter->convertToPBDObjects();
-    bool convMechObjResult = m_mechObjConverter->convertToPBDObjects();
-
-    msg_info("PBDSimulation") << "Converted geometries OK: " << convGeoResult << ", converted MechanicalObjects OK: " << convMechObjResult;
 }
 
 void SofaPBDSimulation::initParameters()
@@ -117,6 +103,20 @@ void SofaPBDSimulation::initParameters()
 void SofaPBDSimulation::bwdInit()
 {
     msg_info("PBDSimulation") << "bwdInit()";
+
+    auto topologies = m_context->getObjects<sofa::core::topology::BaseMeshTopology>(BaseContext::SearchDown);
+    auto mechanicalObjects = m_context->getObjects<sofa::component::container::MechanicalObject<sofa::defaulttype::Vec3Types>>(BaseContext::SearchDown);
+
+    msg_info("PBDSimulation") << "Found BaseMeshTopology instances: " << topologies.size();
+    msg_info("PBDSimulation") << "Found MechanicalObject<sofa::defaulttype::Vec3Types> instances: " << mechanicalObjects.size();
+
+    m_geometryConverter->setMeshTopologies(topologies);
+    m_mechObjConverter->setMechanicalObjects(mechanicalObjects);
+
+    bool convGeoResult = m_geometryConverter->convertToPBDObjects();
+    bool convMechObjResult = m_mechObjConverter->convertToPBDObjects();
+
+    msg_info("PBDSimulation") << "Converted geometries OK: " << convGeoResult << ", converted MechanicalObjects OK: " << convMechObjResult;
 }
 
 void SofaPBDSimulation::reset()

@@ -2,8 +2,7 @@
 #define SOFAPDBLINEMODEL_H
 
 #include "PBDLineModel.h"
-
-#include <sofa/core/objectmodel/BaseObject.h>
+#include "SofaPBDModelBase.h"
 
 namespace sofa
 {
@@ -12,10 +11,10 @@ namespace sofa
         namespace PBDSimulation
         {
             class SofaPBDLineModelPrivate;
-            class SofaPBDLineModel: public sofa::core::objectmodel::BaseObject
+            class SofaPBDLineModel: public SofaPBDModelBase
             {
                 public:
-                    SOFA_CLASS(SofaPBDLineModel,sofa::core::objectmodel::BaseObject);
+                    SOFA_CLASS(SofaPBDLineModel, SofaPBDModelBase);
                     SofaPBDLineModel();
 
                     void init();
@@ -23,7 +22,11 @@ namespace sofa
 
                     void parse(sofa::core::objectmodel::BaseObjectDescription *arg);
 
-                    void draw(const core::visual::VisualParams*) override;
+                    virtual void draw(const core::visual::VisualParams*) override;
+
+                protected:
+                    void buildModel();
+                    void applyInitialTransform();
 
                 private:
                     std::shared_ptr<SofaPBDLineModelPrivate> m_d;

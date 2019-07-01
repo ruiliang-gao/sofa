@@ -34,7 +34,7 @@ int SofaPBDLineModelClass = sofa::core::RegisterObject("Wrapper class for PBD Li
                             .add< SofaPBDLineModel >()
                             .addDescription("Encapsulates sets of particles connected in a chain.");
 
-SofaPBDLineModel::SofaPBDLineModel(): sofa::core::objectmodel::BaseObject()
+SofaPBDLineModel::SofaPBDLineModel(): SofaPBDModelBase()
 {
     m_d.reset(new SofaPBDLineModelPrivate());
 }
@@ -63,6 +63,29 @@ void SofaPBDLineModel::parse(BaseObjectDescription* arg)
 void SofaPBDLineModel::init()
 {
     m_d->m_pbdLineModel.reset(new PBDLineModel());
+}
+
+void SofaPBDLineModel::bwdInit()
+{
+    buildModel();
+    applyInitialTransform();
+}
+
+void SofaPBDLineModel::buildModel()
+{
+    const Base::MapData& datas = this->getDataAliases();
+    const Base::MapData::const_iterator& src_it = datas.find("src");
+    if (src_it != datas.end())
+    {
+        msg_info("SofaPBDLineModel") << "Found src Data entry.";
+        BaseData* src_data = src_it->second;
+        msg_info("SofaPBDLineModel") << "src points to loader: " << src_data->getValueString();
+    }
+}
+
+void SofaPBDLineModel::applyInitialTransform()
+{
+
 }
 
 void SofaPBDLineModel::draw(const core::visual::VisualParams* vparams)

@@ -2,8 +2,9 @@
 #define SOFAPDBTRIANGLEMODEL_H
 
 #include "PBDTriangleModel.h"
+#include "SofaPBDModelBase.h"
 
-#include <sofa/core/objectmodel/BaseObject.h>
+using namespace sofa::defaulttype;
 
 namespace sofa
 {
@@ -12,10 +13,10 @@ namespace sofa
         namespace PBDSimulation
         {
             class SofaPBDTriangleModelPrivate;
-            class SofaPBDTriangleModel: public sofa::core::objectmodel::BaseObject
+            class SofaPBDTriangleModel: public SofaPBDModelBase
             {
                 public:
-                    SOFA_CLASS(SofaPBDTriangleModel,sofa::core::objectmodel::BaseObject);
+                    SOFA_CLASS(SofaPBDTriangleModel, SofaPBDModelBase);
                     SofaPBDTriangleModel();
 
                     void init();
@@ -24,6 +25,10 @@ namespace sofa
                     void parse(sofa::core::objectmodel::BaseObjectDescription *arg);
 
                     void draw(const core::visual::VisualParams*) override;
+
+                protected:
+                    void buildModel();
+                    void applyInitialTransform();
 
                 private:
                     std::shared_ptr<SofaPBDTriangleModelPrivate> m_d;

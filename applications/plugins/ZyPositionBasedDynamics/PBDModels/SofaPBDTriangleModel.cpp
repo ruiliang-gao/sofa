@@ -3,7 +3,14 @@
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/core/visual/VisualParams.h>
 
+#include <PBDMain/SofaPBDSimulation.h>
 #include <PBDUtils/PBDIndexedFaceMesh.h>
+
+#ifdef _WIN32
+#include <gl/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 
 namespace sofa
 {
@@ -29,12 +36,13 @@ namespace sofa
 using namespace sofa::simulation::PBDSimulation;
 using namespace sofa::simulation::PBDSimulation::Utilities;
 using namespace sofa::core::objectmodel;
+using namespace sofa::defaulttype;
 
 int SofaPBDTriangleModelClass = sofa::core::RegisterObject("Wrapper class for PBD TriangleModels.")
                             .add< SofaPBDTriangleModel >()
                             .addDescription("Encapsulates sets of particles in an indexed triangle mesh.");
 
-SofaPBDTriangleModel::SofaPBDTriangleModel(): sofa::core::objectmodel::BaseObject()
+SofaPBDTriangleModel::SofaPBDTriangleModel(): SofaPBDModelBase()
 {
     m_d.reset(new SofaPBDTriangleModelPrivate());
 }
@@ -65,152 +73,76 @@ void SofaPBDTriangleModel::init()
     m_d->m_pbdTriangleModel.reset(new PBDTriangleModel());
 }
 
+void SofaPBDTriangleModel::bwdInit()
+{
+    buildModel();
+    applyInitialTransform();
+}
+
+void SofaPBDTriangleModel::buildModel()
+{
+    const Base::MapData& datas = this->getDataAliases();
+    Base::MapData::const_iterator src_it = datas.find("src");
+    if (src_it != datas.end())
+    {
+        msg_info("SofaPBDLineModel") << "Found src Data entry.";
+        BaseData* src_data = src_it->second;
+        msg_info("SofaPBDLineModel") << "src points to loader: " << src_data->getValueString();
+    }
+}
+
+void SofaPBDTriangleModel::applyInitialTransform()
+{
+
+}
+
 void SofaPBDTriangleModel::draw(const core::visual::VisualParams* vparams)
 {
     if (!vparams->displayFlags().getShowCollisionModels())
         return;
 
+    PBDSimulationModel* simModel = SofaPBDSimulation::getCurrent()->getModel();
+    PBDParticleData& particleData = simModel->getParticles();
     const PBDIndexedFaceMesh &mesh = m_d->m_pbdTriangleModel->getParticleMesh();
+    const PBDIndexedFaceMesh::Edges& meshEdges = mesh.getEdges();
+    const unsigned int vertexCount = mesh.numVertices();
     const unsigned int offset = m_d->m_pbdTriangleModel->getIndexOffset();
-    //Visualization::drawTexturedMesh(pd, mesh, offset, surfaceColor);
 
-//    glPushMatrix();
-//    glPushAttrib(GL_ENABLE_BIT);
-//    glEnable(GL_COLOR_MATERIAL);
+    Vec4f colour(1,0,0,0.5);
+    Vec4f colour2(0,0,1,0.5);
 
-//    Vec4f colour(1,0,0,0.5);
-//    Vec4f colour2(0,0,1,0.5);
-//#ifdef OBBTREEGPUCOLLISIONMODEL_DEBUG_DRAW
-//    glBegin(GL_LINES);
-//    glColor4d(colour2.x(), colour2.y(), colour2.z(), colour2.w());
-//    glVertex3d(0, 0, 0);
-//    glColor4d(colour.x(), colour.y(), colour.z(), colour.w());
-//    glVertex3d(newTr.x(), newTr.y(), newTr.z());
-//    glEnd();
-//#endif //OBBTREEGPUCOLLISIONMODEL_DEBUG_DRAW
+    glPushMatrix();
+    glPushAttrib(GL_ENABLE_BIT);
+    glEnable(GL_COLOR_MATERIAL);
 
-//    glTranslated(newTr.x(), newTr.y(), newTr.z());
+    // Draw mesh particles
+    glPointSize(3.0f);
+    glBegin(GL_POINTS);
+    for (unsigned int k = offset; k < offset + vertexCount; k++)
+    {
+        glColor4f(1,1,0,0.75);
+        Vector3r particle = particleData.getPosition(k);
+        glVertex3d(particle[0], particle[1], particle[2]);
+    }
+    glEnd();
+    glPointSize(1.0f);
 
-//    BVHDrawHelpers::drawCoordinateMarkerGL(0.5f, 1.0f, colour, colour * 0.5, colour * 0.25);
+    // Draw mesh lines
+    glLineWidth(2.0f);
+    glBegin(GL_LINES);
+    for (unsigned int k = 0; k < mesh.numEdges(); k++)
+    {
+        const PBDIndexedFaceMesh::Edge& edge = meshEdges[k];
+        const Vector3r& pt1 = particleData.getPosition(edge.m_vert[0]);
+        const Vector3r& pt2 = particleData.getPosition(edge.m_vert[1]);
+        glColor4f(colour.x(), colour.y(), colour.z(), colour.w());
+        glVertex3d(pt1[0], pt1[1], pt1[2]);
+        glColor4f(colour2.x(), colour2.y(), colour2.z(), colour2.w());
+        glVertex3d(pt2[0], pt2[1], pt2[2]);
+    }
+    glLineWidth(1.0f);
+    glEnd();
 
-//    //std::cout << " rotate to obj. orientation = " << newOrientation.transposed() << std::endl;
-//    glMultMatrixd(modelGlOrientation.transposed().ptr());
-
-
-//    glBegin(GL_LINES);
-//    glColor4d(0, 1, 0, 0.5);
-//    glVertex3d(0, 0, 0);
-//    glColor4d(colour.x(), colour.y(), colour.z(), colour.w());
-//    glVertex3d(m_pqp_tree->b->To[0], m_pqp_tree->b->To[1], m_pqp_tree->b->To[2]);
-//    glEnd();
-
-//    //std::cout << " translate to OBB center = " << m_pqp_tree->b->To[0] << "," << m_pqp_tree->b->To[1] << "," << m_pqp_tree->b->To[2] << std::endl;
-//    glTranslated(m_pqp_tree->b->To[0], m_pqp_tree->b->To[1], m_pqp_tree->b->To[2]);
-
-//    Matrix3 obbRotation; obbRotation.identity();
-//    obbRotation[0] = Vector3(m_pqp_tree->b->R[0][0], m_pqp_tree->b->R[1][0], m_pqp_tree->b->R[2][0]);
-//    obbRotation[1] = Vector3(m_pqp_tree->b->R[0][1], m_pqp_tree->b->R[1][1], m_pqp_tree->b->R[2][1]);
-//    obbRotation[2] = Vector3(m_pqp_tree->b->R[0][2], m_pqp_tree->b->R[1][2], m_pqp_tree->b->R[2][2]);
-
-//    Matrix4 glOrientation; glOrientation.identity();
-//    for (int k = 0; k < 3; k++)
-//    {
-//        for (int l = 0; l < 3; l++)
-//        {
-//            glOrientation[k][l] = obbRotation[k][l];
-//        }
-//    }
-
-//    //drawObbVolume(sofa::defaulttype::Vector3(m_pqp_tree->b->d[0], m_pqp_tree->b->d[1], m_pqp_tree->b->d[2]), colour2);
-
-//    //std::cout << " rotate to OBB orientation = " << glOrientation << std::endl;
-//    BVHDrawHelpers::drawCoordinateMarkerGL(0.75f, 4.0f, colour2, colour2, colour);
-
-//    glMultMatrixd(glOrientation.ptr());
-
-//    BVHDrawHelpers::drawCoordinateMarkerGL(1.0f, 6.0f, colour, colour2, colour2);
-
-//    BVHDrawHelpers::drawObbVolume(sofa::defaulttype::Vector3(m_pqp_tree->b->d[0], m_pqp_tree->b->d[1], m_pqp_tree->b->d[2]), colour);
-
-//    float extent_x = m_pqp_tree->b->d[0]; float extent_y = m_pqp_tree->b->d[1]; float extent_z = m_pqp_tree->b->d[2];
-//    if (m_pqp_tree->b->min_dimension == 0)
-//        extent_x = m_pqp_tree->b->min_dimension_val;
-//    else if (m_pqp_tree->b->min_dimension == 1)
-//        extent_y = m_pqp_tree->b->min_dimension_val;
-//    else if (m_pqp_tree->b->min_dimension == 2)
-//        extent_z = m_pqp_tree->b->min_dimension_val;
-
-//    BVHDrawHelpers::drawObbVolume(sofa::defaulttype::Vector3(extent_x, extent_y, extent_z), Vec4f(0,1,0,1), true);
-
-//    glMultMatrixd(glOrientation.transposed().ptr());
-
-//    glTranslated(-m_pqp_tree->b->To[0], -m_pqp_tree->b->To[1], -m_pqp_tree->b->To[2]);
-
-//    if (m_pqp_tree->b->first_child > 0)
-//    {
-//        BV* child1 = m_pqp_tree->child(m_pqp_tree->b->first_child);
-
-//        Matrix3 childRotation; childRotation.identity();
-//        childRotation[0] = Vector3(child1->R[0][0], child1->R[1][0], child1->R[2][0]);
-//        childRotation[1] = Vector3(child1->R[0][1], child1->R[1][1], child1->R[2][1]);
-//        childRotation[2] = Vector3(child1->R[0][2], child1->R[1][2], child1->R[2][2]);
-
-//        Matrix4 glOrientation; glOrientation.identity();
-//        for (int k = 0; k < 3; k++)
-//        {
-//            for (int l = 0; l < 3; l++)
-//            {
-//                glOrientation[k][l] = childRotation[k][l];
-//            }
-//        }
-
-//        glTranslated(child1->To[0], child1->To[1], child1->To[2]);
-
-//        glMultMatrixd(glOrientation.ptr());
-//        BVHDrawHelpers::drawObbVolume(sofa::defaulttype::Vector3(child1->d[0], child1->d[1], child1->d[2]), Vec4f(1, 1, 1, 0.5), true);
-//        glMultMatrixd(glOrientation.transposed().ptr());
-
-//        glTranslated(-child1->To[0], -child1->To[1], -child1->To[2]);
-//    }
-
-//    if (m_pqp_tree->b->first_child + 1 > 0)
-//    {
-//        BV* child2 = m_pqp_tree->child(m_pqp_tree->b->first_child + 1);
-
-//        Matrix3 childRotation; childRotation.identity();
-//        childRotation[0] = Vector3(child2->R[0][0], child2->R[1][0], child2->R[2][0]);
-//        childRotation[1] = Vector3(child2->R[0][1], child2->R[1][1], child2->R[2][1]);
-//        childRotation[2] = Vector3(child2->R[0][2], child2->R[1][2], child2->R[2][2]);
-
-//        Matrix4 glOrientation; glOrientation.identity();
-//        for (int k = 0; k < 3; k++)
-//        {
-//            for (int l = 0; l < 3; l++)
-//            {
-//                glOrientation[k][l] = childRotation[k][l];
-//            }
-//        }
-
-//        glTranslated(child2->To[0], child2->To[1], child2->To[2]);
-
-//        glMultMatrixd(glOrientation.ptr());
-//        BVHDrawHelpers::drawObbVolume(sofa::defaulttype::Vector3(child2->d[0], child2->d[1], child2->d[2]), Vec4f(1, 1, 1, 1), true);
-//        glMultMatrixd(glOrientation.transposed().ptr());
-
-//        glTranslated(-child2->To[0], -child2->To[1], -child2->To[2]);
-//    }
-
-//    if (m_drawOBBHierarchy.getValue() > 1)
-//    {
-//        if (m_pqp_tree->num_bvs > 2)
-//        {
-//            BVHDrawHelpers::drawRec(m_pqp_tree, m_pqp_tree->child(m_pqp_tree->b->first_child), vparams, colour2, 1, false);
-//            BVHDrawHelpers::drawRec(m_pqp_tree, m_pqp_tree->child(m_pqp_tree->b->first_child+1), vparams, colour2, 1, false);
-//        }
-//    }
-
-//    glPopAttrib();
-//    glPopMatrix();
-
-    vparams->drawTool()->drawTriangles();
+    glPopAttrib();
+    glPopMatrix();
 }

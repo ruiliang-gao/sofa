@@ -56,6 +56,7 @@ set(MODELS_HEADER_FILES
     PBDModels/PBDTriangleModel.h
     PBDModels/PBDTetrahedronModel.h
     PBDModels/PBDSimulationModel.h
+    PBDModels/SofaPBDModelBase.h
     PBDModels/SofaPBDLineModel.h
     PBDModels/SofaPBDTriangleModel.h)
 
