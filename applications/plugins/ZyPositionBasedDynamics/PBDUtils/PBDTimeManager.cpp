@@ -1,5 +1,7 @@
 #include "PBDTimeManager.h"
 
+#include <sofa/helper/logging/Messaging.h>
+
 using namespace sofa::simulation::PBDSimulation;
 
 // #include "Utils/Timing.h"
@@ -21,6 +23,7 @@ PBDTimeManager* PBDTimeManager::getCurrent ()
 {
     if (current == 0)
     {
+        msg_info("PBDTimeManager") << "Instantiating PBDTimeManager singleton.";
         current = new PBDTimeManager ();
     }
     return current;

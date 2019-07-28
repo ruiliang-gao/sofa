@@ -357,7 +357,7 @@ bool MeshObjLoader::readOBJ (std::ifstream &file, const char* filename)
         }
         else
         {
-            // std::cerr << "readObj : Unknown token for line " << line << std::endl;
+            msg_error("MeshObjLoader") << "readObj : Unknown token for line " << line;
         }
     }
 

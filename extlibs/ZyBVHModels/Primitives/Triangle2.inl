@@ -31,7 +31,7 @@ Triangle2<Real>::Triangle2 (const Vec<2,Real>& v0,
 }
 //----------------------------------------------------------------------------
 template <typename Real>
-Triangle2<Real>::Triangle2 (const Vec<2,Real> vertex[3])
+Triangle2<Real>::Triangle2(const Vec<2,Real> vertex[3])
 {
     for (int i = 0; i < 3; ++i)
     {
@@ -40,17 +40,11 @@ Triangle2<Real>::Triangle2 (const Vec<2,Real> vertex[3])
 }
 //----------------------------------------------------------------------------
 template <typename Real>
-Real Triangle2<Real>::DistanceTo (const Vec<2,Real>& q) const
+Real Triangle2<Real>::DistanceTo(const Vec<2,Real>& q) const
 {
     Vec<2,Real> diff = V[0] - q;
     Vec<2,Real> edge0 = V[1] - V[0];
     Vec<2,Real> edge1 = V[2] - V[0];
-    //TRU Real a00 = edge0.SquaredLength();
-    //TRU Real a01 = edge0.Dot(edge1);
-    //TRU Real a11 = edge1.SquaredLength();
-    //TRU Real b0 = diff.Dot(edge0);
-    //TRU Real b1 = diff.Dot(edge1);
-    //TRU Real c = diff.SquaredLength();
     Real a00 = edge0.norm2();
     Real a01 = edge0 * edge1;
     Real a11 = edge1.norm2();
@@ -243,6 +237,16 @@ Real Triangle2<Real>::DistanceTo (const Vec<2,Real>& q) const
 }
 
 template <typename Real>
+bool Triangle2<Real>::IsIntersectionQuerySupported(const PrimitiveType& other)
+{
+    if ((other == PT_SEGMENT2) ||
+        (other == PT_TRIANGLE2))
+        return true;
+
+    return false;
+}
+
+template <typename Real>
 bool Triangle2<Real>::Test(const Intersectable<Real, Vec<2,Real> >& intersectable)
 {
     const Segment2<Real>* mSegment = dynamic_cast<const Segment2<Real>*> (&intersectable);
@@ -322,7 +326,6 @@ bool Triangle2<Real>::Test(const Intersectable<Real, Vec<2,Real> >& intersectabl
         return true;
     }
 
-
     return Intersectable<Real, Vec<2,Real> >::mIntersectionType != IT_EMPTY;
 }
 
@@ -331,7 +334,6 @@ template <typename Real>
 bool Triangle2<Real>::Find(const Intersectable<Real, Vec<2, Real> > & intersectable, IntersectionResult<Real>& result)
 {
     const Segment2<Real>* mSegment = dynamic_cast<const Segment2<Real>*> (&intersectable);
-    //TRU Triangle2IntersectionResult<Real>* triResult = dynamic_cast<Triangle2IntersectionResult<Real>*>(&result);
     Triangle2IntersectionResult<Real>* triResult = static_cast<Triangle2IntersectionResult<Real>*>(&result);
 
     if (!triResult)
@@ -363,9 +365,7 @@ bool Triangle2<Real>::Find(const Intersectable<Real, Vec<2, Real> > & intersecta
 
             intr.Find();
 
-            //TRU int mQuantity = intr.GetNumIntersections();
             triResult->mQuantity = intr.GetNumIntersections();
-            //TRU if (mQuantity == 2)
             if (triResult->mQuantity == 2)
             {
                 // Segment intersection.
@@ -376,7 +376,6 @@ bool Triangle2<Real>::Find(const Intersectable<Real, Vec<2, Real> > & intersecta
                 triResult->mPoint[1] = mSegment->Center +
                     intr.GetIntersection(1)*mSegment->Direction;
             }
-            //TRU else if (mQuantity == 1)
             else if (triResult->mQuantity == 1)
             {
                 // Point intersection.
@@ -396,6 +395,7 @@ bool Triangle2<Real>::Find(const Intersectable<Real, Vec<2, Real> > & intersecta
 
     const Triangle2<Real>* mTriangle = dynamic_cast<const Triangle2<Real>*>(&intersectable);
 
+    // TODO: Triangle2/Triangle2 intersection
     if (mTriangle)
     {
 
@@ -679,7 +679,7 @@ void Triangle2<Real>::ComputeThree (Configuration& cfg,
 
 //----------------------------------------------------------------------------
 template <typename Real>
-bool Triangle2<Real>::NoIntersect (
+bool Triangle2<Real>::NoIntersect(
     const Configuration& cfg0, const Configuration& cfg1, Real tmax,
     Real speed, int& side, Configuration& tcfg0, Configuration& tcfg1,
     Real& tfirst, Real& tlast)
@@ -806,7 +806,7 @@ bool Triangle2<Real>::NoIntersect (
 
 //----------------------------------------------------------------------------
 template <typename Real>
-void Triangle2<Real>::GetIntersection (
+void Triangle2<Real>::GetIntersection(
     const Configuration& cfg0, const Configuration& cfg1, int side,
     const Vec<2,Real> V0[3], const Vec<2,Real> V1[3], int& quantity,
     Vec<2,Real> vertex[6])

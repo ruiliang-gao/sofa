@@ -10,43 +10,19 @@
 
 using namespace Zyklio::Pipeline;
 
-SOFA_DECL_CLASS(TruDefaultPipeline)
-int ZyDefaultPipelineClass = sofa::core::RegisterObject("TruPhysics DefaultPipeline alternative")
+SOFA_DECL_CLASS(ZyDefaultPipeline)
+int ZyDefaultPipelineClass = sofa::core::RegisterObject("Zykl.io DefaultPipeline alternative")
 .add< ZyDefaultPipeline >()
 ;
 
-/*
-template <class NodeType>
-TruPhysicsNodeSearchVisitor<NodeType>::TruPhysicsNodeSearchVisitor(const sofa::core::ExecParams* params) : TruPhysicsVisitor(params)
-{
-
-}
-
-template <class NodeType>
-void TruPhysicsNodeSearchVisitor<NodeType>::doFwd(sofa::simulation::Node* node)
-{
-	std::cout << "  node " << node->getName() << " of type " << node->getTypeName() << ", className = " << node->getClassName() << std::endl;
-	BaseObject* baseObject = dynamic_cast<BaseObject*>(node);
-	std::cout << "  BaseObject " << baseObject->getName() << " of type " << baseObject->getTypeName() << ", className = " << baseObject->getClassName() << std::endl;
-
-	NodeType* nodeObject = dynamic_cast<NodeType*>(baseObject);
-	std::cout << "  NodeType " << nodeObject->getName() << " of type " << nodeObject->getTypeName() << ", className = " << nodeObject->getClassName() << std::endl;
-
-	if (nodeObject)
-	{
-		m_foundObjects.push_back(nodeObject);
-	}
-}
-*/
-
 ZyDefaultPipeline::ZyDefaultPipeline() : sofa::core::collision::Pipeline(), m_operationMode(PIPELINE_MODE_DEFAULT)
 {
-	std::cout << "TruDefaultPipeline::TruDefaultPipeline()" << std::endl;
+    msg_info("ZyDefaultPipeline") << "ZyDefaultPipeline::ZyDefaultPipeline()";
 }
 
 ZyDefaultPipeline::~ZyDefaultPipeline()
 {
-	std::cout << "TruDefaultPipeline::~TruDefaultPipeline()" << std::endl;
+    msg_info("ZyDefaultPipeline") << "ZyDefaultPipeline::~ZyDefaultPipeline()";
 }
 
 void ZyDefaultPipeline::reset()
@@ -66,7 +42,7 @@ void ZyDefaultPipeline::reset()
 
 void ZyDefaultPipeline::bwdInit()
 {
-    std::cout << "ZyPipeline::bwdInit()" << std::endl;
+    msg_info("ZyDefaultPipeline") << "ZyPipeline::bwdInit()";
 	sofa::simulation::Node::SPtr root = sofa::simulation::getSimulation()->getCurrentRootNode();
 	if (root)
 	{
@@ -76,19 +52,19 @@ void ZyDefaultPipeline::bwdInit()
         sofa::core::objectmodel::BaseContext::GetObjectsCallBackT<ZyPipeline, std::vector<ZyPipeline* > > tp_cb(&m_zyPipelines);
         getContext()->getObjects(sofa::core::objectmodel::TClassInfo<sofa::component::collision::ZyPipeline>::get(), tp_cb, sofa::core::objectmodel::TagSet(), sofa::core::objectmodel::BaseContext::SearchRoot);
 
-		std::cout << " DefaultPipeline instances (visitor search): " << m_default_pipelines.size() << std::endl;
-        std::cout << " ZyPipeline     instances (visitor search): " << m_zyPipelines.size() << std::endl;
+        msg_info("ZyDefaultPipeline") << " DefaultPipeline instances (visitor search): " << m_default_pipelines.size();
+        msg_info("ZyDefaultPipeline") << " ZyPipeline     instances (visitor search): " << m_zyPipelines.size();
 		
         if (m_zyPipelines.size() > 0)
 		{
             if (m_zyPipelines.size() == 1)
 			{
-                std::cout << " One ZyPipeline instance detected; using multi-threaded ZyPipeline instance." << std::endl;
+                msg_info("ZyDefaultPipeline") << " One ZyPipeline instance detected; using multi-threaded ZyPipeline instance.";
 				m_operationMode = PIPELINE_MODE_MULTI_THREADED_TASKS;
 			}
 			else
 			{
-                std::cout << " More than one ZyPipeline in scene graph. Should not happen! Assuming first found ZyPipeline instance works." << std::endl;
+                msg_info("ZyDefaultPipeline") << " More than one ZyPipeline in scene graph. Should not happen! Assuming first found ZyPipeline instance works.";
 				m_operationMode = PIPELINE_MODE_MULTI_THREADED_TASKS;
 			}
 		}
@@ -96,17 +72,17 @@ void ZyDefaultPipeline::bwdInit()
 		{
 			if (m_default_pipelines.size() == 0)
 			{
-                std::cout << " Neither DefaultPipeline nor ZyPipeline instances found in scene graph: Set PIPELINE_MODE_INVALID" << std::endl;
+                msg_info("ZyDefaultPipeline") << " Neither DefaultPipeline nor ZyPipeline instances found in scene graph: Set PIPELINE_MODE_INVALID";
 				m_operationMode = PIPELINE_MODE_INVALID;
 			}
 			else if (m_default_pipelines.size() == 1)
 			{
-				std::cout << " One DefaultPipeline instance detected; using single-threaded DefaultPipeline instance." << std::endl;
+                msg_info("ZyDefaultPipeline") << " One DefaultPipeline instance detected; using single-threaded DefaultPipeline instance.";
 				m_operationMode = PIPELINE_MODE_SINGLE_THREADED;
 			}
 			else
 			{
-				std::cout << " More than one DefaultPipeline in scene graph. Should not happen! Assuming first found DefaultPipeline instance works." << std::endl;
+                msg_info("ZyDefaultPipeline") << " More than one DefaultPipeline in scene graph. Should not happen! Assuming first found DefaultPipeline instance works.";
 				m_operationMode = PIPELINE_MODE_SINGLE_THREADED;
 			}
 		}
@@ -115,6 +91,8 @@ void ZyDefaultPipeline::bwdInit()
 
 void ZyDefaultPipeline::computeCollisionReset()
 {
+    msg_info("ZyDefaultPipeline") << "computeCollisionReset()";
+
 	if (m_operationMode == PIPELINE_MODE_INVALID)
 		return;
 
@@ -130,6 +108,8 @@ void ZyDefaultPipeline::computeCollisionReset()
 
 void ZyDefaultPipeline::computeCollisionDetection()
 {
+    msg_info("ZyDefaultPipeline") << "computeCollisionDetection()";
+
 	if (m_operationMode == PIPELINE_MODE_INVALID)
 		return;
 
@@ -145,6 +125,8 @@ void ZyDefaultPipeline::computeCollisionDetection()
 
 void ZyDefaultPipeline::computeCollisionResponse()
 {
+    msg_info("ZyDefaultPipeline") << "computeCollisionResponse()";
+
 	if (m_operationMode == PIPELINE_MODE_INVALID)
 		return;
 
@@ -172,6 +154,8 @@ std::set< std::string > ZyDefaultPipeline::getResponseList() const
 
 void ZyDefaultPipeline::doCollisionReset()
 {
+    msg_info("ZyDefaultPipeline") << "doCollisionReset()";
+
 	if (m_operationMode == PIPELINE_MODE_INVALID)
 		return;
 
@@ -187,6 +171,8 @@ void ZyDefaultPipeline::doCollisionReset()
 
 void ZyDefaultPipeline::doCollisionDetection(const sofa::helper::vector<sofa::core::CollisionModel*>& collisionModels)
 {
+    msg_info("ZyDefaultPipeline") << "doCollisionDetection()";
+
 	if (m_operationMode == PIPELINE_MODE_INVALID)
 		return;
 
@@ -202,6 +188,8 @@ void ZyDefaultPipeline::doCollisionDetection(const sofa::helper::vector<sofa::co
 
 void ZyDefaultPipeline::doCollisionResponse()
 {
+    msg_info("ZyDefaultPipeline") << "doCollisionResponse()";
+
 	if (m_operationMode == PIPELINE_MODE_INVALID)
 		return;
 

@@ -19,20 +19,24 @@ namespace sofa
         {
             class PBDLineModel: public sofa::core::objectmodel::BaseObject
             {
-                struct OrientedEdge
-                {
-                    OrientedEdge(){}
-                    OrientedEdge(unsigned int p0, unsigned int p1, unsigned int q0)
-                    {
-                        m_vert[0] = p0;
-                        m_vert[1] = p1;
-                        m_quat = q0;
-                    }
-                    unsigned int m_vert[2];
-                    unsigned int m_quat;
-                };
-
                 public:
+                    struct OrientedEdge
+                    {
+                        OrientedEdge(): m_quat(0)
+                        {
+                            m_vert[0] = 0;
+                            m_vert[1] = 0;
+                        }
+                        OrientedEdge(unsigned int p0, unsigned int p1, unsigned int q0)
+                        {
+                            m_vert[0] = p0;
+                            m_vert[1] = p1;
+                            m_quat = q0;
+                        }
+                        unsigned int m_vert[2];
+                        unsigned int m_quat;
+                    };
+
                     typedef std::vector<OrientedEdge> Edges;
 
                     PBDLineModel();
@@ -55,6 +59,8 @@ namespace sofa
 
                     unsigned int getIndexOffset() const;
                     unsigned int getIndexOffsetQuaternions() const;
+
+                    unsigned int getNumPoints() const { return m_nPoints; }
 
                     void initMesh(const unsigned int nPoints, const unsigned int nQuaternions, const unsigned int indexOffset, const unsigned int indexOffsetQuaternions, unsigned int* indices, unsigned int* indicesQuaternions);
 

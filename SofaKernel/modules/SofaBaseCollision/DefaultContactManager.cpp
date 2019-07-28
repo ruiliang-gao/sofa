@@ -43,6 +43,7 @@ DefaultContactManager::DefaultContactManager()
     : response(initData(&response, "response", "contact response class"))
     , responseParams(initData(&responseParams, "responseParams", "contact response parameters (syntax: name1=value1&name2=value2&...)"))
 {
+    msg_info("DefaultContactManager") << "Constructor.";
 }
 
 DefaultContactManager::~DefaultContactManager()
@@ -56,7 +57,10 @@ DefaultContactManager::~DefaultContactManager()
 sofa::helper::OptionsGroup DefaultContactManager::initializeResponseOptions(core::collision::Pipeline *pipeline)
 {
     std::set<std::string> listResponse;
-    if (pipeline) listResponse=pipeline->getResponseList();
+    if (pipeline)
+    {
+        listResponse=pipeline->getResponseList();
+    }
     else
     {
         core::collision::Contact::Factory::iterator it;
@@ -75,8 +79,16 @@ void DefaultContactManager::init()
 {
     if (response.getValue().size() == 0)
     {
-        core::collision::Pipeline *pipeline=static_cast<simulation::Node*>(getContext())->collisionPipeline;
+        core::collision::Pipeline *pipeline = static_cast<simulation::Node*>(getContext())->collisionPipeline;
+        msg_info("DefaultContactManager") << "No response options given. Reading from collisionPipeline.";
+
+        msg_info("DefaultContactManager") << "Collision pipeline is of type: " << static_cast<simulation::Node*>(getContext())->collisionPipeline->getTypeName();
+
         response.setValue(initializeResponseOptions(pipeline));
+    }
+    else
+    {
+        msg_info("DefaultContactManager") << "Response options: " << response.getValue().size();
     }
 }
 

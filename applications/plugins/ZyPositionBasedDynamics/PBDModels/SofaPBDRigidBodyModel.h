@@ -12,12 +12,12 @@ namespace sofa
     {
         namespace PBDSimulation
         {
-            class SofaPBDTriangleModelPrivate;
-            class SofaPBDTriangleModel: public SofaPBDModelBase
+            class SofaPBDRigidBodyModelPrivate;
+            class SofaPBDRigidBodyModel: public SofaPBDModelBase
             {
                 public:
-                    SOFA_CLASS(SofaPBDTriangleModel, SofaPBDModelBase);
-                    SofaPBDTriangleModel();
+                    SOFA_CLASS(SofaPBDRigidBodyModel, SofaPBDModelBase);
+                    SofaPBDRigidBodyModel();
 
                     void init();
                     void bwdInit();
@@ -28,10 +28,15 @@ namespace sofa
 
                 protected:
                     void buildModel();
-                    void applyInitialTransform();
+                    void initializeModel();
+
+                    Data<SReal> mass;
+                    Data<SReal> density;
+                    Data<SReal> frictionCoefficient;
+                    Data<sofa::defaulttype::Vec3d> inertiaTensor;
 
                 private:
-                    std::shared_ptr<SofaPBDTriangleModelPrivate> m_d;
+                    std::shared_ptr<SofaPBDRigidBodyModelPrivate> m_d;
             };
         }
     }

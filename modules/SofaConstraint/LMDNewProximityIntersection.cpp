@@ -133,7 +133,7 @@ bool LMDNewProximityIntersection::testIntersection(Point& e1, Point& e2)
 int LMDNewProximityIntersection::computeIntersection(Point& e1, Point& e2, OutputVector* contacts)
 {
     const double alarmDist = getAlarmDistance() + e1.getProximity() + e2.getProximity();
-    std::cout<<"computeIntersection(Point& e1, Point& e2... is called"<<std::endl;
+    msg_info("LMDNewProximityIntersection")<<"computeIntersection(Point& e1, Point& e2... is called";
     int n = doIntersectionPointPoint(alarmDist*alarmDist, e1.p(), e2.p(), contacts
             , (e1.getCollisionModel()->getSize() > e2.getCollisionModel()->getSize()) ? e1.getIndex() : e2.getIndex()
             , e1.getIndex(), e2.getIndex(), *(e1.getCollisionModel()->getFilter())
@@ -163,7 +163,7 @@ int LMDNewProximityIntersection::computeIntersection(Line& e1, Point& e2, Output
 {
     const double alarmDist = getAlarmDistance() + e1.getProximity() + e2.getProximity();
 
-    std::cout<<"computeIntersection(Line& e1, Point& e2... is called"<<std::endl;
+    msg_info("LMDNewProximityIntersection")<<"computeIntersection(Line& e1, Point& e2... is called";
     int id = e2.getIndex();
     int n = doIntersectionLinePoint(alarmDist*alarmDist, e1.p1(), e1.p2(), e2.p(), contacts, id
             , e1.getIndex(), e2.getIndex(), *(e1.getCollisionModel()->getFilter())
@@ -191,7 +191,7 @@ bool LMDNewProximityIntersection::testIntersection(Line&, Line&)
 
 int LMDNewProximityIntersection::computeIntersection(Line& e1, Line& e2, OutputVector* contacts)
 {
-    std::cout<<"computeIntersection(Line& e1, Line& e2... is called"<<std::endl;
+    msg_info("LMDNewProximityIntersection")<<"computeIntersection(Line& e1, Line& e2... is called";
     const double alarmDist = getAlarmDistance() + e1.getProximity() + e2.getProximity();
     const double dist2 = alarmDist*alarmDist;
     const int id = (e1.getCollisionModel()->getSize() > e2.getCollisionModel()->getSize()) ? e1.getIndex() : e2.getIndex();
@@ -237,15 +237,15 @@ int LMDNewProximityIntersection::computeIntersection(Triangle& e1, Point& e2, Ou
         edge[i] = e1.getCollisionModel()->getTopology()->getEdge(edgesInTriangle1[i]);
         if(((int)edge[i][0]==e1.p1Index() && (int)edge[i][1]==e1.p2Index()) || ((int)edge[i][0]==e1.p2Index() && (int)edge[i][1]==e1.p1Index()))
         {
-            E1edge1verif = edgesInTriangle1[i]; /*std::cout<<"- e1 1: "<<i ;*/
+            E1edge1verif = edgesInTriangle1[i]; /*msg_info("LMDNewProximityIntersection")<<"- e1 1: "<<i ;*/
         }
         if(((int)edge[i][0]==e1.p2Index() && (int)edge[i][1]==e1.p3Index()) || ((int)edge[i][0]==e1.p3Index() && (int)edge[i][1]==e1.p2Index()))
         {
-            E1edge2verif = edgesInTriangle1[i]; /*std::cout<<"- e1 2: "<<i ;*/
+            E1edge2verif = edgesInTriangle1[i]; /*msg_info("LMDNewProximityIntersection")<<"- e1 2: "<<i ;*/
         }
         if(((int)edge[i][0]==e1.p1Index() && (int)edge[i][1]==e1.p3Index()) || ((int)edge[i][0]==e1.p3Index() && (int)edge[i][1]==e1.p1Index()))
         {
-            E1edge3verif = edgesInTriangle1[i]; /*std::cout<<"- e1 3: "<<i ;*/
+            E1edge3verif = edgesInTriangle1[i]; /*msg_info("LMDNewProximityIntersection")<<"- e1 3: "<<i ;*/
         }
     }
 
@@ -253,7 +253,7 @@ int LMDNewProximityIntersection::computeIntersection(Triangle& e1, Point& e2, Ou
     e1_edgesIndex[0]=E1edge1verif; e1_edgesIndex[1]=E1edge2verif; e1_edgesIndex[2]=E1edge3verif;
 
 
-    std::cout<<"computeIntersection(Triangle& e1, Point& e2... is called"<<std::endl;
+    msg_info("LMDNewProximityIntersection")<<"computeIntersection(Triangle& e1, Point& e2... is called";
     const double alarmDist = getAlarmDistance() + e1.getProximity() + e2.getProximity();
     const double dist2 = alarmDist*alarmDist;
 
@@ -298,15 +298,15 @@ int LMDNewProximityIntersection::computeIntersection(Triangle& e1, Line& e2, Out
         edge[i] = e1.getCollisionModel()->getTopology()->getEdge(edgesInTriangle1[i]);
         if(((int)edge[i][0]==e1.p1Index() && (int)edge[i][1]==e1.p2Index()) || ((int)edge[i][0]==e1.p2Index() && (int)edge[i][1]==e1.p1Index()))
         {
-            E1edge1verif = edgesInTriangle1[i]; /*std::cout<<"- e1 1: "<<i ;*/
+            E1edge1verif = edgesInTriangle1[i]; /*msg_info("LMDNewProximityIntersection")<<"- e1 1: "<<i ;*/
         }
         if(((int)edge[i][0]==e1.p2Index() && (int)edge[i][1]==e1.p3Index()) || ((int)edge[i][0]==e1.p3Index() && (int)edge[i][1]==e1.p2Index()))
         {
-            E1edge2verif = edgesInTriangle1[i]; /*std::cout<<"- e1 2: "<<i ;*/
+            E1edge2verif = edgesInTriangle1[i]; /*msg_info("LMDNewProximityIntersection")<<"- e1 2: "<<i ;*/
         }
         if(((int)edge[i][0]==e1.p1Index() &&(int) edge[i][1]==e1.p3Index()) || ((int)edge[i][0]==e1.p3Index() && (int)edge[i][1]==e1.p1Index()))
         {
-            E1edge3verif = edgesInTriangle1[i]; /*std::cout<<"- e1 3: "<<i ;*/
+            E1edge3verif = edgesInTriangle1[i]; /*msg_info("LMDNewProximityIntersection")<<"- e1 3: "<<i ;*/
         }
     }
 
@@ -315,7 +315,7 @@ int LMDNewProximityIntersection::computeIntersection(Triangle& e1, Line& e2, Out
 
 
 
-    std::cout<<"computeIntersection(Triangle& e1, Line& e2... is called"<<std::endl;
+    msg_info("LMDNewProximityIntersection")<<"computeIntersection(Triangle& e1, Line& e2... is called";
     const double alarmDist = getAlarmDistance() + e1.getProximity() + e2.getProximity();
     const double dist2 = alarmDist*alarmDist;
     const Vector3& p1 = e1.p1();
@@ -421,29 +421,29 @@ int LMDNewProximityIntersection::computeIntersection(Triangle& e1, Triangle& e2,
         edge[i] = e1.getCollisionModel()->getTopology()->getEdge(edgesInTriangle1[i]);
         if(((int)edge[i][0]==e1.p1Index() && (int)edge[i][1]==e1.p2Index()) || ((int)edge[i][0]==e1.p2Index() && (int)edge[i][1]==e1.p1Index()))
         {
-            E1edge1verif = edgesInTriangle1[i]; /*std::cout<<"- e1 1: "<<i ;*/
+            E1edge1verif = edgesInTriangle1[i]; /*msg_info("LMDNewProximityIntersection")<<"- e1 1: "<<i ;*/
         }
         if(((int)edge[i][0]==e1.p2Index() && (int)edge[i][1]==e1.p3Index()) || ((int)edge[i][0]==e1.p3Index() && (int)edge[i][1]==e1.p2Index()))
         {
-            E1edge2verif = edgesInTriangle1[i]; /*std::cout<<"- e1 2: "<<i ;*/
+            E1edge2verif = edgesInTriangle1[i]; /*msg_info("LMDNewProximityIntersection")<<"- e1 2: "<<i ;*/
         }
         if(((int)edge[i][0]==e1.p1Index() && (int)edge[i][1]==e1.p3Index()) || ((int)edge[i][0]==e1.p3Index() && (int)edge[i][1]==e1.p1Index()))
         {
-            E1edge3verif = edgesInTriangle1[i]; /*std::cout<<"- e1 3: "<<i ;*/
+            E1edge3verif = edgesInTriangle1[i]; /*msg_info("LMDNewProximityIntersection")<<"- e1 3: "<<i ;*/
         }
         // Verify for E2: convention: Edge1 = P1 P2    Edge2 = P2 P3    Edge3 = P3 P1
         edge[i] = e2.getCollisionModel()->getTopology()->getEdge(edgesInTriangle2[i]);
         if(((int)edge[i][0]==e2.p1Index() && (int)edge[i][1]==e2.p2Index()) || ((int)edge[i][0]==e2.p2Index() && (int)edge[i][1]==e2.p1Index()))
         {
-            E2edge1verif = edgesInTriangle2[i];/*std::cout<<"- e2 1: "<<i ;*/
+            E2edge1verif = edgesInTriangle2[i];/*msg_info("LMDNewProximityIntersection")<<"- e2 1: "<<i ;*/
         }
         if(((int)edge[i][0]==e2.p2Index() && (int)edge[i][1]==e2.p3Index()) || ((int)edge[i][0]==e2.p3Index() && (int)edge[i][1]==e2.p2Index()))
         {
-            E2edge2verif = edgesInTriangle2[i];/*std::cout<<"- e2 2: "<<i ;*/
+            E2edge2verif = edgesInTriangle2[i];/*msg_info("LMDNewProximityIntersection")<<"- e2 2: "<<i ;*/
         }
         if(((int)edge[i][0]==e2.p1Index() && (int)edge[i][1]==e2.p3Index()) || ((int)edge[i][0]==e2.p3Index() && (int)edge[i][1]==e2.p1Index()))
         {
-            E2edge3verif = edgesInTriangle2[i]; /*std::cout<<"- e2 3: "<<i ;*/
+            E2edge3verif = edgesInTriangle2[i]; /*msg_info("LMDNewProximityIntersection")<<"- e2 3: "<<i ;*/
         }
     }
 

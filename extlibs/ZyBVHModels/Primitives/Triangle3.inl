@@ -33,7 +33,7 @@ Triangle3<Real>::Triangle3 (const Vec<3,Real>& v0,
 }
 //----------------------------------------------------------------------------
 template <typename Real>
-Triangle3<Real>::Triangle3 (const Vec<3,Real> vertex[])
+Triangle3<Real>::Triangle3(const Vec<3,Real> vertex[])
 {
     for (int i = 0; i < 3; ++i)
     {
@@ -64,7 +64,7 @@ void Triangle3<Real>::draw()
 
 //----------------------------------------------------------------------------
 template <typename Real>
-Real Triangle3<Real>::DistanceTo (const Vec<3,Real>& q) const
+Real Triangle3<Real>::DistanceTo(const Vec<3,Real>& q) const
 {
     Vec<3,Real> diff = V[0] - q;
     Vec<3,Real> edge0 = V[1] - V[0];
@@ -387,9 +387,7 @@ bool Triangle3<Real>::Test(const Intersectable<Real, Vec<3,Real> >& intersectabl
 template <typename Real>
 bool Triangle3<Real>::Find(const Intersectable<Real, Vec<3,Real> >& intersectable, IntersectionResult<Real>& result)
 {
-    //TRU const Triangle3<Real>* tri2 = dynamic_cast<const Triangle3<Real>*>(intersectable);
     const Triangle3<Real>* tri2 = &(dynamic_cast<const Triangle3<Real>&>(intersectable));
-    //TRU Triangle3IntersectionResult<Real>* triRes = dynamic_cast<Triangle3IntersectionResult<Real>*>(&result);
     Triangle3IntersectionResult<Real>* triRes = static_cast<Triangle3IntersectionResult<Real>*>(&result);
 
     if (!tri2 || !triRes)
@@ -419,7 +417,6 @@ bool Triangle3<Real>::Find(const Intersectable<Real, Vec<3,Real> >& intersectabl
         // Triangle1 is contained by plane0.
         if (triRes->mReportCoplanarIntersections)
         {
-            //TRU return GetCoplanarIntersection(plane0, *this,                *tri2);
             return GetCoplanarIntersection(plane0, *this,
                 *tri2, *triRes);
         }
@@ -438,7 +435,6 @@ bool Triangle3<Real>::Find(const Intersectable<Real, Vec<3,Real> >& intersectabl
                 {
                     iM = (i + 2) % 3;
                     iP = (i + 1) % 3;
-                    //TRU return IntersectsSegment(plane0, *this, tri2->V[iM], tri2->V[iP]);
                     return IntersectsSegment(plane0, *this, tri2->V[iM], tri2->V[iP], *triRes);
                 }
             }
@@ -450,7 +446,6 @@ bool Triangle3<Real>::Find(const Intersectable<Real, Vec<3,Real> >& intersectabl
             {
                 if (sign1[i] == 0)
                 {
-                    //TRU return ContainsPoint(*this, plane0, tri2->V[i]);
                     return ContainsPoint(*this, plane0, tri2->V[i], *triRes);
                 }
             }
@@ -477,7 +472,6 @@ bool Triangle3<Real>::Find(const Intersectable<Real, Vec<3,Real> >& intersectabl
                 t = dist1[i]/(dist1[i] - dist1[iP]);
                 intr1 = tri2->V[i] + t*(tri2->V[iP] -
                     tri2->V[i]);
-                //TRU return IntersectsSegment(plane0, *this, intr0, intr1);
                 return IntersectsSegment(plane0, *this, intr0, intr1, *triRes);
             }
         }
@@ -493,7 +487,6 @@ bool Triangle3<Real>::Find(const Intersectable<Real, Vec<3,Real> >& intersectabl
             t = dist1[iM]/(dist1[iM] - dist1[iP]);
             intr0 = tri2->V[iM] + t * (tri2->V[iP] -
                 tri2->V[iM]);
-            //TRU return IntersectsSegment(plane0, *this,                tri2->V[i],intr0);
             return IntersectsSegment(plane0, *this,
                 tri2->V[i],intr0, *triRes);
         }
@@ -542,9 +535,6 @@ void Triangle3<Real>::ProjectOntoAxis (
     Configuration& cfg)
 {
     // Find projections of vertices onto potential separating axis.
-    //TRU Real d0 = axis.Dot(triangle.V[0]);
-    //TRU Real d1 = axis.Dot(triangle.V[1]);
-    //TRU Real d2 = axis.Dot(triangle.V[2]);
     Real d0 = axis * triangle.V[0];
     Real d1 = axis * triangle.V[1];
     Real d2 = axis * triangle.V[2];
@@ -904,7 +894,7 @@ void Triangle3<Real>::GetInterval (
 
 //----------------------------------------------------------------------------
 template <typename Real>
-bool Triangle3<Real>::ContainsPoint (
+bool Triangle3<Real>::ContainsPoint(
     const Triangle3<Real>& triangle, const Plane3<Real>& plane,
     const Vec<3,Real>& point, Triangle3IntersectionResult<Real>& result)
 {
@@ -927,7 +917,6 @@ bool Triangle3<Real>::ContainsPoint (
     Vec<3,Real> V2mV0 = triangle.V[2] - triangle.V[0];
 
     // The planar representation of P-V0.
-    //TRU Vec<2,Real> ProjP(U0.Dot(PmV0), U1.Dot(PmV0));
     Vec<2,Real> ProjP((U0 * PmV0), (U1 * PmV0));
 
     // The planar representation of the triangle <V0-V0,V1-V0,V2-V0>.
@@ -943,7 +932,6 @@ bool Triangle3<Real>::ContainsPoint (
     if (Query2<Real>(3,ProjV).ToTriangle(ProjP,0,1,2) <= 0)
     {
         // Report the point of intersection to the caller.
-        //TRU result.intersectionType = IT_POINT;
         result.SetIntersectionType(IT_POINT);
         result.mQuantity = 1;
         result.mPoint[0] = point;
@@ -966,8 +954,6 @@ bool Triangle3<Real>::IntersectsSegment(
     // Project the triangle and segment onto the coordinate plane most
     // aligned with the plane normal.
     int maxNormal = 0;
-    //TRU Real fmax = MathUtils<Real>::FAbs(plane.Normal.X());
-    //TRU Real absMax = MathUtils<Real>::FAbs(plane.Normal.Y());
     Real fmax = MathUtils<Real>::FAbs(plane.Normal.x());
     Real absMax = MathUtils<Real>::FAbs(plane.Normal.y());
     if (absMax > fmax)
@@ -975,7 +961,6 @@ bool Triangle3<Real>::IntersectsSegment(
         maxNormal = 1;
         fmax = absMax;
     }
-    //TRU absMax = MathUtils<Real>::FAbs(plane.Normal.Z());
     absMax = MathUtils<Real>::FAbs(plane.Normal.z());
     if (absMax > fmax)
     {
@@ -991,8 +976,6 @@ bool Triangle3<Real>::IntersectsSegment(
         // Project onto yz-plane.
         for (i = 0; i < 3; ++i)
         {
-            //TRU projTri.V[i].z() = triangle.V[i].y();
-            //TRU projTri.V[i].y() = triangle.V[i].z();
             projTri.V[i].x() = triangle.V[i].y();
             projTri.V[i].y() = triangle.V[i].z();
             projEnd0.x() = end0.y();
@@ -1019,12 +1002,6 @@ bool Triangle3<Real>::IntersectsSegment(
         // Project onto xy-plane.
         for (i = 0; i < 3; ++i)
         {
-            //TRU projTri.V[i].x() = triangle.V[i].X();
-            //TRU projTri.V[i].y() = triangle.V[i].Y();
-            //TRU projEnd0.x() = end0.X();
-            //TRU projEnd0.y() = end0.Y();
-            //TRU projEnd1.x() = end1.X();
-            //TRU projEnd1.y() = end1.Y();
             projTri.V[i].x() = triangle.V[i].x();
             projTri.V[i].y() = triangle.V[i].y();
             projEnd0.x() = end0.x();
@@ -1047,7 +1024,6 @@ bool Triangle3<Real>::IntersectsSegment(
     Vec<2,Real> intr[2];
     if (tri2Res.GetIntersectionType() == IT_SEGMENT)
     {
-        //TRU result.intersectionType = IT_SEGMENT;
         result.SetIntersectionType(IT_SEGMENT);
         result.mQuantity = 2;
         intr[0] = tri2Res.mPoint[0];
@@ -1057,7 +1033,6 @@ bool Triangle3<Real>::IntersectsSegment(
     {
         //assertion(calc.GetIntersectionType() == IT_POINT,
         //    "Intersection must be a point\n");
-        //TRU result.intersectionType = IT_POINT;
         result.SetIntersectionType(IT_POINT);
         result.mQuantity = 1;
         intr[0] = tri2Res.mPoint[0];
@@ -1081,11 +1056,6 @@ bool Triangle3<Real>::IntersectsSegment(
         Real invNY = ((Real)1)/plane.Normal.y();
         for (i = 0; i < result.mQuantity; ++i)
         {
-            //TRU result.mPoint[i].x() = intr[i].x();
-            //TRU result.mPoint[i].x() = intr[i].y();
-            //TRU result.mPoint[i].x() = invNY*(plane.Constant -
-            //TRU     plane.Normal.x() * result.mPoint[i].x() -
-            //TRU     plane.Normal.x() * result.mPoint[i].z());
             result.mPoint[i].x() = intr[i].x();
             result.mPoint[i].z() = intr[i].y();
             result.mPoint[i].y() = invNY*(plane.Constant -
@@ -1172,7 +1142,6 @@ bool Triangle3<Real>::GetCoplanarIntersection (
     Vec<2,Real> save;
     Vec<2,Real> edge0 = projTri0.V[1] - projTri0.V[0];
     Vec<2,Real> edge1 = projTri0.V[2] - projTri0.V[0];
-    //TRU if (edge0.DotPerp(edge1) < (Real)0)
     if ((edge0[0]*edge1[1] - edge0[1]*edge1[0]) < (Real)0)
     {
         // Triangle is clockwise, reorder it.
@@ -1216,7 +1185,6 @@ bool Triangle3<Real>::GetCoplanarIntersection (
     }
     else if (maxNormal == 1)
     {
-        //TRU Real invNY = ((Real)1)/plane.Normal.Y();
         Real invNY = ((Real)1)/plane.Normal.y();
         for (i = 0; i < mQuantity; i++)
         {
@@ -1229,7 +1197,6 @@ bool Triangle3<Real>::GetCoplanarIntersection (
     }
     else
     {
-        //TRU Real invNZ = ((Real)1)/plane.Normal.Z();
         Real invNZ = ((Real)1)/plane.Normal.z();
         for (i = 0; i < mQuantity; i++)
         {
@@ -1241,7 +1208,6 @@ bool Triangle3<Real>::GetCoplanarIntersection (
         }
     }
 
-    //TRU result.intersectionType = IT_PLANE;
     result.SetIntersectionType(IT_PLANE);
     return true;
 }
@@ -1251,7 +1217,6 @@ bool Triangle3<Real>::TestOverlap (Real tmax, Real speed,
     Real umin, Real umax, Real vmin, Real vmax, Real& tfirst, Real& tlast)
 {
     // Constant velocity separating axis test.
-
     Real t;
 
     if (vmax < umin) // V on left of U
@@ -1370,7 +1335,6 @@ bool Triangle3<Real>::TestOverlap (const Intersectable<Real, Vec<3,Real> >& inte
     Real min0, max0, min1, max1;
     ProjectOntoAxis(*this, axis, min0, max0);
     ProjectOntoAxis(*mTriangle1, axis, min1, max1);
-    //TRU Real speed = velocity.Dot(axis);
     Real speed = velocity * axis;
     return TestOverlap(tmax, speed, min0, max0, min1, max1, tfirst, tlast);
 }
@@ -1386,7 +1350,6 @@ void Triangle3<Real>::FindContactSet (
         if (cfg0.mMap == M21 || cfg0.mMap == M111)
         {
             // tri0 touching tri1 at a single point
-            //TRU result.intersectionType = IT_POINT;
             result.SetIntersectionType(IT_POINT);
             result.mQuantity = 1;
             result.mPoint[0] = tri0.V[cfg0.mIndex[2]];
@@ -1394,7 +1357,6 @@ void Triangle3<Real>::FindContactSet (
         else if (cfg1.mMap == M12 || cfg1.mMap == M111)
         {
             // tri1 touching tri0 at a single point
-            //TRU result.intersectionType = IT_POINT;
             result.SetIntersectionType(IT_POINT);
             result.mQuantity = 1;
             result.mPoint[0] = tri1.V[cfg1.mIndex[0]];
@@ -1404,7 +1366,6 @@ void Triangle3<Real>::FindContactSet (
             if (cfg1.mMap == M21)
             {
                 // edge0-edge1 intersection
-                //TRU GetEdgeEdgeIntersection(                    tri0.V[cfg0.mIndex[1]], tri0.V[cfg0.mIndex[2]],                    tri1.V[cfg1.mIndex[0]], tri1.V[cfg1.mIndex[1]]);
                 GetEdgeEdgeIntersection(
                     tri0.V[cfg0.mIndex[1]], tri0.V[cfg0.mIndex[2]],
                     tri1.V[cfg1.mIndex[0]], tri1.V[cfg1.mIndex[1]],
@@ -1413,7 +1374,6 @@ void Triangle3<Real>::FindContactSet (
             else // cfg1.mMap == m3
             {
                 // uedge-vface intersection
-                //TRU GetEdgeFaceIntersection(                    tri0.V[cfg0.mIndex[1]], tri0.V[cfg0.mIndex[2]],                    tri1);
                 GetEdgeFaceIntersection(
                     tri0.V[cfg0.mIndex[1]], tri0.V[cfg0.mIndex[2]],
                     tri1, result);
@@ -1424,7 +1384,6 @@ void Triangle3<Real>::FindContactSet (
             if (cfg1.mMap == M21)
             {
                 // face0-edge1 intersection
-                //TRU GetEdgeFaceIntersection(                    tri1.V[cfg1.mIndex[0]], tri1.V[cfg1.mIndex[1]],                    tri0);
                 GetEdgeFaceIntersection(
                     tri1.V[cfg1.mIndex[0]], tri1.V[cfg1.mIndex[1]],
                     tri0, result);
@@ -1433,7 +1392,6 @@ void Triangle3<Real>::FindContactSet (
             {
                 // face0-face1 intersection
                 Plane3<Real> plane0(tri0.V[0], tri0.V[1], tri0.V[2]);
-                //TRU GetCoplanarIntersection(plane0, tri0, tri1);
                 GetCoplanarIntersection(plane0, tri0, tri1, result);
             }
         }
@@ -1443,7 +1401,6 @@ void Triangle3<Real>::FindContactSet (
         if (cfg1.mMap == M21 || cfg1.mMap == M111)
         {
             // tri1 touching tri0 at a single point
-            //TRU result.intersectionType = IT_POINT;
             result.SetIntersectionType(IT_POINT);
             result.mQuantity = 1;
             result.mPoint[0] = tri1.V[cfg1.mIndex[2]];
@@ -1451,7 +1408,6 @@ void Triangle3<Real>::FindContactSet (
         else if (cfg0.mMap == M12 || cfg0.mMap == M111)
         {
             // tri0 touching tri1 at a single point
-            //TRU result.intersectionType = IT_POINT;
             result.SetIntersectionType(IT_POINT);
             result.mQuantity = 1;
             result.mPoint[0] = tri0.V[cfg0.mIndex[0]];
@@ -1461,7 +1417,6 @@ void Triangle3<Real>::FindContactSet (
             if (cfg0.mMap == M21)
             {
                 // edge0-edge1 intersection
-                //TRU GetEdgeEdgeIntersection(                    tri0.V[cfg0.mIndex[0]], tri0.V[cfg0.mIndex[1]],                    tri1.V[cfg1.mIndex[1]], tri1.V[cfg1.mIndex[2]]);
                 GetEdgeEdgeIntersection(
                     tri0.V[cfg0.mIndex[0]], tri0.V[cfg0.mIndex[1]],
                     tri1.V[cfg1.mIndex[1]], tri1.V[cfg1.mIndex[2]], result);
@@ -1469,7 +1424,6 @@ void Triangle3<Real>::FindContactSet (
             else // cfg0.mMap == M3
             {
                 // edge1-face0 intersection
-                //TRU GetEdgeFaceIntersection(                    tri1.V[cfg1.mIndex[1]], tri1.V[cfg1.mIndex[2]],                    tri0);
                 GetEdgeFaceIntersection(
                     tri1.V[cfg1.mIndex[1]], tri1.V[cfg1.mIndex[2]],
                     tri0, result);
@@ -1480,7 +1434,6 @@ void Triangle3<Real>::FindContactSet (
             if (cfg0.mMap == M21)
             {
                 // edge0-face1 intersection
-                //TRU GetEdgeFaceIntersection(                    tri0.V[cfg0.mIndex[0]], tri0.V[cfg0.mIndex[1]],                    tri1);
                 GetEdgeFaceIntersection(
                     tri0.V[cfg0.mIndex[0]], tri0.V[cfg0.mIndex[1]],
                     tri1, result);
@@ -1499,13 +1452,11 @@ void Triangle3<Real>::FindContactSet (
         // Triangles are already intersecting tranversely.
         //IntrTriangle3Triangle3<Real> calc(tri0, tri1);
         Triangle3IntersectionResult<Real> tri3Res;
-        //TRU bool int_result = tri0.Find(tri1, tri3Res);
         bool int_result = const_cast<Triangle3<Real>&>(tri0).Find(const_cast<Triangle3<Real>&>(tri1), tri3Res);
 
         // assertion(result, "Intersection must exist\n");
         // WM5_UNUSED(result);
         result.mQuantity = tri3Res.mQuantity;
-        //TRU result.intersectionType = tri3Res.GetIntersectionType();
         result.SetIntersectionType(tri3Res.GetIntersectionType());
         for (int i = 0; i < result.mQuantity; ++i)
         {
@@ -1580,16 +1531,11 @@ void Triangle3<Real>::GetEdgeFaceIntersection (
 
     // Compute the plane coordinates of the triangle.
     Triangle2<Real> projTri;
-    //TRU projTri.V[0] = Vec<2,Real>::ZERO;
     projTri.V[0] = Vec<2,Real>((Real)0.0,(Real)0.0);
-    //TRU projTri.V[1] = Vec<2,Real>(dir0.Dot(edge0), dir1.Dot(edge0));
-    //TRU projTri.V[2] = Vec<2,Real>(dir0.Dot(edge1), dir1.Dot(edge1));
     projTri.V[1] = Vec<2,Real>((dir0 * edge0), (dir1 * edge0));
     projTri.V[2] = Vec<2,Real>((dir0 * edge1), (dir1 * edge1));
 
     // Compute the intersection.
-    //IntrSegment2Triangle2<Real> calc(projSeg, projTri);
-
     Segment2IntersectionResult<Real> seg2Res;
     if (projSeg.Find(projTri, seg2Res))
     {
@@ -1606,19 +1552,16 @@ void Triangle3<Real>::GetEdgeFaceIntersection (
         // round-off errors have led to a failure to find it.  Use a slower
         // 3D distance calculator for robustness.
         Segment3<Real> seg(U0, U1);
-        //DistSegment3Triangle3<Real> dcalc(seg, tri);
 
         Segment3Triangle3DistanceResult seg3Res;
         // We do not need the distance, but we do need the side effect
         // of locating the closest points.
-        //TRU Real distance = seg.GetDistance(&tri, seg3Res);
         const DistanceComputable<Real, Vec<3,Real> >& tmp = dynamic_cast<const DistanceComputable<Real, Vec<3,Real> >&>(tri);
         if (&tmp)
         {
             Real distance = seg.GetDistance(tmp, seg3Res);
         }
 
-        //WM5_UNUSED(distance);
         Real parameter = seg3Res.mSegmentParameter;
         result.mQuantity = 1;
         result.mPoint[0] = seg.Center + parameter * seg.Direction;

@@ -30,6 +30,7 @@ namespace sofa
 
                 public:
                     Mesh &getMesh();
+                    const Mesh& getMesh() const;
                     PBDVertexData &getVertexData();
                     const PBDVertexData &getVertexData() const;
                     PBDVertexData &getVertexDataLocal();

@@ -28,6 +28,7 @@ namespace sofa
 
                     virtual void init();
                     virtual void reset();
+                    virtual void cleanup();
 
                     virtual void step(PBDSimulationModel &model);
 

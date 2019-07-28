@@ -5,16 +5,15 @@
     <!-- animation loop -->
     <SofaPBDAnimationLoop/>
     
-    <!-- Torus rigid body model -->
-    <Node name="PBDTorusRigid">
-        <MeshObjLoader name="meshLoader" filename="mesh/torus2_for_collision.obj" />
-        <SofaPBDTriangleModel dx="14.4679" dy="0.0000" dz="4.7604" rx="25.0000" ry="-35.0000" rz="0.0000" src="@meshLoader"/>
-        <UniformMass  name="TorusMass" vertexMass="1" />
-    </Node>
+    <!-- Line models -->
+    <Node name="PBDThreadModel1">
+        <MeshObjLoader name="meshLoader1" filename="mesh/line_vertices.obj" />
+        <SofaPBDLineModel name="pdbLineModel1" dx="0.0000" dy="-1.0000" dz="0.0" rx="0.0000" ry="30.0000" rz="0.0000" src="@meshLoader1"/>
+    </Node> 
     
-    <!-- Line model -->
-    <Node name="PBDThreadLineModel">
-        <SofaPBDLineModel name="lineVertexLoader" filename="mesh/line_vertices.obj"/>
+    <Node name="PBDThreadModel2">
+        <MeshObjLoader name="meshLoader2" filename="mesh/line_vertices2.obj" />
+        <SofaPBDLineModel name="pdbLineModel2" dx="0.0000" dy="1.0000" dz="0.0" rx="0.0000" ry="0.0000" rz="0.0000" src="@meshLoader2"/>
     </Node>
     
 </Node>

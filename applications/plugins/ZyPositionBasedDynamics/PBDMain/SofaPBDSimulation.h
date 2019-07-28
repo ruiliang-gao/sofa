@@ -8,8 +8,8 @@
 #include "PBDModels/PBDSimulationModel.h"
 #include "SofaPBDTimeStep.h"
 
-#include "PBDIntegration/GeometryConversion.h"
-#include "PBDIntegration/MechObjConversion.h"
+// #include "PBDIntegration/GeometryConversion.h"
+// #include "PBDIntegration/MechObjConversion.h"
 
 #include <sofa/core/topology/BaseMeshTopology.h>
 #include <SofaBaseMechanics/MechanicalObject.h>
@@ -65,8 +65,9 @@ namespace sofa
 
                     virtual void initParameters();
 
-                    std::shared_ptr<GeometryConversion> m_geometryConverter;
-                    std::shared_ptr<MechObjConversion> m_mechObjConverter;
+                    // TODO: Decide if centralizing conversion is better or not
+                    /*std::shared_ptr<GeometryConversion> m_geometryConverter;
+                    std::shared_ptr<MechObjConversion> m_mechObjConverter;*/
 
                 private:
                     static SofaPBDSimulation *current;

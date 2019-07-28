@@ -14,7 +14,7 @@ using namespace sofa::component::collision;
 
 SOFA_DECL_CLASS(ZyPipeline)
 
-int ZyPipelineClass = sofa::core::RegisterObject("TruPhysics pipeline wrapper")
+int ZyPipelineClass = sofa::core::RegisterObject("Zykl.io collision pipeline wrapper")
 .add< ZyPipeline >()
 ;
 
@@ -44,33 +44,33 @@ void ZyPipeline::reset()
 void ZyPipeline::init()
 {
 	PipelineImpl::init();
-	std::cout << "--- PipelineImpl members after init ---" << std::endl;
-	std::cout << " narrowPhaseDetection: memory location = " << this->narrowPhaseDetection << std::endl;
+    msg_info("ZyBasePipeline") << "--- PipelineImpl members after init ---";
+    msg_info("ZyBasePipeline") << " narrowPhaseDetection: memory location = " << this->narrowPhaseDetection;
 	if (this->narrowPhaseDetection)
-		std::cout << "  named " << this->narrowPhaseDetection->getName() << " of type " << this->narrowPhaseDetection->getTypeName() << std::endl;
+        msg_info("ZyBasePipeline") << "  named " << this->narrowPhaseDetection->getName() << " of type " << this->narrowPhaseDetection->getTypeName();
 
-	std::cout << " broadPhaseDetection: memory location = " << this->broadPhaseDetection << std::endl;
+    msg_info("ZyBasePipeline") << " broadPhaseDetection: memory location = " << this->broadPhaseDetection;
 	if (this->broadPhaseDetection)
-		std::cout << "  named " << this->broadPhaseDetection->getName() << " of type " << this->broadPhaseDetection->getTypeName() << std::endl;
+        msg_info("ZyBasePipeline") << "  named " << this->broadPhaseDetection->getName() << " of type " << this->broadPhaseDetection->getTypeName();
 
-	std::cout << " intersectionMethod: memory location = " << this->intersectionMethod << std::endl;
+    msg_info("ZyBasePipeline") << " intersectionMethod: memory location = " << this->intersectionMethod;
 	if (this->intersectionMethod)
-		std::cout << "  named " << this->intersectionMethod->getName() << " of type " << this->intersectionMethod->getTypeName() << std::endl;
+        msg_info("ZyBasePipeline") << "  named " << this->intersectionMethod->getName() << " of type " << this->intersectionMethod->getTypeName();
 
-	std::cout << " contactManager: memory location = " << this->contactManager << std::endl;
+    msg_info("ZyBasePipeline") << " contactManager: memory location = " << this->contactManager;
 	if (this->contactManager)
-		std::cout << "  named " << this->contactManager->getName() << " of type " << this->contactManager->getTypeName() << std::endl;
+        msg_info("ZyBasePipeline") << "  named " << this->contactManager->getName() << " of type " << this->contactManager->getTypeName();
 
-	std::cout << " groupManager: memory location = " << this->groupManager << std::endl;
+    msg_info("ZyBasePipeline") << " groupManager: memory location = " << this->groupManager;
 	if (this->groupManager)
-		std::cout << "  named " << this->groupManager->getName() << " of type " << this->groupManager->getTypeName() << std::endl;
+        msg_info("ZyBasePipeline") << "  named " << this->groupManager->getName() << " of type " << this->groupManager->getTypeName();
 
-	std::cout << "--- PipelineImpl members after init ---" << std::endl;
+    msg_info("ZyBasePipeline") << "--- PipelineImpl members after init ---";
 }
 
 void ZyPipeline::bwdInit()
 {
-    std::cout << "ZyPipeline::bwdInit()" << std::endl;
+    msg_info("ZyBasePipeline") << "ZyPipeline::bwdInit()";
 	sofa::simulation::PipelineImpl::bwdInit();
 	
 	sofa::simulation::Node::SPtr root = sofa::simulation::getSimulation()->getCurrentRootNode();	
@@ -79,7 +79,7 @@ void ZyPipeline::bwdInit()
 		m_pipeline_interfaces.clear();
         root->getTreeObjects<ZyPipelineInterface>(&m_pipeline_interfaces);
 		
-        std::cout << "ZyPipelineInterface instances in SOFA scene graph: " << m_pipeline_interfaces.size() << std::endl;
+        msg_info("ZyBasePipeline") << "ZyPipelineInterface instances in SOFA scene graph: " << m_pipeline_interfaces.size();
 
 		if (m_pipeline_interfaces.size() > 0)
 		{
@@ -104,17 +104,17 @@ void ZyPipeline::bwdInit()
 				// Call setActive(true) twice: init() might reset it to false.
 				temp_pipeline_interfaces[k]->setActive(true);
 
-				std::cout << " - object " << k << ": " << temp_pipeline_interfaces[k]->getName() << " of type " << temp_pipeline_interfaces[k]->getTypeName() << std::endl;
+                msg_info("ZyBasePipeline") << " - object " << k << ": " << temp_pipeline_interfaces[k]->getName() << " of type " << temp_pipeline_interfaces[k]->getTypeName();
 
 				if (temp_pipeline_interfaces[k]->isDefaultPipeline())
 				{
 					m_pipeline = temp_pipeline_interfaces[k];
-					std::cout << "  -> claims to be our 'DefaultPipeline'" << std::endl;
+                    msg_info("ZyBasePipeline") << "  -> claims to be our 'DefaultPipeline'";
 				}
 				else
 				{
 					m_pipeline_interfaces.push_back(temp_pipeline_interfaces[k]);
-                    std::cout << "  -> Normal ZyPipelineInterface implementation" << std::endl;
+                    msg_info("ZyBasePipeline") << "  -> Normal ZyPipelineInterface implementation";
 				}
 			}
 		}
@@ -134,33 +134,53 @@ std::set< std::string > ZyPipeline::getResponseList() const
 
 void ZyPipeline::doCollisionDetection(const sofa::helper::vector<core::CollisionModel*>& collisionModels)
 {
+    msg_info("ZyPipeline") << "doCollisionDetection()";
 	if (m_pipeline)
 	{
+        msg_info("ZyPipeline") << "m_pipeline instance valid: " << m_pipeline->getName();
+        msg_info("ZyPipeline") << "CollisionModel instances in scene: " << collisionModels.size();
+
 		m_pipeline->doCollisionDetection(collisionModels);
 
 		for (size_t k = 0; k < m_pipeline_interfaces.size(); ++k)
 			m_pipeline_interfaces[k]->doCollisionDetection(collisionModels);
 	}
+    else
+    {
+        msg_warning("ZyPipeline") << "m_pipeline instance INVALID! Collision detection not functional.";
+    }
 }
 
 void ZyPipeline::doCollisionResponse()
 {
+    msg_info("ZyPipeline") << "doCollisionResponse()";
 	if (m_pipeline)
 	{
+        msg_info("ZyPipeline") << "m_pipeline instance valid: " << m_pipeline->getName();
 		m_pipeline->doCollisionResponse();
 
 		for (size_t k = 0; k < m_pipeline_interfaces.size(); ++k)
 			m_pipeline_interfaces[k]->doCollisionResponse();
 	}
+    else
+    {
+        msg_warning("ZyPipeline") << "m_pipeline instance INVALID! Collision response not functional.";
+    }
 }
 
 void ZyPipeline::doCollisionReset()
 {
+    msg_info("ZyPipeline") << "doCollisionReset()";
 	if (m_pipeline)
 	{
+        msg_info("ZyPipeline") << "m_pipeline instance valid: " << m_pipeline->getName();
 		m_pipeline->doCollisionReset();
 
 		for (size_t k = 0; k < m_pipeline_interfaces.size(); ++k)
 			m_pipeline_interfaces[k]->doCollisionReset();
 	}
+    else
+    {
+        msg_warning("ZyPipeline") << "m_pipeline instance INVALID! Collision reset not functional.";
+    }
 }

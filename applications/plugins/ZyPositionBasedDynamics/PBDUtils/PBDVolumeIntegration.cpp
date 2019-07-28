@@ -10,19 +10,32 @@ using namespace sofa::simulation::PBDSimulation::Utilities;
 #define CUBE(x) ((x)*(x)*(x))
 
 PBDVolumeIntegration::PBDVolumeIntegration(const unsigned int nVertices, const unsigned int nFaces, Vector3r * const vertices, const unsigned int* indices)
-        : m_nVertices(nVertices), m_nFaces(nFaces), m_indices(indices), m_face_normals(nFaces), m_weights(nFaces)
+    : m_nVertices(nVertices), m_nFaces(nFaces), m_indices(indices), m_face_normals(nFaces), m_weights(nFaces)
 {
+    msg_info("PBDVolumeIntegration") << "nVertices = " << nVertices << "; nFaces = " << nFaces;
     // compute center of mass
+    msg_info("PBDVolumeIntegration") << "Computing center of mass.";
     m_x.setZero();
-    for (unsigned int i(0); i < m_nVertices; ++i)
+    for (unsigned int i = 0; i < m_nVertices; ++i)
+    {
+        msg_info("PBDVolumeIntegration") << "Adding vertex " << i << ": " << vertices[i][0] << "," << vertices[i][1] << "," << vertices[i][2];
         m_x += vertices[i];
+    }
+
+    msg_info("PBDVolumeIntegration") << "Center of mass before normalization: " << m_x[0] << "," << m_x[1] << "," << m_x[2];
     m_x /= (Real)m_nVertices;
+    msg_info("PBDVolumeIntegration") << "Center of mass after  normalization: " << m_x[0] << "," << m_x[1] << "," << m_x[2];
 
+    msg_info("PBDVolumeIntegration") << "Translating vertices relative to center of mass.";
     m_vertices.resize(nVertices);
-    for (unsigned int i(0); i < m_nVertices; ++i)
+    for (unsigned int i = 0; i < m_nVertices; ++i)
+    {
         m_vertices[i] = vertices[i] - m_x;
+        msg_info("PBDVolumeIntegration") << "Vertex " << i << ": " << m_vertices[i][0] << "," << m_vertices[i][1] << "," << m_vertices[i][2];
+    }
 
-    for (unsigned int i(0); i < m_nFaces; ++i)
+    msg_info("PBDVolumeIntegration") << "Computing face normals.";
+    for (unsigned int i = 0; i < m_nFaces; ++i)
     {
         const Vector3r &a = m_vertices[m_indices[3 * i]];
         const Vector3r &b = m_vertices[m_indices[3 * i + 1]];
@@ -37,7 +50,11 @@ PBDVolumeIntegration::PBDVolumeIntegration(const unsigned int nVertices, const u
         else
             m_face_normals[i].normalize();
 
+        msg_info("PBDVolumeIntegration") << "Normal " << i << ": " << m_face_normals[i][0] << "," << m_face_normals[i][1] << "," << m_face_normals[i][2];
+
         m_weights[i] = -m_face_normals[i].dot(a);
+
+        msg_info("PBDVolumeIntegration") << "Face weight " << i << ": " << m_weights[i];
     }
 }
 
@@ -46,12 +63,30 @@ void PBDVolumeIntegration::compute_inertia_tensor(Real density)
     volume_integrals();
     m_volume = static_cast<Real>(T0);
 
+    if (m_volume < 0.0)
+    {
+        msg_warning("PBDVolumeIntegration") << "Computed volume " << m_volume << " is negative. Using positive value instead!";
+        m_volume = -1.0 * m_volume;
+    }
+
+    msg_info("PBDVolumeIntegration") << "Computed volume: " << m_volume;
+
     m_mass = static_cast<Real>(density * T0);
+
+    if (m_mass < 0.0)
+    {
+        msg_warning("PBDVolumeIntegration") << "Computed mass " << m_mass << " is negative. Using positive value instead!";
+        m_mass = -1.0 * m_mass;
+    }
+
+    msg_info("PBDVolumeIntegration") << "Computed mass: " << m_mass;
 
     /* compute center of mass */
     m_r[0] = static_cast<Real>(T1[0] / T0);
     m_r[1] = static_cast<Real>(T1[1] / T0);
     m_r[2] = static_cast<Real>(T1[2] / T0);
+
+    msg_info("PBDVolumeIntegration") << "Computed center of mass without m_x offset: (" << m_r[0] << "," << m_r[1] << "," << m_r[2] << ")";
 
     /* compute inertia tensor */
     m_theta(0, 0) = static_cast<Real>(density * (T2[1] + T2[2]));
@@ -70,11 +105,14 @@ void PBDVolumeIntegration::compute_inertia_tensor(Real density)
     m_theta(2, 0) = m_theta(0, 2) += m_mass * m_r[2] * m_r[0];
 
     m_r += m_x;
+    msg_info("PBDVolumeIntegration") << "Computed center of mass with m_x offset: (" << m_r[0] << "," << m_r[1] << "," << m_r[2] << ")";
 }
 
 
 void PBDVolumeIntegration::projection_integrals(unsigned int f)
 {
+    msg_info("PBDVolumeIntegration") << "projection_integrals(" << f << ")";
+
     Real a0, a1, da;
     Real b0, b1, db;
     Real a0_2, a0_3, a0_4, b0_2, b0_3, b0_4;
@@ -116,6 +154,10 @@ void PBDVolumeIntegration::projection_integrals(unsigned int f)
         Pab += db*(b1*Cab + b0*Kab);
         Paab += db*(b1*Caab + b0*Kaab);
         Pabb += da*(a1*Cabb + a0*Kabb);
+
+        msg_info("PBDVolumeIntegration") << "Before normalization: P1 = " << P1 << ", Pa = " << Pa << ", Paa = " << Paa << ", " <<
+                                            "Paaa = " << Paaa << ", Pb = " << Pb << ", Pbb = " << Pbb << ", Pbbb = " << Pbbb <<
+                                            " Pab = " << Pab << ", Paab = " << Paab << ", Pabb = " << Pabb;
     }
 
     P1 /= 2.0;
@@ -128,56 +170,69 @@ void PBDVolumeIntegration::projection_integrals(unsigned int f)
     Pab /= 24.0;
     Paab /= 60.0;
     Pabb /= -60.0;
+
+    msg_info("PBDVolumeIntegration") << "Afters normalization: P1 = " << P1 << ", Pa = " << Pa << ", Paa = " << Paa << ", " <<
+                                        "Paaa = " << Paaa << ", Pb = " << Pb << ", Pbb = " << Pbb << ", Pbbb = " << Pbbb <<
+                                        " Pab = " << Pab << ", Paab = " << Paab << ", Pabb = " << Pabb;
 }
 
 void PBDVolumeIntegration::face_integrals(unsigned int f)
 {
-  Real w;
-  Vector3r n;
-  Real k1, k2, k3, k4;
+    msg_info("PBDVolumeIntegration") << "face_integrals(" << f << ")";
+    Real w;
+    Vector3r n;
+    Real k1, k2, k3, k4;
 
-  projection_integrals(f);
+    projection_integrals(f);
 
-  w = m_weights[f];
-  n = m_face_normals[f];
-  k1 = 1 / n[C]; k2 = k1 * k1; k3 = k2 * k1; k4 = k3 * k1;
+    w = m_weights[f];
+    n = m_face_normals[f];
+    k1 = 1 / n[C]; k2 = k1 * k1; k3 = k2 * k1; k4 = k3 * k1;
 
-  Fa = k1 * Pa;
-  Fb = k1 * Pb;
-  Fc = -k2 * (n[A]*Pa + n[B]*Pb + w*P1);
+    msg_info("PBDVolumeIntegration") << "Fa = " << k1 << " * " << Pa;
+    Fa = k1 * Pa;
+    msg_info("PBDVolumeIntegration") << "Fb = " << k1 << " * " << Pb;
+    Fb = k1 * Pb;
+    msg_info("PBDVolumeIntegration") << "Fc = " << -k1 << " * (" << n[A] << " * " << Pa << " + " << n[B] << " * " << Pb << " + " << w << " * " << P1;
+    Fc = -k2 * (n[A]*Pa + n[B]*Pb + w*P1);
 
-  Faa = k1 * Paa;
-  Fbb = k1 * Pbb;
-  Fcc = k3 * (SQR(n[A])*Paa + 2*n[A]*n[B]*Pab + SQR(n[B])*Pbb
-     + w*(2*(n[A]*Pa + n[B]*Pb) + w*P1));
+    Faa = k1 * Paa;
+    Fbb = k1 * Pbb;
+    Fcc = k3 * (SQR(n[A])*Paa + 2*n[A]*n[B]*Pab + SQR(n[B])*Pbb
+                + w*(2*(n[A]*Pa + n[B]*Pb) + w*P1));
 
-  Faaa = k1 * Paaa;
-  Fbbb = k1 * Pbbb;
-  Fccc = -k4 * (CUBE(n[A])*Paaa + 3*SQR(n[A])*n[B]*Paab
-       + 3*n[A]*SQR(n[B])*Pabb + CUBE(n[B])*Pbbb
-       + 3*w*(SQR(n[A])*Paa + 2*n[A]*n[B]*Pab + SQR(n[B])*Pbb)
-       + w*w*(3*(n[A]*Pa + n[B]*Pb) + w*P1));
+    Faaa = k1 * Paaa;
+    Fbbb = k1 * Pbbb;
+    Fccc = -k4 * (CUBE(n[A])*Paaa + 3*SQR(n[A])*n[B]*Paab
+                  + 3*n[A]*SQR(n[B])*Pabb + CUBE(n[B])*Pbbb
+                  + 3*w*(SQR(n[A])*Paa + 2*n[A]*n[B]*Pab + SQR(n[B])*Pbb)
+                  + w*w*(3*(n[A]*Pa + n[B]*Pb) + w*P1));
 
-  Faab = k1 * Paab;
-  Fbbc = -k2 * (n[A]*Pabb + n[B]*Pbbb + w*Pbb);
-  Fcca = k3 * (SQR(n[A])*Paaa + 2*n[A]*n[B]*Paab + SQR(n[B])*Pabb
-     + w*(2*(n[A]*Paa + n[B]*Pab) + w*Pa));
+    Faab = k1 * Paab;
+    Fbbc = -k2 * (n[A]*Pabb + n[B]*Pbbb + w*Pbb);
+    Fcca = k3 * (SQR(n[A])*Paaa + 2*n[A]*n[B]*Paab + SQR(n[B])*Pabb
+                 + w*(2*(n[A]*Paa + n[B]*Pab) + w*Pa));
 }
 
 void PBDVolumeIntegration::volume_integrals()
 {
+    msg_info("PBDVolumeIntegration") << "volume_integrals()";
     Real nx, ny, nz;
 
     T0  = T1[0] = T1[1] = T1[2]
-        = T2[0] = T2[1] = T2[2]
-        = TP[0] = TP[1] = TP[2] = 0;
+            = T2[0] = T2[1] = T2[2]
+            = TP[0] = TP[1] = TP[2] = 0;
 
-    for (unsigned int i(0); i < m_nFaces; ++i)
+    for (unsigned int i = 0; i < m_nFaces; ++i)
     {
         Vector3r const& n = m_face_normals[i];
         nx = std::abs(n[0]);
         ny = std::abs(n[1]);
         nz = std::abs(n[2]);
+
+        msg_info("PBDVolumeIntegration") << "Face normal " << i << ": " << n[0] << "," << n[1] << "," << n[2];
+        msg_info("PBDVolumeIntegration") << "Absolute normal components" << i << ": " << nx << "," << ny << "," << nz;
+
         if (nx > ny && nx > nz)
             C = 0;
         else
@@ -185,11 +240,17 @@ void PBDVolumeIntegration::volume_integrals()
         A = (C + 1) % 3;
         B = (A + 1) % 3;
 
+        msg_info("PBDVolumeIntegration") << "Indices for face_integrals " << i << ": " << A << "," << B << "," << C;
+
         face_integrals(i);
 
+        msg_info("PBDVolumeIntegration") << "Before adding face_integrals: T0 = " << T0 << " -- Fa = " << Fa << ", Fb = " << Fb << ", Fc = " << Fc;
+        msg_info("PBDVolumeIntegration") << "Adding: " << n[0] << " * " << ((A == 0) ? Fa : ((B == 0) ? Fb : Fc));
         T0 += n[0] * ((A == 0) ? Fa : ((B == 0) ? Fb : Fc));
+        msg_info("PBDVolumeIntegration") << "After  adding face_integrals: T0 = " << T0;
 
         T1[A] += n[A] * Faa;
+
         T1[B] += n[B] * Fbb;
         T1[C] += n[C] * Fcc;
         T2[A] += n[A] * Faaa;

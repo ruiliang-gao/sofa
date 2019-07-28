@@ -138,6 +138,16 @@ void IntersectorMap::insert(const helper::TypeInfo& t1, const helper::TypeInfo& 
     }
 }
 
+const std::vector<std::pair<helper::TypeInfo, helper::TypeInfo> > IntersectorMap::getIntersectors()
+{
+    std::vector <std::pair<helper::TypeInfo, helper::TypeInfo> > intersectorPairs;
+    for(InternalMap::const_iterator it = intersectorsMap.begin(), itEnd = intersectorsMap.end(); it != itEnd; ++it)
+    {
+        intersectorPairs.emplace_back(it->first);
+    }
+    return intersectorPairs;
+}
+
 Intersection::~Intersection()
 {
 }

@@ -19,7 +19,7 @@ namespace sofa
     {
         namespace collision
         {
-			class SOFA_OBBTREEGPUPLUGIN_API OBBTreeGPUDiscreteIntersection :  public sofa::core::objectmodel::BaseObject, public core::collision::BaseIntersector  /*, public component::collision::DiscreteIntersection */
+            class SOFA_OBBTREEGPUPLUGIN_API OBBTreeGPUDiscreteIntersection :  public sofa::core::objectmodel::BaseObject, public core::collision::BaseIntersector
             {
                 typedef DiscreteIntersection::OutputVector OutputVector;
 

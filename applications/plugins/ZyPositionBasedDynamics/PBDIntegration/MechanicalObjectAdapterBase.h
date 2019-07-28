@@ -21,14 +21,9 @@ namespace sofa
                 public:
                     MechObjConversion(PBDSimulationModel*);
 
-                    const std::vector<sofa::component::container::MechanicalObject<sofa::defaulttype::Vec3Types>*>& getMechanicalObjects() const { return m_mechObjects; }
-                    void setMechanicalObjects(std::vector<sofa::component::container::MechanicalObject<sofa::defaulttype::Vec3Types>*>& mechObjects) { m_mechObjects = mechObjects; }
-
-                    bool convertToPBDObjects();
-
                 private:
                     std::shared_ptr<PBDSimulationModel> m_model;
-                    std::vector<sofa::component::container::MechanicalObject<sofa::defaulttype::Vec3Types>*> m_mechObjects;
+                    sofa::component::container::MechanicalObject<sofa::defaulttype::Vec3Types>* m_mechObject;
             };
         }
     }

@@ -37,7 +37,10 @@ namespace simulation
 
 Visitor::Result InitVisitor::processNodeTopDown(simulation::Node* node)
 {
-    if (!rootNode) rootNode=node;
+    if (!rootNode)
+        rootNode=node;
+
+    msg_info("InitVisitor") << "Initializing node: " << node->getName();
 
     node->initialize();
 
@@ -45,8 +48,10 @@ Visitor::Result InitVisitor::processNodeTopDown(simulation::Node* node)
     if(!node->f_bbox.isSet())
         nodeBBox->invalidate();
 
+    msg_info("InitVisitor") << "Initializing node objects: " << node->object.size();
     for(unsigned int i=0; i<node->object.size(); ++i)
     {
+        msg_info("InitVisitor") << "Node object << " << i << ": " << node->object[i]->getName() << " of type " << node->object[i]->getTypeName();
         node->object[i]->init();
         node->object[i]->computeBBox(params, true);
         nodeBBox->include(node->object[i]->f_bbox.getValue(params));

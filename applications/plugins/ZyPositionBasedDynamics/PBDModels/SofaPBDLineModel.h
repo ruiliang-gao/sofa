@@ -19,14 +19,17 @@ namespace sofa
 
                     void init();
                     void bwdInit();
+                    void cleanup();
 
                     void parse(sofa::core::objectmodel::BaseObjectDescription *arg);
 
                     virtual void draw(const core::visual::VisualParams*) override;
 
+                    std::shared_ptr<PBDLineModel> getPBDLineModel() const;
+
                 protected:
                     void buildModel();
-                    void applyInitialTransform();
+                    void initializeModel();
 
                 private:
                     std::shared_ptr<SofaPBDLineModelPrivate> m_d;

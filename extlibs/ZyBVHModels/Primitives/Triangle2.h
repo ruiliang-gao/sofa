@@ -29,7 +29,6 @@ namespace BVHModels
             }
 
             int mQuantity;
-            //hm Vec<3,Real> mPoint[2];
             Vec<2,Real> mPoint[2];
     };
 
@@ -41,19 +40,21 @@ namespace BVHModels
             // V0, V1, and V2.
 
             // Construction and destruction.
-            Triangle2 ();  // uninitialized
-            ~Triangle2 ();
+            Triangle2();  // uninitialized
+            ~Triangle2();
 
-            Triangle2 (const Vec<2,Real>& v0, const Vec<2,Real>& v1,
+            Triangle2(const Vec<2,Real>& v0, const Vec<2,Real>& v1,
                 const Vec<2,Real>& v2);
 
-            Triangle2 (const Vec<2,Real> vertex[3]);
+            Triangle2(const Vec<2,Real> vertex[3]);
 
 			PrimitiveType GetIntersectableType() const { return PT_TRIANGLE2; }
 
+            bool IsIntersectionQuerySupported(const PrimitiveType& other);
+
             // Distance from the point Q to the triangle.  TODO:  Move this
             // to the physics library distance code.
-            Real DistanceTo (const Vec<2,Real>& q) const;
+            Real DistanceTo(const Vec<2,Real>& q) const;
 
             bool Test(const Intersectable<Real, Vec<2, Real> > &);
             bool Find(const Intersectable<Real, Vec<2, Real> > &, IntersectionResult<Real> &);
@@ -61,10 +62,10 @@ namespace BVHModels
             Vec<2,Real> V[3];
 
         private:
-            static int WhichSide (const Vec<2,Real> V[3], const Vec<2,Real>& P,
+            static int WhichSide(const Vec<2,Real> V[3], const Vec<2,Real>& P,
                     const Vec<2,Real>& D);
 
-            static void ClipConvexPolygonAgainstLine (const Vec<2,Real>& N,
+            static void ClipConvexPolygonAgainstLine(const Vec<2,Real>& N,
                 Real c, int& quantity, Vec<2,Real> V[6]);
 
             enum ProjectionMap

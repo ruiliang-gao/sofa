@@ -1,6 +1,8 @@
 #ifndef SOFA_CORE_COLLISION_ZYPIPELINEINTERFACE_H
 #define SOFA_CORE_COLLISION_ZYPIPELINEINTERFACE_H
 
+#include "initZyPipeline.h"
+
 #include <sofa/core/objectmodel/BaseObject.h>
 #include <sofa/helper/vector.h>
 #include <sofa/core/CollisionModel.h>
@@ -14,7 +16,7 @@ namespace sofa
 	{
 		namespace collision
 		{
-			class SOFA_CORE_API ZyPipelineInterface : public sofa::core::objectmodel::BaseObject
+            class ZY_PIPELINE_API ZyPipelineInterface : public sofa::core::objectmodel::BaseObject
 			{
 				public:
 					SOFA_CLASS(ZyPipelineInterface, sofa::core::objectmodel::BaseObject);
@@ -27,9 +29,9 @@ namespace sofa
 					/// get the set of response available with the current collision pipeline
 					virtual std::set< std::string > getResponseList() const;
 
-					virtual void doCollisionDetection(const sofa::helper::vector<core::CollisionModel*>&) {}
-					virtual void doCollisionResponse() {}
-					virtual void doCollisionReset() {}
+                    virtual void doCollisionDetection(const sofa::helper::vector<core::CollisionModel*>&) {}
+                    virtual void doCollisionResponse() {}
+                    virtual void doCollisionReset() {}
 
                     // TODO: Find a better way to cope with the double inheritance hierarchy (PipelineImpl vs. ZyPipelineInterface)
 					virtual void setup(BroadPhaseDetection*, NarrowPhaseDetection*, Intersection*, ContactManager*, CollisionGroupManager*) {}

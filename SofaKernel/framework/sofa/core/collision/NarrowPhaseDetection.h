@@ -124,6 +124,16 @@ public:
         return it->second;
     }
 
+    // Zykl.io begin
+    void createDetectionOutputs(const std::vector< std::pair<sofa::core::CollisionModel*, sofa::core::CollisionModel*> >& _cmPairs)
+    {
+        for (size_t k = 0; k < _cmPairs.size(); ++k)
+        {
+            this->getDetectionOutputs(_cmPairs[k].first, _cmPairs[k].second);
+        }
+    }
+    // Zykl.io end
+
     //Returns true if the last narrow phase detected no collision, to use after endNarrowPhase.
     inline bool zeroCollision()const{
         return m_outputsMap.empty();

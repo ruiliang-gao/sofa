@@ -12,7 +12,7 @@ extern "C" {
 
     const char* getModuleName()
     {
-        return "Position Based Dynamics.";
+        return "SofaPBDPlugin";
     }
 
     const char* getModuleVersion()
@@ -32,6 +32,19 @@ extern "C" {
 
     const char* getModuleComponentList()
     {
-        return "PBDSimulation,PBDSimulationModel,PBDTimeStep";
+        return "SofaPBDSimulationLoop, SofaPBDSimulation, SofaPBDLineModel, SofaPBDRigidBodyModel, SofaPBDTriangleMeshModel, SofaPBDTetrahedronMeshModel, SofaPBDPointCollisionModel, SofaPBDLineCollisionModel, SofaPBDTriangleCollisionModel, PBDCollisionModelsIntersection, SofaPBDPipeline";
     }
 }
+
+SOFA_LINK_CLASS(SofaPBDSimulationLoop)
+SOFA_LINK_CLASS(SofaPBDSimulation)
+SOFA_LINK_CLASS(SofaPBDLineModel)
+SOFA_LINK_CLASS(SofaPBDRigidBodyModel)
+SOFA_LINK_CLASS(SofaPBDTriangleMeshModel)
+SOFA_LINK_CLASS(SofaPBDTetrahedronMeshModel)
+SOFA_LINK_CLASS(SofaPBDPointCollisionModel)
+SOFA_LINK_CLASS(SofaPBDLineCollisionModel)
+SOFA_LINK_CLASS(SofaPBDTriangleCollisionModel)
+SOFA_LINK_CLASS(PBDCollisionModelsIntersection)
+SOFA_LINK_CLASS(SofaPBDPipeline)
+

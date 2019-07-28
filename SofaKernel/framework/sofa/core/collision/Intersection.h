@@ -113,6 +113,10 @@ public:
 
     ElementIntersector* get(core::CollisionModel* model1, core::CollisionModel* model2, bool& swapModels);
 
+    // Zykl.io begin
+    const std::vector<std::pair<helper::TypeInfo, helper::TypeInfo> > getIntersectors();
+    // Zykl.io end
+
 protected:
     template<class Model1, class Model2>
     void add_impl(ElementIntersector* intersector);

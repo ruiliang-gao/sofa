@@ -23,7 +23,18 @@ PBDSimulationModel::PBDSimulationModel(): sofa::core::objectmodel::BaseObject()
 
 PBDSimulationModel::~PBDSimulationModel()
 {
-
+    if (m_rigidBodies.size() > 0)
+    {
+        for (size_t k = 0; k < m_rigidBodies.size(); k++)
+        {
+            if (m_rigidBodies[k] != NULL)
+            {
+                delete m_rigidBodies[k];
+                m_rigidBodies[k] = NULL;
+            }
+        }
+        m_rigidBodies.clear();
+    }
 }
 
 void PBDSimulationModel::init()
@@ -100,20 +111,34 @@ void PBDSimulationModel::reset()
 void PBDSimulationModel::cleanup()
 {
     resetContacts();
-    for (unsigned int i = 0; i < m_rigidBodies.size(); i++)
-        delete m_rigidBodies[i];
+
+    // Rigid body etc. instances are managed by the SOFA wrapper classes
+    /*for (unsigned int i = 0; i < m_rigidBodies.size(); i++)
+        delete m_rigidBodies[i];*/
+
     m_rigidBodies.clear();
-    for (unsigned int i = 0; i < m_triangleModels.size(); i++)
-        delete m_triangleModels[i];
+
+    // Rigid body etc. instances are managed by the SOFA wrapper classes
+    /*for (unsigned int i = 0; i < m_triangleModels.size(); i++)
+        delete m_triangleModels[i];*/
+
     m_triangleModels.clear();
-    for (unsigned int i = 0; i < m_tetModels.size(); i++)
-        delete m_tetModels[i];
+
+    // Rigid body etc. instances are managed by the SOFA wrapper classes
+    /*for (unsigned int i = 0; i < m_tetModels.size(); i++)
+        delete m_tetModels[i];*/
+
     m_tetModels.clear();
-    for (unsigned int i = 0; i < m_lineModels.size(); i++)
-        delete m_lineModels[i];
+
+    // Rigid body etc. instances are managed by the SOFA wrapper classes
+    /*for (unsigned int i = 0; i < m_lineModels.size(); i++)
+        delete m_lineModels[i];*/
+
     m_lineModels.clear();
+
     for (unsigned int i = 0; i < m_constraints.size(); i++)
         delete m_constraints[i];
+
     m_constraints.clear();
     m_particles.release();
     m_orientations.release();
@@ -576,6 +601,7 @@ void PBDSimulationModel::addTetModel(
 }
 
 void PBDSimulationModel::addLineModel(
+    PBDLineModel* lineModel,
     const unsigned int nPoints,
     const unsigned int nQuaternions,
     Vector3r *points,
@@ -583,20 +609,33 @@ void PBDSimulationModel::addLineModel(
     unsigned int *indices,
     unsigned int *indicesQuaternions)
 {
-    PBDLineModel *lineModel = new PBDLineModel();
+    msg_info("PBDSimulationModel") << "addLineModel() - nPoints = " << nPoints << ", nQuaternions = " << nQuaternions;
+
     m_lineModels.push_back(lineModel);
+
+    msg_info("PBDSimulationModel") << "Particles vector size before adding new particles: " << m_particles.size();
 
     unsigned int startIndex = m_particles.size();
     m_particles.reserve(startIndex + nPoints);
 
+    msg_info("PBDSimulationModel") << "Adding particles starting from index " << startIndex;
+
     for (unsigned int i = 0; i < nPoints; i++)
         m_particles.addVertex(points[i]);
+
+    msg_info("PBDSimulationModel") << "Particles vector size after adding new particles: " << m_particles.size();
+
+    msg_info("PBDSimulationModel") << "Particles orientations vector size before adding new particles: " << m_orientations.size();
 
     unsigned int startIndexOrientations = m_orientations.size();
     m_orientations.reserve(startIndexOrientations + nQuaternions);
 
+    msg_info("PBDSimulationModel") << "Adding quaternions starting from index " << startIndexOrientations;
+
     for (unsigned int i = 0; i < nQuaternions; i++)
         m_orientations.addQuaternion(quaternions[i]);
+
+    msg_info("PBDSimulationModel") << "Particles orientations vector size after adding new particles: " << m_orientations.size();
 
     lineModel->initMesh(nPoints, nQuaternions, startIndex, startIndexOrientations, indices, indicesQuaternions);
 }

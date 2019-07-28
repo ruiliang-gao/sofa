@@ -33,6 +33,8 @@ namespace sofa
                     typedef sofa::core::objectmodel::BaseContext BaseContext;
                     typedef sofa::core::objectmodel::BaseObjectDescription BaseObjectDescription;
 
+                    sofa::core::objectmodel::Data<int> SUB_STEPS_PER_ITERATION;
+
                     virtual void setNode(simulation::Node*);
 
                     virtual void init() override;
@@ -51,6 +53,8 @@ namespace sofa
                     SofaPBDSimulation* m_simulation;
                     BaseContext* m_context;
 
+                    sofa::core::collision::Pipeline* m_collisionPipeline;
+                    sofa::core::collision::Pipeline::SPtr m_collisionPipelineLocal;
             };
         }
     }

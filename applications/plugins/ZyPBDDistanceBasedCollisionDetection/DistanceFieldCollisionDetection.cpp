@@ -205,7 +205,7 @@ void DistanceFieldCollisionDetection::collisionDetectionRigidBodies(PBDRigidBody
     // transformation world to local:
     // p_local = R_initial^T ( R_MAT R^T (p_world - x) - x_initial + x_MAT)
     //
-    // transformation local to:
+    // transformation local to world:
     // p_world = R R_MAT^T (R_initial p_local + x_initial - x_MAT) + x
     //
     const Matrix3r &R = rb2->getTransformationR();

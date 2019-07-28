@@ -60,7 +60,7 @@ int DefaultPipelineClass = core::RegisterObject("The default collision detection
         ;
 
 DefaultPipeline::DefaultPipeline()
-    : d_doPrintInfoMessage(initData(&d_doPrintInfoMessage, false, "verbose",
+    : d_doPrintInfoMessage(initData(&d_doPrintInfoMessage, true /*false*/, "verbose",
                                     "Display extra informations at each computation step. (default=false)"))
     , d_doDebugDraw(initData(&d_doDebugDraw, false, "draw",
                              "Draw the detected collisions. (default=false)"))
@@ -77,6 +77,7 @@ typedef simulation::Visitor::ctime_t ctime_t;
 
 void DefaultPipeline::init()
 {
+    msg_info("DefaultPipeline") << "init()";
     Inherit1::init() ;
 
     /// Insure that all the value provided by the user are valid and report message if it is not.
@@ -162,13 +163,17 @@ void DefaultPipeline::doCollisionDetection(const helper::vector<core::CollisionM
 #endif
 
         msg_info_when(d_doPrintInfoMessage.getValue())
-                << "doCollisionDetection, Computed "<<nActive<<" BBoxs" ;
+                << "doCollisionDetection, Computed " << nActive << " bounding box hierarchies.";
     }
     // then we start the broad phase
-    if (broadPhaseDetection==nullptr) return; // can't go further
+    if (broadPhaseDetection==nullptr)
+    {
+        msg_warning("DefaultPipeline") << "No valid broadPhaseDetection instance provided, collision detection is non-functional!";
+        return; // can't go further
+    }
 
     msg_info_when(d_doPrintInfoMessage.getValue())
-            << "doCollisionDetection, BroadPhaseDetection "<<broadPhaseDetection->getName();
+            << "doCollisionDetection, BroadPhaseDetection " << broadPhaseDetection->getName();
 
 #ifdef SOFA_DUMP_VISITOR_INFO
     simulation::Visitor::printNode("BroadPhase");
@@ -186,10 +191,14 @@ void DefaultPipeline::doCollisionDetection(const helper::vector<core::CollisionM
 #endif
 
     // then we start the narrow phase
-    if (narrowPhaseDetection==nullptr) return; // can't go further
+    if (narrowPhaseDetection==nullptr)
+    {
+        msg_warning("DefaultPipeline") << "No valid narrowPhaseDetection instance provided, collision detection is non-functional!";
+        return; // can't go further
+    }
 
     msg_info_when(d_doPrintInfoMessage.getValue())
-        << "doCollisionDetection, NarrowPhaseDetection "<<narrowPhaseDetection->getName();
+        << "doCollisionDetection, NarrowPhaseDetection " << narrowPhaseDetection->getName();
 
 #ifdef SOFA_DUMP_VISITOR_INFO
     simulation::Visitor::printNode("NarrowPhase");
@@ -201,7 +210,7 @@ void DefaultPipeline::doCollisionDetection(const helper::vector<core::CollisionM
         helper::vector<std::pair<CollisionModel*, CollisionModel*> >& vectCMPair = broadPhaseDetection->getCollisionModelPairs();
 
         msg_info_when(d_doPrintInfoMessage.getValue())
-                << "doCollisionDetection, "<< vectCMPair.size()<<" colliding model pairs" ;
+                << "doCollisionDetection, " << vectCMPair.size() << " colliding model pairs" ;
 
         narrowPhaseDetection->addCollisionPairs(vectCMPair);
         narrowPhaseDetection->endNarrowPhase();
@@ -220,7 +229,7 @@ void DefaultPipeline::doCollisionResponse()
     if (contactManager==nullptr) return; // can't go further
 
     msg_info_when(d_doPrintInfoMessage.getValue())
-        << "Create Contacts "<<contactManager->getName() ;
+        << "Create Contacts " << contactManager->getName() ;
 
     contactManager->createContacts(narrowPhaseDetection->getDetectionOutputs());
 

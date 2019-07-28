@@ -91,7 +91,7 @@ void PBDIndexedFaceMesh::release()
     */
 void PBDIndexedFaceMesh::addFace(const unsigned int * const indices)
 {
-    for (unsigned int i=0u; i < m_verticesPerFace; i++)
+    for (unsigned int i = 0u; i < m_verticesPerFace; i++)
         m_indices.push_back(indices[i]);
 }
 

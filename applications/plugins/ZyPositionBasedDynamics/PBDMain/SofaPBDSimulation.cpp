@@ -18,11 +18,16 @@ using namespace std;
 
 SofaPBDSimulation* SofaPBDSimulation::current = nullptr;
 
-SofaPBDSimulation::SofaPBDSimulation(BaseContext *context): sofa::core::objectmodel::BaseObject()
+SofaPBDSimulation::SofaPBDSimulation(BaseContext *context): sofa::core::objectmodel::BaseObject(),
+    GRAVITATION(initData(&GRAVITATION, sofa::defaulttype::Vec3d(0, -9.81, 0), "Gravitation", "Vector to define the gravitational acceleration."))
 {
     m_context = context;
     m_timeStep = nullptr;
-    m_model = nullptr;
+
+    msg_info("PBDSimulation") << "Instantiating PBDSimulationModel.";
+    m_model = new PBDSimulationModel();
+    m_model->init();
+
     m_simulationMethodChanged = nullptr;
 }
 
@@ -30,22 +35,17 @@ SofaPBDSimulation::~SofaPBDSimulation()
 {
     if (m_timeStep)
     {
+        m_timeStep->cleanup();
         delete m_timeStep;
         m_timeStep = nullptr;
     }
 
-    if (current)
-    {
-        delete current;
-        current = nullptr;
-    }
-
     if (m_model)
     {
+        m_model->cleanup();
         delete m_model;
         m_model = nullptr;
     }
-
 }
 
 SofaPBDSimulation* SofaPBDSimulation::getCurrent()
@@ -71,14 +71,15 @@ bool SofaPBDSimulation::hasCurrent()
 void SofaPBDSimulation::init()
 {
     msg_info("PBDSimulation") << "init()";
-    m_model = new PBDSimulationModel();
-    m_model->init();
-
     initParameters();
+
+    msg_info("PBDSimulation") << "Gravitation vector set: " << GRAVITATION.getValue();
+
+    msg_info("PBDSimulation") << "setSimulationMethod(" << PBDSimulationMethods::PBD << ")";
     setSimulationMethod(static_cast<int>(PBDSimulationMethods::PBD));
 
-    m_geometryConverter.reset(new GeometryConversion(m_model));
-    m_mechObjConverter.reset(new MechObjConversion(m_model));
+    //m_geometryConverter.reset(new GeometryConversion(m_model));
+    //m_mechObjConverter.reset(new MechObjConversion(m_model));
 
     if (!m_context)
         m_context = dynamic_cast<sofa::simulation::Node*>(this->getContext());
@@ -86,8 +87,11 @@ void SofaPBDSimulation::init()
 
 void SofaPBDSimulation::initParameters()
 {
-    initData(&GRAVITATION, sofa::defaulttype::Vec3d(0, 0, -9.81), "Gravitation", "Vector to define the gravitational acceleration.");
+    msg_info("PBDSimulation") << "initParameters()";
     GRAVITATION.setGroup("Simulation");
+    GRAVITATION.setValue(sofa::defaulttype::Vec3d(0, -9.81, 0));
+
+    msg_info("SofaPBDSimulation") << "Gravitation vector set: " << GRAVITATION.getValue();
 
     helper::OptionsGroup methodOptions(3, "0 - Position-Based Dynamics (PBD)",
                                        "1 - eXtended Position-Based Dynamics (XPBD)",
@@ -104,7 +108,7 @@ void SofaPBDSimulation::bwdInit()
 {
     msg_info("PBDSimulation") << "bwdInit()";
 
-    auto topologies = m_context->getObjects<sofa::core::topology::BaseMeshTopology>(BaseContext::SearchDown);
+    /*auto topologies = m_context->getObjects<sofa::core::topology::BaseMeshTopology>(BaseContext::SearchDown);
     auto mechanicalObjects = m_context->getObjects<sofa::component::container::MechanicalObject<sofa::defaulttype::Vec3Types>>(BaseContext::SearchDown);
 
     msg_info("PBDSimulation") << "Found BaseMeshTopology instances: " << topologies.size();
@@ -116,7 +120,7 @@ void SofaPBDSimulation::bwdInit()
     bool convGeoResult = m_geometryConverter->convertToPBDObjects();
     bool convMechObjResult = m_mechObjConverter->convertToPBDObjects();
 
-    msg_info("PBDSimulation") << "Converted geometries OK: " << convGeoResult << ", converted MechanicalObjects OK: " << convMechObjResult;
+    msg_info("PBDSimulation") << "Converted geometries OK: " << convGeoResult << ", converted MechanicalObjects OK: " << convMechObjResult;*/
 }
 
 void SofaPBDSimulation::reset()
@@ -135,31 +139,44 @@ void SofaPBDSimulation::reset()
 
 void SofaPBDSimulation::setSimulationMethod(const int val)
 {
+    msg_info("SofaPBDSimulation") << "setSimulationMethod()";
     PBDSimulationMethods method = static_cast<PBDSimulationMethods>(val);
     if ((method < PBDSimulationMethods::PBD) || (method >= PBDSimulationMethods::NumSimulationMethods))
         method = PBDSimulationMethods::PBD;
 
-    if ((int) method == SIMULATION_METHOD.getValue().getSelectedId())
-        return;
+    msg_info("SofaPBDSimulation") << "method set: " << val;
 
-    delete m_timeStep;
-    m_timeStep = nullptr;
+    /*if ((int) method == SIMULATION_METHOD.getValue().getSelectedId())
+    {
+        return;
+    }*/
+
+    if (m_timeStep)
+    {
+        msg_info("SofaPBDSimulation") << "Deleting existing PBDTimeStep instance.";
+        delete m_timeStep;
+        m_timeStep = nullptr;
+    }
 
     SIMULATION_METHOD.setValue(val);
 
     if (method == PBDSimulationMethods::PBD)
     {
+        msg_info("SofaPBDSimulation") << "Instantiating new PBDTimeStep object.";
         m_timeStep = new SofaPBDTimeStep();
         m_timeStep->init();
-        PBDTimeManager::getCurrent()->setTimeStepSize(static_cast<Real>(0.005));
+
+        Real timeStepSize = static_cast<Real>(0.005);
+        msg_info("SofaPBDSimulation") << "Setting time step size to: " << timeStepSize;
+        PBDTimeManager::getCurrent()->setTimeStepSize(timeStepSize);
     }
     else if (method == PBDSimulationMethods::XPBD)
     {
-        msg_info("PBDSimulation") << "XPBD not implemented yet.";
+        msg_error("PBDSimulation") << "XPBD not implemented yet.";
     }
     else if (method == PBDSimulationMethods::IBDS)
     {
-        msg_info("PBDSimulation") << "IBDS not implemented yet.";
+        msg_error("PBDSimulation") << "IBDS not implemented yet.";
     }
 
     if (m_simulationMethodChanged != nullptr)

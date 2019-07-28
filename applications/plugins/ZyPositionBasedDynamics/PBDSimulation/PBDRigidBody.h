@@ -6,6 +6,8 @@
 #include "PBDSimulation/PBDRigidBodyGeometry.h"
 #include "PBDUtils/PBDVolumeIntegration.h"
 
+#include <framework/sofa/helper/logging/Messaging.h>
+
 namespace sofa
 {
     namespace simulation
@@ -90,6 +92,10 @@ namespace sofa
                         const PBDVertexData &vertices, const Utilities::PBDIndexedFaceMesh &mesh,
                         const Vector3r &scale = Vector3r(1.0, 1.0, 1.0))
                     {
+                        msg_info("PBDRigidBody") << "initBody() -- mass = " << mass << ", position = (" << x[0] << "," << x[1] << "," << x[2] << "), rotation = " << rotation.x() << "," << rotation.y() << "," << rotation.z() << "," << rotation.w() << ", scale = " << scale;
+                        msg_info("PBDRigidBody") << "vertices: " << mesh.numVertices() << ", faces: " << mesh.numFaces() << ", edges: " << mesh.numEdges();
+                        msg_info("PBDRigidBody") << "Particles: " << vertices.size();
+
                         setMass(mass);
                         m_x = x;
                         m_x0 = x;
@@ -114,13 +120,22 @@ namespace sofa
                         m_restitutionCoeff = static_cast<Real>(0.6);
                         m_frictionCoeff = static_cast<Real>(0.2);
 
+                        msg_info("PBDRigidBody") << "Calling initMesh() on PBDRigidGeometry.";
                         getGeometry().initMesh(vertices.size(), mesh.numFaces(), &vertices.getPosition(0), mesh.getFaces().data(), mesh.getUVIndices(), mesh.getUVs(), scale);
+                        msg_info("PBDRigidBody") << "Calling updateMeshTransformation on PBDRigidGeometry.";
                         getGeometry().updateMeshTransformation(getPosition(), getRotationMatrix());
                     }
 
                     void initBody(const Real density, const Vector3r &x, const Quaternionr &rotation,
                         const PBDVertexData &vertices, const Utilities::PBDIndexedFaceMesh &mesh, const Vector3r &scale = Vector3r(1.0, 1.0, 1.0))
                     {
+                        msg_info("PBDRigidBody") << "initBody() -- density = " << density << ", position = (" << x[0] << "," << x[1] << "," << x[2] << "), rotation = " << rotation.x() << "," << rotation.y() << "," << rotation.z() << "," << rotation.w() << ", scale = " << scale;
+                        msg_info("PBDRigidBody") << "vertices: " << mesh.numVertices() << ", faces: " << mesh.numFaces() << ", edges: " << mesh.numEdges();
+                        msg_info("PBDRigidBody") << "Particles: " << vertices.size();
+
+                        msg_info("PBDRigidBody") << "position: " << x;
+                        msg_info("PBDRigidBody") << "orientation: (" << rotation.x() << "," << rotation.y() << "," << rotation.z() << "," << rotation.w() << ")";
+
                         m_mass = 1.0;
                         m_inertiaTensor = Vector3r(1.0, 1.0, 1.0);
                         m_x = x;
@@ -135,6 +150,9 @@ namespace sofa
                         m_lastQ = rotation;
                         m_oldQ = rotation;
                         m_rot = m_q.matrix();
+
+                        msg_info("PBDRigidBody") << "Rotation matrix: " << m_rot;
+
                         rotationUpdated();
                         m_omega.setZero();
                         m_torque.setZero();
@@ -142,9 +160,29 @@ namespace sofa
                         m_restitutionCoeff = static_cast<Real>(0.6);
                         m_frictionCoeff = static_cast<Real>(0.2);
 
+                        msg_info("PBDRigidBody") << "Calling initMesh() on PBDRigidGeometry.";
                         getGeometry().initMesh(vertices.size(), mesh.numFaces(), &vertices.getPosition(0), mesh.getFaces().data(), mesh.getUVIndices(), mesh.getUVs(), scale);
+
+                        msg_info("PBDRigidBody") << "=== Vertex data after initMesh() ===";
+                        for (unsigned int k = 0; k < getGeometry().getVertexData().size(); k++)
+                            msg_info("PBDRigidBody") << "Vertex " << k << ": " << getGeometry().getVertexData().getPosition(k)[0] << "," << getGeometry().getVertexData().getPosition(k)[1] << "," << getGeometry().getVertexData().getPosition(k)[2];
+
+                        msg_info("PBDRigidBody") << "=== Local vertex data after initMesh() ===";
+                        for (unsigned int k = 0; k < getGeometry().getVertexDataLocal().size(); k++)
+                            msg_info("PBDRigidBody") << "Vertex " << k << ": " << getGeometry().getVertexDataLocal().getPosition(k)[0] << "," << getGeometry().getVertexDataLocal().getPosition(k)[1] << "," << getGeometry().getVertexDataLocal().getPosition(k)[2];
+
+                        msg_info("PBDRigidBody") << "Calling determineMassProperties().";
                         determineMassProperties(density);
+                        msg_info("PBDRigidBody") << "Calling updateMeshTransformation on PBDRigidGeometry: position = " << getPosition() << ", rotationMatrix = " << getRotationMatrix();
                         getGeometry().updateMeshTransformation(getPosition(), getRotationMatrix());
+
+                        msg_info("PBDRigidBody") << "=== Vertex data after updateMeshTransformation() ===";
+                        for (unsigned int k = 0; k < getGeometry().getVertexData().size(); k++)
+                            msg_info("PBDRigidBody") << "Vertex " << k << ": " << getGeometry().getVertexData().getPosition(k)[0] << "," << getGeometry().getVertexData().getPosition(k)[1] << "," << getGeometry().getVertexData().getPosition(k)[2];
+
+                        msg_info("PBDRigidBody") << "=== Local vertex data after updateMeshTransformation() ===";
+                        for (unsigned int k = 0; k < getGeometry().getVertexDataLocal().size(); k++)
+                            msg_info("PBDRigidBody") << "Vertex " << k << ": " << getGeometry().getVertexDataLocal().getPosition(k)[0] << "," << getGeometry().getVertexDataLocal().getPosition(k)[1] << "," << getGeometry().getVertexDataLocal().getPosition(k)[2];
                     }
 
                     void reset()
@@ -189,6 +227,8 @@ namespace sofa
                         if (m_mass != 0.0)
                         {
                             m_rot = m_q.matrix();
+                            msg_info("PBDRigidBody") << "rotationUpdated() -- new rotation matrix: " << m_rot;
+
                             updateInverseInertiaW();
                             updateInverseTransformation();
                         }
@@ -206,18 +246,34 @@ namespace sofa
                      */
                     void determineMassProperties(const Real density)
                     {
+                        msg_info("PBDRigidBody") << "determineMassProperties(" << density << ")";
+
                         // apply initial rotation
+                        msg_info("PBDRigidBody") << "Applying initial rotation: " << m_rot;
                         PBDVertexData &vd = m_geometry.getVertexDataLocal();
                         for (unsigned int i = 0; i < vd.size(); i++)
+                        {
+                            msg_info("PBDRigidBody") << "Vertex " << i << " before applying rotation: (" << vd.getPosition(i)[0] << "," << vd.getPosition(i)[1] << "," << vd.getPosition(i)[2] << ")";
                             vd.getPosition(i) = m_rot * vd.getPosition(i) + m_x0;
+                            msg_info("PBDRigidBody") << "Vertex " << i << " after  applying rotation: (" << vd.getPosition(i)[0] << "," << vd.getPosition(i)[1] << "," << vd.getPosition(i)[2] << ")";
+                        }
 
+                        msg_info("PBDRigidBody") << "Integrating rigid body volume, density = " << density;
                         Utilities::PBDVolumeIntegration vi(m_geometry.getVertexDataLocal().size(), m_geometry.getMesh().numFaces(), &m_geometry.getVertexDataLocal().getPosition(0), m_geometry.getMesh().getFaces().data());
                         vi.compute_inertia_tensor(density);
+
+                        msg_info("PBDRigidBody") << "Rigid body mass   : " << vi.getMass();
+                        msg_info("PBDRigidBody") << "Rigid body volume : " << vi.getVolume();
+                        msg_info("PBDRigidBody") << "Rigid body COM    : (" << vi.getCenterOfMass()[0] << "," << vi.getCenterOfMass()[1] << "," << vi.getCenterOfMass()[2] << ")";
+                        msg_info("PBDRigidBody") << "Rigid body inertia: " << vi.getInertia();
 
                         // Diagonalize Inertia Tensor
                         Eigen::SelfAdjointEigenSolver<Matrix3r> es(vi.getInertia());
                         Vector3r inertiaTensor = es.eigenvalues();
                         Matrix3r R = es.eigenvectors();
+
+                        msg_info("PBDRigidBody") << "Rigid body inertia tensor: (" << inertiaTensor[0] << ","  << inertiaTensor[1] << "," << inertiaTensor[2];
+                        msg_info("PBDRigidBody") << "Inertia eigenvectors     : " << R;
 
                         setMass(vi.getMass());
                         setInertiaTensor(inertiaTensor);
@@ -226,8 +282,13 @@ namespace sofa
                             R = -R;
 
                         // rotate vertices back
+                        msg_info("PBDRigidBody") << "Reverse transform of vertices applying eigenvectors";
                         for (unsigned int i = 0; i < vd.size(); i++)
+                        {
+                            msg_info("PBDRigidBody") << "Vertex " << i << " before applying rotation: (" << vd.getPosition(i)[0] << "," << vd.getPosition(i)[1] << "," << vd.getPosition(i)[2] << ")";
                             vd.getPosition(i) = R.transpose() * (vd.getPosition(i) - vi.getCenterOfMass());
+                            msg_info("PBDRigidBody") << "Vertex " << i << " after  applying rotation: (" << vd.getPosition(i)[0] << "," << vd.getPosition(i)[1] << "," << vd.getPosition(i)[2] << ")";
+                        }
 
                         // set rotation
                         Quaternionr qR = Quaternionr(R);
@@ -240,6 +301,9 @@ namespace sofa
                         m_q = m_q0;
                         m_lastQ = m_q0;
                         m_oldQ = m_q0;
+
+                        msg_info("PBDRigidBody") << "Set initial rotation: (" << m_q0.x() << "," << m_q0.y() << "," << m_q0.z() << "," << m_q0.w() << ")";
+
                         rotationUpdated();
 
                         // set translation
@@ -247,6 +311,9 @@ namespace sofa
                         m_x = m_x0;
                         m_lastX = m_x0;
                         m_oldX = m_x0;
+
+                        msg_info("PBDRigidBody") << "Set initial translation: (" << m_x0[0] << "," << m_x0[1] << "," << m_x0[2] << ")";
+
                         updateInverseTransformation();
                     }
 

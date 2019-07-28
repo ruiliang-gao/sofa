@@ -1,0 +1,19 @@
+<Node dt="0.02" name="root">
+    <RequiredPlugin name="SofaMiscCollision"/>
+    <RequiredPlugin name="ZyPositionBasedDynamics"/>
+    
+    <!-- animation loop -->
+    <SofaPBDAnimationLoop/>
+    
+    <!-- Rigid body models -->
+    <Node name="PBDSingleTetrahedronRigid">
+        <MeshObjLoader name="meshLoader1" filename="mesh/single_tetrahedron.obj" />
+        <SofaPBDRigidBodyModel name="pdbRigidBodyModel1" dx="0.0000" dy="0.0000" dz="0.0" rx="0.0000" ry="0.0000" rz="0.0000" scale="0.10" src="@meshLoader1" density="5.0" frictionCoefficient="0.1"/>
+    </Node>
+    
+    <Node name="PBDStaticBowlRigid">
+        <MeshObjLoader name="meshLoader2" filename="mesh/SaladBowl.obj" />
+        <SofaPBDRigidBodyModel name="pdbRigidBodyModel3" dx="0.000" dy="-1.0000" dz="0.0" rx="-90.0000" ry="0.0000" rz="0.0000" scale="5.00" src="@meshLoader2" mass="0.0" density="1.0" frictionCoefficient="0.25"/>
+    </Node>
+    
+</Node>

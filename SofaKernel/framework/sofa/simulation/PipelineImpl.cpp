@@ -95,33 +95,61 @@ void PipelineImpl::reset()
 
 void PipelineImpl::computeCollisionReset()
 {
+    msg_info("PipelineImpl") << "computeCollisionReset()";
     simulation::Node* root = dynamic_cast<simulation::Node*>(getContext());
-    if(root == NULL) return;
+
+    if(root == NULL)
+    {
+        msg_warning("PipelineImpl") << "Simulation root node is NULL, doing nothing!";
+        return;
+    }
+
     if (broadPhaseDetection!=NULL && broadPhaseDetection->getIntersectionMethod()!=intersectionMethod)
         broadPhaseDetection->setIntersectionMethod(intersectionMethod);
     if (narrowPhaseDetection!=NULL && narrowPhaseDetection->getIntersectionMethod()!=intersectionMethod)
         narrowPhaseDetection->setIntersectionMethod(intersectionMethod);
     if (contactManager!=NULL && contactManager->getIntersectionMethod()!=intersectionMethod)
         contactManager->setIntersectionMethod(intersectionMethod);
+
     sofa::helper::AdvancedTimer::stepBegin("CollisionReset");
+    msg_info("PipelineImpl") << "Calling doCollisionReset()";
     doCollisionReset();
     sofa::helper::AdvancedTimer::stepEnd("CollisionReset");
 }
 
 void PipelineImpl::computeCollisionDetection()
 {
+    msg_info("PipelineImpl") << "computeCollisionDetection()";
     simulation::Node* root = dynamic_cast<simulation::Node*>(getContext());
-    if(root == NULL) return;
+
+    if(root == NULL)
+    {
+        msg_warning("PipelineImpl") << "Simulation root node is NULL, doing nothing!";
+        return;
+    }
+
     std::vector<CollisionModel*> collisionModels;
     root->getTreeObjects<CollisionModel>(&collisionModels);
+
+    msg_info("PipelineImpl") << "CollisionModel instances in scene: " << collisionModels.size();
+
+    msg_info("PipelineImpl") << "Calling doCollisionDetection()";
     doCollisionDetection(collisionModels);
 }
 
 void PipelineImpl::computeCollisionResponse()
 {
+    msg_info("PipelineImpl") << "computeCollisionResponse()";
     simulation::Node* root = dynamic_cast<simulation::Node*>(getContext());
-    if(root == NULL) return;
+
+    if (root == NULL)
+    {
+        msg_warning("PipelineImpl") << "Simulation root node is NULL, doing nothing!";
+        return;
+    }
+
     sofa::helper::AdvancedTimer::stepBegin("CollisionResponse");
+    msg_info("PipelineImpl") << "Calling doCollisionResponse()";
     doCollisionResponse();
     sofa::helper::AdvancedTimer::stepEnd("CollisionResponse");
 }

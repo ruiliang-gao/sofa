@@ -123,6 +123,7 @@ namespace sofa
                         unsigned int* indices);
 
                     void addLineModel(
+                        PBDLineModel* lineModel,
                         const unsigned int nPoints,
                         const unsigned int nQuaternions,
                         Vector3r *points,

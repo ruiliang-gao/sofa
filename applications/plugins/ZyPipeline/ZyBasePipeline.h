@@ -1,7 +1,7 @@
 #ifndef SOFA_COMPONENT_COLLISION_ZyPipeline_H
 #define SOFA_COMPONENT_COLLISION_ZyPipeline_H
 
-#include "config_zypipeline.h"
+#include "initZyPipeline.h"
 
 #include "ZyPipelineInterface.h"
 #include <sofa/simulation/PipelineImpl.h>

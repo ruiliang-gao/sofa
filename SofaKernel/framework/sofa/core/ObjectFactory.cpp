@@ -118,7 +118,7 @@ void ObjectFactory::resetAlias(std::string name, ClassEntry::SPtr previous)
 
 
 objectmodel::BaseObject::SPtr ObjectFactory::createObject(objectmodel::BaseContext* context, objectmodel::BaseObjectDescription* arg)
-{
+{   
     std::stringstream availabletemplate;
     objectmodel::BaseObject::SPtr object = nullptr;
     std::vector< std::pair<std::string, Creator::SPtr> > creators;
@@ -157,38 +157,59 @@ objectmodel::BaseObject::SPtr ObjectFactory::createObject(objectmodel::BaseConte
     std::string userresolved = templatename; // Copy in case we change for the default one
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    msg_info("ObjectFactory") << "Known classnames in total: " << registry.size();
+    /*msg_info("ObjectFactory") << "Known classnames in total: " << registry.size();
     for (ClassEntryMap::iterator it = registry.begin(); it != registry.end(); ++it)
-        msg_info("ObjectFactory") << "Known classname: " << it->first;
+        msg_info("ObjectFactory") << "Known classname: " << it->first;*/
+
+    msg_info("ObjectFactory") << "createObject() -- classname: " << classname << ", templatename: " << templatename;
 
     ClassEntryMap::iterator it = registry.find(classname);
     if (it != registry.end()) // Found the classname
     {
+        msg_info("ObjectFactory") << "classname " << classname << " exists in registry.";
         entry = it->second;
         // If no template has been given or if the template does not exist, first try with the default one
         if(templatename.empty() || entry->creatorMap.find(templatename) == entry->creatorMap.end())
             templatename = entry->defaultTemplate;
 
+        msg_info("ObjectFactory") << "Using templatename: " << templatename;
+
         CreatorMap::iterator it2 = entry->creatorMap.find(templatename);
         if (it2 != entry->creatorMap.end())
         {
+            msg_info("ObjectFactory") << "Found templatename '" << templatename << "' in creatorMap.";
             Creator::SPtr c = it2->second;
             if (c->canCreate(context, arg))
+            {
+                msg_info("ObjectFactory") << "Creator '" << c->type().name() << "' can create requested classname " << classname << " and templatename " << templatename;
                 creators.push_back(*it2);
+            }
+            else
+            {
+                msg_info("ObjectFactory") << "Creator '" << c->type().name() << "' can NOT create requested classname " << classname << " and templatename " << templatename;
+            }
+        }
+        else
+        {
+            msg_warning("ObjectFactory") << "DID NOT find templatename '" << templatename << "' in creatorMap.";
         }
 
         // If object cannot be created with the given template (or the default one), try all possible ones
         if (creators.empty())
         {
+            msg_info("ObjectFactory") << "No working creators found for templatename " << templatename << " . Trying all possible permutations.";
             CreatorMap::iterator it3;
             for (it3 = entry->creatorMap.begin(); it3 != entry->creatorMap.end(); ++it3)
             {
                 Creator::SPtr c = it3->second;
-                if (c->canCreate(context, arg)){
+                if (c->canCreate(context, arg))
+                {
+                    msg_info("ObjectFactory") << "Found working creator: " << c->type().name();
                     creators.push_back(*it3);
                 }
                 else
                 {
+                    msg_info("ObjectFactory") << "Found potential creator: " << c->type().name() << ", but object creation is not possible.";
                     availabletemplate << it3->first << ", ";
                 }
             }

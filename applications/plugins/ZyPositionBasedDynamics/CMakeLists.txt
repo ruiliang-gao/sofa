@@ -17,6 +17,7 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 find_package(SofaFramework REQUIRED)
+find_package(ZyPipeline REQUIRED)
 
 ## Eigen
 find_package(Eigen3 REQUIRED)
@@ -28,8 +29,16 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 include_directories(${CMAKE_SOURCE_DIR}/SofaKernel
                     ${CMAKE_SOURCE_DIR}/SofaKernel/modules
+                    ${CMAKE_SOURCE_DIR}/modules
                     ${EIGEN3_INCLUDE_DIR}
                     ${EIGEN3_INCLUDE_DIR}/unsupported)
+
+if (ZyPipeline_FOUND)
+    message(STATUS "Found ZyPipeline package.")
+    include_directories(${CMAKE_SOURCE_DIR}/applications/plugins/ZyPipeline)
+else()
+    message(STATUS "Failed to find ZyPipeline package!")
+endif()
 
 set(COMMON_UTIL_HEADER_FILES
     PBDCommon/PBDCommon.h
@@ -52,21 +61,20 @@ set(COMMON_UTIL_SOURCE_FILES
     PBDUtils/PBDTimeManager.cpp)
 
 set(MODELS_HEADER_FILES
+    PBDModels/initZyPositionBasedDynamicsModels.h
     PBDModels/PBDLineModel.h
     PBDModels/PBDTriangleModel.h
     PBDModels/PBDTetrahedronModel.h
     PBDModels/PBDSimulationModel.h
-    PBDModels/SofaPBDModelBase.h
-    PBDModels/SofaPBDLineModel.h
-    PBDModels/SofaPBDTriangleModel.h)
+    )
 
 set(MODELS_SOURCE_FILES
+    PBDModels/initZyPositionBasedDynamicsModels.cpp
     PBDModels/PBDLineModel.cpp
     PBDModels/PBDTriangleModel.cpp
     PBDModels/PBDTetrahedronModel.cpp
     PBDModels/PBDSimulationModel.cpp
-    PBDModels/SofaPBDLineModel.cpp
-    PBDModels/SofaPBDTriangleModel.cpp)
+    )
 
 set(CONSTRAINTS_HEADER_FILES
     PBDConstraints/PBDConstraintBase.h
@@ -103,40 +111,78 @@ set(HEADER_FILES initZyPositionBasedDynamicsPlugin.h
                  PBDMain/SofaPBDAnimationLoop.h
                  PBDMain/SofaPBDTimeStep.h
                  PBDMain/SofaPBDSimulation.h
-                 # PBDMain/SofaPBDTimeStepController.h
 
-                 PBDIntegration/GeometryConversion.h
-                 PBDIntegration/MechObjConversion.h
+                 PBDModels/SofaPBDModelBase.h
+                 PBDModels/SofaPBDLineModel.h
+                 PBDModels/SofaPBDRigidBodyModel.h
+                 PBDModels/SofaPBDTriangleMeshModel.h
+                 PBDModels/SofaPBDTetrahedronMeshModel.h
 
+                 PBDIntegration/GeometryAdapterBase.h
+                 PBDIntegration/MechanicalObjectAdapterBase.h
+
+                 PBDIntegration/SofaPBDPipeline.h
+                 PBDIntegration/SofaPBDCollisionVisitor.h
+                 PBDIntegration/SofaPBDSearchNodeVisitor.h
+
+                 PBDIntegration/SofaPBDCollisionIntersectorInterface.h
+
+                 PBDIntegration/SofaPBDNarrowPhaseCollisionIntersectors.h
+                 PBDIntegration/SofaPBDNarrowPhaseCollisionIntersectors.inl
+
+                 PBDIntegration/SofaPBDPointCollisionModel.h
+                 PBDIntegration/SofaPBDLineCollisionModel.h
+                 PBDIntegration/SofaPBDTriangleCollisionModel.h
+                 PBDIntegration/PBDCollisionModelsIntersection.h
                  )
 
 set(SOURCE_FILES initZyPositionBasedDynamicsPlugin.cpp
                  PBDMain/SofaPBDAnimationLoop.cpp
                  PBDMain/SofaPBDTimeStep.cpp
                  PBDMain/SofaPBDSimulation.cpp
-                 # PBDMain/SofaPBDTimeStepController.cpp
 
-                 PBDIntegration/GeometryConversion.cpp
-                 PBDIntegration/MechObjConversion.cpp
+                 PBDModels/SofaPBDModelBase.cpp
+                 PBDModels/SofaPBDLineModel.cpp
+                 PBDModels/SofaPBDRigidBodyModel.cpp
+                 PBDModels/SofaPBDTriangleMeshModel.cpp
+                 PBDModels/SofaPBDTetrahedronMeshModel.cpp
+
+                 PBDIntegration/GeometryAdapterBase.cpp
+                 PBDIntegration/MechanicalObjectAdapterBase.cpp
+
+                 PBDIntegration/SofaPBDPipeline.cpp
+                 PBDIntegration/SofaPBDCollisionVisitor.cpp
+
+                 PBDIntegration/SofaPBDNarrowPhaseCollisionIntersectors.cpp
+
+                 PBDIntegration/SofaPBDPointCollisionModel.cpp
+                 PBDIntegration/SofaPBDLineCollisionModel.cpp
+                 PBDIntegration/SofaPBDTriangleCollisionModel.cpp
+                 PBDIntegration/PBDCollisionModelsIntersection.cpp
                  )
 
 add_library(${PROJECT_NAME}_CommonUtils STATIC ${COMMON_UTIL_HEADER_FILES} ${COMMON_UTIL_SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME}_CommonUtils SofaCore SofaSimulationCore SofaBaseMechanics)
+target_link_libraries(${PROJECT_NAME}_CommonUtils SofaCore SofaSimulationCore SofaBaseMechanics SofaBaseCollision)
 
 add_library(${PROJECT_NAME}_Constraints STATIC ${CONSTRAINTS_HEADER_FILES} ${CONSTRAINTS_SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME}_Constraints SofaCore SofaSimulationCore SofaBaseMechanics ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Models)
+target_link_libraries(${PROJECT_NAME}_Constraints SofaCore SofaSimulationCore SofaBaseMechanics SofaBaseCollision ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Models)
 
 add_library(${PROJECT_NAME}_Models STATIC ${MODELS_HEADER_FILES} ${MODELS_SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME}_Models SofaCore SofaSimulationCore SofaBaseMechanics ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Constraints)
+target_link_libraries(${PROJECT_NAME}_Models SofaCore SofaSimulationCore SofaBaseMechanics SofaBaseCollision ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Constraints)
 
 add_library(${PROJECT_NAME}_Simulation STATIC ${SIMULATION_HEADER_FILES} ${SIMULATION_SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME}_Simulation SofaCore SofaSimulationCore SofaBaseMechanics ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Constraints ${PROJECT_NAME}_Models)
+target_link_libraries(${PROJECT_NAME}_Simulation SofaCore SofaSimulationCore SofaBaseMechanics SofaBaseCollision ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Constraints ${PROJECT_NAME}_Models)
 
 add_library(${PROJECT_NAME}_Dynamics STATIC ${DYNAMICS_HEADER_FILES} ${DYNAMICS_SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME}_Dynamics SofaCore SofaSimulationCore SofaBaseMechanics ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Constraints ${PROJECT_NAME}_Models)
+target_link_libraries(${PROJECT_NAME}_Dynamics SofaCore SofaSimulationCore SofaBaseMechanics SofaBaseCollision ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Constraints ${PROJECT_NAME}_Models)
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} SofaCore SofaSimulationCore SofaBaseMechanics ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Models ${PROJECT_NAME}_Constraints ${PROJECT_NAME}_Dynamics ${PROJECT_NAME}_Simulation ZyPBDDistanceBasedCollisionDetection)
+target_link_libraries(${PROJECT_NAME} SofaCore SofaSimulationCore SofaBaseMechanics SofaBaseCollision ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Models ${PROJECT_NAME}_Constraints ${PROJECT_NAME}_Dynamics ${PROJECT_NAME}_Simulation ZyPBDDistanceBasedCollisionDetection)
+
+if (ZyPipeline_FOUND)
+    message(STATUS "Found ZyPipeline package.")
+    target_link_libraries(${PROJECT_NAME} ZyPipeline)
+endif()
 
 sofa_create_package(${PROJECT_NAME}_CommonUtils ${ZY_POSITION_BASED_DYNAMICS_VERSION} ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_CommonUtils)
 sofa_create_package(${PROJECT_NAME}_Models ${ZY_POSITION_BASED_DYNAMICS_VERSION} ${PROJECT_NAME}_Models ${PROJECT_NAME}_Models)

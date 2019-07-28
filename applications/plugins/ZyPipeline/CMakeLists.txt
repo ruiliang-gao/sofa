@@ -9,17 +9,22 @@ set(ZY_PIPELINE_VERSION ${ZY_PIPELINE_MAJOR_VERSION}.${ZY_PIPELINE_MINOR_VERSION
 find_package(CUDA REQUIRED)
 find_package(Boost COMPONENTS system chrono thread REQUIRED)
 
-set(HEADER_FILES config_zypipeline.h
-                 initZyPipeline.h
+set(HEADER_FILES initZyPipeline.h
                  ZyPipelineInterface.h
                  ZyBasePipeline.h
 		 ZyDefaultPipeline.h
+                 ZyParallelNarrowPhase.h
+                 ZyMultiThreadedCollisionPipeline.h
+                 ZySingleThreadedCollisionPipeline.h
 		 )
 				 
 set(SOURCE_FILES initZyPipeline.cpp
                  ZyPipelineInterface.cpp
                  ZyBasePipeline.cpp
                  ZyDefaultPipeline.cpp
+                 ZyParallelNarrowPhase.cpp
+                 ZySingleThreadedCollisionPipeline.cpp
+                 ZyMultiThreadedCollisionPipeline.cpp
 		 )
 				 
 set(TASK_HEADER_FILES Zy_MultiThread_Tasks_BVHTraversal.h

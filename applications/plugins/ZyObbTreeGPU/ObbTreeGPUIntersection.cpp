@@ -34,7 +34,7 @@ namespace sofa
             OBBTreeGPUDiscreteIntersection::OBBTreeGPUDiscreteIntersection()
             {
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-                std::cout << "OBBTreeGPUDiscreteIntersection::OBBTreeGPUDiscreteIntersection() -- SHOULD NOT BE CALLED" << std::endl;
+                msg_info("ObbTreeGPUIntersection") << "OBBTreeGPUDiscreteIntersection::OBBTreeGPUDiscreteIntersection() -- SHOULD NOT BE CALLED";
 #endif
 
                 sofa::core::objectmodel::BaseObjectDescription discreteIntersectionDesc("Default Intersection","DiscreteIntersection");
@@ -44,28 +44,28 @@ namespace sofa
                 OBBTreeGPUDiscreteIntersection(intersection, true);
             }
 
-            OBBTreeGPUDiscreteIntersection::OBBTreeGPUDiscreteIntersection(DiscreteIntersection* object, bool addSelf)
-                : intersection(object)
+            OBBTreeGPUDiscreteIntersection::OBBTreeGPUDiscreteIntersection(DiscreteIntersection* object, bool addSelf): BaseIntersector()
+                //: intersection(object)
             {
-
+                /*
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-                std::cout << "OBBTreeGPUDiscreteIntersection::OBBTreeGPUDiscreteIntersection(" << object << "," << addSelf << ")" << std::endl;
+                msg_info("ObbTreeGPUIntersection") << "OBBTreeGPUDiscreteIntersection::OBBTreeGPUDiscreteIntersection(" << object << "," << addSelf << ")";
 #endif
                 if (intersection && addSelf)
                 {
 
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-                    std::cout << "Add intersector for ObbTreeGPUCollisionModel <-> ObbTreeGPUCollisionModel" << std::endl;
+                    msg_info("ObbTreeGPUIntersection") << "Add intersector for ObbTreeGPUCollisionModel <-> ObbTreeGPUCollisionModel";
 #endif
                     intersection->intersectors.add<ObbTreeGPUCollisionModel<>, ObbTreeGPUCollisionModel<>, OBBTreeGPUDiscreteIntersection>(this);
 
-                }
+                }*/
             }
 
             bool OBBTreeGPUDiscreteIntersection::testIntersection(ObbTreeGPUCollisionModelNode& e1, ObbTreeGPUCollisionModelNode &e2)
             {
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-				std::cout << "OBBTreeGPUDiscreteIntersection::testIntersection(ObbTreeGPUCollisionModelNode, ObbTreeGPUCollisionModelNode): OBBTreeGPUCollisionModels " << e1.getCollisionModel()->getName() << " -- " << e2.getCollisionModel()->getName() << ": "; // << std::endl;
+                msg_info("ObbTreeGPUIntersection") << "OBBTreeGPUDiscreteIntersection::testIntersection(ObbTreeGPUCollisionModelNode, ObbTreeGPUCollisionModelNode): OBBTreeGPUCollisionModels " << e1.getCollisionModel()->getName() << " -- " << e2.getCollisionModel()->getName() << ": ";
 #endif
                 const CubeModel::CubeData& cubeData1 = e1.getCollisionModel()->getCubeModel()->getCubeData(0);
                 const CubeModel::CubeData& cubeData2 = e2.getCollisionModel()->getCubeModel()->getCubeData(0);
@@ -74,29 +74,31 @@ namespace sofa
                 const Vector3& maxVect1 = cubeData1.maxBBox;
                 const Vector3& maxVect2 = cubeData2.maxBBox;
 
-//                const double alarmDist = getAlarmDistance();
-                const double alarmDist = 2.0;
-
-                //std::cout << "  minVect1 = " << minVect1 << ", maxVect1 = " << maxVect1 << "; minVect2 = " << minVect2 << ", maxVect2 = " << maxVect2 << "; alarmDist = " << alarmDist << std::endl;
-
+                // TODO: Make a data member
+                const double alarmDist = 2.0f;
+#ifdef OBBTREEGPUINTERSECTION_DEBUG
+                msg_info("ObbTreeGPUIntersection") << "  minVect1 = " << minVect1 << ", maxVect1 = " << maxVect1 << "; minVect2 = " << minVect2 << ", maxVect2 = " << maxVect2 << "; alarmDist = " << alarmDist;
+#endif
                 for (int i = 0; i < 3; i++)
                 {
                     if (minVect1[i] > maxVect2[i] + alarmDist || minVect2[i] > maxVect1[i] + alarmDist)
                     {
-                        //std::cout << minVect1[i] << " > " << maxVect2[i] << " + " << alarmDist << " -- " << minVect2[i] <<  " > " << maxVect1[i] << " + " << alarmDist << std::endl;
-						std::cout << " NO INTERSECTION of AABB's" << std::endl;
+#ifdef OBBTREEGPUINTERSECTION_DEBUG
+                        msg_info("ObbTreeGPUIntersection") << " NO INTERSECTION of AABB's";
+#endif
 						return false;
                     }
                 }
-
-				std::cout << " INTERSECTION DETECTED!!!" << std::endl;
+#ifdef OBBTREEGPUINTERSECTION_DEBUG
+                msg_info("ObbTreeGPUIntersection") << " INTERSECTION DETECTED!!!";
+#endif
                 return true;
             }
 
             int OBBTreeGPUDiscreteIntersection::computeIntersection(ObbTreeGPUCollisionModelNode& e1, ObbTreeGPUCollisionModelNode& e2, OutputVector* contacts)
             {
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-                std::cout << "OBBTreeGPUDiscreteIntersection::computeIntersection(): OBBTreeGPUCollisionModels " << e1.getCollisionModel()->getName() << " -- " << e2.getCollisionModel()->getName() << std::endl;
+                msg_info("ObbTreeGPUIntersection") << "OBBTreeGPUDiscreteIntersection::computeIntersection(): OBBTreeGPUCollisionModels " << e1.getCollisionModel()->getName() << " -- " << e2.getCollisionModel()->getName();
 #endif
                 return 0;
             }
@@ -120,9 +122,9 @@ namespace sofa
             {
                 intersectors.add<ObbTreeGPUCollisionModel<>, ObbTreeGPUCollisionModel<>, ObbTreeGPULocalMinDistance>(this);
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-				std::cout << "ObbTreeGPULocalMinDistance::init(" << this->getName() << ")" << std::endl;
+                msg_info("ObbTreeGPUIntersection") << "ObbTreeGPULocalMinDistance::init(" << this->getName() << ")";
 				testOutputFilename.setValue(sofa::helper::system::DataRepository.getFirstPath() + "/" + this->getName() + ".log");
-				std::cout << "testOutputFilename = " << testOutputFilename.getValue() << std::endl;
+                msg_info("ObbTreeGPUIntersection") << "testOutputFilename = " << testOutputFilename.getValue();
 
 				testOutput.open(testOutputFilename.getValue().c_str(), std::ofstream::trunc);
 				testOutput.close();
@@ -159,7 +161,7 @@ namespace sofa
             bool ObbTreeGPULocalMinDistance::testIntersection(ObbTreeGPUCollisionModelNode& e1, ObbTreeGPUCollisionModelNode &e2)
             {
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-				testOutput << "=== OBBTreeGPULocalMinDistance::testIntersection(ObbTreeGPUCollisionModelNode, ObbTreeGPUCollisionModelNode): OBBTreeGPUCollisionModels " << e1.getCollisionModel()->getName() << " -- " << e2.getCollisionModel()->getName()  << ", dt = " << this->getTime() << " ===" << std::endl;
+                testOutput << "=== OBBTreeGPULocalMinDistance::testIntersection(ObbTreeGPUCollisionModelNode, ObbTreeGPUCollisionModelNode): OBBTreeGPUCollisionModels " << e1.getCollisionModel()->getName() << " -- " << e2.getCollisionModel()->getName()  << ", dt = " << this->getTime() << " ===";
 #endif
 
 				checkedCollisionModels.push_back(std::make_pair(e1.getCollisionModel()->getName(), e2.getCollisionModel()->getName()));
@@ -174,7 +176,7 @@ namespace sofa
                 const double alarmDist = getAlarmDistance();
 
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-				testOutput << "  minVect1 = " << minVect1 << ", maxVect1 = " << maxVect1 << "; minVect2 = " << minVect2 << ", maxVect2 = " << maxVect2 << "; alarmDist = " << alarmDist << std::endl;
+                testOutput << "  minVect1 = " << minVect1 << ", maxVect1 = " << maxVect1 << "; minVect2 = " << minVect2 << ", maxVect2 = " << maxVect2 << "; alarmDist = " << alarmDist;
 #endif
 
                 for (int i = 0; i < 3; i++)
@@ -182,16 +184,16 @@ namespace sofa
                     if (minVect1[i] > maxVect2[i] + alarmDist || minVect2[i] > maxVect1[i] + alarmDist)
 					{
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-						testOutput << "  NO AABB Overlap detected -- " << minVect1[i] << " > " << maxVect2[i] << " + " << alarmDist << " -- " << minVect2[i] << " > " << maxVect1[i] << " + " << alarmDist << std::endl;
+                        testOutput << "  NO AABB Overlap detected -- " << minVect1[i] << " > " << maxVect2[i] << " + " << alarmDist << " -- " << minVect2[i] << " > " << maxVect1[i] << " + " << alarmDist;
 #endif
                         return false;
                     }
                 }
 
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-				testOutput << "  AABB Intersection DETECTED -- model1 is ghost = " << e1.getCollisionModel()->isGhostObject() << ", model2 is ghost = " << e2.getCollisionModel()->isGhostObject() << std::endl;
+                testOutput << "  AABB Intersection DETECTED -- model1 is ghost = " << e1.getCollisionModel()->isGhostObject() << ", model2 is ghost = " << e2.getCollisionModel()->isGhostObject();
 				if (e1.getCollisionModel()->isGhostObject() && e2.getCollisionModel()->isGhostObject())
-					testOutput << "  ghost-ghost AABB intersection detected!!!" << std::endl;
+                    testOutput << "  ghost-ghost AABB intersection detected!!!";
 #endif
 				overlappingCollisionModels.push_back(std::make_pair(e1.getCollisionModel()->getName(), e2.getCollisionModel()->getName()));
 
@@ -201,7 +203,7 @@ namespace sofa
             int ObbTreeGPULocalMinDistance::computeIntersection(ObbTreeGPUCollisionModelNode& e1, ObbTreeGPUCollisionModelNode& e2, OutputVector* contacts)
             {
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-                std::cout << "OBBTreeGPULocalMinDistance::computeIntersection(): OBBTreeGPUCollisionModels " << e1.getCollisionModel()->getName() << " -- " << e2.getCollisionModel()->getName() << std::endl;
+                msg_info("ObbTreeGPUIntersection") << "OBBTreeGPULocalMinDistance::computeIntersection(): OBBTreeGPUCollisionModels " << e1.getCollisionModel()->getName() << " -- " << e2.getCollisionModel()->getName();
 #endif
                 return 0;
             }
@@ -210,7 +212,7 @@ namespace sofa
             {
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
 				testOutput.open(testOutputFilename.getValue().c_str(), std::ofstream::ate | std::ofstream::app);
-                testOutput << "=== ObbTreeGPULocalMinDistance::beginBroadPhase(" << this->getName() << "), dt = " << this->getTime() << " ===" << std::endl;
+                testOutput << "=== ObbTreeGPULocalMinDistance::beginBroadPhase(" << this->getName() << "), dt = " << this->getTime() << " ===";
 #endif
 				checkedCollisionModels.clear();
 				overlappingCollisionModels.clear();
@@ -219,15 +221,15 @@ namespace sofa
 			void ObbTreeGPULocalMinDistance::endBroadPhase()
             {
 #ifdef OBBTREEGPUINTERSECTION_DEBUG
-				testOutput << "=== ObbTreeGPULocalMinDistance::endBroadPhase(" << this->getName() << "), dt = " << this->getTime() << " ===" << std::endl;
+                testOutput << "=== ObbTreeGPULocalMinDistance::endBroadPhase(" << this->getName() << "), dt = " << this->getTime() << " ===";
 
-				testOutput << "AABB pairs tested in broad-phase: " << checkedCollisionModels.size() << std::endl;
+                testOutput << "AABB pairs tested in broad-phase: " << checkedCollisionModels.size();
 				for (std::vector<std::pair<std::string, std::string> >::const_iterator it = checkedCollisionModels.begin(); it != checkedCollisionModels.end(); it++)
-					testOutput << " - " << it->first << " -- " << it->second << std::endl;
+                    testOutput << " - " << it->first << " -- " << it->second;
 
-				testOutput << "AABB pairs overlapping in broad-phase: " << overlappingCollisionModels.size() << std::endl;
+                testOutput << "AABB pairs overlapping in broad-phase: " << overlappingCollisionModels.size();
 				for (std::vector<std::pair<std::string, std::string> >::const_iterator it = overlappingCollisionModels.begin(); it != overlappingCollisionModels.end(); it++)
-					testOutput << " - " << it->first << " -- " << it->second << std::endl;
+                    testOutput << " - " << it->first << " -- " << it->second;
 
                 testOutput.close();
 #endif

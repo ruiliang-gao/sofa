@@ -59,11 +59,12 @@ void CollisionVisitor::processCollisionPipeline(simulation::Node*
 #endif
         , core::collision::Pipeline* obj)
 {
-    //msg_info()<<"CollisionVisitor::processCollisionPipeline"<<std::endl;
+    msg_info("CollisionVisitor") << "CollisionVisitor::processCollisionPipeline";
 #ifdef SOFA_DUMP_VISITOR_INFO
     printComment("computeCollisionReset");
     ctime_t t0=begin(node, obj);
 #endif
+    msg_info("CollisionVisitor") << "computeCollisionReset()";
     obj->computeCollisionReset();
 #ifdef SOFA_DUMP_VISITOR_INFO
     end(node, obj,t0);
@@ -73,10 +74,14 @@ void CollisionVisitor::processCollisionPipeline(simulation::Node*
     printComment("computeCollisionDetection");
     t0=begin(node, obj);
 #endif
+    msg_info("CollisionVisitor") << "computeCollisionDetection()";
     obj->computeCollisionDetection();
 
     if (obj->getNarrowPhaseDetection())
+    {
         m_primitiveTestCount += obj->getNarrowPhaseDetection()->getPrimitiveTestCount();
+        msg_info("CollisionVisitor") << "Primitive test count after narrow phase: " << m_primitiveTestCount;
+    }
 #ifdef SOFA_DUMP_VISITOR_INFO
     end(node, obj,t0);
 #endif
@@ -85,6 +90,7 @@ void CollisionVisitor::processCollisionPipeline(simulation::Node*
     printComment("computeCollisionResponse");
     t0=begin(node, obj);
 #endif
+    msg_info("CollisionVisitor") << "computeCollisionResponse()";
     obj->computeCollisionResponse();
 #ifdef SOFA_DUMP_VISITOR_INFO
     end(node, obj,t0);

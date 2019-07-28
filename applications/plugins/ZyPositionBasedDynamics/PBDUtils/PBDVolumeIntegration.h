@@ -7,6 +7,9 @@
 
 #include "initZyPositionBasedDynamicsPlugin.h"
 #include "PBDCommon/PBDCommon.h"
+
+#include <sofa/helper/logging/Messaging.h>
+
 namespace sofa
 {
     namespace simulation
@@ -57,7 +60,6 @@ namespace sofa
                         /** Compute various integrations over projection of face.
                         */
                         void projection_integrals(unsigned int i);
-
 
                         std::vector<Vector3r> m_face_normals;
                         std::vector<Real> m_weights;

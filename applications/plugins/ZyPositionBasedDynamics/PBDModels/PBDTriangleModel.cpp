@@ -8,6 +8,7 @@ using namespace sofa::simulation::PBDSimulation;
 PBDTriangleModel::PBDTriangleModel() :
     m_particleMesh()
 {
+    m_indexOffset = 0;
     m_restitutionCoeff = static_cast<Real>(0.6);
     m_frictionCoeff = static_cast<Real>(0.2);
 }

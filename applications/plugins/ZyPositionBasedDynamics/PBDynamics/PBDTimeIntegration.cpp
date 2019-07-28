@@ -1,5 +1,7 @@
 #include "PBDTimeIntegration.h"
 
+#include <sofa/helper/logging/Messaging.h>
+
 using namespace sofa::simulation::PBDSimulation;
 
 // ----------------------------------------------------------------------------------------------
@@ -12,7 +14,9 @@ void PBDTimeIntegration::semiImplicitEuler(
 {
     if (mass != 0.0)
     {
+        msg_info("PBDTimeIntegration") << "semiImplicitEuler: velocity = (" << velocity[0] << "," << velocity[1] << "," << velocity[2] << ") + " << "((" << acceleration[0] << "," << acceleration[1] << "," << acceleration[2] << ") * " << h << ")";
         velocity += acceleration * h;
+        msg_info("PBDTimeIntegration") << "semiImplicitEuler: position = (" << position[0] << "," << position[1] << "," << position[2] << ") + " << "((" << velocity[0] << "," << "," << velocity[1] << "," << velocity[2] << ") * " << h << ")";
         position += velocity * h;
     }
 }
@@ -29,11 +33,13 @@ void PBDTimeIntegration::semiImplicitEulerRotation(
     if (mass != 0.0)
     {
         // simple form without nutation effect
+        msg_info("PBDTimeIntegration") << "semiImplicitEulerRotation: angularVelocity = (" << angularVelocity[0] << "," << angularVelocity[1] << "," << angularVelocity[2] << "," << ") + " << "((" << invInertiaW << " * " << torque[0] << "," << torque[1] << "," << torque[2] << ") * " << h << ")";
         angularVelocity += h * invInertiaW * torque;
 
         Quaternionr angVelQ(0.0, angularVelocity[0], angularVelocity[1], angularVelocity[2]);
         rotation.coeffs() += h * 0.5 * (angVelQ * rotation).coeffs();
         rotation.normalize();
+        msg_info("PBDTimeIntegration") << "semiImplicitEulerRotation: rotation = (" << rotation.x() << "," << rotation.y() << "," << rotation.z() << "," << rotation.w() << ")";
     }
 }
 
@@ -46,7 +52,9 @@ void PBDTimeIntegration::velocityUpdateFirstOrder(
     Vector3r &velocity)
 {
     if (mass != 0.0)
+    {
         velocity = (1.0 / h) * (position - oldPosition);
+    }
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -74,7 +82,9 @@ void PBDTimeIntegration::velocityUpdateSecondOrder(
     Vector3r &velocity)
 {
     if (mass != 0.0)
+    {
         velocity = (1.0 / h) * (1.5*position - 2.0*oldPosition + 0.5*positionOfLastStep);
+    }
 }
 
 // ----------------------------------------------------------------------------------------------

@@ -63,4 +63,4 @@ namespace Zyklio
 	}
 }
 
-#endif //TruPhysics_PIPELINE_TRUDEFAULTPIPELINE_H
+#endif //ZY_PIPELINE_DEFAULTPIPELINE_H
