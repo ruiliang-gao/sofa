@@ -10,7 +10,7 @@
 	branch = master
 [submodule "CollDet"]
 	path = extlibs/CollDet
-	url = https://gitlab.informatik.uni-bremen.de/cgvr/CollDet.git
+	url = ssh://git@git.simedis.com:222/tracks/SPE/colldet.git
 [submodule "ProtoSphereExtended"]
 	path = extlibs/ProtoSphereExtended
-	url = https://gitlab.informatik.uni-bremen.de/cgvr/protosphereextended.git
+	url = ssh://git@git.simedis.com:222/tracks/SPE/protosphereextended.git
