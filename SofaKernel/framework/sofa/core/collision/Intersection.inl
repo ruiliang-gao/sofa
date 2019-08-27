@@ -67,6 +67,10 @@ public:
     {
         Elem1 e1(elem1);
         Elem2 e2(elem2);
+
+        msg_info("MemberElementIntersector") << "intersect: " << elem1.getCollisionModel()->getName() << " of type " << elem1.getCollisionModel()->getClassName() <<
+                                                " -- " << elem2.getCollisionModel()->getName() << " of type " << elem2.getCollisionModel()->getClassName();
+
         return impl->computeIntersection(e1, e2, impl->getOutputVector(e1.getCollisionModel(), e2.getCollisionModel(), contacts));
     }
 

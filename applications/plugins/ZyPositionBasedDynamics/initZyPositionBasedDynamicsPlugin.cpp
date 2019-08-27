@@ -32,7 +32,7 @@ extern "C" {
 
     const char* getModuleComponentList()
     {
-        return "SofaPBDSimulationLoop, SofaPBDSimulation, SofaPBDLineModel, SofaPBDRigidBodyModel, SofaPBDTriangleMeshModel, SofaPBDTetrahedronMeshModel, SofaPBDPointCollisionModel, SofaPBDLineCollisionModel, SofaPBDTriangleCollisionModel, PBDCollisionModelsIntersection, SofaPBDPipeline";
+        return "SofaPBDSimulationLoop, SofaPBDSimulation, SofaPBDLineModel, SofaPBDRigidBodyModel, SofaPBDTriangleMeshModel, SofaPBDTetrahedronMeshModel, SofaPBDPointCollisionModel, SofaPBDLineCollisionModel, SofaPBDTriangleCollisionModel, PBDCollisionModelsIntersection, PBDBruteForceDetection, SofaPBDPipeline, SofaPBDNarrowPhaseCollisionIntersectors";
     }
 }
 
@@ -47,4 +47,5 @@ SOFA_LINK_CLASS(SofaPBDLineCollisionModel)
 SOFA_LINK_CLASS(SofaPBDTriangleCollisionModel)
 SOFA_LINK_CLASS(PBDCollisionModelsIntersection)
 SOFA_LINK_CLASS(SofaPBDPipeline)
-
+SOFA_LINK_CLASS(SofaPBDNarrowPhaseCollisionIntersectors)
+SOFA_LINK_CLASS(PBDBruteForceDetection)

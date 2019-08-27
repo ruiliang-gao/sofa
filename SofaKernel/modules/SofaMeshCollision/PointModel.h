@@ -173,7 +173,7 @@ template<class DataTypes>
 inline TPoint<DataTypes>::TPoint(ParentModel* model, int index)
     : core::TCollisionElementIterator<ParentModel>(model, index)
 {
-
+    msg_info("TPoint") << "TPoint(" << (model ? model->getName() : "NULL") << ", " << index << ")";
 }
 
 template<class DataTypes>

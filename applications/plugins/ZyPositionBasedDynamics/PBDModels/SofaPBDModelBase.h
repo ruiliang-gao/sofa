@@ -45,6 +45,9 @@ namespace sofa
                     virtual bool hasPBDRigidBody() const;
                     virtual const PBDRigidBodyGeometry& getRigidBodyGeometry() const;
 
+                    virtual const PBDRigidBody* getPBDRigidBody() const;
+                    virtual PBDRigidBody* getPBDRigidBody();
+
                     /// @}
                 protected:
                     /// Initial model transform data

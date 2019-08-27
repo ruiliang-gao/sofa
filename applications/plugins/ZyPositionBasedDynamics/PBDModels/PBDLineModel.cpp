@@ -49,3 +49,8 @@ unsigned PBDLineModel::getIndexOffsetQuaternions() const
 {
     return m_indexOffsetQuaternions;
 }
+
+unsigned int PBDLineModel::getNumPoints() const
+{
+    return m_nPoints;
+}

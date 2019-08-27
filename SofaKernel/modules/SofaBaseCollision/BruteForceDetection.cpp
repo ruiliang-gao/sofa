@@ -442,7 +442,11 @@ void BruteForceDetection::addCollisionPair(const std::pair<core::CollisionModel*
                                                         //if (!it1->canCollideWith(it2)) continue;
                                                         // Final collision pair
                                                         if (!self || it1.canCollideWith(it2))
+                                                        {
+                                                            msg_info("BruteForceDetection") << "Final intersection check: " << it1.getCollisionModel()->getName() << " of type " << it1.getCollisionModel()->getClassName() << ", index " << it1.getIndex() << " -- "
+                                                                                            << it2.getCollisionModel()->getName() << " of type " << it2.getCollisionModel()->getClassName() << ", index " << it2.getIndex();
                                                             finalintersector->intersect(it1,it2,outputs);
+                                                        }
                                                     }
                                                 }
                                             }

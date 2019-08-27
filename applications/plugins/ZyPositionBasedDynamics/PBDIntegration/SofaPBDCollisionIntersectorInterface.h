@@ -10,6 +10,10 @@
 #include <SofaMeshCollision/LineModel.h>
 #include <SofaMeshCollision/TriangleModel.h>
 
+#include <SofaMeshCollision/PointLocalMinDistanceFilter.h>
+#include <SofaMeshCollision/LineLocalMinDistanceFilter.h>
+#include <SofaMeshCollision/TriangleLocalMinDistanceFilter.h>
+
 using namespace sofa;
 namespace sofa
 {
@@ -27,17 +31,13 @@ namespace sofa
                     ~SofaPBDCollisionIntersectorInterface() {}
 
                     // From LMDNewProximityIntersection
-                    template< class TFilter1, class TFilter2 >
-                    int doIntersectionLineLine(double dist2, const defaulttype::Vector3& p1, const defaulttype::Vector3& p2, const defaulttype::Vector3& q1, const defaulttype::Vector3& q2, sofa::core::collision::BaseIntersector::OutputVector* contacts, int id, int indexLine1, int indexLine2, TFilter1 &f1, TFilter2 &f2) { return 0; }
+                    int doIntersectionLineLine(double dist2, const defaulttype::Vector3& p1, const defaulttype::Vector3& p2, const defaulttype::Vector3& q1, const defaulttype::Vector3& q2, sofa::core::collision::BaseIntersector::OutputVector* contacts, int id, int indexLine1, int indexLine2, sofa::component::collision::LineLocalMinDistanceFilter &f1, sofa::component::collision::LineLocalMinDistanceFilter &f2) { return 0; }
 
-                    template< class TFilter1, class TFilter2 >
-                    int doIntersectionLinePoint(double dist2, const defaulttype::Vector3& p1, const defaulttype::Vector3& p2, const defaulttype::Vector3& q, sofa::core::collision::BaseIntersector::OutputVector* contacts, int id, int indexLine1, int indexPoint2, TFilter1 &f1, TFilter2 &f2, bool swapElems = false) { return 0; }
+                    int doIntersectionLinePoint(double dist2, const defaulttype::Vector3& p1, const defaulttype::Vector3& p2, const defaulttype::Vector3& q, sofa::core::collision::BaseIntersector::OutputVector* contacts, int id, int indexLine1, int indexPoint2, sofa::component::collision::LineLocalMinDistanceFilter &f1, sofa::component::collision::PointLocalMinDistanceFilter &f2, bool swapElems = false) { return 0; }
 
-                    template< class TFilter1, class TFilter2 >
-                    int doIntersectionPointPoint(double dist2, const defaulttype::Vector3& p, const defaulttype::Vector3& q, sofa::core::collision::BaseIntersector::OutputVector* contacts, int id, int indexPoint1, int indexPoint2, TFilter1 &f1, TFilter2 &f2) { return 0; }
+                    int doIntersectionPointPoint(double dist2, const defaulttype::Vector3& p, const defaulttype::Vector3& q, sofa::core::collision::BaseIntersector::OutputVector* contacts, int id, int indexPoint1, int indexPoint2, sofa::component::collision::PointLocalMinDistanceFilter &f1, sofa::component::collision::PointLocalMinDistanceFilter &f2) { return 0; }
 
-                    template< class TFilter1, class TFilter2 >
-                    int doIntersectionTrianglePoint(double dist2, int flags, const defaulttype::Vector3& p1, const defaulttype::Vector3& p2, const defaulttype::Vector3& p3, const defaulttype::Vector3& n, const defaulttype::Vector3& q, sofa::core::collision::BaseIntersector::OutputVector* contacts, int id, sofa::component::collision::Triangle &e1, unsigned int *edgesIndices, int indexPoint2, TFilter1 &f1, TFilter2 &f2, bool swapElems = false) { return 0; }
+                    int doIntersectionTrianglePoint(double dist2, int flags, const defaulttype::Vector3& p1, const defaulttype::Vector3& p2, const defaulttype::Vector3& p3, const defaulttype::Vector3& n, const defaulttype::Vector3& q, sofa::core::collision::BaseIntersector::OutputVector* contacts, int id, sofa::component::collision::Triangle &e1, unsigned int *edgesIndices, int indexPoint2, sofa::component::collision::TriangleLocalMinDistanceFilter &f1, sofa::component::collision::PointLocalMinDistanceFilter &f2, bool swapElems = false) { return 0; }
             };
         }
     }

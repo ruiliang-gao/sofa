@@ -86,11 +86,14 @@ set(CUDA_SOURCE_FILES_CUDPP
     ${gProximity_baseDir}/cudasort.cu
 )
 
-if (CUDPP_FOUND)
-    include_directories(${CUDPP_INCLUDE_DIR})
-else (CUDPP_FOUND)
-    include_directories(${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp/include ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp/src)
-endif (CUDPP_FOUND)
+# if (CUDPP_FOUND)
+#     include_directories(${CUDPP_INCLUDE_DIR})
+# else (CUDPP_FOUND)
+#     include_directories(${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp/include ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp/src)
+# endif (CUDPP_FOUND)
+
+# Fine, always use the local version of CudPP
+include_directories(${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp/include ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp/src)
 
 if (NOT WIN32)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")

@@ -47,6 +47,10 @@ using namespace sofa::core;
 using namespace sofa::core::objectmodel;
 using namespace sofa::component::collision;
 
+#include "SofaPBDLineCollisionModel.inl"
+
+template class TPBDLine<sofa::defaulttype::Vec3Types>;
+
 SOFA_DECL_CLASS(SofaPBDLineCollisionModel)
 
 int SofaPBDLineCollisionModelClass = sofa::core::RegisterObject("PBD plugin adapter class for line collision models.")
@@ -261,10 +265,7 @@ void SofaPBDLineCollisionModel::computeBoundingTree(int maxDepth)
 
         if (m_d->m_usePBDLineModel && !m_d->m_usePBDRigidBody)
         {
-            msg_info("SofaPBDLineCollisionModel") << "Use SofaPBDLineModel geometry for BVH update.";
-            PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
-            const PBDParticleData &pd = model->getParticles();
-
+            msg_info("SofaPBDLineCollisionModel") << "Use SofaPBDLineModel geometry for BVH update.";            
             PBDLineModel::Edges& lm_edges = m_d->m_pbdLineModel->getPBDLineModel()->getEdges();
 
             nlines = lm_edges.size();
@@ -404,4 +405,179 @@ void SofaPBDLineCollisionModel::computeBoundingTree(int maxDepth)
     {
         m_lmdFilter->invalidate();
     }
+}
+
+bool SofaPBDLineCollisionModel::usesPBDRigidBody() const
+{
+    return m_d->m_usePBDRigidBody;
+}
+
+bool SofaPBDLineCollisionModel::usesPBDLineModel() const
+{
+    return m_d->m_usePBDLineModel;
+}
+
+const PBDRigidBody* SofaPBDLineCollisionModel::getPBDRigidBody() const
+{
+    if (m_d->m_pbdRigidBody)
+        return m_d->m_pbdRigidBody->getPBDRigidBody();
+
+    return nullptr;
+}
+
+PBDRigidBody* SofaPBDLineCollisionModel::getPBDRigidBody()
+{
+    if (m_d->m_pbdRigidBody)
+        return m_d->m_pbdRigidBody->getPBDRigidBody();
+
+    return nullptr;
+}
+
+const PBDLineModel* SofaPBDLineCollisionModel::getPBDLineModel() const
+{
+    if (m_d->m_pbdLineModel)
+        return m_d->m_pbdLineModel->getPBDLineModel().get();
+
+    return nullptr;
+}
+
+PBDLineModel* SofaPBDLineCollisionModel::getPBDLineModel()
+{
+    if (m_d->m_pbdLineModel)
+        return m_d->m_pbdLineModel->getPBDLineModel().get();
+
+    return nullptr;
+}
+
+const sofa::defaulttype::Vec3 SofaPBDLineCollisionModel::getCoord(unsigned int idx) const
+{
+    static sofa::defaulttype::Vec3 zeroVec(0, 0, 0);
+    msg_info("SofaPBDLineCollisionModel") << "getCoord(" << idx << ")";
+
+    if (m_d->m_usePBDRigidBody)
+    {
+        msg_info("SofaPBDLineCollisionModel") << "Using PBDRigidBody.";
+        if (idx >= m_d->m_pbdRigidBody->getRigidBodyGeometry().getVertexData().size())
+        {
+            msg_info("SofaPBDLineCollisionModel") << "Index " << idx << " lies beyond RB geometry size " << m_d->m_pbdRigidBody->getRigidBodyGeometry().getVertexData().size() << " returning zeroVec.";
+            return zeroVec;
+        }
+        Vector3r pt = m_d->m_pbdRigidBody->getRigidBodyGeometry().getVertexData().getPosition(idx);
+        msg_info("SofaPBDLineCollisionModel") << "RB vertex at index: " << idx << ": " << pt;
+        return sofa::defaulttype::Vector3(pt[0], pt[1], pt[2]);
+    }
+
+    if (m_d->m_usePBDLineModel)
+    {
+        PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+        const PBDParticleData &pd = model->getParticles();
+
+        PBDLineModel::Edges& lm_edges = m_d->m_pbdLineModel->getPBDLineModel()->getEdges();
+        if (idx > lm_edges.size())
+        {
+            msg_info("SofaPBDLineCollisionModel") << "Index " << idx << " lies beyond line model size " << lm_edges.size() << ", returning zeroVec.";
+            return zeroVec;
+        }
+
+        if (idx == lm_edges.size())
+        {
+            const PBDLineModel::OrientedEdge& edge = lm_edges.back();
+            const Vector3r& lpt = pd.getPosition(edge.m_vert[1]);
+            return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
+        }
+        else
+        {
+            const PBDLineModel::OrientedEdge& edge = lm_edges[idx];
+            const Vector3r& lpt = pd.getPosition(edge.m_vert[0]);
+            return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
+        }
+    }
+
+    return zeroVec;
+}
+
+const sofa::defaulttype::Vec3 SofaPBDLineCollisionModel::getDeriv(unsigned int idx) const
+{
+    static sofa::defaulttype::Vec3 zeroVec(0, 0, 0);
+
+    if (m_d->m_usePBDRigidBody)
+    {
+        if (idx >= m_d->m_pbdRigidBody->getRigidBodyGeometry().getVertexData().size())
+            return zeroVec;
+
+        Vector3r tr_v = m_d->m_pbdRigidBody->getPBDRigidBody()->getVelocity();
+        Vector3r rot_v = m_d->m_pbdRigidBody->getPBDRigidBody()->getAngularVelocity();
+
+        Vector3r rb_pos = m_d->m_pbdRigidBody->getPBDRigidBody()->getPosition();
+        Vector3r pt = m_d->m_pbdRigidBody->getRigidBodyGeometry().getVertexData().getPosition(idx);
+
+        Vector3r pt_in_rb_pos = rb_pos - pt;
+
+        Vec3 pt_in_rb(pt_in_rb_pos[0], pt_in_rb_pos[1], pt_in_rb_pos[2]);
+
+        Vec3 tr_vel(tr_v[0], tr_v[1], tr_v[2]);
+        Vec3 rot_vel(rot_v[0], rot_v[1], rot_v[2]);
+
+        Vec3 pt_in_rb_vel = tr_vel + rot_vel.cross(pt_in_rb);
+
+        return pt_in_rb_vel;
+    }
+
+    if (m_d->m_usePBDLineModel)
+    {
+        PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+        const PBDParticleData &pd = model->getParticles();
+
+        PBDLineModel::Edges& lm_edges = m_d->m_pbdLineModel->getPBDLineModel()->getEdges();
+        if (idx > lm_edges.size())
+            return zeroVec;
+
+        if (idx == lm_edges.size())
+        {
+            const PBDLineModel::OrientedEdge& edge = lm_edges.back();
+            const Vector3r& lpt = pd.getVelocity(edge.m_vert[1]);
+            return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
+        }
+        else
+        {
+            const PBDLineModel::OrientedEdge& edge = lm_edges[idx];
+            const Vector3r& lpt = pd.getVelocity(edge.m_vert[0]);
+            return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
+        }
+    }
+
+    return zeroVec;
+}
+
+void SofaPBDLineCollisionModel::computeBBox(const core::ExecParams* params, bool onlyVisible)
+{
+    if (!onlyVisible)
+        return;
+
+    static const Real max_real = std::numeric_limits<Real>::max();
+    static const Real min_real = std::numeric_limits<Real>::lowest();
+    Real maxBBox[3] = {min_real,min_real,min_real};
+    Real minBBox[3] = {max_real,max_real,max_real};
+
+    for (int i=0; i<size; i++)
+    {
+        Element e(this,i);
+        const defaulttype::Vector3& pt1 = e.p1();
+        const defaulttype::Vector3& pt2 = e.p2();
+
+        for (int c=0; c<3; c++)
+        {
+            if (pt1[c] > maxBBox[c])
+                maxBBox[c] = (Real)pt1[c];
+            else if (pt1[c] < minBBox[c])
+                minBBox[c] = (Real)pt1[c];
+
+            if (pt2[c] > maxBBox[c])
+                maxBBox[c] = (Real)pt2[c];
+            else if (pt2[c] < minBBox[c])
+                minBBox[c] = (Real)pt2[c];
+        }
+    }
+
+    this->f_bbox.setValue(params,sofa::defaulttype::TBoundingBox<Real>(minBBox,maxBBox));
 }

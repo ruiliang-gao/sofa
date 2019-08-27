@@ -131,8 +131,13 @@ set(HEADER_FILES initZyPositionBasedDynamicsPlugin.h
                  PBDIntegration/SofaPBDNarrowPhaseCollisionIntersectors.inl
 
                  PBDIntegration/SofaPBDPointCollisionModel.h
+                 PBDIntegration/SofaPBDPointCollisionModel.inl
                  PBDIntegration/SofaPBDLineCollisionModel.h
+                 PBDIntegration/SofaPBDLineCollisionModel.inl
                  PBDIntegration/SofaPBDTriangleCollisionModel.h
+                 PBDIntegration/SofaPBDTriangleCollisionModel.inl
+
+                 PBDIntegration/SofaPBDBruteForceDetection.h
                  PBDIntegration/PBDCollisionModelsIntersection.h
                  )
 
@@ -158,6 +163,8 @@ set(SOURCE_FILES initZyPositionBasedDynamicsPlugin.cpp
                  PBDIntegration/SofaPBDPointCollisionModel.cpp
                  PBDIntegration/SofaPBDLineCollisionModel.cpp
                  PBDIntegration/SofaPBDTriangleCollisionModel.cpp
+
+                 PBDIntegration/SofaPBDBruteForceDetection.cpp
                  PBDIntegration/PBDCollisionModelsIntersection.cpp
                  )
 

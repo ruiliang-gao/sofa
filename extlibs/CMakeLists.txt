@@ -63,3 +63,18 @@ foreach(target ${EXTLIBS_TARGETS})
     set_target_properties(${target} PROPERTIES FOLDER "SofaExtlibs")
 endforeach()
 
+option(SOFA_BUILD_PROTOSPHERE_EXTENDED
+"Build the ProtoSphere helper library for IST." ON)
+
+if (SOFA_BUILD_PROTOSPHERE_EXTENDED)
+    add_subdirectory(ProtoSphereExtended ${CMAKE_BINARY_DIR}/extlibs/ProtoSphereExtended)
+    # list(APPEND EXTLIBS_TARGETS ProtoSphereExtended)
+endif()
+
+option(SOFA_BUILD_COLLDET
+"Build the CollDet library." ON)
+
+if (SOFA_BUILD_COLLDET)
+    add_subdirectory(CollDet ${CMAKE_BINARY_DIR}/extlibs/CollDet)
+    # list(APPEND EXTLIBS_TARGETS CollDet)
+endif()

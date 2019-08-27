@@ -16,3 +16,7 @@ SofaPBDNarrowPhaseCollisionIntersectors::SofaPBDNarrowPhaseCollisionIntersectors
 
 }
 
+SofaPBDNarrowPhaseCollisionIntersectors::~SofaPBDNarrowPhaseCollisionIntersectors()
+{
+
+}

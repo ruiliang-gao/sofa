@@ -143,22 +143,23 @@ if(WIN32)
     add_definitions("-DBUILD_TRU_MULTITHREADING")  # without this the compiler complains that "definition of dllimport function not allowed" for TaskSchedulerBoostPool.inl functions
 endif(WIN32)
 
-# TruMultiThreading
+# ZyMultiThreading
 include_directories(${CMAKE_SOURCE_DIR}/applications/plugins/ZyMultiThreading)
 
-# TruCollisionManager
+# ZyCollisionManager
 include_directories(${CMAKE_SOURCE_DIR}/applications/plugins/ZyCollisionManager)
 add_definitions(-DBUILD_ZY_COLLISIONMANAGER)
 
-# include_directories(${CMAKE_SOURCE_DIR}/trulibs/BVHModels)
-# include_directories(${CMAKE_SOURCE_DIR}/trulibs/libkrc)
-# include_directories(${CMAKE_SOURCE_DIR}/trulibs/)
+#if (CUDPP_FOUND)
+#    message(STATUS "CudPP library found. Include directory: ${CUDPP_INCLUDE_DIR}")
+#        include_directories(${CUDPP_INCLUDE_DIR})
+#else (CUDPP_FOUND)
+#        include_directories(${CMAKE_SOURCE_DIR}/trulibs/cudpp/include ${SOFA_EXTLIBS_DIR}/cudpp ${SOFA_EXTLIBS_DIR}/cudpp/src)
+#endif (CUDPP_FOUND)
 
-if (CUDPP_FOUND)
-        include_directories(${CUDPP_INCLUDE_DIR})
-else (CUDPP_FOUND)
-        include_directories(${CMAKE_SOURCE_DIR}/trulibs/cudpp/include ${SOFA_EXTLIBS_DIR}/cudpp ${SOFA_EXTLIBS_DIR}/cudpp/src)
-endif (CUDPP_FOUND)
+# Fine, always use the local version of CudPP
+include_directories(${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp/include ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp/src)
+
 
 link_directories(${Boost_LIBRARY_DIRS})
 link_directories(${CMAKE_BINARY_DIR}/lib/Debug ${CMAKE_BINARY_DIR}/lib/RelWithDebInfo ${CMAKE_BINARY_DIR}/lib/Release)

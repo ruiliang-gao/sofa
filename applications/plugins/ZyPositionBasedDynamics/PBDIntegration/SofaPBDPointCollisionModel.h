@@ -15,11 +15,44 @@ namespace sofa
         {
             using namespace sofa::core::objectmodel;
 
-            class SofaPBDPointCollisionModelPrivate;
-            class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API SofaPBDPointCollisionModel: /*public sofa::core::CollisionModel,*/ public sofa::component::collision::PointModel
+            class SofaPBDPointCollisionModel;
+
+            template<class TDataTypes>
+            class TPBDPoint : public core::TCollisionElementIterator<SofaPBDPointCollisionModel>
             {
+            public:
+                typedef TDataTypes DataTypes;
+                typedef typename DataTypes::Coord Coord;
+                typedef typename DataTypes::Deriv Deriv;
+                typedef SofaPBDPointCollisionModel ParentModel;
+
+                TPBDPoint(ParentModel* model, int index);
+                TPBDPoint() {}
+
+                explicit TPBDPoint(const core::CollisionElementIterator& i);
+
+                const Coord p() const;
+                const Coord pFree() const;
+                const Deriv v() const;
+                Deriv n() const;
+
+                /// Return true if the element stores a free position vector
+                bool hasFreePosition() const;
+
+                bool testLMD(const sofa::defaulttype::Vector3 &, double &, double &);
+
+                bool activated(core::CollisionModel *cm = nullptr) const;
+            };
+
+            class SofaPBDPointCollisionModelPrivate;
+            class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API SofaPBDPointCollisionModel: /*public sofa::core::CollisionModel,*/ public sofa::component::collision::TPointModel<sofa::defaulttype::Vec3Types>
+            {
+                friend class TPBDPoint<sofa::defaulttype::Vec3Types>;
                 public:
                     SOFA_CLASS(SofaPBDPointCollisionModel, sofa::component::collision::PointModel);
+
+                    typedef TPBDPoint<sofa::defaulttype::Vec3Types> Element;
+
                     SofaPBDPointCollisionModel();
                     ~SofaPBDPointCollisionModel();
 
@@ -35,6 +68,8 @@ namespace sofa
                     bool removeInNode(sofa::core::objectmodel::BaseNode *node) override;
 
                     void computeBoundingTree(int maxDepth = 0) override;
+
+                    void computeBBox(const core::ExecParams* params, bool onlyVisible) override;
 
                     void parse(BaseObjectDescription* arg);
 
@@ -55,10 +90,12 @@ namespace sofa
                         return boCanCreate;
                     }
 
+                    const sofa::defaulttype::Vec3 getCoord(unsigned int) const;
+                    const sofa::defaulttype::Vec3 getDeriv(unsigned int) const;
+
                 private:
                     SofaPBDPointCollisionModelPrivate* m_d;
             };
-
         }
     }
 }

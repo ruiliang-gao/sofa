@@ -641,6 +641,11 @@ namespace sofa
                     {
                         return m_geometry;
                     }
+
+                    const PBDRigidBodyGeometry& getGeometry() const
+                    {
+                        return m_geometry;
+                    }
             };
         }
     }

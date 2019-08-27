@@ -20,6 +20,17 @@ bool SofaPBDModelBase::hasPBDRigidBody() const
 {
     return (m_pbdRigidBody != nullptr);
 }
+
+const PBDRigidBody* SofaPBDModelBase::getPBDRigidBody() const
+{
+    return m_pbdRigidBody;
+}
+
+PBDRigidBody* SofaPBDModelBase::getPBDRigidBody()
+{
+    return m_pbdRigidBody;
+}
+
 const PBDRigidBodyGeometry& SofaPBDModelBase::getRigidBodyGeometry() const
 {
     static PBDRigidBodyGeometry emptyPBDGeom;

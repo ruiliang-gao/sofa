@@ -444,20 +444,6 @@ void SofaPBDRigidBodyModel::draw(const core::visual::VisualParams* vparams)
 
     PBDRigidBodyGeometry& rbGeometry = m_pbdRigidBody->getGeometry();
 
-    /*msg_info("SofaPBDRigidBodyModel") << "draw(): vertexCount = " << rbGeometry.getVertexData().size() << ", edgeCount = " << rbGeometry.getMesh().numEdges();
-
-    msg_info("SofaPBDRigidBodyModel") << "=== Vertex data ===";
-    for (unsigned int k = 0; k < rbGeometry.getVertexData().size(); k++)
-    {
-        msg_info("SofaPBDRigidBodyModel") << "Vertex " << k << ": (" << rbGeometry.getVertexData().getPosition(k)[0] << "," << rbGeometry.getVertexData().getPosition(k)[1] << "," << rbGeometry.getVertexData().getPosition(k)[2] << ")";
-    }
-
-    msg_info("SofaPBDRigidBodyModel") << "=== Local vertex data ===";
-    for (unsigned int k = 0; k < rbGeometry.getVertexDataLocal().size(); k++)
-    {
-        msg_info("SofaPBDRigidBodyModel") << "Vertex " << k << ": (" << rbGeometry.getVertexDataLocal().getPosition(k)[0] << "," << rbGeometry.getVertexDataLocal().getPosition(k)[1] << "," << rbGeometry.getVertexDataLocal().getPosition(k)[2] << ")";
-    }*/
-
     Vec4f colour(1,0,0,0.5);
     Vec4f colour2(0,0,1,0.5);
 

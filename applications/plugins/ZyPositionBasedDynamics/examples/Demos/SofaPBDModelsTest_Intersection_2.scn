@@ -5,16 +5,14 @@
     
     <!-- Collision detection components -->
     <DefaultContactManager name="Response" response="default" />
-    <BruteForceDetection name="PBDBruteForceDetection" />
+    <SofaPBDBruteForceDetection name="pBDBruteForceDetection" />
+    <!--<PBDCollisionModelsLocalMinDistance name="PBDCollisionModelsLocalMinDistance" />-->
     <PBDCollisionModelsIntersection alarmDistance="0.3" contactDistance="0.2" name="PBDProximityIntersection" />
     
     <!-- Use our custom DefaultPipeline implementation -->
     <ZyPipeline name="zyPipeline" depth="15" verbose="1" draw="1"/>
     <ZySingleThreadedCollisionPipeline name="zyMainCollisionPipeline"/>
     <SofaPBDPipeline name="sofaPBDPipeline1"/>
-    
-    <!-- animation loop -->
-    <SofaPBDAnimationLoop/>
     
     <!-- Rigid body models -->
     <Node name="PBDSingleTetrahedronRigid_1">
@@ -23,9 +21,9 @@
         
         <OglModel template="ExtVec3f" name="visualModel1" fileMesh="mesh/single_tetrahedron.obj" translation="0 0 0" rotation="0 0 0" scale3d="0.1 0.1 0.1" material="Default Diffuse 1 0.5 0.5 0.5 1 Ambient 1 0.1 0.1 0.1 1 Specular 0 0.5 0.5 0.5 1 Emissive 0 0.5 0.5 0.5 1 Shininess 0 45" />
         
-        <SofaPBDPointCollisionModel name="pbdPointModel_1" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel1"/>
-        <SofaPBDLineCollisionModel name="pbdLineModel_1" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel1"/>
-        <!--<SofaPBDTriangleCollisionModel name="pbdTriangleModel_1" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel1"/>-->
+        <!--<SofaPBDPointCollisionModel name="pbdPointModel_1" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel1"/>
+        <SofaPBDLineCollisionModel name="pbdLineModel_1" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel1"/>-->
+        <SofaPBDTriangleCollisionModel name="pbdTriangleModel_1" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel1"/>
     </Node>
     
     <Node name="PBDSingleTetrahedronRigid_2">
@@ -37,9 +35,12 @@
         
         <!--<OglModel template="ExtVec3f" name="visualModel2" fileMesh="mesh/SaladBowl.obj" translation="0 -1 0" rotation="-90 0 0" scale3d="5 5 5" material="Default Diffuse 1 0.5 0.5 0.5 1 Ambient 1 0.1 0.1 0.1 1 Specular 0 0.5 0.5 0.5 1 Emissive 0 0.5 0.5 0.5 1 Shininess 0 45" />-->
         
-        <SofaPBDPointCollisionModel name="pbdPointModel_2" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel2"/>
-        <SofaPBDLineCollisionModel name="pbdLineModel_2" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel2"/>
-        <!--<SofaPBDTriangleCollisionModel name="pbdTriangleModel_2" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel2"/>-->
+        <!--<SofaPBDPointCollisionModel name="pbdPointModel_2" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel2"/>
+        <SofaPBDLineCollisionModel name="pbdLineModel_2" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel2"/>-->
+        <SofaPBDTriangleCollisionModel name="pbdTriangleModel_2" template="Vec3d" rigidBodyModel="@pdbRigidBodyModel2"/>
     </Node>
+    
+    <!-- animation loop -->
+    <SofaPBDAnimationLoop/>
     
 </Node>

@@ -52,28 +52,51 @@ void PBDRigidBodyGeometry::initMesh(const unsigned int nVertices, const unsigned
     m_mesh.buildNeighbors();
     updateMeshNormals(m_vertexData);
 
-    msg_info("PBDRigidBodyGeometry") << "Vertex count after mesh init = " << m_vertexData.size();
+    const Utilities::PBDIndexedFaceMesh::Faces& meshFaces = m_mesh.getFaces();
+    const Utilities::PBDIndexedFaceMesh::Edges& meshEdges = m_mesh.getEdges();
+    const Utilities::PBDIndexedFaceMesh::FaceData& meshFaceData = m_mesh.getFaceData();
+
+    msg_info("PBDRigidBodyGeometry") << "=======================================";
+    msg_info("PBDRigidBodyGeometry") << "Mesh structure data for PBDRigidBody   ";
+    msg_info("PBDRigidBodyGeometry") << "=======================================";
+
+    msg_info("PBDRigidBodyGeometry") << "Vertex count after mesh init: " << m_vertexData.size();
     for (unsigned int k = 0; k < m_vertexData.size(); k++)
         msg_info("PBDRigidBodyGeometry") << m_vertexData.getPosition(k)[0] << "," << m_vertexData.getPosition(k)[1] << "," << m_vertexData.getPosition(k)[2];
 
-    msg_info("PBDRigidBodyGeometry") << "Local vertex count after mesh init = " << m_vertexData_local.size();
+    msg_info("PBDRigidBodyGeometry") << "Local vertex count after mesh init: " << m_vertexData_local.size();
     for (unsigned int k = 0; k < m_vertexData_local.size(); k++)
         msg_info("PBDRigidBodyGeometry") << m_vertexData_local.getPosition(k)[0] << "," << m_vertexData_local.getPosition(k)[1] << "," << m_vertexData_local.getPosition(k)[2];
-
-    Utilities::PBDIndexedFaceMesh::Faces& meshFaces = m_mesh.getFaces();
-    const Utilities::PBDIndexedFaceMesh::FaceData& meshFaceData = m_mesh.getFaceData();
 
     msg_info("PBDRigidBodyGeometry") << "Mesh indices count: " << meshFaces.size();
     for (unsigned int k = 0; k < meshFaces.size(); k++)
         msg_info("PBDRigidBodyGeometry") << "Index " << k << ": " << meshFaces.at(k);
 
-    msg_info("PBDRigidBodyGeometry") << "Mesh FaceData count: " << meshFaceData.size();
+    msg_info("PBDRigidBodyGeometry") << "Size of PBD triangle mesh (number of faces): " << meshFaces.size();
+
     for (unsigned int k = 0; k < meshFaceData.size(); k++)
     {
-        msg_info("PBDRigidBodyGeometry") << "Face " << k;
-        for (unsigned int m = 0; m < m_mesh.getNumVerticesPerFace(); m++)
-            msg_info("PBDRigidBodyGeometry") << "Index " << m << ": " << meshFaceData[k].m_edges[m];
+        const Utilities::PBDIndexedFaceMesh::Face& f = meshFaceData[k];
+        for (unsigned int l = 0; l < this->getMesh().getNumVerticesPerFace(); l++)
+        {
+            const Utilities::PBDIndexedFaceMesh::Edge& e = meshEdges[f.m_edges[l]];
+            msg_info("PBDRigidBodyGeometry") << "Face " << k << " edge " << l << " vertices: " << e.m_vert[0] << " -- " << e.m_vert[1];
+        }
     }
+
+    msg_info("PBDRigidBodyGeometry") << "Size of PBD triangle mesh (number of edges): " << meshEdges.size();
+
+    for (unsigned int k = 0; k < meshFaceData.size(); k++)
+    {
+        const Utilities::PBDIndexedFaceMesh::Face& f = meshFaceData[k];
+        for (unsigned int l = 0; l < this->getMesh().getNumVerticesPerFace(); l++)
+        {
+            // const Utilities::PBDIndexedFaceMesh::Edge& e = meshEdges[f.m_edges[l]];
+            msg_info("PBDRigidBodyGeometry") << "Face " << k << " edge " << l << ": Index " << f.m_edges[l];
+        }
+    }
+
+    msg_info("PBDRigidBodyGeometry") << "=======================================";
 }
 
 void PBDRigidBodyGeometry::updateMeshNormals(const PBDVertexData &vd)

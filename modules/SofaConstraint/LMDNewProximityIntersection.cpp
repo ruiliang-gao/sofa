@@ -184,14 +184,14 @@ int LMDNewProximityIntersection::computeIntersection(Line& e1, Point& e2, Output
 
 bool LMDNewProximityIntersection::testIntersection(Line&, Line&)
 {
-    serr << "Unnecessary call to NewProximityIntersection::testIntersection(Line,Line)."<<sendl;
+    msg_warning("LMDNewProximityIntersection") << "Unnecessary call to NewProximityIntersection::testIntersection(Line,Line).";
     return true;
 }
 
 
 int LMDNewProximityIntersection::computeIntersection(Line& e1, Line& e2, OutputVector* contacts)
 {
-    msg_info("LMDNewProximityIntersection")<<"computeIntersection(Line& e1, Line& e2... is called";
+    msg_info("LMDNewProximityIntersection") << "computeIntersection(Line& e1, Line& e2) is called";
     const double alarmDist = getAlarmDistance() + e1.getProximity() + e2.getProximity();
     const double dist2 = alarmDist*alarmDist;
     const int id = (e1.getCollisionModel()->getSize() > e2.getCollisionModel()->getSize()) ? e1.getIndex() : e2.getIndex();

@@ -9,6 +9,11 @@
 
 #include <sofa/core/ObjectFactory.h>
 
+#include <PBDIntegration/SofaPBDPointCollisionModel.h>
+#include <PBDIntegration/SofaPBDLineCollisionModel.h>
+#include <PBDIntegration/SofaPBDTriangleCollisionModel.h>
+
+
 using namespace sofa::simulation::PBDSimulation;
 
 int SofaPBDSimulationClass = sofa::core::RegisterObject("Wrapper class for the PBD main simulation entry point.")
@@ -23,6 +28,8 @@ SofaPBDSimulation::SofaPBDSimulation(BaseContext *context): sofa::core::objectmo
 {
     m_context = context;
     m_timeStep = nullptr;
+
+    m_rootNode = nullptr;
 
     msg_info("PBDSimulation") << "Instantiating PBDSimulationModel.";
     m_model = new PBDSimulationModel();
@@ -70,12 +77,12 @@ bool SofaPBDSimulation::hasCurrent()
 
 void SofaPBDSimulation::init()
 {
-    msg_info("PBDSimulation") << "init()";
+    msg_info("SofaPBDSimulation") << "init()";
     initParameters();
 
-    msg_info("PBDSimulation") << "Gravitation vector set: " << GRAVITATION.getValue();
+    msg_info("SofaPBDSimulation") << "Gravitation vector set: " << GRAVITATION.getValue();
 
-    msg_info("PBDSimulation") << "setSimulationMethod(" << PBDSimulationMethods::PBD << ")";
+    msg_info("SofaPBDSimulation") << "setSimulationMethod(" << PBDSimulationMethods::PBD << ")";
     setSimulationMethod(static_cast<int>(PBDSimulationMethods::PBD));
 
     //m_geometryConverter.reset(new GeometryConversion(m_model));
@@ -83,6 +90,72 @@ void SofaPBDSimulation::init()
 
     if (!m_context)
         m_context = dynamic_cast<sofa::simulation::Node*>(this->getContext());
+
+    if (!m_context)
+    {
+        msg_info("SofaPBDSimulation") << "No valid context/Node object so far, trying to use current root node.";
+        m_rootNode = sofa::simulation::getSimulation()->getCurrentRootNode();
+        if (m_rootNode)
+            msg_info("SofaPBDSimulation") << "Using current root node as context: " << m_rootNode->getName();
+    }
+
+    if (m_rootNode)
+    {
+        msg_info("SofaPBDSimulation") << "Searching for PBD collision model wrappers.";
+
+        msg_info("SofaPBDSimulation") << "PointModel wrappers.";
+        std::vector<SofaPBDPointCollisionModel*> pbdPointCollisionModels;
+        sofa::core::objectmodel::BaseContext::GetObjectsCallBackT<SofaPBDPointCollisionModel, std::vector<SofaPBDPointCollisionModel*> > pbdPtMCb(&pbdPointCollisionModels);
+        m_rootNode->getObjects(sofa::core::objectmodel::TClassInfo<SofaPBDPointCollisionModel>::get(), pbdPtMCb, sofa::core::objectmodel::BaseContext::SearchDown);
+
+        msg_info("SofaPBDSimulation") << "LineModel wrappers.";
+        std::vector<SofaPBDLineCollisionModel*> pbdLineCollisionModels;
+        sofa::core::objectmodel::BaseContext::GetObjectsCallBackT<SofaPBDLineCollisionModel, std::vector<SofaPBDLineCollisionModel*> > pbdLnMCb(&pbdLineCollisionModels);
+        m_rootNode->getObjects(sofa::core::objectmodel::TClassInfo<SofaPBDLineCollisionModel>::get(), pbdLnMCb, sofa::core::objectmodel::BaseContext::SearchDown);
+
+        msg_info("SofaPBDSimulation") << "TriangleModel wrappers.";
+        std::vector<SofaPBDTriangleCollisionModel*> pbdTriangleCollisionModels;
+        sofa::core::objectmodel::BaseContext::GetObjectsCallBackT<SofaPBDTriangleCollisionModel, std::vector<SofaPBDTriangleCollisionModel*> > pbdTriMCb(&pbdTriangleCollisionModels);
+        m_rootNode->getObjects(sofa::core::objectmodel::TClassInfo<SofaPBDTriangleCollisionModel>::get(), pbdTriMCb, sofa::core::objectmodel::BaseContext::SearchDown);
+
+        msg_info("SofaPBDSimulation") << "SofaPBDPointCollisionModels in scene: " << pbdPointCollisionModels.size();
+        msg_info("SofaPBDSimulation") << "SofaPBDLineCollisionModels in scene: " << pbdLineCollisionModels.size();
+        msg_info("SofaPBDSimulation") << "SofaPBDTriangleCollisionModels in scene: " << pbdTriangleCollisionModels.size();
+
+        if (pbdPointCollisionModels.size() > 0)
+        {
+            for (size_t k = 0; k < pbdPointCollisionModels.size(); k++)
+            {
+                msg_info("SofaPBDSimulation") << "Init SofaPBDPointCollisionModel " << pbdPointCollisionModels[k]->getName();
+                pbdPointCollisionModels[k]->init();
+                pbdPointCollisionModels[k]->bwdInit();
+            }
+        }
+
+        if (pbdLineCollisionModels.size() > 0)
+        {
+            for (size_t k = 0; k < pbdLineCollisionModels.size(); k++)
+            {
+                msg_info("SofaPBDSimulation") << "Init SofaPBDLineCollisionModel " << pbdLineCollisionModels[k]->getName();
+                pbdLineCollisionModels[k]->init();
+                pbdLineCollisionModels[k]->bwdInit();
+            }
+        }
+
+        if (pbdTriangleCollisionModels.size() > 0)
+        {
+            for (size_t k = 0; k < pbdTriangleCollisionModels.size(); k++)
+            {
+                msg_info("SofaPBDSimulation") << "Init SofaPBDTriangleCollisionModel " << pbdTriangleCollisionModels[k]->getName();
+                pbdTriangleCollisionModels[k]->init();
+                pbdTriangleCollisionModels[k]->bwdInit();
+            }
+        }
+    }
+    else
+    {
+        msg_error("SofaPBDSimulation") << "Invalid context/Node object! Couldn't initialize PBDCollisionModels correctly!";
+    }
 }
 
 void SofaPBDSimulation::initParameters()

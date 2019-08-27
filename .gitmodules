@@ -8,3 +8,9 @@
 	path = applications/plugins/PDBSofaPlugin
 	url = git@github.com:faichele/PBDSofaPlugin.git
 	branch = master
+[submodule "CollDet"]
+	path = extlibs/CollDet
+	url = https://gitlab.informatik.uni-bremen.de/cgvr/CollDet.git
+[submodule "ProtoSphereExtended"]
+	path = extlibs/ProtoSphereExtended
+	url = https://gitlab.informatik.uni-bremen.de/cgvr/protosphereextended.git

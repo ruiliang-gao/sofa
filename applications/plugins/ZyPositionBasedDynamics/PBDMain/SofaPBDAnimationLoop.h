@@ -55,6 +55,9 @@ namespace sofa
 
                     sofa::core::collision::Pipeline* m_collisionPipeline;
                     sofa::core::collision::Pipeline::SPtr m_collisionPipelineLocal;
+
+                    Real m_dt;
+                    Real m_prevDt;
             };
         }
     }

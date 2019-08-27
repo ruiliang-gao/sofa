@@ -69,7 +69,9 @@ sofa_add_plugin(SofaROSConnector ZyROSConnector ON)
 
 sofa_add_plugin(ZyCollisionManager ZyCollisionManager ON)
 sofa_add_plugin(ZyPipeline ZyPipeline ON)
-sofa_add_plugin(ZyObbTreeGPU ZyObbTreeGPU ON)
+if (PLUGIN_ZYOBBTREEGPU)
+    sofa_add_plugin(ZyObbTreeGPU ZyObbTreeGPU ON)
+endif()
 sofa_add_plugin(ZyBVHModels ZyBVHModels ON)
 
 sofa_add_plugin(PDBSofaPlugin PDBSofaPlugin ON)

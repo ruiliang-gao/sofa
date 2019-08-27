@@ -60,7 +60,7 @@ namespace sofa
                     unsigned int getIndexOffset() const;
                     unsigned int getIndexOffsetQuaternions() const;
 
-                    unsigned int getNumPoints() const { return m_nPoints; }
+                    unsigned int getNumPoints() const;
 
                     void initMesh(const unsigned int nPoints, const unsigned int nQuaternions, const unsigned int indexOffset, const unsigned int indexOffsetQuaternions, unsigned int* indices, unsigned int* indicesQuaternions);
 

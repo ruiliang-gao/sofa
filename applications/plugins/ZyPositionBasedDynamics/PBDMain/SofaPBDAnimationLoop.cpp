@@ -33,7 +33,8 @@ SofaPBDAnimationLoop::SofaPBDAnimationLoop(sofa::simulation::Node*& gnode):
     sofa::simulation::DefaultAnimationLoop(gnode), m_simulation(nullptr), m_collisionPipeline(nullptr),
     SUB_STEPS_PER_ITERATION(initData(&SUB_STEPS_PER_ITERATION, 5, "SubStepsPerIteration", "Number of solver substeps per iteration of the simulation"))
 {
-
+    m_dt = 0.0;
+    m_prevDt = 0.0;
 }
 
 SofaPBDAnimationLoop::~SofaPBDAnimationLoop()
@@ -117,6 +118,11 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
 
     SReal startTime = gnode->getTime();
 
+    m_dt = startTime + dt;
+    SReal timeDelta = m_dt - m_prevDt;
+
+    msg_info("SofaPBDAnimationLoop") << "startTime = " << startTime << ", timeDelta = " << timeDelta << " (" << startTime << " + " << dt << ")";
+
     sofa::helper::AdvancedTimer::stepBegin("BehaviorUpdatePositionVisitor");
     BehaviorUpdatePositionVisitor beh(params , dt);
     gnode->execute(beh);
@@ -127,7 +133,10 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
     gnode->execute(act);
     sofa::helper::AdvancedTimer::stepEnd("AnimateVisitor");
 
-    /*PBDTimeManager::getCurrent()->setTimeStepSize((Real) dt);*/
+    Real dtPerSubStep = timeDelta / SUB_STEPS_PER_ITERATION.getValue();
+
+    msg_info("SofaPBDAnimationLoop") << "Setting per-substep time delta to: " << dtPerSubStep;
+    PBDTimeManager::getCurrent()->setTimeStepSize(dtPerSubStep);
 
     sofa::helper::AdvancedTimer::stepBegin("StepPBDTimeLoop");
     PBDSimulationModel* model = m_simulation->getModel();
@@ -166,7 +175,7 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
     sofa::helper::AdvancedTimer::stepEnd("StepPBDTimeLoop");
 
     sofa::helper::AdvancedTimer::stepBegin("UpdateSimulationContextVisitor");
-    gnode->setTime (startTime + dt);
+    gnode->setTime(startTime + dt);
     gnode->execute< UpdateSimulationContextVisitor >(params);
     sofa::helper::AdvancedTimer::stepEnd("UpdateSimulationContextVisitor");
 
@@ -194,6 +203,8 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
         sofa::helper::ScopedAdvancedTimer timer("UpdateBBox");
         gnode->execute< UpdateBoundingBoxVisitor >(params);
     }*/
+
+    m_prevDt = m_dt;
 
 #ifdef SOFA_DUMP_VISITOR_INFO
     simulation::Visitor::printCloseNode("Step");

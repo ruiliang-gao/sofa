@@ -16,6 +16,7 @@
 #include <sofa/defaulttype/Vec.h>
 #include <sofa/defaulttype/Vec3Types.h>
 #include <sofa/helper/OptionsGroup.h>
+#include <sofa/simulation/Node.h>
 
 namespace sofa
 {
@@ -58,6 +59,7 @@ namespace sofa
 
                 protected:
                     BaseContext* m_context;
+                    sofa::simulation::Node::SPtr m_rootNode;
 
                     PBDSimulationModel *m_model;
                     SofaPBDTimeStep *m_timeStep;
