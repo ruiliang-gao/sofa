@@ -74,7 +74,7 @@ if (PLUGIN_ZYOBBTREEGPU)
 endif()
 sofa_add_plugin(ZyBVHModels ZyBVHModels ON)
 
-sofa_add_plugin(PDBSofaPlugin PDBSofaPlugin ON)
+# sofa_add_plugin(PDBSofaPlugin PDBSofaPlugin ON)
 
 sofa_add_plugin(ZyPBDDistanceBasedCollisionDetection ZyPBDDistanceBasedCollisionDetection ON)
 sofa_add_plugin(ZyPositionBasedDynamics ZyPositionBasedDynamics ON)
