@@ -116,6 +116,8 @@ namespace sofa
                     const PBDRigidBody* getPBDRigidBody() const;
                     PBDRigidBody* getPBDRigidBody();
 
+                    const int getPBDRigidBodyIndex() const;
+
                     const sofa::defaulttype::Vec3 getCoord(unsigned int) const;
 
                     const sofa::defaulttype::Vec3& getVertex1(const unsigned int) const;

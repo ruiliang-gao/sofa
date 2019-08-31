@@ -102,6 +102,8 @@ namespace sofa
                     const PBDRigidBody* getPBDRigidBody() const;
                     PBDRigidBody* getPBDRigidBody();
 
+                    const int getPBDRigidBodyIndex() const;
+
                     const PBDLineModel* getPBDLineModel() const;
                     PBDLineModel* getPBDLineModel();
 

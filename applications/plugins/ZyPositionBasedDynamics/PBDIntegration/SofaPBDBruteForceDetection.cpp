@@ -11,6 +11,7 @@
 
 using namespace sofa::component::collision;
 using namespace sofa::core::collision;
+using namespace sofa;
 
 using namespace sofa::simulation::PBDSimulation;
 
@@ -187,6 +188,11 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
     }
 
     NarrowPhaseDetection::endNarrowPhase();
+}
+
+const std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::DetectionOutput>>& SofaPBDBruteForceDetection::getCollisionOutputs() const
+{
+    return collisionOutputs;
 }
 
 void SofaPBDBruteForceDetection::draw(const core::visual::VisualParams* vparams)

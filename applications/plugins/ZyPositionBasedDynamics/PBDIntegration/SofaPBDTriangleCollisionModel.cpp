@@ -69,7 +69,7 @@ int SofaPBDTriangleCollisionModelClass = sofa::core::RegisterObject("PBD plugin 
                             .addDescription("PBD plugin adapter class for triangle collision models.");
 
 SofaPBDTriangleCollisionModel::SofaPBDTriangleCollisionModel(): sofa::component::collision::TriangleModel(),
-    showIndices(initData(&showIndices, (bool) true, "showIndices", "Show indices. (default=false)")),
+    showIndices(initData(&showIndices, (bool) false, "showIndices", "Show indices. (default=false)")),
     showIndicesScale(initData(&showIndicesScale, (float) 0.02, "showIndicesScale", "Scale for indices display. (default=0.02)"))
 
 {
@@ -622,6 +622,14 @@ PBDRigidBody* SofaPBDTriangleCollisionModel::getPBDRigidBody()
         return m_d->m_pbdRigidBody->getPBDRigidBody();
 
     return nullptr;
+}
+
+const int SofaPBDTriangleCollisionModel::getPBDRigidBodyIndex() const
+{
+    if (m_d->m_pbdRigidBody)
+        return m_d->m_pbdRigidBody->getPBDRigidBodyIndex();
+
+    return -1;
 }
 
 const sofa::defaulttype::Vec3& SofaPBDTriangleCollisionModel::getVertex1(const unsigned int idx) const

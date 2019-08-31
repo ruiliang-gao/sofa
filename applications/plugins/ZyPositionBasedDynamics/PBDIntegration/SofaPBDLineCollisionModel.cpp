@@ -433,6 +433,14 @@ PBDRigidBody* SofaPBDLineCollisionModel::getPBDRigidBody()
     return nullptr;
 }
 
+const int SofaPBDLineCollisionModel::getPBDRigidBodyIndex() const
+{
+    if (m_d->m_pbdRigidBody)
+        return m_d->m_pbdRigidBody->getPBDRigidBodyIndex();
+
+    return -1;
+}
+
 const PBDLineModel* SofaPBDLineCollisionModel::getPBDLineModel() const
 {
     if (m_d->m_pbdLineModel)

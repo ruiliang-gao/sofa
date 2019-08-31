@@ -16,6 +16,8 @@ PBDSimulationModel::PBDSimulationModel(): sofa::core::objectmodel::BaseObject()
 
     m_groupsInitialized = false;
 
+    m_contactsCleared = false;
+
     m_rigidBodyContactConstraints.reserve(10000);
     m_particleRigidBodyContactConstraints.reserve(10000);
     m_particleSolidContactConstraints.reserve(10000);
@@ -35,6 +37,16 @@ PBDSimulationModel::~PBDSimulationModel()
         }
         m_rigidBodies.clear();
     }
+}
+
+bool PBDSimulationModel::getContactsCleared() const
+{
+    return m_contactsCleared;
+}
+
+void PBDSimulationModel::setContactsCleared(bool val)
+{
+    m_contactsCleared = val;
 }
 
 void PBDSimulationModel::init()
@@ -350,6 +362,10 @@ bool PBDSimulationModel::addRigidBodyContactConstraint(const unsigned int rbInde
     const bool res = cc.initConstraint(*this, rbIndex1, rbIndex2, cp1, cp2, normal, dist, restitutionCoeff, m_contactStiffnessRigidBody, frictionCoeff);
     if (!res)
         m_rigidBodyContactConstraints.pop_back();
+
+    if (m_contactsCleared)
+        setContactsCleared(false);
+
     return res;
 }
 
@@ -363,6 +379,10 @@ bool PBDSimulationModel::addRigidBodyContactConstraint(const unsigned int rbInde
     const bool res = cc.initConstraint(*this, particleIndex, rbIndex, cp1, cp2, normal, dist, restitutionCoeff, m_contactStiffnessParticleRigidBody, frictionCoeff);
     if (!res)
         m_particleRigidBodyContactConstraints.pop_back();
+
+    if (m_contactsCleared)
+        setContactsCleared(false);
+
     return res;
 }
 
@@ -377,6 +397,10 @@ bool PBDSimulationModel::addParticleSolidContactConstraint(const unsigned int pa
     const bool res = cc.initConstraint(*this, particleIndex, solidIndex, tetIndex, bary, cp1, cp2, normal, dist, frictionCoeff);
     if (!res)
         m_particleSolidContactConstraints.pop_back();
+
+    if (m_contactsCleared)
+        setContactsCleared(false);
+
     return res;
 }
 
@@ -705,7 +729,12 @@ void PBDSimulationModel::initConstraintGroups()
 
 void PBDSimulationModel::resetContacts()
 {
-    m_rigidBodyContactConstraints.clear();
-    m_particleRigidBodyContactConstraints.clear();
-    m_particleSolidContactConstraints.clear();
+    if (!m_contactsCleared)
+    {
+        m_rigidBodyContactConstraints.clear();
+        m_particleRigidBodyContactConstraints.clear();
+        m_particleSolidContactConstraints.clear();
+
+        setContactsCleared(true);
+    }
 }

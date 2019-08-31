@@ -91,16 +91,19 @@ void SofaPBDSimulation::init()
     if (!m_context)
         m_context = dynamic_cast<sofa::simulation::Node*>(this->getContext());
 
+    m_rootNode = sofa::simulation::getSimulation()->getCurrentRootNode();
+
     if (!m_context)
     {
         msg_info("SofaPBDSimulation") << "No valid context/Node object so far, trying to use current root node.";
-        m_rootNode = sofa::simulation::getSimulation()->getCurrentRootNode();
-        if (m_rootNode)
-            msg_info("SofaPBDSimulation") << "Using current root node as context: " << m_rootNode->getName();
+        m_context = dynamic_cast<sofa::simulation::Node*>(m_rootNode.get());
     }
 
+    if (m_timeStep)
+        m_timeStep->init();
+
     if (m_rootNode)
-    {
+    {   
         msg_info("SofaPBDSimulation") << "Searching for PBD collision model wrappers.";
 
         msg_info("SofaPBDSimulation") << "PointModel wrappers.";
@@ -180,6 +183,9 @@ void SofaPBDSimulation::initParameters()
 void SofaPBDSimulation::bwdInit()
 {
     msg_info("PBDSimulation") << "bwdInit()";
+
+    if (m_timeStep)
+        m_timeStep->bwdInit();
 
     /*auto topologies = m_context->getObjects<sofa::core::topology::BaseMeshTopology>(BaseContext::SearchDown);
     auto mechanicalObjects = m_context->getObjects<sofa::component::container::MechanicalObject<sofa::defaulttype::Vec3Types>>(BaseContext::SearchDown);

@@ -33,6 +33,8 @@ namespace sofa
                         m_numFaces = 0;
                         m_pbdIndexedFaceMesh.reset(new Utilities::PBDIndexedFaceMesh());
                         m_densitySet = m_massSet = false;
+
+                        m_pbdRBIndex = -1;
                     }
 
                     std::shared_ptr<Utilities::PBDIndexedFaceMesh> m_pbdIndexedFaceMesh;
@@ -40,6 +42,8 @@ namespace sofa
 
                     std::string m_srcLoader;
                     sofa::core::loader::BaseLoader* m_srcLoaderObject;
+
+                    int m_pbdRBIndex;
 
                     unsigned int m_numPoints;
                     unsigned int m_numFaces;
@@ -200,6 +204,11 @@ void SofaPBDRigidBodyModel::parse(BaseObjectDescription* arg)
     }
 
     BaseObject::parse(arg);
+}
+
+const int SofaPBDRigidBodyModel::getPBDRigidBodyIndex() const
+{
+    return m_d->m_pbdRBIndex;
 }
 
 void SofaPBDRigidBodyModel::init()
@@ -417,6 +426,11 @@ void SofaPBDRigidBodyModel::initializeModel()
 
     rigidBodies.emplace_back(m_pbdRigidBody);
     msg_info("SofaPBDRigidBodyModel") << "Number of rigid bodies after insertion: " << rigidBodies.size();
+
+    if (rigidBodies.size() == 1)
+        m_d->m_pbdRBIndex = 0;
+    else
+        m_d->m_pbdRBIndex = rigidBodies.size() - 1;
 
     PBDRigidBodyGeometry& rbGeometry = m_pbdRigidBody->getGeometry();
 

@@ -90,11 +90,13 @@ void SofaPBDAnimationLoop::init()
 
     m_simulation = new SofaPBDSimulation();
     SofaPBDSimulation::setCurrent(m_simulation);
+
+    m_simulation->init();
 }
 
 void SofaPBDAnimationLoop::bwdInit()
 {
-    m_simulation->init();
+    m_simulation->bwdInit();
 }
 
 void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)

@@ -79,6 +79,10 @@ namespace sofa
                     ParticleSolidContactConstraintVector m_particleSolidContactConstraints;
                     ConstraintGroupVector m_constraintGroups;
 
+                    bool m_groupsInitialized;
+
+                    bool m_contactsCleared;
+
                     Real m_contactStiffnessRigidBody;
                     Real m_contactStiffnessParticleRigidBody;
 
@@ -104,7 +108,9 @@ namespace sofa
                     ParticleRigidBodyContactConstraintVector &getParticleRigidBodyContactConstraints();
                     ParticleSolidContactConstraintVector &getParticleSolidContactConstraints();
                     ConstraintGroupVector &getConstraintGroups();
-                    bool m_groupsInitialized;
+
+                    void setContactsCleared(bool);
+                    bool getContactsCleared() const;
 
                     void resetContacts();
 

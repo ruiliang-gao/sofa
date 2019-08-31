@@ -196,6 +196,14 @@ void SofaPBDPointCollisionModel::bwdInit()
     }
 }
 
+const int SofaPBDPointCollisionModel::getPBDRigidBodyIndex() const
+{
+    if (m_d->m_pbdRigidBody)
+        return m_d->m_pbdRigidBody->getPBDRigidBodyIndex();
+
+    return -1;
+}
+
 void SofaPBDPointCollisionModel::draw(const core::visual::VisualParams* vparams)
 {
     if (m_d->m_cubeModel)

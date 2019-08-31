@@ -7,7 +7,9 @@
 #include "initZyPositionBasedDynamicsPlugin.h"
 
 #include "PBDModels/PBDSimulationModel.h"
+
 #include "CollisionDetection.h"
+#include "PBDIntegration/SofaPBDBruteForceDetection.h"
 
 namespace sofa
 {
@@ -16,6 +18,7 @@ namespace sofa
         namespace PBDSimulation
         {
             using namespace sofa::simulation::PBDDistanceBasedCD;
+            using namespace sofa::component::collision;
 
             class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API SofaPBDTimeStep: public sofa::core::objectmodel::BaseObject
             {
@@ -23,10 +26,10 @@ namespace sofa
                     SOFA_CLASS(SofaPBDTimeStep, sofa::core::objectmodel::BaseObject);
 
                     SofaPBDTimeStep();
-
-                    virtual ~SofaPBDTimeStep(void);
+                    virtual ~SofaPBDTimeStep();
 
                     virtual void init();
+                    virtual void bwdInit();
                     virtual void reset();
                     virtual void cleanup();
 
@@ -38,20 +41,22 @@ namespace sofa
                     Data<int> MAX_ITERATIONS;
                     Data<int> MAX_ITERATIONS_V;
                     Data<sofa::helper::OptionsGroup> VELOCITY_UPDATE_METHOD;
+                    Data<sofa::helper::OptionsGroup> COLLISION_DETECTION_METHOD;
 
                 protected:
-                    int m_velocityUpdateMethod;
                     unsigned int m_iterations;
                     unsigned int m_iterationsV;
-                    unsigned int m_maxIterations;
-                    unsigned int m_maxIterationsV;
 
                     virtual void initParameters();
 
                     void positionConstraintProjection(PBDSimulationModel &model);
                     void velocityConstraintProjection(PBDSimulationModel &model);
 
+                    // Built-in collision detection of the PBD library
                     CollisionDetection *m_collisionDetection;
+
+                    // Sofa-integrated collision pipeline
+                    SofaPBDBruteForceDetection* m_sofaPBDCollisionDetection;
 
                     /** Clear accelerations and add gravitation.
                     */

@@ -26,6 +26,8 @@ namespace sofa
 
                     void draw(const core::visual::VisualParams*) override;
 
+                    const int getPBDRigidBodyIndex() const;
+
                 protected:
                     void buildModel();
                     void initializeModel();

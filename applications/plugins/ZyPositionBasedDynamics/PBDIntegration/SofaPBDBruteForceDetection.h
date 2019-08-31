@@ -33,6 +33,8 @@ namespace sofa
                     virtual void endNarrowPhase();
 
                     void draw(const core::visual::VisualParams*) override;
+
+                    const std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::DetectionOutput>>& getCollisionOutputs() const;
             };
         }
     }

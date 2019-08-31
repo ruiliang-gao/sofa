@@ -2,10 +2,15 @@
 #include "PBDUtils/PBDTimeManager.h"
 #include "SofaPBDSimulation.h"
 
+#include <sofa/core/ObjectFactory.h>
+#include <sofa/simulation/Simulation.h>
+
 #include "PBDynamics/PBDTimeIntegration.h"
 #include "DistanceFieldCollisionDetection.h"
 
-#include <sofa/core/ObjectFactory.h>
+#include <PBDIntegration/SofaPBDPointCollisionModel.h>
+#include <PBDIntegration/SofaPBDLineCollisionModel.h>
+#include <PBDIntegration/SofaPBDTriangleCollisionModel.h>
 
 using namespace sofa::simulation::PBDSimulation;
 
@@ -13,25 +18,43 @@ int SofaPBDTimeStepClass = sofa::core::RegisterObject("Wrapper class for the PBD
                             .add< SofaPBDTimeStep >()
                             .addDescription("Wrapper class for the PBD TimeStep.");
 using namespace std;
+using namespace sofa::component::collision;
 
 SofaPBDTimeStep::SofaPBDTimeStep(): sofa::core::objectmodel::BaseObject()
 {
-    m_velocityUpdateMethod = 0;
     m_iterations = 0;
     m_iterationsV = 0;
-    m_maxIterations = 5;
-    m_maxIterationsV = 5;
 
     m_collisionDetection = NULL;
+    m_sofaPBDCollisionDetection = NULL;
 }
 
-SofaPBDTimeStep::~SofaPBDTimeStep(void)
+SofaPBDTimeStep::~SofaPBDTimeStep()
 {
+
 }
 
 void SofaPBDTimeStep::init()
 {
     initParameters();
+}
+
+void SofaPBDTimeStep::bwdInit()
+{
+    BaseContext* bc = sofa::simulation::getSimulation()->getCurrentRootNode().get();
+
+    std::vector<SofaPBDBruteForceDetection*> bfdInstances = bc->getObjects<SofaPBDBruteForceDetection>(BaseContext::SearchDown);
+
+    if (bfdInstances.size() > 0)
+    {
+        msg_info("SofaPBDTimeStep") << "SofaPBDBruteForceDetection instances found: " << bfdInstances.size();
+        // Store reference to the first SofaPBDBruteForceDetection found
+        m_sofaPBDCollisionDetection = bfdInstances.at(0);
+    }
+    else
+    {
+        msg_warning("SofaPBDTimeStep") << "No SofaPBDBruteForceDetection instance found, collision response will be non-functional!";
+    }
 }
 
 void SofaPBDTimeStep::initParameters()
@@ -45,18 +68,23 @@ void SofaPBDTimeStep::initParameters()
     helper::OptionsGroup methodOptions(2, "0 - First Order Update",
                                        "1 - Second Order Update");
 
-    initData(&VELOCITY_UPDATE_METHOD, "Velocity update method", "Velocity method.");
+    initData(&VELOCITY_UPDATE_METHOD, "Velocity update method", "Velocity update method.");
     VELOCITY_UPDATE_METHOD.setGroup("PBD");
     methodOptions.setSelectedItem(0);
     VELOCITY_UPDATE_METHOD.setValue(methodOptions);
+
+    helper::OptionsGroup collisionDetectionOptions(2, "0 - use SOFA collision pipeline",
+                                                   "1 - use PBD SignedDistanceFieldCollisionDetection");
+
+    initData(&COLLISION_DETECTION_METHOD, "Collision detection method", "Collision Detection method.");
+    COLLISION_DETECTION_METHOD.setGroup("PBD");
+    collisionDetectionOptions.setSelectedItem(0);
 }
 
 void SofaPBDTimeStep::reset()
 {
     m_iterations = 0;
     m_iterationsV = 0;
-    m_maxIterations = 5;
-    m_maxIterationsV = 5;
 }
 
 void SofaPBDTimeStep::cleanup()
@@ -66,6 +94,11 @@ void SofaPBDTimeStep::cleanup()
         m_collisionDetection->cleanup();
         delete m_collisionDetection;
         m_collisionDetection = NULL;
+    }
+
+    if (m_sofaPBDCollisionDetection)
+    {
+        m_sofaPBDCollisionDetection->cleanup();
     }
 }
 
@@ -112,8 +145,8 @@ void SofaPBDTimeStep::clearAccelerations(PBDSimulationModel &model)
 void SofaPBDTimeStep::setCollisionDetection(PBDSimulationModel &model, CollisionDetection *cd)
 {
     m_collisionDetection = cd;
-    // m_collisionDetection->setContactCallback(contactCallbackFunction, &model);
-    // m_collisionDetection->setSolidContactCallback(solidContactCallbackFunction, &model);
+    m_collisionDetection->setContactCallback(contactCallbackFunction, &model);
+    m_collisionDetection->setSolidContactCallback(solidContactCallbackFunction, &model);
 }
 
 CollisionDetection *SofaPBDTimeStep::getCollisionDetection()
@@ -245,7 +278,7 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
         msg_info("PBDTimeStepController") << "Updating velocities - rigid bodies";
         for (int i = 0; i < numBodies; i++)
         {
-            if (m_velocityUpdateMethod == 0)
+            if (VELOCITY_UPDATE_METHOD.getValue().getSelectedId() == 0)
             {
                 if (rb[i]->getMass() != 0.0)
                 {
@@ -286,7 +319,7 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
         msg_info("PBDTimeStepController") << "Updating velocities - particles: " << pd.size();
         for (int i = 0; i < (int) pd.size(); i++)
         {
-            if (m_velocityUpdateMethod == 0)
+            if (VELOCITY_UPDATE_METHOD.getValue().getSelectedId() == 0)
                 PBDTimeIntegration::velocityUpdateFirstOrder(h, pd.getMass(i), pd.getPosition(i), pd.getOldPosition(i), pd.getVelocity(i));
             else
                 PBDTimeIntegration::velocityUpdateSecondOrder(h, pd.getMass(i), pd.getPosition(i), pd.getOldPosition(i), pd.getLastPosition(i), pd.getVelocity(i));
@@ -298,7 +331,7 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
         msg_info("PBDTimeStepController") << "Updating velocities - particle orientations";
         for (int i = 0; i < (int)od.size(); i++)
         {
-            if (m_velocityUpdateMethod == 0)
+            if (VELOCITY_UPDATE_METHOD.getValue().getSelectedId() == 0)
                 PBDTimeIntegration::angularVelocityUpdateFirstOrder(h, od.getMass(i), od.getQuaternion(i), od.getOldQuaternion(i), od.getVelocity(i));
             else
                 PBDTimeIntegration::angularVelocityUpdateSecondOrder(h, od.getMass(i), od.getQuaternion(i), od.getOldQuaternion(i), od.getLastQuaternion(i), od.getVelocity(i));
@@ -306,12 +339,93 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
     }
 
     // TODO: Move collision detection to PBDAnimationLoop and companion classes
-    msg_info("PBDTimeStepController") << "Running collision queries: collision detection active = " << (m_collisionDetection != NULL);
-    if (m_collisionDetection)
+    msg_info("PBDTimeStepController") << "Running collision queries: collision detection method = " << COLLISION_DETECTION_METHOD.getValue().getSelectedId();
+
+    if (COLLISION_DETECTION_METHOD.getValue().getSelectedId() == 0)
     {
-        // START_TIMING("collision detection");
-        m_collisionDetection->collisionDetection(model);
-        // STOP_TIMING_AVG;
+        PBDSimulationModel* simModel = SofaPBDSimulation::getCurrent()->getModel();
+
+        msg_info("PBDTimeStepController") << "Using SOFA-integrated collision detection.";
+        if (m_sofaPBDCollisionDetection)
+        {
+            const std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::DetectionOutput>>& collisionOutputs = m_sofaPBDCollisionDetection->getCollisionOutputs();
+
+            // Forward rigid vs. rigid contacts to the PBD solver
+            for (std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::DetectionOutput>>::const_iterator cm_it = collisionOutputs.begin(); cm_it != collisionOutputs.end(); cm_it++)
+            {
+                msg_info("PBDTimeStepController") << cm_it->first.first->getName() << " -- " << cm_it->first.second->getName() << ": " << cm_it->second.size() << " contacts.";
+
+                SofaPBDPointCollisionModel* pm_1 = dynamic_cast<SofaPBDPointCollisionModel*>(cm_it->first.first);
+                SofaPBDPointCollisionModel* pm_2 = dynamic_cast<SofaPBDPointCollisionModel*>(cm_it->first.second);
+
+                SofaPBDLineCollisionModel* lm_1 = dynamic_cast<SofaPBDLineCollisionModel*>(cm_it->first.first);
+                SofaPBDLineCollisionModel* lm_2 = dynamic_cast<SofaPBDLineCollisionModel*>(cm_it->first.second);
+
+                SofaPBDTriangleCollisionModel* tm_1 = dynamic_cast<SofaPBDTriangleCollisionModel*>(cm_it->first.first);
+                SofaPBDTriangleCollisionModel* tm_2 = dynamic_cast<SofaPBDTriangleCollisionModel*>(cm_it->first.second);
+
+                if (pm_1 && pm_2)
+                {
+
+                }
+                else if (pm_1 && lm_2)
+                {
+
+                }
+                else if (pm_1 && tm_2)
+                {
+
+                }
+                else if (lm_1 && pm_2)
+                {
+
+                }
+                else if (lm_1 && lm_2)
+                {
+
+                }
+                else if (lm_1 && tm_2)
+                {
+
+                }
+                else if (tm_1 && pm_1)
+                {
+
+                }
+                else if (tm_1 && lm_2)
+                {
+
+                }
+                else if (tm_1 && tm_2)
+                {
+
+                }
+
+                for (size_t r = 0; r < cm_it->second.size(); r++)
+                {
+                    // Distinguish between rigid vs. rigid and rigid vs. particle type contacts here - this needs to be added in SofaPBD BruteForceDetection!
+                    msg_info("PBDTimeStepController") << "Adding contact: ID = " << cm_it->second[r].id
+                                                           << ", point0 = " << cm_it->second[r].point[0]
+                                                           << ", point1 = " << cm_it->second[r].point[1]
+                                                           << ", normal = " << cm_it->second[r].normal
+                                                           << ", features = " << cm_it->second[r].elem.first.getIndex() << " -- " << cm_it->second[r].elem.second.getIndex()
+                                                           << ", distance = " << cm_it->second[r].value;
+
+
+                    // simModel->addRigidBodyContactConstraint();
+                }
+            }
+        }
+    }
+    else
+    {
+        msg_info("PBDTimeStepController") << "Using PBD-integrated collision detection.";
+        if (m_collisionDetection)
+        {
+            // START_TIMING("collision detection");
+            m_collisionDetection->collisionDetection(model);
+            // STOP_TIMING_AVG;
+        }
     }
 
     msg_info("PBDTimeStepController") << "Calling velocityConstraintProjection()";
@@ -391,7 +505,7 @@ void SofaPBDTimeStep::positionConstraintProjection(PBDSimulationModel &model)
         constraint->initConstraintBeforeProjection(model);
     }
 
-    while (m_iterations < m_maxIterations)
+    while (m_iterations < MAX_ITERATIONS.getValue())
     {
         for (unsigned int group = 0; group < groups.size(); group++)
         {
@@ -447,7 +561,7 @@ void SofaPBDTimeStep::velocityConstraintProjection(PBDSimulationModel &model)
         }
     }
 
-    while (m_iterationsV < m_maxIterationsV)
+    while (m_iterationsV < MAX_ITERATIONS_V.getValue())
     {
         for (unsigned int group = 0; group < groups.size(); group++)
         {
