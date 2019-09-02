@@ -137,6 +137,7 @@ set(HEADER_FILES initZyPositionBasedDynamicsPlugin.h
                  PBDIntegration/SofaPBDTriangleCollisionModel.h
                  PBDIntegration/SofaPBDTriangleCollisionModel.inl
 
+                 PBDIntegration/SofaPBDCollisionDetectionOutput.h
                  PBDIntegration/SofaPBDBruteForceDetection.h
                  PBDIntegration/PBDCollisionModelsIntersection.h
                  )

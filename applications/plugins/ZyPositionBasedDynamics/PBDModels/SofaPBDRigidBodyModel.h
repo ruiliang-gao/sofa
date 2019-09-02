@@ -35,6 +35,7 @@ namespace sofa
                     Data<SReal> mass;
                     Data<SReal> density;
                     Data<SReal> frictionCoefficient;
+                    Data<SReal> restitutionCoefficient;
                     Data<sofa::defaulttype::Vec3d> inertiaTensor;
 
                 private:

@@ -9,6 +9,8 @@
 #include "PBDModels/SofaPBDRigidBodyModel.h"
 #include "PBDModels/SofaPBDLineModel.h"
 
+#include "PBDIntegration/SofaPBDCollisionDetectionOutput.h"
+
 namespace sofa
 {
     namespace simulation
@@ -75,6 +77,7 @@ SofaPBDTriangleCollisionModel::SofaPBDTriangleCollisionModel(): sofa::component:
 {
     m_d = new SofaPBDTriangleCollisionModelPrivate();
     this->f_printLog.setValue(false);
+    this->addTag(sofa::core::collision::tagPBDTriangleCollisionModel);
 }
 
 SofaPBDTriangleCollisionModel::~SofaPBDTriangleCollisionModel()

@@ -59,6 +59,8 @@ int SofaPBDPointCollisionModelClass = sofa::core::RegisterObject("PBD plugin ada
 SofaPBDPointCollisionModel::SofaPBDPointCollisionModel(): /*sofa::core::CollisionModel(),*/ sofa::component::collision::PointModel()
 {
     m_d = new SofaPBDPointCollisionModelPrivate();
+    this->f_printLog.setValue(false);
+    this->addTag(sofa::core::collision::tagPBDPointCollisionModel);
 }
 
 SofaPBDPointCollisionModel::~SofaPBDPointCollisionModel()

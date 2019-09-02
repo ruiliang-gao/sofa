@@ -70,7 +70,8 @@ SofaPBDRigidBodyModel::SofaPBDRigidBodyModel(): SofaPBDModelBase(),
     mass(initData(&mass, 0.0, "mass", "Rigid body total mass.")),
     inertiaTensor(initData(&inertiaTensor, Vec3d(1.0, 1.0, 1.0), "inertiaTensor", "Rigid body inertia tensor.")),
     density(initData(&density, 1.0, "density", "Rigid body material density.")),
-    frictionCoefficient(initData(&frictionCoefficient, 0.1, "frictionCoefficient", "Rigid body friction coefficient."))
+    frictionCoefficient(initData(&frictionCoefficient, 0.1, "frictionCoefficient", "Rigid body friction coefficient.")),
+    restitutionCoefficient(initData(&restitutionCoefficient, 0.1, "restitutionCoefficient", "Rigid body restitution coefficient."))
 {
     m_d.reset(new SofaPBDRigidBodyModelPrivate());
 }
@@ -201,6 +202,14 @@ void SofaPBDRigidBodyModel::parse(BaseObjectDescription* arg)
         frictionCoefficient.setValue(f);
 
         arg->removeAttribute("frictionCoefficient");
+    }
+
+    if (arg->getAttribute("restitutionCoefficient") != NULL)
+    {
+        SReal f = (SReal)arg->getAttributeAsFloat("restitutionCoefficient", 0.6);
+        restitutionCoefficient.setValue(f);
+
+        arg->removeAttribute("restitutionCoefficient");
     }
 
     BaseObject::parse(arg);
@@ -420,6 +429,9 @@ void SofaPBDRigidBodyModel::initializeModel()
 
     msg_info("SofaPBDRigidBodyModel") << "Setting friction coefficient: " << frictionCoefficient.getValue();
     m_pbdRigidBody->setFrictionCoeff(static_cast<Real>(frictionCoefficient.getValue()));
+
+    msg_info("SofaPBDRigidBodyModel") << "Setting restution coefficient: " << restitutionCoefficient.getValue();
+    m_pbdRigidBody->setRestitutionCoeff(static_cast<Real>(restitutionCoefficient.getValue()));
 
     PBDSimulationModel::RigidBodyVector& rigidBodies = SofaPBDSimulation::getCurrent()->getModel()->getRigidBodies();
     msg_info("SofaPBDRigidBodyModel") << "Adding rigid body to PBDSimulationModel. Number of rigid bodies before insertion: " << rigidBodies.size();

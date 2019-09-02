@@ -6,6 +6,8 @@
 #include <SofaBaseCollision/BruteForceDetection.h>
 #include <sofa/core/collision/DetectionOutput.h>
 
+#include "PBDIntegration/SofaPBDCollisionDetectionOutput.h"
+
 namespace sofa
 {
     namespace component
@@ -18,7 +20,7 @@ namespace sofa
                 std::vector<std::pair<std::string, std::string> > checkedCollisionModels;
                 std::vector<std::pair<std::string, std::string> > overlappingCollisionModels;
 
-                std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::DetectionOutput>> collisionOutputs;
+                std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::SofaPBDCollisionDetectionOutput>> collisionOutputs;
 
                 public:
                     SOFA_CLASS(SofaPBDBruteForceDetection, sofa::component::collision::BruteForceDetection);
@@ -34,7 +36,7 @@ namespace sofa
 
                     void draw(const core::visual::VisualParams*) override;
 
-                    const std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::DetectionOutput>>& getCollisionOutputs() const;
+                    const std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::SofaPBDCollisionDetectionOutput>>& getCollisionOutputs() const;
             };
         }
     }

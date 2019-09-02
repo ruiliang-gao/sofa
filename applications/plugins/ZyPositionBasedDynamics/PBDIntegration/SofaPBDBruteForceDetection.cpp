@@ -116,7 +116,7 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                 if (outputs->size() > 0)
                 {
                     std::vector<int64_t> unique_contact_ids;
-                    sofa::helper::vector<DetectionOutput> unique_outputs;
+                    sofa::helper::vector<SofaPBDCollisionDetectionOutput> unique_outputs;
                     for (size_t m = 0; m < outputs->size(); m++)
                     {
                         sofa::core::collision::DetectionOutput detection = contactPoints->operator[](m);
@@ -128,19 +128,155 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                         if (std::find(unique_contact_ids.begin(), unique_contact_ids.end(), detection.id) == unique_contact_ids.end())
                         {
                             unique_contact_ids.emplace_back(detection.id);
-                            unique_outputs.push_back(detection);
+                            SofaPBDCollisionDetectionOutput pbd_output(detection);
+
+                            bool cm1IsPBDPointModel = cmPair.first->hasTag(tagPBDPointCollisionModel);
+                            bool cm2IsPBDPointModel = cmPair.second->hasTag(tagPBDPointCollisionModel);
+                            bool cm1IsPBDLineModel = cmPair.first->hasTag(tagPBDLineCollisionModel);
+                            bool cm2IsPBDLineModel = cmPair.second->hasTag(tagPBDLineCollisionModel);
+                            bool cm1IsPBDTriangleModel = cmPair.first->hasTag(tagPBDTriangleCollisionModel);
+                            bool cm2IsPBDTriangleModel = cmPair.second->hasTag(tagPBDTriangleCollisionModel);
+
+                            // Distinguish contact types: Rigid/Rigid, Rigid/Line, Rigid/Particle, Solid/Particle
+                            SofaPBDPointCollisionModel* pm1 = nullptr;
+                            SofaPBDPointCollisionModel* pm2 = nullptr;
+                            SofaPBDLineCollisionModel* lm1 = nullptr;
+                            SofaPBDLineCollisionModel* lm2 = nullptr;
+
+                            if (cm1IsPBDPointModel)
+                            {
+                                pm1 = dynamic_cast<SofaPBDPointCollisionModel*>(cmPair.first);
+                            }
+
+                            if (cm2IsPBDPointModel)
+                            {
+                                pm2 = dynamic_cast<SofaPBDPointCollisionModel*>(cmPair.second);
+                            }
+
+                            if (cm1IsPBDLineModel)
+                            {
+                                lm1 = dynamic_cast<SofaPBDLineCollisionModel*>(cmPair.first);
+                            }
+
+                            if (cm2IsPBDLineModel)
+                            {
+                                lm2 = dynamic_cast<SofaPBDLineCollisionModel*>(cmPair.second);
+                            }
+
+                            // Distinguish contact model pairings
+
+                            // Point vs. point model
+                            if (cm1IsPBDPointModel && cm2IsPBDPointModel)
+                            {
+                                pbd_output.modelPairType = PBD_CONTACT_PAIR_POINT_POINT;
+                                // Point vs. point should be rigid-rigid contacts exclusively
+                                pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                            }
+
+                            // Line vs. line model
+                            if (cm1IsPBDLineModel && cm2IsPBDLineModel)
+                            {
+                                pbd_output.modelPairType = PBD_CONTACT_PAIR_LINE_LINE;
+                                // Rigid body pair
+                                if (lm1->usesPBDLineModel() && lm2->usesPBDLineModel())
+                                {
+                                    pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                                }
+                                // Thread segments: Self-intersection
+                                else if (lm1->usesPBDRigidBody() && lm2->usesPBDRigidBody())
+                                {
+                                    pbd_output.contactType = PBD_LINE_LINE_CONTACT;
+                                }
+                                // Thread segment vs. rigid body
+                                else
+                                {
+                                    pbd_output.contactType = PBD_RIGID_LINE_CONTACT;
+                                }
+                            }
+
+                            // Triangle vs. triangle model
+                            if (cm1IsPBDTriangleModel && cm2IsPBDTriangleModel)
+                            {
+                                pbd_output.modelPairType = PBD_CONTACT_PAIR_TRIANGLE_TRIANGLE;
+                                // This can only be a rigid-body pair
+                                pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                            }
+
+                            // Point vs. line model
+                            if ((cm1IsPBDPointModel && cm2IsPBDLineModel) || (cm2IsPBDPointModel && cm1IsPBDLineModel))
+                            {
+                                pbd_output.modelPairType = PBD_CONTACT_PAIR_POINT_LINE;
+
+                                if (cm2IsPBDPointModel && cm1IsPBDLineModel)
+                                    pbd_output.modelTypeMirrored = true;
+
+                                // This can also only be rigid vs. rigid body, right?
+                                pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                            }
+
+                            if ((cm1IsPBDPointModel && cm2IsPBDTriangleModel) || (cm2IsPBDPointModel && cm1IsPBDTriangleModel))
+                            {
+                                pbd_output.modelPairType = PBD_CONTACT_PAIR_POINT_TRIANGLE;
+
+                                if (cm2IsPBDPointModel && cm1IsPBDTriangleModel)
+                                    pbd_output.modelTypeMirrored = true;
+
+                                // This can also only be rigid vs. rigid body, right?
+                                pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                            }
+
+                            // Line vs. triangle models
+                            if ((cm1IsPBDLineModel && cm2IsPBDTriangleModel) || (cm2IsPBDLineModel && cm2IsPBDTriangleModel))
+                            {
+                                pbd_output.modelPairType = PBD_CONTACT_PAIR_LINE_TRIANGLE;
+
+                                if (cm2IsPBDLineModel && cm2IsPBDTriangleModel)
+                                    pbd_output.modelTypeMirrored = true;
+
+                                // Depending on whether one of the line models represents a thread or a rigid body model, set the contactType accordingly
+                                if (cm1IsPBDLineModel)
+                                {
+                                    if (lm1->usesPBDLineModel())
+                                    {
+                                        pbd_output.contactType = PBD_RIGID_LINE_CONTACT;
+                                    }
+                                    else if (lm1->usesPBDRigidBody())
+                                    {
+                                        pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                                    }
+                                }
+                                if (cm2IsPBDLineModel)
+                                {
+                                    if (lm2->usesPBDLineModel())
+                                    {
+                                        pbd_output.contactType = PBD_RIGID_LINE_CONTACT;
+                                    }
+                                    else if (lm2->usesPBDRigidBody())
+                                    {
+                                        pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                                    }
+                                }
+                            }
+
+                            unique_outputs.push_back(pbd_output);
                         }
                     }
 
-                    /*msg_info("SofaPBDBruteForceDetection") << "Unique contacts: " << unique_contact_ids.size();
-                    for (std::map<int64_t, DetectionOutput>::const_iterator ct_it = unique_outputs.begin(); ct_it != unique_outputs.end(); ct_it++)
-                        msg_info("SofaPBDBruteForceDetection") << "Contact: ID = " << ct_it->second.id
+                    msg_info("SofaPBDBruteForceDetection") << "Unique contacts after filtering out duplicates: " << unique_contact_ids.size();
+                    unsigned long contact_idx = 0;
+                    for (std::map<int64_t, SofaPBDCollisionDetectionOutput>::iterator ct_it = unique_outputs.begin(); ct_it != unique_outputs.end(); ct_it++)
+                    {
+                        msg_info("SofaPBDBruteForceDetection") << "Contact " << contact_idx << ": ID = " << ct_it->second.id
+                                                               << ", contactType = " << ct_it->second.contactType
+                                                               << ", modelPairType = " << ct_it->second.modelPairType
+                                                               << ", modelTypeMirrored = " << ct_it->second.modelTypeMirrored
                                                                << ", point0 = " << ct_it->second.point[0]
                                                                << ", point1 = " << ct_it->second.point[1]
                                                                << ", normal = " << ct_it->second.normal
                                                                << ", features = " << ct_it->second.elem.first.getIndex() << " -- " << ct_it->second.elem.second.getIndex()
-                                                               << ", distance = " << ct_it->second.value;*/
-
+                                                               << ", distance = " << ct_it->second.value;
+                        contact_idx++;
+                    }
                     collisionOutputs.insert(std::make_pair(cmPair, unique_outputs));
                 }
             }
@@ -173,7 +309,7 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
     }
 
     msg_info("SofaPBDBruteForceDetection") << "collisionOutputs map size: " << collisionOutputs.size();
-    for (std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::DetectionOutput>>::const_iterator cm_it = collisionOutputs.begin(); cm_it != collisionOutputs.end(); cm_it++)
+    for (std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::SofaPBDCollisionDetectionOutput>>::const_iterator cm_it = collisionOutputs.begin(); cm_it != collisionOutputs.end(); cm_it++)
     {
         msg_info("SofaPBDBruteForceDetection") << cm_it->first.first->getName() << " -- " << cm_it->first.second->getName() << ": " << cm_it->second.size() << " contacts.";
         for (size_t r = 0; r < cm_it->second.size(); r++)
@@ -190,7 +326,7 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
     NarrowPhaseDetection::endNarrowPhase();
 }
 
-const std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::DetectionOutput>>& SofaPBDBruteForceDetection::getCollisionOutputs() const
+const std::map<std::pair<core::CollisionModel *, core::CollisionModel *>, sofa::helper::vector<SofaPBDCollisionDetectionOutput> > &SofaPBDBruteForceDetection::getCollisionOutputs() const
 {
     return collisionOutputs;
 }
@@ -204,7 +340,7 @@ void SofaPBDBruteForceDetection::draw(const core::visual::VisualParams* vparams)
     vparams->drawTool()->enableLighting();
 
     sofa::defaulttype::Vec4f normalArrowColor(0.8f, 0.2f, 0.2f, 0.9f);
-    for (std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::DetectionOutput>>::const_iterator cm_it = collisionOutputs.begin(); cm_it != collisionOutputs.end(); cm_it++)
+    for (std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::SofaPBDCollisionDetectionOutput>>::const_iterator cm_it = collisionOutputs.begin(); cm_it != collisionOutputs.end(); cm_it++)
     {
         for (size_t r = 0; r < cm_it->second.size(); r++)
         {
