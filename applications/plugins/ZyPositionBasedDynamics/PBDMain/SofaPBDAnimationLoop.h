@@ -40,6 +40,8 @@ namespace sofa
                     virtual void init() override;
                     virtual void bwdInit() override;
 
+                    void draw(const core::visual::VisualParams*) override;
+
                     /// perform one animation step
                     /*
                      * Inputs : ExecParams *    -> Execution context

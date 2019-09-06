@@ -5,6 +5,8 @@
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/simulation/Simulation.h>
 
+#include <sofa/core/visual/VisualParams.h>
+
 #include "PBDynamics/PBDTimeIntegration.h"
 #include "DistanceFieldCollisionDetection.h"
 
@@ -14,6 +16,7 @@
 
 #include <PBDIntegration/SofaPBDCollisionDetectionOutput.h>
 
+using namespace sofa::defaulttype;
 using namespace sofa::simulation::PBDSimulation;
 
 int SofaPBDTimeStepClass = sofa::core::RegisterObject("Wrapper class for the PBD TimeStep.")
@@ -22,7 +25,9 @@ int SofaPBDTimeStepClass = sofa::core::RegisterObject("Wrapper class for the PBD
 using namespace std;
 using namespace sofa::component::collision;
 
-SofaPBDTimeStep::SofaPBDTimeStep(): sofa::core::objectmodel::BaseObject()
+SofaPBDTimeStep::SofaPBDTimeStep(): sofa::core::objectmodel::BaseObject(),
+    MAX_ITERATIONS(initData(&MAX_ITERATIONS, 5, "Max. iterations", "Maximal number of iterations of the solver.")),
+    MAX_ITERATIONS_V(initData(&MAX_ITERATIONS_V, 5, "Max. velocity iterations", "Maximal number of iterations of the velocity solver."))
 {
     m_iterations = 0;
     m_iterationsV = 0;
@@ -38,7 +43,11 @@ SofaPBDTimeStep::~SofaPBDTimeStep()
 
 void SofaPBDTimeStep::init()
 {
+    msg_info("SofaPBDTimeStep") << "init()";
     initParameters();
+
+    msg_info("SofaPBDTimeStep") << "MAX_ITERATIONS = " << MAX_ITERATIONS.getValue();
+    msg_info("SofaPBDTimeStep") << "MAX_ITERATIONS_V = " << MAX_ITERATIONS_V.getValue();
 }
 
 void SofaPBDTimeStep::bwdInit()
@@ -61,10 +70,7 @@ void SofaPBDTimeStep::bwdInit()
 
 void SofaPBDTimeStep::initParameters()
 {
-    initData(&MAX_ITERATIONS, 5, "Max. iterations", "Maximal number of iterations of the solver.");
     MAX_ITERATIONS.setGroup("PBD");
-
-    initData(&MAX_ITERATIONS_V, "Max. velocity iterations", "Maximal number of iterations of the velocity solver.");
     MAX_ITERATIONS_V.setGroup("PBD");
 
     helper::OptionsGroup methodOptions(2, "0 - First Order Update",
@@ -98,10 +104,10 @@ void SofaPBDTimeStep::cleanup()
         m_collisionDetection = NULL;
     }
 
-    if (m_sofaPBDCollisionDetection)
+    /*if (m_sofaPBDCollisionDetection)
     {
         m_sofaPBDCollisionDetection->cleanup();
-    }
+    }*/
 }
 
 void SofaPBDTimeStep::clearAccelerations(PBDSimulationModel &model)
@@ -147,8 +153,8 @@ void SofaPBDTimeStep::clearAccelerations(PBDSimulationModel &model)
 void SofaPBDTimeStep::setCollisionDetection(PBDSimulationModel &model, CollisionDetection *cd)
 {
     m_collisionDetection = cd;
-    m_collisionDetection->setContactCallback(contactCallbackFunction, &model);
-    m_collisionDetection->setSolidContactCallback(solidContactCallbackFunction, &model);
+    /*m_collisionDetection->setContactCallback(contactCallbackFunction, &model);
+    m_collisionDetection->setSolidContactCallback(solidContactCallbackFunction, &model);*/
 }
 
 CollisionDetection *SofaPBDTimeStep::getCollisionDetection()
@@ -349,6 +355,10 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
         if (m_sofaPBDCollisionDetection)
         {
             PBDSimulationModel* simModel = SofaPBDSimulation::getCurrent()->getModel();
+
+            simModel->setContactsCleared(true);
+            simModel->resetContacts();
+
             const PBDSimulationModel::RigidBodyVector& rigidBodies = simModel->getRigidBodies();
             simModel->getParticles();
             const PBDSimulationModel::LineModelVector& lineModels = simModel->getLineModels();
@@ -366,6 +376,7 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
                     msg_info("SofaPBDTimeStep") << "Adding contact: ID = " << cm_it->second[r].id
                                                       << ", contactType = " << cm_it->second[r].contactType
                                                       << ", modelPairType = " << cm_it->second[r].modelPairType
+                                                      << ", rigidBodyIndices = " << cm_it->second[r].rigidBodyIndices[0] << " -- " << cm_it->second[r].rigidBodyIndices[1]
                                                       << ", point0 = " << cm_it->second[r].point[0]
                                                       << ", point1 = " << cm_it->second[r].point[1]
                                                       << ", normal = " << cm_it->second[r].normal
@@ -376,29 +387,45 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
                     if (cm_it->second[r].contactType == sofa::core::collision::PBD_RIGID_RIGID_CONTACT)
                     {
                         msg_info("SofaPBDTimeStep") << "Adding new contact constraint: PBD_RIGID_RIGID_CONTACT";
-                        Vector3r contactPoint1(cm_it->second[r].point[0].x(), cm_it->second[r].point[0].y(), cm_it->second[r].point[0].z());
-                        Vector3r contactPoint2(cm_it->second[r].point[1].x(), cm_it->second[r].point[1].y(), cm_it->second[r].point[1].z());
-                        Vector3r normal(cm_it->second[r].normal.x(), cm_it->second[r].normal.y(), cm_it->second[r].normal.z());
+                        try
+                        {
+                            Vector3r contactPoint1(cm_it->second[r].point[0].x(), cm_it->second[r].point[0].y(), cm_it->second[r].point[0].z());
+                            Vector3r contactPoint2(cm_it->second[r].point[1].x(), cm_it->second[r].point[1].y(), cm_it->second[r].point[1].z());
+                            Vector3r normal(cm_it->second[r].normal.x(), cm_it->second[r].normal.y(), cm_it->second[r].normal.z());
 
-                        Real restitutionCoeff = rigidBodies.at(cm_it->second[r].rigidBodyIndices[0])->getRestitutionCoeff() * rigidBodies.at(cm_it->second[r].rigidBodyIndices[1])->getRestitutionCoeff();
-                        Real frictionCoeff = rigidBodies.at(cm_it->second[r].rigidBodyIndices[0])->getFrictionCoeff() + rigidBodies.at(cm_it->second[r].rigidBodyIndices[1])->getFrictionCoeff();
+                            Real restitutionCoeff = rigidBodies.at(cm_it->second[r].rigidBodyIndices[0])->getRestitutionCoeff() * rigidBodies.at(cm_it->second[r].rigidBodyIndices[1])->getRestitutionCoeff();
+                            Real frictionCoeff = rigidBodies.at(cm_it->second[r].rigidBodyIndices[0])->getFrictionCoeff() + rigidBodies.at(cm_it->second[r].rigidBodyIndices[1])->getFrictionCoeff();
 
-                        simModel->addRigidBodyContactConstraint((unsigned int) cm_it->second[r].rigidBodyIndices[0], (unsigned int) cm_it->second[r].rigidBodyIndices[1],
-                                contactPoint1, contactPoint2, normal, Real(cm_it->second[r].value), restitutionCoeff, frictionCoeff);
+                            simModel->addRigidBodyContactConstraint((unsigned int) cm_it->second[r].rigidBodyIndices[0], (unsigned int) cm_it->second[r].rigidBodyIndices[1],
+                                    contactPoint1, contactPoint2, normal, Real(cm_it->second[r].value), restitutionCoeff, frictionCoeff);
+                        }
+                        catch (std::out_of_range& ex)
+                        {
+                            msg_error("SofaPBDTimeStep") << "Tried accessing rigid body data outside valid index range (RIGID_RIGID_CONTACT): " << ex.what();
+                        }
+
                     }
                     else if (cm_it->second[r].contactType == sofa::core::collision::PBD_RIGID_LINE_CONTACT)
                     {
                         msg_info("SofaPBDTimeStep") << "Adding new contact constraint: PBD_RIGID_LINE_CONTACT";
-                        Vector3r contactPoint1(cm_it->second[r].point[0].x(), cm_it->second[r].point[0].y(), cm_it->second[r].point[0].z());
-                        Vector3r contactPoint2(cm_it->second[r].point[1].x(), cm_it->second[r].point[1].y(), cm_it->second[r].point[1].z());
-                        Vector3r normal(cm_it->second[r].normal.x(), cm_it->second[r].normal.y(), cm_it->second[r].normal.z());
 
-                        Real restitutionCoeff = rigidBodies.at(cm_it->second[r].rigidBodyIndices[0])->getRestitutionCoeff() * lineModels.at(cm_it->second[r].rigidBodyIndices[1])->getRestitutionCoeff();
-                        Real frictionCoeff = rigidBodies.at(cm_it->second[r].rigidBodyIndices[0])->getFrictionCoeff() * lineModels.at(cm_it->second[r].rigidBodyIndices[1])->getFrictionCoeff();
+                        try
+                        {
+                            Vector3r contactPoint1(cm_it->second[r].point[0].x(), cm_it->second[r].point[0].y(), cm_it->second[r].point[0].z());
+                            Vector3r contactPoint2(cm_it->second[r].point[1].x(), cm_it->second[r].point[1].y(), cm_it->second[r].point[1].z());
+                            Vector3r normal(cm_it->second[r].normal.x(), cm_it->second[r].normal.y(), cm_it->second[r].normal.z());
+
+                            Real restitutionCoeff = rigidBodies.at(cm_it->second[r].rigidBodyIndices[0])->getRestitutionCoeff() * lineModels.at(cm_it->second[r].rigidBodyIndices[1])->getRestitutionCoeff();
+                            Real frictionCoeff = rigidBodies.at(cm_it->second[r].rigidBodyIndices[0])->getFrictionCoeff() * lineModels.at(cm_it->second[r].rigidBodyIndices[1])->getFrictionCoeff();
 
 
-                        simModel->addParticleRigidBodyContactConstraint(cm_it->second[r].particleIndices[0], cm_it->second[r].rigidBodyIndices[1],
-                                contactPoint1, contactPoint2, normal, Real(cm_it->second[r].value), restitutionCoeff, frictionCoeff);
+                            simModel->addParticleRigidBodyContactConstraint(cm_it->second[r].particleIndices[0], cm_it->second[r].rigidBodyIndices[1],
+                                    contactPoint1, contactPoint2, normal, Real(cm_it->second[r].value), restitutionCoeff, frictionCoeff);
+                        }
+                        catch (std::out_of_range& ex)
+                        {
+                            msg_error("SofaPBDTimeStep") << "Tried accessing rigid body data outside valid index range (RIGID_LINE_CONTACT): " << ex.what();
+                        }
                     }
                     else if (cm_it->second[r].contactType == sofa::core::collision::PBD_PARTICLE_RIGID_CONTACT)
                     {
@@ -530,6 +557,7 @@ void SofaPBDTimeStep::positionConstraintProjection(PBDSimulationModel &model)
 
 void SofaPBDTimeStep::velocityConstraintProjection(PBDSimulationModel &model)
 {
+    msg_info("SofaPBDTimeStep") << "velocityConstraintProjection() - MAX_ITERATIONS_V = " << MAX_ITERATIONS_V.getValue();
     m_iterationsV = 0;
 
     // init constraint groups if necessary
@@ -545,9 +573,9 @@ void SofaPBDTimeStep::velocityConstraintProjection(PBDSimulationModel &model)
     for (unsigned int group = 0; group < groups.size(); group++)
     {
         const int groupSize = (int)groups[group].size();
-        // #pragma omp parallel if(groupSize > MIN_PARALLEL_SIZE) default(shared)
+        #pragma omp parallel if(groupSize > MIN_PARALLEL_SIZE) default(shared)
         {
-            // #pragma omp for schedule(static)
+            #pragma omp for schedule(static)
             for (int i = 0; i < groupSize; i++)
             {
                 const unsigned int constraintIndex = groups[group][i];
@@ -561,9 +589,9 @@ void SofaPBDTimeStep::velocityConstraintProjection(PBDSimulationModel &model)
         for (unsigned int group = 0; group < groups.size(); group++)
         {
             const int groupSize = (int)groups[group].size();
-            // #pragma omp parallel if(groupSize > MIN_PARALLEL_SIZE) default(shared)
+            #pragma omp parallel if(groupSize > MIN_PARALLEL_SIZE) default(shared)
             {
-                // #pragma omp for schedule(static)
+                #pragma omp for schedule(static)
                 for (int i = 0; i < groupSize; i++)
                 {
                     const unsigned int constraintIndex = groups[group][i];
@@ -573,14 +601,18 @@ void SofaPBDTimeStep::velocityConstraintProjection(PBDSimulationModel &model)
         }
 
         // solve contacts
+        msg_info("SofaPBDTimeStep") << "Solving rigid body - rigid body constraints: " << rigidBodyContacts.size();
         for (unsigned int i = 0; i < rigidBodyContacts.size(); i++)
         {
+            msg_info("SofaPBDTimeStep") << "Solve constraint " << i;
             rigidBodyContacts[i].solveVelocityConstraint(model, m_iterationsV);
         }
+        msg_info("SofaPBDTimeStep") << "Solving rigid body - particle constraints: " << particleRigidBodyContacts.size();
         for (unsigned int i = 0; i < particleRigidBodyContacts.size(); i++)
         {
             particleRigidBodyContacts[i].solveVelocityConstraint(model, m_iterationsV);
         }
+        msg_info("SofaPBDTimeStep") << "Solving tetrahedron - particle constraints: " << particleTetContacts.size();
         for (unsigned int i = 0; i < particleTetContacts.size(); i++)
         {
             particleTetContacts[i].solveVelocityConstraint(model, m_iterationsV);
@@ -589,8 +621,60 @@ void SofaPBDTimeStep::velocityConstraintProjection(PBDSimulationModel &model)
     }
 }
 
+void SofaPBDTimeStep::draw(const core::visual::VisualParams* vparams)
+{
+    /*if (!vparams->displayFlags().getShowBehaviorModels())
+        return;*/
+
+    PBDSimulationModel* model = SofaPBDSimulation::getCurrent()->getModel();
+    const PBDSimulationModel::RigidBodyContactConstraintVector& rbConstraints = model->getRigidBodyContactConstraints();
+
+    vparams->drawTool()->saveLastState();
+    vparams->drawTool()->enableLighting();
+
+    msg_info("SofaPBDTimeStep") << "PBD rigid body constraints count = " << rbConstraints.size();
+
+    if (rbConstraints.size() > 0)
+    {
+        Vec4f normalColor(0.5f, 0.9f, 0.2f, 0.5f);
+        Vec4f tangentColor(0.2f, 0.5f, 0.9f, 0.5f);
+        Vec4f linVelColor(0.9f, 0.5f, 0.2f, 0.75f);
+
+        for (size_t k = 0; k < rbConstraints.size(); k++)
+        {
+            const RigidBodyContactConstraint& rbc = rbConstraints[k];
+            const Vector3r &cp1 = rbc.m_constraintInfo.col(0);
+            const Vector3r &cp2 = rbc.m_constraintInfo.col(1);
+            const Vector3r &normal = rbc.m_constraintInfo.col(2);
+            const Vector3r &tangent = rbc.m_constraintInfo.col(3);
+
+            Vector3 contactPoint1(cp1[0], cp1[1], cp1[2]);
+            Vector3 contactPoint2(cp2[0], cp2[1], cp2[2]);
+            Vector3 normalVector(normal[0], normal[1], normal[2]);
+            Vector3 tangentVector(tangent[0], tangent[1], tangent[2]);
+
+            Vector3 rbVelCorrLin1(rbc.m_corrLin_rb1[0], rbc.m_corrLin_rb1[1], rbc.m_corrLin_rb1[2]);
+            Vector3 rbVelCorrLin2(rbc.m_corrLin_rb2[0], rbc.m_corrLin_rb2[1], rbc.m_corrLin_rb2[2]);
+
+            vparams->drawTool()->drawSphere(contactPoint1, 0.02f);
+            vparams->drawTool()->drawSphere(contactPoint2, 0.02f);
+
+            vparams->drawTool()->drawArrow(contactPoint1, contactPoint1 + normalVector, 0.0025f, normalColor, 8);
+            vparams->drawTool()->drawArrow(contactPoint1, contactPoint1 + tangentVector, 0.0025f, tangentColor, 8);
+
+            vparams->drawTool()->drawArrow(contactPoint1, contactPoint1 + rbVelCorrLin1, 0.005f, linVelColor, 8);
+            vparams->drawTool()->drawArrow(contactPoint2, contactPoint2 + rbVelCorrLin2, 0.005f, linVelColor, 8);
+
+            vparams->drawTool();
+        }
+    }
+
+    vparams->drawTool()->disableLighting();
+    vparams->drawTool()->restoreLastState();
+}
+
 /// TODO: Check for re-entrancy!
-void SofaPBDTimeStep::contactCallbackFunction(const unsigned int contactType, const unsigned int bodyIndex1, const unsigned int bodyIndex2,
+/*void SofaPBDTimeStep::contactCallbackFunction(const unsigned int contactType, const unsigned int bodyIndex1, const unsigned int bodyIndex2,
     const Vector3r &cp1, const Vector3r &cp2,
     const Vector3r &normal, const Real dist,
     const Real restitutionCoeff, const Real frictionCoeff, void *userData)
@@ -600,10 +684,10 @@ void SofaPBDTimeStep::contactCallbackFunction(const unsigned int contactType, co
         model->addRigidBodyContactConstraint(bodyIndex1, bodyIndex2, cp1, cp2, normal, dist, restitutionCoeff, frictionCoeff);
     else if (contactType == CollisionDetection::ParticleRigidBodyContactType)
         model->addParticleRigidBodyContactConstraint(bodyIndex1, bodyIndex2, cp1, cp2, normal, dist, restitutionCoeff, frictionCoeff);
-}
+}*/
 
 /// TODO: Check for re-entrancy!
-void SofaPBDTimeStep::solidContactCallbackFunction(const unsigned int contactType, const unsigned int bodyIndex1, const unsigned int bodyIndex2,
+/*void SofaPBDTimeStep::solidContactCallbackFunction(const unsigned int contactType, const unsigned int bodyIndex1, const unsigned int bodyIndex2,
     const unsigned int tetIndex, const Vector3r &bary,
     const Vector3r &cp1, const Vector3r &cp2,
     const Vector3r &normal, const Real dist,
@@ -612,4 +696,4 @@ void SofaPBDTimeStep::solidContactCallbackFunction(const unsigned int contactTyp
     PBDSimulationModel *model = (PBDSimulationModel*)userData;
     if (contactType == CollisionDetection::ParticleSolidContactType)
         model->addParticleSolidContactConstraint(bodyIndex1, bodyIndex2, tetIndex, bary, cp1, cp2, normal, dist, restitutionCoeff, frictionCoeff);
-}
+}*/

@@ -360,6 +360,12 @@ namespace sofa
                     Real m_stiffness;
                     Real m_frictionCoeff;
                     Real m_sum_impulses;
+
+                    Real m_dist;
+
+                    Vector3r m_corrLin_rb1, m_corrLin_rb2;
+                    Vector3r m_corrAng_rb1, m_corrAng_rb2;
+
                     Eigen::Matrix<Real, 3, 5> m_constraintInfo;
 
                     RigidBodyContactConstraint() {}

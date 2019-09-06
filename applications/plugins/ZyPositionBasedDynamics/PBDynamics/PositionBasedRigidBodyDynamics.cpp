@@ -31,6 +31,7 @@ void PositionBasedRigidBodyDynamics::computeMatrixK(
         const Real j23 = inertiaInverseW(1,2);
         const Real j33 = inertiaInverseW(2,2);
 
+        // K is also symmetric
         K(0,0) = c*c*j22 - b*c*(j23 + j23) + b*b*j33 + invMass;
         K(0,1) = -(c*c*j12) + a*c*j23 + b*c*j13 - a*b*j33;
         K(0,2) = b*c*j12 - a*c*j22 - b*b*j13 + a*b*j23;
@@ -42,7 +43,9 @@ void PositionBasedRigidBodyDynamics::computeMatrixK(
         K(2,2) = b*b*j11 - a*b*(j12 + j12) + a*a*j22 + invMass;
     }
     else
+    {
         K.setZero();
+    }
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -2235,8 +2238,7 @@ bool PositionBasedRigidBodyDynamics::solve_RigidBodyParticleBallJoint(
 
 
 // ----------------------------------------------------------------------------------------------
-bool PositionBasedRigidBodyDynamics::init_RigidBodyContactConstraint(
-    const Real invMass0,							// inverse mass is zero if body is static
+bool PositionBasedRigidBodyDynamics::init_RigidBodyContactConstraint(const Real invMass0,							// inverse mass is zero if body is static
     const Vector3r &x0,						// center of mass of body 0
     const Vector3r &v0,						// velocity of body 0
     const Matrix3r &inertiaInverseW0,		// inverse inertia tensor (world space) of body 0
@@ -2251,7 +2253,7 @@ bool PositionBasedRigidBodyDynamics::init_RigidBodyContactConstraint(
     const Vector3r &cp0,						// contact point of body 0
     const Vector3r &cp1,						// contact point of body 1
     const Vector3r &normal,					// contact normal in body 1
-    const Real restitutionCoeff,					// coefficient of restitution
+    const Real restitutionCoeff,            // coefficient of restitution
     Eigen::Matrix<Real, 3, 5> &constraintInfo)
 {
     // constraintInfo contains
@@ -2315,6 +2317,7 @@ bool PositionBasedRigidBodyDynamics::velocitySolve_RigidBodyContactConstraint(
     const Vector3r &v1,						// velocity of body 1
     const Matrix3r &inertiaInverseW1,		// inverse inertia tensor (world space) of body 1
     const Vector3r &omega1,					// angular velocity of body 1
+    const Real dist,                        // distance between contact points
     const Real stiffness,							// stiffness parameter of penalty impulse
     const Real frictionCoeff,						// friction coefficient
     Real &sum_impulses,							// sum of all impulses
@@ -2339,11 +2342,14 @@ bool PositionBasedRigidBodyDynamics::velocitySolve_RigidBodyContactConstraint(
     const Vector3r &normal = constraintInfo.col(2);
     const Vector3r &tangent = constraintInfo.col(3);
 
-    // 1.0 / normal^T * K * normal
+    // 1.0 / normal^T * K(ugelgelenk)/ConstraintMatrix1 * normal
     const Real nKn_inv = constraintInfo(0, 4);
 
     // penetration depth
-    const Real d = normal.dot(connector0 - connector1);
+    Real d = dist;
+    // compute distance if specified as double INF value, else use specified distance
+    if (d == std::numeric_limits<double>::infinity())
+        d = normal.dot(connector0 - connector1);
 
     // maximal impulse in tangent direction
     const Real pMax = constraintInfo(1, 4);
@@ -2370,7 +2376,6 @@ bool PositionBasedRigidBodyDynamics::velocitySolve_RigidBodyContactConstraint(
     if (d < 0.0)
         correctionMagnitude -= stiffness * nKn_inv * d;
 
-
     Vector3r p(correctionMagnitude * normal);
     sum_impulses += correctionMagnitude;
 
@@ -2385,13 +2390,13 @@ bool PositionBasedRigidBodyDynamics::velocitySolve_RigidBodyContactConstraint(
 
     if (invMass0 != 0.0)
     {
-        corr_v0 = invMass0*p;
+        corr_v0 = invMass0 * p;
         corr_omega0 = inertiaInverseW0 * (r0.cross(p));
     }
 
     if (invMass1 != 0.0)
     {
-        corr_v1 = -invMass1*p;
+        corr_v1 = -invMass1 * p;
         corr_omega1 = inertiaInverseW1 * (r1.cross(-p));
     }
 

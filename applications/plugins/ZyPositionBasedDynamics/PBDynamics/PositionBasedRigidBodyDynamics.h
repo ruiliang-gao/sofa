@@ -3,6 +3,8 @@
 
 #include "PBDCommon/PBDCommon.h"
 
+#include <numeric>
+
 // ------------------------------------------------------------------------------------
 namespace sofa
 {
@@ -1039,6 +1041,7 @@ namespace sofa
                 * @param cp1 contact point of body 1
                 * @param normal contact normal in body 1
                 * @param restitutionCoeff coefficient of restitution
+                * @param dist Contact point distance - if dist == std::numeric_limits<DOUBLE_MAX>, it is computed from the vector between the two points instead
                 * @param constraintInfo Stores the local and global position of the contact points and
                 * the contact normal. \n
                 * The joint info contains the following columns:\n
@@ -1049,6 +1052,7 @@ namespace sofa
                 * 0,4:   1.0 / normal^T * K * normal\n
                 * 1,4:  maximal impulse in tangent direction\n
                 * 2,4:  goal velocity in normal direction after collision
+                * 3,4: Contact point distance, i. e. penetration depth -
                 */
                 static bool init_RigidBodyContactConstraint(
                     const Real invMass0,							// inverse mass is zero if body is static
@@ -1057,16 +1061,16 @@ namespace sofa
                     const Matrix3r &inertiaInverseW0,		// inverse inertia tensor (world space) of body 0
                     const Quaternionr &q0,					// rotation of body 0
                     const Vector3r &omega0,					// angular velocity of body 0
-                    const Real invMass1,							// inverse mass is zero if body is static
+                    const Real invMass1,					// inverse mass is zero if body is static
                     const Vector3r &x1,						// center of mass of body 1
                     const Vector3r &v1,						// velocity of body 1
                     const Matrix3r &inertiaInverseW1,		// inverse inertia tensor (world space) of body 1
                     const Quaternionr &q1,					// rotation of body 1
                     const Vector3r &omega1,					// angular velocity of body 1
-                    const Vector3r &cp0,						// contact point of body 0
-                    const Vector3r &cp1,						// contact point of body 1
+                    const Vector3r &cp0,					// contact point of body 0
+                    const Vector3r &cp1,					// contact point of body 1
                     const Vector3r &normal,					// contact normal in body 1
-                    const Real restitutionCoeff,					// coefficient of restitution
+                    const Real restitutionCoeff,			// coefficient of restitution
                     Eigen::Matrix<Real, 3, 5> &constraintInfo);
 
 
@@ -1095,19 +1099,20 @@ namespace sofa
                 * @param corr_omega1 angular velocity correction of second body
                 */
                 static bool velocitySolve_RigidBodyContactConstraint(
-                    const Real invMass0,							// inverse mass is zero if body is static
-                    const Vector3r &x0, 						// center of mass of body 0
+                    const Real invMass0,					// inverse mass is zero if body is static
+                    const Vector3r &x0, 					// center of mass of body 0
                     const Vector3r &v0,						// velocity of body 0
                     const Matrix3r &inertiaInverseW0,		// inverse inertia tensor (world space) of body 0
                     const Vector3r &omega0,					// angular velocity of body 0
-                    const Real invMass1,							// inverse mass is zero if body is static
-                    const Vector3r &x1, 						// center of mass of body 1
+                    const Real invMass1,					// inverse mass is zero if body is static
+                    const Vector3r &x1, 					// center of mass of body 1
                     const Vector3r &v1,						// velocity of body 1
                     const Matrix3r &inertiaInverseW1,		// inverse inertia tensor (world space) of body 1
                     const Vector3r &omega1,					// angular velocity of body 1
-                    const Real stiffness,							// stiffness parameter of penalty impulse
-                    const Real frictionCoeff,						// friction coefficient
-                    Real &sum_impulses,							// sum of all impulses
+                    const Real dist,                        // distance between contact points
+                    const Real stiffness,					// stiffness parameter of penalty impulse
+                    const Real frictionCoeff,				// friction coefficient
+                    Real &sum_impulses,						// sum of all impulses
                     Eigen::Matrix<Real, 3, 5> &constraintInfo,		// precomputed contact info
                     Vector3r &corr_v0, Vector3r &corr_omega0,
                     Vector3r &corr_v1, Vector3r &corr_omega1);

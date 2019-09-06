@@ -35,8 +35,10 @@ const PBDRigidBodyGeometry& SofaPBDModelBase::getRigidBodyGeometry() const
 {
     static PBDRigidBodyGeometry emptyPBDGeom;
     if (m_pbdRigidBody == nullptr)
+    {
+        msg_warning("SofaPBDModelBase") << "getRigidBodyGeometry(" << this->getName() << "): Invalid PBDRigidBodyGeometryPointer!";
         return emptyPBDGeom;
-
+    }
     return m_pbdRigidBody->getGeometry();
 }
 

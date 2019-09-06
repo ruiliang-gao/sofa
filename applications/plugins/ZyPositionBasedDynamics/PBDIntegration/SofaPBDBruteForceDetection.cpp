@@ -120,10 +120,33 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                     for (size_t m = 0; m < outputs->size(); m++)
                     {
                         sofa::core::collision::DetectionOutput detection = contactPoints->operator[](m);
-                        /*msg_info("SofaPBDBruteForceDetection") << "Contact " << m << ": ID = " << detection.id << ", point0 = " << detection.point[0] << ", point1 = " << detection.point[1]
+
+                        msg_info("SofaPBDBruteForceDetection") << "Contact " << m << ": ID = " << detection.id << ", point0 = " << detection.point[0] << ", point1 = " << detection.point[1]
                                                                << ", normal = " << detection.normal
                                                                << ", features = " << detection.elem.first.getIndex() << " -- " << detection.elem.second.getIndex()
-                                                               << ", distance = " << detection.value;*/
+                                                               << ", distance = " << detection.value;
+
+                        bool cpAlreadyFound = false;
+                        for (std::vector<SofaPBDCollisionDetectionOutput>::const_iterator ct_it = unique_outputs.begin(); ct_it != unique_outputs.end(); ct_it++)
+                        {
+                            // TODO: Distinguish between point, line and triangle models: These report different element indices for contact point pairs with identical point/normal/distance values!
+                            if (ct_it->point[0] == detection.point[0] &&
+                                ct_it->point[1] == detection.point[1] &&
+                                ct_it->normal == detection.normal &&
+                                ct_it->value == detection.value /*&&
+                                (ct_it->elem.first.getIndex() == detection.elem.first.getIndex() ||
+                                 ct_it->elem.first.getIndex() == detection.elem.second.getIndex() ||
+                                 ct_it->elem.second.getIndex() == detection.elem.first.getIndex() ||
+                                 ct_it->elem.second.getIndex() == detection.elem.second.getIndex())*/)
+                            {
+                                msg_info("SofaPBDBruteForceDetection") << "Contact point with equal attributes already registered, skipping ID " << detection.id;
+                                cpAlreadyFound = true;
+                                break;
+                            }
+                        }
+
+                        if (cpAlreadyFound)
+                            continue;
 
                         if (std::find(unique_contact_ids.begin(), unique_contact_ids.end(), detection.id) == unique_contact_ids.end())
                         {
@@ -142,6 +165,8 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                             SofaPBDPointCollisionModel* pm2 = nullptr;
                             SofaPBDLineCollisionModel* lm1 = nullptr;
                             SofaPBDLineCollisionModel* lm2 = nullptr;
+                            SofaPBDTriangleCollisionModel* tm1 = nullptr;
+                            SofaPBDTriangleCollisionModel* tm2 = nullptr;
 
                             if (cm1IsPBDPointModel)
                             {
@@ -163,6 +188,16 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                                 lm2 = dynamic_cast<SofaPBDLineCollisionModel*>(cmPair.second);
                             }
 
+                            if (cm1IsPBDTriangleModel)
+                            {
+                                tm1 = dynamic_cast<SofaPBDTriangleCollisionModel*>(cmPair.first);
+                            }
+
+                            if (cm2IsPBDTriangleModel)
+                            {
+                                tm2 = dynamic_cast<SofaPBDTriangleCollisionModel*>(cmPair.second);
+                            }
+
                             // Distinguish contact model pairings
 
                             // Point vs. point model
@@ -171,26 +206,40 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                                 pbd_output.modelPairType = PBD_CONTACT_PAIR_POINT_POINT;
                                 // Point vs. point should be rigid-rigid contacts exclusively
                                 pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+
+                                pbd_output.rigidBodyIndices[0] = pm1->getPBDRigidBodyIndex();
+                                pbd_output.rigidBodyIndices[1] = pm2->getPBDRigidBodyIndex();
                             }
 
                             // Line vs. line model
                             if (cm1IsPBDLineModel && cm2IsPBDLineModel)
                             {
                                 pbd_output.modelPairType = PBD_CONTACT_PAIR_LINE_LINE;
-                                // Rigid body pair
+
+                                // Thread segments: Self-intersection - consider this a rigid vs. rigid contact, unless something else is required
                                 if (lm1->usesPBDLineModel() && lm2->usesPBDLineModel())
                                 {
-                                    pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                                    pbd_output.contactType = PBD_LINE_LINE_CONTACT;
                                 }
-                                // Thread segments: Self-intersection
+                                // Rigid body pair
                                 else if (lm1->usesPBDRigidBody() && lm2->usesPBDRigidBody())
                                 {
-                                    pbd_output.contactType = PBD_LINE_LINE_CONTACT;
+                                    pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                                    pbd_output.rigidBodyIndices[0] = lm1->getPBDRigidBodyIndex();
+                                    pbd_output.rigidBodyIndices[1] = lm2->getPBDRigidBodyIndex();
                                 }
                                 // Thread segment vs. rigid body
                                 else
                                 {
                                     pbd_output.contactType = PBD_RIGID_LINE_CONTACT;
+                                    if (lm1->usesPBDLineModel() && lm2->usesPBDRigidBody())
+                                    {
+                                        pbd_output.rigidBodyIndices[1] = lm2->getPBDRigidBodyIndex();
+                                    }
+                                    else if (lm1->usesPBDRigidBody() && lm2->usesPBDLineModel())
+                                    {
+                                        pbd_output.rigidBodyIndices[0] = lm1->getPBDRigidBodyIndex();
+                                    }
                                 }
                             }
 
@@ -200,6 +249,9 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                                 pbd_output.modelPairType = PBD_CONTACT_PAIR_TRIANGLE_TRIANGLE;
                                 // This can only be a rigid-body pair
                                 pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+
+                                pbd_output.rigidBodyIndices[0] = tm1->getPBDRigidBodyIndex();
+                                pbd_output.rigidBodyIndices[1] = tm2->getPBDRigidBodyIndex();
                             }
 
                             // Point vs. line model
@@ -207,22 +259,40 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                             {
                                 pbd_output.modelPairType = PBD_CONTACT_PAIR_POINT_LINE;
 
-                                if (cm2IsPBDPointModel && cm1IsPBDLineModel)
-                                    pbd_output.modelTypeMirrored = true;
-
                                 // This can also only be rigid vs. rigid body, right?
                                 pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+
+                                if (cm2IsPBDPointModel && cm1IsPBDLineModel)
+                                {
+                                    pbd_output.modelTypeMirrored = true;
+                                    pbd_output.rigidBodyIndices[0] = pm2->getPBDRigidBodyIndex();
+                                    pbd_output.rigidBodyIndices[1] = lm1->getPBDRigidBodyIndex();
+                                }
+                                else if (cm1IsPBDPointModel && cm2IsPBDLineModel)
+                                {
+                                    pbd_output.rigidBodyIndices[0] = pm1->getPBDRigidBodyIndex();
+                                    pbd_output.rigidBodyIndices[1] = lm2->getPBDRigidBodyIndex();
+                                }
                             }
 
                             if ((cm1IsPBDPointModel && cm2IsPBDTriangleModel) || (cm2IsPBDPointModel && cm1IsPBDTriangleModel))
                             {
                                 pbd_output.modelPairType = PBD_CONTACT_PAIR_POINT_TRIANGLE;
 
-                                if (cm2IsPBDPointModel && cm1IsPBDTriangleModel)
-                                    pbd_output.modelTypeMirrored = true;
-
                                 // This can also only be rigid vs. rigid body, right?
                                 pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+
+                                if (cm2IsPBDPointModel && cm1IsPBDTriangleModel)
+                                {
+                                    pbd_output.modelTypeMirrored = true;
+                                    pbd_output.rigidBodyIndices[0] = pm2->getPBDRigidBodyIndex();
+                                    pbd_output.rigidBodyIndices[1] = tm1->getPBDRigidBodyIndex();
+                                }
+                                else if (cm1IsPBDPointModel && cm2IsPBDTriangleModel)
+                                {
+                                    pbd_output.rigidBodyIndices[0] = tm1->getPBDRigidBodyIndex();
+                                    pbd_output.rigidBodyIndices[1] = pm2->getPBDRigidBodyIndex();
+                                }
                             }
 
                             // Line vs. triangle models
@@ -231,7 +301,9 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                                 pbd_output.modelPairType = PBD_CONTACT_PAIR_LINE_TRIANGLE;
 
                                 if (cm2IsPBDLineModel && cm2IsPBDTriangleModel)
+                                {
                                     pbd_output.modelTypeMirrored = true;
+                                }
 
                                 // Depending on whether one of the line models represents a thread or a rigid body model, set the contactType accordingly
                                 if (cm1IsPBDLineModel)
@@ -239,10 +311,13 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                                     if (lm1->usesPBDLineModel())
                                     {
                                         pbd_output.contactType = PBD_RIGID_LINE_CONTACT;
+                                        // TODO: Retrieve particle indices involved in collision
                                     }
                                     else if (lm1->usesPBDRigidBody())
                                     {
                                         pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                                        pbd_output.rigidBodyIndices[0] = lm1->getPBDRigidBodyIndex();
+                                        pbd_output.rigidBodyIndices[1] = tm2->getPBDRigidBodyIndex();
                                     }
                                 }
                                 if (cm2IsPBDLineModel)
@@ -254,6 +329,8 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
                                     else if (lm2->usesPBDRigidBody())
                                     {
                                         pbd_output.contactType = PBD_RIGID_RIGID_CONTACT;
+                                        pbd_output.rigidBodyIndices[0] = tm1->getPBDRigidBodyIndex();
+                                        pbd_output.rigidBodyIndices[1] = lm2->getPBDRigidBodyIndex();
                                     }
                                 }
                             }
@@ -264,17 +341,17 @@ void SofaPBDBruteForceDetection::endNarrowPhase()
 
                     msg_info("SofaPBDBruteForceDetection") << "Unique contacts after filtering out duplicates: " << unique_contact_ids.size();
                     unsigned long contact_idx = 0;
-                    for (std::map<int64_t, SofaPBDCollisionDetectionOutput>::iterator ct_it = unique_outputs.begin(); ct_it != unique_outputs.end(); ct_it++)
+                    for (std::vector<SofaPBDCollisionDetectionOutput>::const_iterator ct_it = unique_outputs.begin(); ct_it != unique_outputs.end(); ct_it++)
                     {
-                        msg_info("SofaPBDBruteForceDetection") << "Contact " << contact_idx << ": ID = " << ct_it->second.id
-                                                               << ", contactType = " << ct_it->second.contactType
-                                                               << ", modelPairType = " << ct_it->second.modelPairType
-                                                               << ", modelTypeMirrored = " << ct_it->second.modelTypeMirrored
-                                                               << ", point0 = " << ct_it->second.point[0]
-                                                               << ", point1 = " << ct_it->second.point[1]
-                                                               << ", normal = " << ct_it->second.normal
-                                                               << ", features = " << ct_it->second.elem.first.getIndex() << " -- " << ct_it->second.elem.second.getIndex()
-                                                               << ", distance = " << ct_it->second.value;
+                        msg_info("SofaPBDBruteForceDetection") << "Contact " << contact_idx << ": ID = " << ct_it->id
+                                                               << ", contactType = " << ct_it->contactType
+                                                               << ", modelPairType = " << ct_it->modelPairType
+                                                               << ", modelTypeMirrored = " << ct_it->modelTypeMirrored
+                                                               << ", point0 = " << ct_it->point[0]
+                                                               << ", point1 = " << ct_it->point[1]
+                                                               << ", normal = " << ct_it->normal
+                                                               << ", features = " << ct_it->elem.first.getIndex() << " -- " << ct_it->elem.second.getIndex()
+                                                               << ", distance = " << ct_it->value;
                         contact_idx++;
                     }
                     collisionOutputs.insert(std::make_pair(cmPair, unique_outputs));

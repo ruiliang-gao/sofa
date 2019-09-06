@@ -71,12 +71,12 @@ int SofaPBDTriangleCollisionModelClass = sofa::core::RegisterObject("PBD plugin 
                             .addDescription("PBD plugin adapter class for triangle collision models.");
 
 SofaPBDTriangleCollisionModel::SofaPBDTriangleCollisionModel(): sofa::component::collision::TriangleModel(),
-    showIndices(initData(&showIndices, (bool) false, "showIndices", "Show indices. (default=false)")),
+    showIndices(initData(&showIndices, true, "showIndices", "Show indices. (default=false)")),
     showIndicesScale(initData(&showIndicesScale, (float) 0.02, "showIndicesScale", "Scale for indices display. (default=0.02)"))
 
 {
     m_d = new SofaPBDTriangleCollisionModelPrivate();
-    this->f_printLog.setValue(false);
+    this->f_printLog.setValue(true);
     this->addTag(sofa::core::collision::tagPBDTriangleCollisionModel);
 }
 
@@ -174,7 +174,18 @@ void SofaPBDTriangleCollisionModel::bwdInit()
             ntriangles = m_d->m_pbdRigidBody->getRigidBodyGeometry().getMesh().numFaces();
 
             if (this->f_printLog.getValue())
+            {
                 msg_info("SofaPBDTriangleCollisionModel") << "rigidBodyModel link specified and found.";
+            }
+
+            if (ntriangles == 0)
+            {
+                msg_warning("SofaPBDTriangleCollisionModel") << "PBD rigid body geometry reports 0 triangles! This is most likely incorrect. Have its init/bwdInit not run yet? Calling them now.";
+                m_d->m_pbdRigidBody->init();
+                m_d->m_pbdRigidBody->bwdInit();
+
+                ntriangles = m_d->m_pbdRigidBody->getRigidBodyGeometry().getMesh().numFaces();
+            }
         }
         else
         {
@@ -182,7 +193,7 @@ void SofaPBDTriangleCollisionModel::bwdInit()
         }
 
         if (this->f_printLog.getValue())
-            msg_info("SofaPBDLineCollisionModel") << "Size of collision model (triangles): " << ntriangles;
+            msg_info("SofaPBDTriangleCollisionModel") << "Size of collision model (triangles): " << ntriangles;
 
         if (ntriangles != size)
         {
@@ -192,7 +203,13 @@ void SofaPBDTriangleCollisionModel::bwdInit()
             resize(ntriangles);
         }
 
-        // Initialize lookup for vertex to index data to avoid excessive queries from PBD rigid body geometry
+        // Initialize lookup for vertex to index data to avoid excessive queries to PBD rigid body geometry
+        if (this->f_printLog.getValue())
+        {
+            msg_info("SofaPBDTriangleCollisionModel") << "===================================================";
+            msg_info("SofaPBDTriangleCollisionModel") << "SofaPBDTriangleCollisionModel aux. data filled HERE";
+            msg_info("SofaPBDTriangleCollisionModel") << "===================================================";
+        }
         m_d->m_vertexToIndex_1.resize(ntriangles);
         m_d->m_vertexToIndex_2.resize(ntriangles);
         m_d->m_vertexToIndex_3.resize(ntriangles);
@@ -406,15 +423,15 @@ void SofaPBDTriangleCollisionModel::draw(const core::visual::VisualParams* vpara
 
             oss.str("");
             oss << "Face " << j << " vtx 1: " << pt1;
-            vparams->drawTool()->draw3DText(pt1, showIndicesScale.getValue(), color, oss.str().c_str());
+            vparams->drawTool()->draw3DText((1.0 + ((j + 1) * 0.05)) * pt1, showIndicesScale.getValue(), color, oss.str().c_str());
 
             oss.str("");
             oss << "Face " << j << " vtx 2: " << pt2;
-            vparams->drawTool()->draw3DText(pt2, showIndicesScale.getValue(), color, oss.str().c_str());
+            vparams->drawTool()->draw3DText((1.0 + ((j + 1) * 0.05)) * pt2, showIndicesScale.getValue(), color, oss.str().c_str());
 
             oss.str("");
             oss << "Face " << j << " vtx 3: " << pt3;
-            vparams->drawTool()->draw3DText(pt3, showIndicesScale.getValue(), color, oss.str().c_str());
+            vparams->drawTool()->draw3DText((1.0 + ((j + 1) * 0.05)) * pt3, showIndicesScale.getValue(), color, oss.str().c_str());
 
             const int e_idx1 = m_d->m_edgeToIndex_1[j];
             const int e_idx2 = m_d->m_edgeToIndex_2[j];
@@ -434,15 +451,15 @@ void SofaPBDTriangleCollisionModel::draw(const core::visual::VisualParams* vpara
 
             oss.str("");
             oss << "Face " << j << " edge 1: " << e_idx1;
-            vparams->drawTool()->draw3DText(e1_center, showIndicesScale.getValue(), color, oss.str().c_str());
+            vparams->drawTool()->draw3DText((1.0 + ((j + 1) * 0.05)) * e1_center, showIndicesScale.getValue(), color, oss.str().c_str());
 
             oss.str("");
             oss << "Face " << j << " edge 2: " << e_idx2;
-            vparams->drawTool()->draw3DText(e2_center, showIndicesScale.getValue(), color, oss.str().c_str());
+            vparams->drawTool()->draw3DText((1.0 + ((j + 1) * 0.05)) * e2_center, showIndicesScale.getValue(), color, oss.str().c_str());
 
             oss.str("");
             oss << "Face " << j << " edge 3: " << e_idx3;
-            vparams->drawTool()->draw3DText(e3_center, showIndicesScale.getValue(), color, oss.str().c_str());
+            vparams->drawTool()->draw3DText((1.0 + ((j + 1) * 0.05)) * e3_center, showIndicesScale.getValue(), color, oss.str().c_str());
 
             const Vec3 t_center((pt1.x() + pt2.x() + pt3.x()) / 3.0,
                                 (pt1.y() + pt2.y() + pt3.y()) / 3.0,
@@ -601,7 +618,7 @@ void SofaPBDTriangleCollisionModel::computeBoundingTree(int maxDepth)
     }
     else
     {
-        msg_info("SofaPBDTriangleCollisionModel") << "Model marked as empty, no BVH update possible.";
+        msg_warning("SofaPBDTriangleCollisionModel") << "Model marked as empty, no BVH update possible.";
     }
 
 
@@ -641,7 +658,12 @@ const sofa::defaulttype::Vec3& SofaPBDTriangleCollisionModel::getVertex1(const u
 
     if (idx < m_d->m_vertex_1.size())
     {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex1(" << idx << ") = " << m_d->m_vertex_1[idx];
         return m_d->m_vertex_1[idx];
+    }
+    else
+    {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex1(" << idx << ") - index " << idx << " larger than triangle model size " << m_d->m_vertex_1.size() << ", or smaller than 0!";
     }
 
     return zeroVec;
@@ -653,7 +675,12 @@ const sofa::defaulttype::Vec3& SofaPBDTriangleCollisionModel::getVertex2(const u
 
     if (idx < m_d->m_vertex_2.size())
     {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex2(" << idx << ") = " << m_d->m_vertex_2[idx];
         return m_d->m_vertex_2[idx];
+    }
+    else
+    {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex2(" << idx << ") - index " << idx << " larger than triangle model size " << m_d->m_vertex_2.size() << ", or smaller than 0!";
     }
 
     return zeroVec;
@@ -665,7 +692,12 @@ const sofa::defaulttype::Vec3& SofaPBDTriangleCollisionModel::getVertex3(const u
 
     if (idx < m_d->m_vertex_3.size())
     {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex3(" << idx << ") = " << m_d->m_vertex_3[idx];
         return m_d->m_vertex_3[idx];
+    }
+    else
+    {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex3(" << idx << ") - index " << idx << " larger than triangle model size " << m_d->m_vertex_3.size() << ", or smaller than 0!";
     }
 
     return zeroVec;
@@ -675,54 +707,84 @@ const int SofaPBDTriangleCollisionModel::getVertex1Idx(const unsigned int faceId
 {
     if (faceIdx < m_d->m_numTriangles && faceIdx < m_d->m_vertexToIndex_1.size())
     {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex1Idx(" << faceIdx << ") = " << m_d->m_vertexToIndex_1[faceIdx];
         return m_d->m_vertexToIndex_1[faceIdx];
     }
-    return -1;
+    else
+    {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex1Idx(" << faceIdx << ") - index larger than mesh size " << m_d->m_vertexToIndex_1.size() << ", or smaller than 0!";
+        return -1;
+    }
 }
 
 const int SofaPBDTriangleCollisionModel::getVertex2Idx(const unsigned int faceIdx) const
 {
     if (faceIdx < m_d->m_numTriangles && faceIdx < m_d->m_vertexToIndex_2.size())
     {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex2Idx(" << faceIdx << ") = " << m_d->m_vertexToIndex_2[faceIdx];
         return m_d->m_vertexToIndex_2[faceIdx];
     }
-    return -1;
+    else
+    {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex2Idx(" << faceIdx << ") - index larger than mesh size " << m_d->m_vertexToIndex_2.size() << ", or smaller than 0!";
+        return -1;
+    }
 }
 
 const int SofaPBDTriangleCollisionModel::getVertex3Idx(const unsigned int faceIdx) const
 {
     if (faceIdx < m_d->m_numTriangles && faceIdx < m_d->m_vertexToIndex_3.size())
     {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex3Idx(" << faceIdx << ") = " << m_d->m_vertexToIndex_3[faceIdx];
         return m_d->m_vertexToIndex_3[faceIdx];
     }
-    return -1;
+    else
+    {
+        msg_info("SofaPBDTriangleCollisionModel") << "getVertex3Idx(" << faceIdx << ") - index larger than mesh size " << m_d->m_vertexToIndex_3.size() << ", or smaller than 0!";
+        return -1;
+    }
 }
 
 const int SofaPBDTriangleCollisionModel::getEdge1Idx(const unsigned int faceIdx) const
 {
     if (faceIdx < m_d->m_numTriangles && faceIdx < m_d->m_edgeToIndex_1.size())
     {
+        msg_info("SofaPBDTriangleCollisionModel") << "getEdge1Idx(" << faceIdx << ") = " << m_d->m_edgeToIndex_1[faceIdx];
         return m_d->m_edgeToIndex_1[faceIdx];
     }
-    return -1;
+    else
+    {
+        msg_info("SofaPBDTriangleCollisionModel") << "getEdge1Idx(" << faceIdx << ") - index larger than mesh size " << m_d->m_edgeToIndex_1.size() << ", or smaller than 0!";
+        return -1;
+    }
 }
 
 const int SofaPBDTriangleCollisionModel::getEdge2Idx(const unsigned int faceIdx) const
 {
     if (faceIdx < m_d->m_numTriangles && faceIdx < m_d->m_edgeToIndex_2.size())
     {
+        msg_info("SofaPBDTriangleCollisionModel") << "getEdge2Idx(" << faceIdx << ") = " << m_d->m_edgeToIndex_2[faceIdx];
         return m_d->m_edgeToIndex_2[faceIdx];
     }
-    return -1;
+    else
+    {
+        msg_info("SofaPBDTriangleCollisionModel") << "getEdge2Idx(" << faceIdx << ") - index larger than mesh size " << m_d->m_edgeToIndex_2.size() << ", or smaller than 0!";
+        return -1;
+    }
 }
 
 const int SofaPBDTriangleCollisionModel::getEdge3Idx(const unsigned int faceIdx) const
 {
     if (faceIdx < m_d->m_numTriangles && faceIdx < m_d->m_edgeToIndex_3.size())
     {
+        msg_info("SofaPBDTriangleCollisionModel") << "getEdge3Idx(" << faceIdx << ") = " << m_d->m_edgeToIndex_3[faceIdx];
         return m_d->m_edgeToIndex_3[faceIdx];
     }
-    return -1;
+    else
+    {
+        msg_info("SofaPBDTriangleCollisionModel") << "getEdge3Idx(" << faceIdx << ") - index larger than mesh size " << m_d->m_edgeToIndex_3.size() << ", or smaller than 0!";
+        return -1;
+    }
 }
 
 const sofa::helper::fixed_array<unsigned int, 3> SofaPBDTriangleCollisionModel::getEdgesInTriangle(unsigned int idx) const
@@ -734,14 +796,14 @@ const sofa::helper::fixed_array<unsigned int, 3> SofaPBDTriangleCollisionModel::
         edgesInTriangle[0] = m_d->m_edgeToIndex_1[idx];
         edgesInTriangle[1] = m_d->m_edgeToIndex_2[idx];
         edgesInTriangle[2] = m_d->m_edgeToIndex_3[idx];
+
+        if (this->f_printLog.getValue())
+            msg_info("SofaPBDTriangleCollisionModel") << this->getName() << " -- Edges indices in triangle " << idx << ": " << edgesInTriangle[0] << ", " << edgesInTriangle[1] << ", " << edgesInTriangle[2];
     }
     else
     {
         msg_warning("SofaPBDTriangleCollisionModel") << "Triangle index " << idx << " outside range for mesh size: " << m_d->m_numTriangles;
     }
-
-    if (this->f_printLog.getValue())
-        msg_info("SofaPBDTriangleCollisionModel") << this->getName() << " -- Edges indices in triangle " << idx << ": " << edgesInTriangle[0] << ", " << edgesInTriangle[1] << ", " << edgesInTriangle[2];
 
     return edgesInTriangle;
 }
@@ -808,7 +870,6 @@ void SofaPBDTriangleCollisionModel::computeBBox(const core::ExecParams* params, 
 int SofaPBDTriangleCollisionModel::getTriangleFlags(Topology::TriangleID i)
 {
     int f = 0;
-    sofa::core::topology::BaseMeshTopology::Triangle t(m_d->m_vertexToIndex_1[i], m_d->m_vertexToIndex_2[i], m_d->m_vertexToIndex_3[i]);
 
     if (this->f_printLog.getValue())
         msg_info("SofaPBDTriangleCollisionModel") << "getTriangleFlags(" << i << ")";

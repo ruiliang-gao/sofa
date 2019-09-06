@@ -208,7 +208,16 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
 
     m_prevDt = m_dt;
 
+    msg_info("SofaPBDAnimationLoop") << "==================================================================";
+    msg_info("SofaPBDAnimationLoop") << "Simulation times -- SOFA: " << m_dt << "; PBD: " << m_simulation->getTimeStep()->getTime();
+    msg_info("SofaPBDAnimationLoop") << "==================================================================";
 #ifdef SOFA_DUMP_VISITOR_INFO
     simulation::Visitor::printCloseNode("Step");
 #endif
+}
+
+void SofaPBDAnimationLoop::draw(const core::visual::VisualParams* vparams)
+{
+    if (m_simulation)
+        m_simulation->draw(vparams);
 }

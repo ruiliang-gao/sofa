@@ -41,6 +41,8 @@ namespace sofa
                     void bwdInit();
                     void reset();
 
+                    void draw(const core::visual::VisualParams*) override;
+
                     // Singleton
                     static SofaPBDSimulation* getCurrent ();
                     static void setCurrent(SofaPBDSimulation* tm);

@@ -35,8 +35,6 @@ namespace sofa
                     Real m_restitutionCoeff;
                     Real m_frictionCoeff;
 
-                    std::string m_srcLoader;
-
                 public:
                     void updateConstraints();
 

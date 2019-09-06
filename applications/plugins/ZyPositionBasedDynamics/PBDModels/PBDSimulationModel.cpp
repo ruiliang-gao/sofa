@@ -357,15 +357,21 @@ bool PBDSimulationModel::addRigidBodyContactConstraint(const unsigned int rbInde
     const Vector3r &normal, const Real dist,
     const Real restitutionCoeff, const Real frictionCoeff)
 {
+    msg_info("PBDSimulationModel") << "addRigidBodyContactConstraint(" << rbIndex1 << ", " << rbIndex2 << ")";
     m_rigidBodyContactConstraints.emplace_back(RigidBodyContactConstraint());
     RigidBodyContactConstraint &cc = m_rigidBodyContactConstraints.back();
     const bool res = cc.initConstraint(*this, rbIndex1, rbIndex2, cp1, cp2, normal, dist, restitutionCoeff, m_contactStiffnessRigidBody, frictionCoeff);
+
     if (!res)
+    {
+        msg_warning("PBDSimulationModel") << "Constraint init failed!";
         m_rigidBodyContactConstraints.pop_back();
+    }
 
     if (m_contactsCleared)
         setContactsCleared(false);
 
+    msg_info("PBDSimulationModel") << "Constraint init successful: " << res << ", total rigid body constraints count = " << m_rigidBodyContactConstraints.size();
     return res;
 }
 
@@ -729,8 +735,10 @@ void PBDSimulationModel::initConstraintGroups()
 
 void PBDSimulationModel::resetContacts()
 {
-    if (!m_contactsCleared)
+    msg_info("PBDSimulationModel") << "resetContacts(); m_contactsCleared = " << m_contactsCleared;
+    if (m_contactsCleared)
     {
+        msg_info("PBDSimulationModel") << "Now clearing contact constraint lists.";
         m_rigidBodyContactConstraints.clear();
         m_particleRigidBodyContactConstraints.clear();
         m_particleSolidContactConstraints.clear();

@@ -33,6 +33,8 @@ namespace sofa
                     virtual void reset();
                     virtual void cleanup();
 
+                    void draw(const core::visual::VisualParams*) override;
+
                     virtual void step(PBDSimulationModel &model);
 
                     void setCollisionDetection(PBDSimulationModel &model, CollisionDetection *cd);
@@ -63,19 +65,19 @@ namespace sofa
                     void clearAccelerations(PBDSimulationModel &model);
 
                     /// TODO: Check for re-entrancy!
-                    static void contactCallbackFunction(const unsigned int contactType,
+                    /*static void contactCallbackFunction(const unsigned int contactType,
                         const unsigned int bodyIndex1, const unsigned int bodyIndex2,
                         const Vector3r &cp1, const Vector3r &cp2,
                         const Vector3r &normal, const Real dist,
-                        const Real restitutionCoeff, const Real frictionCoeff, void *userData);
+                        const Real restitutionCoeff, const Real frictionCoeff, void *userData);*/
 
                     /// TODO: Check for re-entrancy!
-                    static void solidContactCallbackFunction(const unsigned int contactType,
+                    /*static void solidContactCallbackFunction(const unsigned int contactType,
                         const unsigned int bodyIndex1, const unsigned int bodyIndex2,
                         const unsigned int tetIndex, const Vector3r &bary,
                         const Vector3r &cp1, const Vector3r &cp2,
                         const Vector3r &normal, const Real dist,
-                        const Real restitutionCoeff, const Real frictionCoeff, void *userData);
+                        const Real restitutionCoeff, const Real frictionCoeff, void *userData);*/
             };
         }
     }

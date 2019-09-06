@@ -1585,6 +1585,8 @@ bool RigidBodyContactConstraint::initConstraint(PBDSimulationModel &model, const
     PBDRigidBody &rb1 = *rb[m_bodies[0]];
     PBDRigidBody &rb2 = *rb[m_bodies[1]];
 
+    m_dist = dist;
+
     m_sum_impulses = 0.0;
 
     return PositionBasedRigidBodyDynamics::init_RigidBodyContactConstraint(
@@ -1600,7 +1602,10 @@ bool RigidBodyContactConstraint::initConstraint(PBDSimulationModel &model, const
                 rb2.getInertiaTensorInverseW(),
                 rb2.getRotation(),
                 rb2.getAngularVelocity(),
-                cp1, cp2, normal, restitutionCoeff,
+                cp1,
+                cp2,
+                normal,
+                restitutionCoeff,
                 m_constraintInfo);
 }
 
@@ -1610,6 +1615,8 @@ bool RigidBodyContactConstraint::solveVelocityConstraint(PBDSimulationModel &mod
 
     PBDRigidBody &rb1 = *rb[m_bodies[0]];
     PBDRigidBody &rb2 = *rb[m_bodies[1]];
+
+    msg_info("RigidBodyContactConstraint") << "solveVelocityConstraint(" << m_bodies[0] << ", " << m_bodies[1] << ")";
 
     Vector3r corr_v1, corr_v2;
     Vector3r corr_omega1, corr_omega2;
@@ -1624,6 +1631,7 @@ bool RigidBodyContactConstraint::solveVelocityConstraint(PBDSimulationModel &mod
                 rb2.getVelocity(),
                 rb2.getInertiaTensorInverseW(),
                 rb2.getAngularVelocity(),
+                m_dist,
                 m_stiffness,
                 m_frictionCoeff,
                 m_sum_impulses,
@@ -1633,15 +1641,26 @@ bool RigidBodyContactConstraint::solveVelocityConstraint(PBDSimulationModel &mod
                 corr_v2,
                 corr_omega2);
 
+    msg_info("RigidBodyContactConstraint") << "Result: " << res;
     if (res)
     {
         if (rb1.getMass() != 0.0)
         {
+            msg_info("RigidBodyContactConstraint") << "RigidBody A (index " << m_bodies[0] << ") new lin./ang. velocities = " << rb1.getVelocity() << " + " << corr_v1 << " / " << rb1.getAngularVelocity() << " + " << corr_omega1;
+
+            m_corrLin_rb1 = corr_v1;
+            m_corrAng_rb1 = corr_omega1;
+
             rb1.getVelocity() += corr_v1;
             rb1.getAngularVelocity() += corr_omega1;
         }
         if (rb2.getMass() != 0.0)
         {
+            msg_info("RigidBodyContactConstraint") << "RigidBody B (index " << m_bodies[1] << ") new lin./ang. velocities = " << rb2.getVelocity() << " + " << corr_v2 << " / " << rb2.getAngularVelocity() << " + " << corr_omega2;
+
+            m_corrLin_rb2 = corr_v2;
+            m_corrAng_rb2 = corr_omega2;
+
             rb2.getVelocity() += corr_v2;
             rb2.getAngularVelocity() += corr_omega2;
         }

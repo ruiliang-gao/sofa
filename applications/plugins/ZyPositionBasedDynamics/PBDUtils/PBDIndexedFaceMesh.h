@@ -154,12 +154,12 @@ namespace sofa
                     const VerticesFaces& getVertexFaces() const { return m_verticesFaces; }
                     const VerticesEdges& getVertexEdges() const { return m_verticesEdges; }
 
-                    const unsigned int getNumVerticesPerFace() const { return m_verticesPerFace; }
+                    const unsigned int getNumVerticesPerFace() const;
 
-                    unsigned int numVertices() const { return m_numPoints; }
-                    unsigned int numFaces() const { return (unsigned int)m_indices.size() / m_verticesPerFace; }
-                    unsigned int numEdges() const { return (unsigned int)m_edges.size(); }
-                    unsigned int numUVs() const { return (unsigned int)m_uvs.size(); }
+                    unsigned int numVertices() const;
+                    unsigned int numFaces() const;
+                    unsigned int numEdges() const;
+                    unsigned int numUVs() const;
 
                     void copyUVs(const UVIndices& uvIndices, const UVs& uvs);
 

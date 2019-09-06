@@ -8,11 +8,11 @@
 #include <sofa/simulation/Node.h>
 
 #include <sofa/core/ObjectFactory.h>
+#include <sofa/core/visual/VisualParams.h>
 
 #include <PBDIntegration/SofaPBDPointCollisionModel.h>
 #include <PBDIntegration/SofaPBDLineCollisionModel.h>
 #include <PBDIntegration/SofaPBDTriangleCollisionModel.h>
-
 
 using namespace sofa::simulation::PBDSimulation;
 
@@ -265,4 +265,10 @@ void SofaPBDSimulation::setSimulationMethod(const int val)
 void SofaPBDSimulation::setSimulationMethodChangedCallback(std::function<void()> const& callBackFct)
 {
     m_simulationMethodChanged = callBackFct;
+}
+
+void SofaPBDSimulation::draw(const core::visual::VisualParams* vparams)
+{
+    if (m_timeStep)
+        m_timeStep->draw(vparams);
 }

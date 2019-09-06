@@ -14,3 +14,6 @@
 [submodule "ProtoSphereExtended"]
 	path = extlibs/ProtoSphereExtended
 	url = ssh://git@git.simedis.com:222/tracks/SPE/protosphereextended.git
+[submodule "impulse-based-dynamics"]
+	path = extlibs/impulse-based-dynamics
+	url = ssh://git@git.simedis.com:222/tracks/SPE/impulse-based-simulator.git

@@ -346,6 +346,35 @@ void PBDIndexedFaceMesh::copyUVs(const UVIndices& uvIndices, const UVs& uvs)
 
 unsigned int PBDIndexedFaceMesh::getVerticesPerFace() const
 {
+    msg_info("PBDIndexedFaceMesh") << "VerticesPerFace = " << m_verticesPerFace;
     return m_verticesPerFace;
 }
 
+const unsigned int PBDIndexedFaceMesh::getNumVerticesPerFace() const
+{
+    msg_info("PBDIndexedFaceMesh") << "VerticesPerFace = " << m_verticesPerFace;
+    return m_verticesPerFace;
+}
+
+unsigned int PBDIndexedFaceMesh::numVertices() const
+{
+    msg_info("PBDIndexedFaceMesh") << "NumVertices = " << m_numPoints;
+    return m_numPoints;
+}
+
+unsigned int PBDIndexedFaceMesh::numFaces() const
+{
+    msg_info("PBDIndexedFaceMesh") << "NumFaces = " << ((unsigned int)m_indices.size() / m_verticesPerFace);
+    return (unsigned int)m_indices.size() / m_verticesPerFace;
+}
+
+unsigned int PBDIndexedFaceMesh::numEdges() const
+{
+    msg_info("PBDIndexedFaceMesh") << "NumEdges = " << m_edges.size();
+    return (unsigned int)m_edges.size();
+}
+
+unsigned int PBDIndexedFaceMesh::numUVs() const
+{
+    return (unsigned int)m_uvs.size();
+}

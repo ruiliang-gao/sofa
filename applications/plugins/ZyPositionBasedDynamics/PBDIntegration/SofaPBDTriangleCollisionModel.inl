@@ -33,8 +33,17 @@ const typename DataTypes::Coord TPBDTriangle<DataTypes>::p1() const
         if (this->index < this->model->size)
         {
             int v1Idx = this->model->getVertex1Idx(this->index);
-            Vector3r pt1 = this->model->getPBDRigidBody()->getGeometry().getVertexData().getPosition(v1Idx);
-            return sofa::defaulttype::Vec3(pt1[0], pt1[1], pt1[2]);
+            msg_info("TPBDTriangle") << "p1(): Get vertex at index: " << v1Idx;
+            if (v1Idx < this->model->getPBDRigidBody()->getGeometry().getVertexData().size())
+            {
+                const Vector3r& pt1 = this->model->getPBDRigidBody()->getGeometry().getVertexData().getPosition(v1Idx);
+                return sofa::defaulttype::Vec3(pt1[0], pt1[1], pt1[2]);
+            }
+            else
+            {
+                msg_warning("TPBDTriangle") << "p1(): Vertex index " << v1Idx << " larger than mesh size " << this->model->getPBDRigidBody()->getGeometry().getVertexData().size() << ", or less than 0!";
+                return zeroVec;
+            }
         }
         return zeroVec;
     }
@@ -52,8 +61,17 @@ const typename DataTypes::Coord TPBDTriangle<DataTypes>::p2() const
         if (this->index < this->model->size)
         {
             int v2Idx = this->model->getVertex2Idx(this->index);
-            Vector3r pt2 = this->model->getPBDRigidBody()->getGeometry().getVertexData().getPosition(v2Idx);
-            return sofa::defaulttype::Vec3(pt2[0], pt2[1], pt2[2]);
+            msg_info("TPBDTriangle") << "p2(): Get vertex at index: " << v2Idx;
+            if (v2Idx < this->model->getPBDRigidBody()->getGeometry().getVertexData().size())
+            {
+                const Vector3r& pt2 = this->model->getPBDRigidBody()->getGeometry().getVertexData().getPosition(v2Idx);
+                return sofa::defaulttype::Vec3(pt2[0], pt2[1], pt2[2]);
+            }
+            else
+            {
+                msg_warning("TPB1DTriangle") << "p2(): Vertex index " << v2Idx << " larger than mesh size " << this->model->getPBDRigidBody()->getGeometry().getVertexData().size() << ", or less than 0!";
+                return zeroVec;
+            }
         }
         return zeroVec;
     }
@@ -71,8 +89,17 @@ const typename DataTypes::Coord TPBDTriangle<DataTypes>::p3() const
         if (this->index < this->model->size)
         {
             int v3Idx = this->model->getVertex3Idx(this->index);
-            Vector3r pt3 = this->model->getPBDRigidBody()->getGeometry().getVertexData().getPosition(v3Idx);
-            return sofa::defaulttype::Vec3(pt3[0], pt3[1], pt3[2]);
+            msg_info("TPBDTriangle") << "p3(): Get vertex at index: " << v3Idx;
+            if (v3Idx < this->model->getPBDRigidBody()->getGeometry().getVertexData().size())
+            {
+                const Vector3r& pt3 = this->model->getPBDRigidBody()->getGeometry().getVertexData().getPosition(v3Idx);
+                return sofa::defaulttype::Vec3(pt3[0], pt3[1], pt3[2]);
+            }
+            else
+            {
+                msg_warning("TPBDTriangle") << "p3(): Vertex index " << v3Idx << " larger than mesh size " << this->model->getPBDRigidBody()->getGeometry().getVertexData().size() << ", or less than 0!";
+                return zeroVec;
+            }
         }
         return zeroVec;
     }
