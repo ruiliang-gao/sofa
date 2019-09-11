@@ -283,7 +283,7 @@ add_library(${PROJECT_NAME}_CommonUtils STATIC ${COMMON_UTIL_HEADER_FILES} ${COM
 target_link_libraries(${PROJECT_NAME}_CommonUtils SofaCore SofaSimulationCore SofaBaseMechanics SofaBaseCollision)
 
 add_library(${PROJECT_NAME}_Constraints STATIC ${CONSTRAINTS_HEADER_FILES} ${CONSTRAINTS_SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME}_Constraints SofaCore SofaSimulationCore SofaBaseMechanics SofaBaseCollision ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Models)
+target_link_libraries(${PROJECT_NAME}_Constraints SofaCore SofaSimulationCore SofaBaseMechanics SofaBaseCollision SofaLoader ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Models)
 
 add_library(${PROJECT_NAME}_Models STATIC ${MODELS_HEADER_FILES} ${MODELS_SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME}_Models SofaCore SofaSimulationCore SofaBaseMechanics SofaBaseCollision ${PROJECT_NAME}_CommonUtils ${PROJECT_NAME}_Constraints)
