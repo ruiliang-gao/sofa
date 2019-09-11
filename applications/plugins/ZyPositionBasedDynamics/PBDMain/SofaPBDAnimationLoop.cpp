@@ -141,7 +141,6 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
     PBDTimeManager::getCurrent()->setTimeStepSize(dtPerSubStep);
 
     sofa::helper::AdvancedTimer::stepBegin("StepPBDTimeLoop");
-    PBDSimulationModel* model = m_simulation->getModel();
     msg_info("SofaPBDAnimationLoop") << "Sub steps: " << SUB_STEPS_PER_ITERATION.getValue();
     for (unsigned int k = 0; k < SUB_STEPS_PER_ITERATION.getValue(); k++)
     {
@@ -164,10 +163,10 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
         sofa::helper::AdvancedTimer::stepEnd("SofaPBDCollisionVisitor");
 
         msg_info("SofaPBDAnimationLoop") << "Sub-step " << k;
-        SofaPBDTimeStep* timeStep = m_simulation->getTimeStep();
+        SofaPBDTimeStepInterface* timeStep = m_simulation->getTimeStep();
         if (timeStep)
         {
-            timeStep->step(*model);
+            timeStep->step();
         }
         else
         {
@@ -183,19 +182,19 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
 
     sofa::helper::AdvancedTimer::stepBegin("AnimateBeginEvent");
     {
-        AnimateEndEvent ev ( dt );
-        PropagateEventVisitor act ( params, &ev );
-        gnode->execute ( act );
+        AnimateEndEvent ev(dt);
+        PropagateEventVisitor act(params, &ev);
+        gnode->execute(act);
     }
     sofa::helper::AdvancedTimer::stepEnd("AnimateBeginEvent");
 
     sofa::helper::AdvancedTimer::stepBegin("UpdateMapping");
     //Visual Information update: Ray Pick add a MechanicalMapping used as VisualMapping
-    gnode->execute< UpdateMappingVisitor >(params);
+    gnode->execute<UpdateMappingVisitor>(params);
     {
-        UpdateMappingEndEvent ev ( dt );
-        PropagateEventVisitor act ( params , &ev );
-        gnode->execute ( act );
+        UpdateMappingEndEvent ev (dt);
+        PropagateEventVisitor act(params , &ev);
+        gnode->execute(act);
     }
     sofa::helper::AdvancedTimer::stepEnd("UpdateMapping");
 
@@ -211,6 +210,7 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
     msg_info("SofaPBDAnimationLoop") << "==================================================================";
     msg_info("SofaPBDAnimationLoop") << "Simulation times -- SOFA: " << m_dt << "; PBD: " << m_simulation->getTimeStep()->getTime();
     msg_info("SofaPBDAnimationLoop") << "==================================================================";
+
 #ifdef SOFA_DUMP_VISITOR_INFO
     simulation::Visitor::printCloseNode("Step");
 #endif

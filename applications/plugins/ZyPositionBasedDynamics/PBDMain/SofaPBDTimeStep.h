@@ -11,6 +11,10 @@
 #include "CollisionDetection.h"
 #include "PBDIntegration/SofaPBDBruteForceDetection.h"
 
+#include "PBDMain/SofaPBDTimeStepInterface.h"
+
+#define MIN_PARALLEL_SIZE 64
+
 namespace sofa
 {
     namespace simulation
@@ -20,12 +24,14 @@ namespace sofa
             using namespace sofa::simulation::PBDDistanceBasedCD;
             using namespace sofa::component::collision;
 
-            class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API SofaPBDTimeStep: public sofa::core::objectmodel::BaseObject
+            class SofaPBDSimulation;
+
+            class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API SofaPBDTimeStep: public SofaPBDTimeStepInterface, public sofa::core::objectmodel::BaseObject
             {
                 public:
                     SOFA_CLASS(SofaPBDTimeStep, sofa::core::objectmodel::BaseObject);
 
-                    SofaPBDTimeStep();
+                    SofaPBDTimeStep(SofaPBDSimulation* = nullptr);
                     virtual ~SofaPBDTimeStep();
 
                     virtual void init();
@@ -33,9 +39,11 @@ namespace sofa
                     virtual void reset();
                     virtual void cleanup();
 
+                    virtual double getTime() override;
+
                     void draw(const core::visual::VisualParams*) override;
 
-                    virtual void step(PBDSimulationModel &model);
+                    virtual void step();
 
                     void setCollisionDetection(PBDSimulationModel &model, CollisionDetection *cd);
                     CollisionDetection *getCollisionDetection();
@@ -49,10 +57,14 @@ namespace sofa
                     unsigned int m_iterations;
                     unsigned int m_iterationsV;
 
+                    void stepSimulation();
+
                     virtual void initParameters();
 
                     void positionConstraintProjection(PBDSimulationModel &model);
                     void velocityConstraintProjection(PBDSimulationModel &model);
+
+                    SofaPBDSimulation* m_simulation;
 
                     // Built-in collision detection of the PBD library
                     CollisionDetection *m_collisionDetection;

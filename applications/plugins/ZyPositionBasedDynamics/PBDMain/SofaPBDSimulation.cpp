@@ -33,7 +33,6 @@ SofaPBDSimulation::SofaPBDSimulation(BaseContext *context): sofa::core::objectmo
 
     msg_info("PBDSimulation") << "Instantiating PBDSimulationModel.";
     m_model = new PBDSimulationModel();
-    m_model->init();
 
     m_simulationMethodChanged = nullptr;
 }
@@ -76,8 +75,11 @@ bool SofaPBDSimulation::hasCurrent()
 }
 
 void SofaPBDSimulation::init()
-{
+{   
     msg_info("SofaPBDSimulation") << "init()";
+
+    m_model->init();
+
     initParameters();
 
     msg_info("SofaPBDSimulation") << "Gravitation vector set: " << GRAVITATION.getValue();
@@ -242,7 +244,7 @@ void SofaPBDSimulation::setSimulationMethod(const int val)
     if (method == PBDSimulationMethods::PBD)
     {
         msg_info("SofaPBDSimulation") << "Instantiating new PBDTimeStep object.";
-        m_timeStep = new SofaPBDTimeStep();
+        m_timeStep = new SofaPBDTimeStep(this);
         m_timeStep->init();
 
         Real timeStepSize = static_cast<Real>(0.005);

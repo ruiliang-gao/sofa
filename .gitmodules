@@ -10,10 +10,10 @@
 	branch = master
 [submodule "CollDet"]
 	path = extlibs/CollDet
-	url = ssh://git@git.simedis.com:222/tracks/SPE/colldet.git
+	url = ssh://git@git.simedis.com/tracks/SPE/colldet.git
 [submodule "ProtoSphereExtended"]
 	path = extlibs/ProtoSphereExtended
-	url = ssh://git@git.simedis.com:222/tracks/SPE/protosphereextended.git
+	url = ssh://git@git.simedis.com/tracks/SPE/protosphereextended.git
 [submodule "impulse-based-dynamics"]
 	path = extlibs/impulse-based-dynamics
-	url = ssh://git@git.simedis.com:222/tracks/SPE/impulse-based-simulator.git
+	url = ssh://git@git.simedis.com/tracks/SPE/impulse-based-simulator.git

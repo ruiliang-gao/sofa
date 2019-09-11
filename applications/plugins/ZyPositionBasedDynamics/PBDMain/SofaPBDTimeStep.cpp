@@ -10,6 +10,8 @@
 #include "PBDynamics/PBDTimeIntegration.h"
 #include "DistanceFieldCollisionDetection.h"
 
+#include "SofaPBDSimulation.h"
+
 #include <PBDIntegration/SofaPBDPointCollisionModel.h>
 #include <PBDIntegration/SofaPBDLineCollisionModel.h>
 #include <PBDIntegration/SofaPBDTriangleCollisionModel.h>
@@ -25,9 +27,10 @@ int SofaPBDTimeStepClass = sofa::core::RegisterObject("Wrapper class for the PBD
 using namespace std;
 using namespace sofa::component::collision;
 
-SofaPBDTimeStep::SofaPBDTimeStep(): sofa::core::objectmodel::BaseObject(),
+SofaPBDTimeStep::SofaPBDTimeStep(SofaPBDSimulation* pbdSimulation): sofa::core::objectmodel::BaseObject(),
     MAX_ITERATIONS(initData(&MAX_ITERATIONS, 5, "Max. iterations", "Maximal number of iterations of the solver.")),
-    MAX_ITERATIONS_V(initData(&MAX_ITERATIONS_V, 5, "Max. velocity iterations", "Maximal number of iterations of the velocity solver."))
+    MAX_ITERATIONS_V(initData(&MAX_ITERATIONS_V, 5, "Max. velocity iterations", "Maximal number of iterations of the velocity solver.")),
+    m_simulation(pbdSimulation)
 {
     m_iterations = 0;
     m_iterationsV = 0;
@@ -39,6 +42,11 @@ SofaPBDTimeStep::SofaPBDTimeStep(): sofa::core::objectmodel::BaseObject(),
 SofaPBDTimeStep::~SofaPBDTimeStep()
 {
 
+}
+
+double SofaPBDTimeStep::getTime()
+{
+    return static_cast<double>(PBDTimeManager::getCurrent()->getTime());
 }
 
 void SofaPBDTimeStep::init()
@@ -162,9 +170,23 @@ CollisionDetection *SofaPBDTimeStep::getCollisionDetection()
     return m_collisionDetection;
 }
 
-void SofaPBDTimeStep::step(PBDSimulationModel &model)
+void SofaPBDTimeStep::step()
 {
-    msg_info("SofaPBDTimeStep") << "SofaPBDTimeStep::step()";
+    this->stepSimulation();
+}
+
+void SofaPBDTimeStep::stepSimulation()
+{
+    msg_info("SofaPBDTimeStep") << "SofaPBDTimeStep::stepSimulation()";
+
+    if (!m_simulation)
+    {
+        msg_warning("SofaPBDTimeStep") << "No valid SofaPBDSimulation instance, aborting!";
+        return;
+    }
+
+    PBDSimulationModel* model = m_simulation->getModel();
+
     // START_TIMING("simulation step");
     PBDTimeManager *tm = PBDTimeManager::getCurrent();
     const Real h = tm->getTimeStepSize();
@@ -175,19 +197,21 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
     // rigid body models
     //////////////////////////////////////////////////////////////////////////
     msg_info("SofaPBDTimeStep") << "Clearing accelerations.";
-    clearAccelerations(model);
-    PBDSimulationModel::RigidBodyVector &rb = model.getRigidBodies();
-    PBDParticleData &pd = model.getParticles();
-    PBDOrientationData &od = model.getOrientations();
+    clearAccelerations(*model);
+    PBDSimulationModel::RigidBodyVector &rb = model->getRigidBodies();
+    PBDParticleData &pd = model->getParticles();
+    PBDOrientationData &od = model->getOrientations();
 
     msg_info("SofaPBDTimeStep") << "Retrieved data arrays from model: rigidBodies = " << rb.size() << ", particles = " << pd.size() << ", particle orientations = " << od.size();
 
     const int numBodies = (int) rb.size();
     const int numParticles = (int) pd.size();
-    // #pragma omp parallel if(numBodies > MIN_PARALLEL_SIZE) default(shared)
+
+    #pragma omp parallel if(numBodies > MIN_PARALLEL_SIZE) default(shared)
     {
-        // #pragma omp for schedule(static) nowait
         msg_info("SofaPBDTimeStep") << "Updating rigid body free-motion.";
+
+        #pragma omp for schedule(static) nowait
         for (int i = 0; i < numBodies; i++)
         {
             rb[i]->getLastPosition() = rb[i]->getOldPosition();
@@ -202,8 +226,9 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
         //////////////////////////////////////////////////////////////////////////
         // particle model
         //////////////////////////////////////////////////////////////////////////
-        // #pragma omp for schedule(static)
         msg_info("SofaPBDTimeStep") << "Updating particles free-motion: " << pd.size() << " particles.";
+
+        #pragma omp for schedule(static)
         for (int i = 0; i < (int) pd.size(); i++)
         {
             pd.getLastPosition(i) = pd.getOldPosition(i);
@@ -221,8 +246,9 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
         //////////////////////////////////////////////////////////////////////////
         // orientation model
         //////////////////////////////////////////////////////////////////////////
-        // #pragma omp for schedule(static)
         msg_info("SofaPBDTimeStep") << "Updating particle orientations free-motion.";
+
+        #pragma omp for schedule(static)
         for (int i = 0; i < (int)od.size(); i++)
         {
             od.getLastQuaternion(i) = od.getOldQuaternion(i);
@@ -233,7 +259,7 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
 
     // START_TIMING("position constraints projection");
     msg_info("SofaPBDTimeStep") << "Calling positionConstraintProjection()";
-    positionConstraintProjection(model);
+    positionConstraintProjection(*model);
     // STOP_TIMING_AVG;
 
     /// TODO: Move collision detection interface to the PBDAnimationLoop and companion classes
@@ -278,12 +304,12 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
         }
     }
 
-    // #pragma omp parallel if(numBodies > MIN_PARALLEL_SIZE) default(shared)
+    #pragma omp parallel if(numBodies > MIN_PARALLEL_SIZE) default(shared)
     {
         // Update velocities
-        // #pragma omp for schedule(static) nowait
-
         msg_info("SofaPBDTimeStep") << "Updating velocities - rigid bodies";
+
+        #pragma omp for schedule(static) nowait
         for (int i = 0; i < numBodies; i++)
         {
             if (VELOCITY_UPDATE_METHOD.getValue().getSelectedId() == 0)
@@ -322,9 +348,9 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
         }
 
         // Update velocities
-        // #pragma omp for schedule(static)
-
         msg_info("SofaPBDTimeStep") << "Updating velocities - particles: " << pd.size();
+
+        #pragma omp for schedule(static)
         for (int i = 0; i < (int) pd.size(); i++)
         {
             if (VELOCITY_UPDATE_METHOD.getValue().getSelectedId() == 0)
@@ -334,9 +360,9 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
         }
 
         // Update velocites of orientations
-        // #pragma omp for schedule(static)
-
         msg_info("SofaPBDTimeStep") << "Updating velocities - particle orientations";
+
+        #pragma omp for schedule(static)
         for (int i = 0; i < (int)od.size(); i++)
         {
             if (VELOCITY_UPDATE_METHOD.getValue().getSelectedId() == 0)
@@ -403,7 +429,6 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
                         {
                             msg_error("SofaPBDTimeStep") << "Tried accessing rigid body data outside valid index range (RIGID_RIGID_CONTACT): " << ex.what();
                         }
-
                     }
                     else if (cm_it->second[r].contactType == sofa::core::collision::PBD_RIGID_LINE_CONTACT)
                     {
@@ -445,18 +470,18 @@ void SofaPBDTimeStep::step(PBDSimulationModel &model)
         if (m_collisionDetection)
         {
             // START_TIMING("collision detection");
-            m_collisionDetection->collisionDetection(model);
+            m_collisionDetection->collisionDetection(*model);
             // STOP_TIMING_AVG;
         }
     }
 
     msg_info("SofaPBDTimeStep") << "Calling velocityConstraintProjection()";
-    velocityConstraintProjection(model);
+    velocityConstraintProjection(*model);
 
     //////////////////////////////////////////////////////////////////////////
     // update motor joint targets
     //////////////////////////////////////////////////////////////////////////
-    PBDSimulationModel::ConstraintVector &constraints = model.getConstraints();
+    PBDSimulationModel::ConstraintVector &constraints = model->getConstraints();
 
     msg_info("SofaPBDTimeStep") << "Updating motor joint targets: Constraint count = " << constraints.size();
     for (unsigned int i = 0; i < constraints.size(); i++)

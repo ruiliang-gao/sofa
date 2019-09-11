@@ -327,7 +327,7 @@ function(sofa_add_pybind11_module)
     set(multiValueArgs SOURCES DEPENDS)
     cmake_parse_arguments("" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
     include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-    set(PYBIND11_CPP_STANDARD -std=c++11)
+    set(PYBIND11_CPP_STANDARD -std=gnu++14)
     pybind11_add_module(${_TARGET} SHARED ${_SOURCES} NO_EXTRAS)
     target_link_libraries(${_TARGET} PRIVATE ${_DEPENDS} ${PYTHON_LIBRARIES} pybind11::module)
     set_target_properties(${_TARGET} PROPERTIES

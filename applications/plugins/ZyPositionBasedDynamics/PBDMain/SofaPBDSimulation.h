@@ -56,15 +56,15 @@ namespace sofa
 
                     void setSimulationMethodChangedCallback(std::function<void()> const& callBackFct);
 
-                    SofaPBDTimeStep *getTimeStep() { return m_timeStep; }
-                    void setTimeStep(SofaPBDTimeStep *ts) { m_timeStep = ts; }
+                    SofaPBDTimeStepInterface* getTimeStep() { return m_timeStep; }
+                    void setTimeStep(SofaPBDTimeStepInterface* ts) { m_timeStep = ts; }
 
                 protected:
                     BaseContext* m_context;
                     sofa::simulation::Node::SPtr m_rootNode;
 
                     PBDSimulationModel *m_model;
-                    SofaPBDTimeStep *m_timeStep;
+                    SofaPBDTimeStepInterface* m_timeStep;
                     std::function<void()> m_simulationMethodChanged;
 
                     virtual void initParameters();

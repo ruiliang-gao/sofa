@@ -63,18 +63,28 @@ foreach(target ${EXTLIBS_TARGETS})
     set_target_properties(${target} PROPERTIES FOLDER "SofaExtlibs")
 endforeach()
 
-option(SOFA_BUILD_PROTOSPHERE_EXTENDED
-"Build the ProtoSphere helper library for IST." ON)
+if(EXISTS ${CMAKE_SOURCE_DIR}/extlibs/ProtoSphereExtended)
+    option(SOFA_BUILD_PROTOSPHERE_EXTENDED "Build the ProtoSphere helper library for IST." ON)
 
-if (SOFA_BUILD_PROTOSPHERE_EXTENDED)
-    add_subdirectory(ProtoSphereExtended ${CMAKE_BINARY_DIR}/extlibs/ProtoSphereExtended)
-    # list(APPEND EXTLIBS_TARGETS ProtoSphereExtended)
+    if (SOFA_BUILD_PROTOSPHERE_EXTENDED)
+        add_subdirectory(ProtoSphereExtended ${CMAKE_BINARY_DIR}/extlibs/ProtoSphereExtended)
+    endif()
 endif()
 
-option(SOFA_BUILD_COLLDET
-"Build the CollDet library." ON)
 
-if (SOFA_BUILD_COLLDET)
-    add_subdirectory(CollDet ${CMAKE_BINARY_DIR}/extlibs/CollDet)
-    # list(APPEND EXTLIBS_TARGETS CollDet)
+if(EXISTS ${CMAKE_SOURCE_DIR}/extlibs/CollDet)
+    option(SOFA_BUILD_COLLDET "Build the CollDet library." ON)
+
+    if (SOFA_BUILD_COLLDET)
+        add_subdirectory(CollDet ${CMAKE_BINARY_DIR}/extlibs/CollDet)
+    endif()
+endif()
+
+if(EXISTS ${CMAKE_SOURCE_DIR}/extlibs/impulse-based-dynamics)
+    option(SOFA_BUILD_IMPULSE_BASED_DYNAMICS "Build the ImpulseBasedDynamics library." ON)
+
+    if (SOFA_BUILD_IMPULSE_BASED_DYNAMICS)
+        add_subdirectory(impulse-based-dynamics/extern/gl3w ${CMAKE_BINARY_DIR}/extlibs/impulse-based-dynamics/extern/gl3w)
+        add_subdirectory(ImpulseBasedDynamics ${CMAKE_BINARY_DIR}/extlibs/ImpulseBasedDynamics)
+    endif()
 endif()

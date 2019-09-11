@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 project(Sofa) # Cannot use VERSION with patch like "00"
 
+set(CMAKE_VERBOSE_MAKEFILE On)
+
 # Manually define VERSION
 set(Sofa_VERSION_MAJOR 19)
 set(Sofa_VERSION_MINOR 06)
