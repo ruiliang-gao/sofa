@@ -3,6 +3,8 @@
     <RequiredPlugin name="ZyPipeline"/>
     <RequiredPlugin name="ZyPositionBasedDynamics"/>
     
+    <VisualStyle displayFlags="hideVisual showBehaviorModels showCollisionModels showBehavior"/>
+
     <!-- Collision detection components -->
     <DefaultContactManager name="Response" response="default" />
     <SofaPBDBruteForceDetection name="pBDBruteForceDetection" />
@@ -29,9 +31,9 @@
     <Node name="PBDSingleTetrahedronRigid_2">
         <!--<MeshObjLoader name="meshLoader2" filename="mesh/SaladBowl.obj" />-->
         <MeshObjLoader name="meshLoader2" filename="mesh/single_tetrahedron.obj" />
-        <SofaPBDRigidBodyModel name="pdbRigidBodyModel2" dx="0.000" dy="-1.0000" dz="0.0" rx="-90.0000" ry="0.0000" rz="0.0000" scale="0.10" src="@meshLoader2" mass="0.0" density="1.0" frictionCoefficient="0.25"/>
+        <SofaPBDRigidBodyModel name="pdbRigidBodyModel2" dx="0.000" dy="-0.25" dz="0.0" rx="-90.0000" ry="0.0000" rz="0.0000" scale="0.10" src="@meshLoader2" mass="0.0" density="1.0" frictionCoefficient="0.25"/>
         
-        <OglModel template="ExtVec3f" name="visualModel2" fileMesh="mesh/single_tetrahedron.obj" translation="0 -1 0" rotation="-90 0 0" scale3d="0.1 0.1 0.1" material="Default Diffuse 1 0.5 0.5 0.5 1 Ambient 1 0.1 0.1 0.1 1 Specular 0 0.5 0.5 0.5 1 Emissive 0 0.5 0.5 0.5 1 Shininess 0 45" />
+        <OglModel template="ExtVec3f" name="visualModel2" fileMesh="mesh/single_tetrahedron.obj" translation="0 -0.25 0" rotation="-90 0 0" scale3d="0.1 0.1 0.1" material="Default Diffuse 1 0.5 0.5 0.5 1 Ambient 1 0.1 0.1 0.1 1 Specular 0 0.5 0.5 0.5 1 Emissive 0 0.5 0.5 0.5 1 Shininess 0 45" />
         
         <!--<OglModel template="ExtVec3f" name="visualModel2" fileMesh="mesh/SaladBowl.obj" translation="0 -1 0" rotation="-90 0 0" scale3d="5 5 5" material="Default Diffuse 1 0.5 0.5 0.5 1 Ambient 1 0.1 0.1 0.1 1 Specular 0 0.5 0.5 0.5 1 Emissive 0 0.5 0.5 0.5 1 Shininess 0 45" />-->
         

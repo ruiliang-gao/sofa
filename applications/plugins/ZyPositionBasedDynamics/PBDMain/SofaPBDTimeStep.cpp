@@ -661,17 +661,35 @@ void SofaPBDTimeStep::draw(const core::visual::VisualParams* vparams)
 
     if (rbConstraints.size() > 0)
     {
-        Vec4f normalColor(0.5f, 0.9f, 0.2f, 0.5f);
-        Vec4f tangentColor(0.2f, 0.5f, 0.9f, 0.5f);
-        Vec4f linVelColor(0.9f, 0.5f, 0.2f, 0.75f);
+        Vec4f normalColor(0.5f, 0.9f, 0.2f, 0.25f);
+        Vec4f normalColor2(0.5f, 0.9f, 0.2f, 0.75f);
+        Vec4f tangentColor(0.2f, 0.5f, 0.9f, 0.25f);
+        Vec4f tangentColor2(0.2f, 0.5f, 0.9f, 0.75f);
+        Vec4f linVelColor(0.9f, 0.5f, 0.2f, 0.25f);
 
+        std::stringstream oss;
         for (size_t k = 0; k < rbConstraints.size(); k++)
         {
+            // constraintInfo contains
+            // 0:	contact point in body 0 (global)
+            // 1:	contact point in body 1 (global)
+            // 2:	contact normal in body 1 (global)
+            // 3:	contact tangent (global)
+            // 0,4:  1.0 / normal^T * K * normal
+            // 1,4: maximal impulse in tangent direction
+            // 2,4: goal velocity in normal direction after collision
+
             const RigidBodyContactConstraint& rbc = rbConstraints[k];
             const Vector3r &cp1 = rbc.m_constraintInfo.col(0);
             const Vector3r &cp2 = rbc.m_constraintInfo.col(1);
             const Vector3r &normal = rbc.m_constraintInfo.col(2);
             const Vector3r &tangent = rbc.m_constraintInfo.col(3);
+
+            const Real sumImpulses = rbc.m_sum_impulses;
+            const Real frictionImpulse = rbc.m_frictionImpulse;
+            const Real corrMagnitude = rbc.m_correctionMagnitude;
+            const Real maxImpulseTangentDir = rbc.m_constraintInfo(1,4);
+            const Real goalVelocityNormalDir = rbc.m_constraintInfo(2,4);
 
             Vector3 contactPoint1(cp1[0], cp1[1], cp1[2]);
             Vector3 contactPoint2(cp2[0], cp2[1], cp2[2]);
@@ -690,7 +708,17 @@ void SofaPBDTimeStep::draw(const core::visual::VisualParams* vparams)
             vparams->drawTool()->drawArrow(contactPoint1, contactPoint1 + rbVelCorrLin1, 0.005f, linVelColor, 8);
             vparams->drawTool()->drawArrow(contactPoint2, contactPoint2 + rbVelCorrLin2, 0.005f, linVelColor, 8);
 
-            vparams->drawTool();
+            Vector3 scaledNormalVector = goalVelocityNormalDir * normalVector;
+            vparams->drawTool()->drawArrow(contactPoint1, contactPoint1 + scaledNormalVector, 0.005f, normalColor2, 16);
+            vparams->drawTool()->drawArrow(contactPoint1, contactPoint1 + (maxImpulseTangentDir * tangentVector), 0.005f, tangentColor2, 16);
+
+            oss.str("");
+            oss << "Constraint " << k << ": v_n = " << goalVelocityNormalDir << ", i_t_max = " << maxImpulseTangentDir << std::endl << " sum_imp. = " << sumImpulses << ", friction_imp. = " << frictionImpulse << ", corr_mag. = " << corrMagnitude;
+
+            Vector3 labelPos((contactPoint2.x() - contactPoint1.x()) / 2.0f,
+                             (contactPoint2.y() - contactPoint1.y()) / 2.0f,
+                             (contactPoint2.z() - contactPoint1.z()) / 2.0f);
+            vparams->drawTool()->draw3DText((1.0f + (k * 0.05f)) * labelPos, 0.03f, normalColor2, oss.str().c_str());
         }
     }
 

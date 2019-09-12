@@ -1639,7 +1639,9 @@ bool RigidBodyContactConstraint::solveVelocityConstraint(PBDSimulationModel &mod
                 corr_v1,
                 corr_omega1,
                 corr_v2,
-                corr_omega2);
+                corr_omega2,
+                m_correctionMagnitude,
+                m_frictionImpulse);
 
     msg_info("RigidBodyContactConstraint") << "Result: " << res;
     if (res)

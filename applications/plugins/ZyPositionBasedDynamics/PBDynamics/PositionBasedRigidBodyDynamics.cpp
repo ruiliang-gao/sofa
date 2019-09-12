@@ -2306,8 +2306,7 @@ bool PositionBasedRigidBodyDynamics::init_RigidBodyContactConstraint(const Real 
 }
 
 //--------------------------------------------------------------------------------------------
-bool PositionBasedRigidBodyDynamics::velocitySolve_RigidBodyContactConstraint(
-    const Real invMass0,							// inverse mass is zero if body is static
+bool PositionBasedRigidBodyDynamics::velocitySolve_RigidBodyContactConstraint(const Real invMass0,							// inverse mass is zero if body is static
     const Vector3r &x0, 						// center of mass of body 0
     const Vector3r &v0,						// velocity of body 0
     const Matrix3r &inertiaInverseW0,		// inverse inertia tensor (world space) of body 0
@@ -2323,7 +2322,8 @@ bool PositionBasedRigidBodyDynamics::velocitySolve_RigidBodyContactConstraint(
     Real &sum_impulses,							// sum of all impulses
     Eigen::Matrix<Real, 3, 5> &constraintInfo,		// precomputed contact info
     Vector3r &corr_v0, Vector3r &corr_omega0,
-    Vector3r &corr_v1, Vector3r &corr_omega1)
+    Vector3r &corr_v1, Vector3r &corr_omega1,
+    Real& corrMagnitude,Real &frictionImpulse)
 {
     // constraintInfo contains
     // 0:	contact point in body 0 (global)
@@ -2376,17 +2376,28 @@ bool PositionBasedRigidBodyDynamics::velocitySolve_RigidBodyContactConstraint(
     if (d < 0.0)
         correctionMagnitude -= stiffness * nKn_inv * d;
 
+    corrMagnitude = correctionMagnitude;
+
     Vector3r p(correctionMagnitude * normal);
     sum_impulses += correctionMagnitude;
 
     // dynamic friction
     const Real pn = p.dot(normal);
     if (frictionCoeff * pn > pMax)
+    {
         p -= pMax * tangent;
+        frictionImpulse = -pMax;
+    }
     else if (frictionCoeff * pn < -pMax)
+    {
         p += pMax * tangent;
+        frictionImpulse = pMax;
+    }
     else
+    {
         p -= frictionCoeff * pn * tangent;
+        frictionImpulse = frictionCoeff * pn;
+    }
 
     if (invMass0 != 0.0)
     {

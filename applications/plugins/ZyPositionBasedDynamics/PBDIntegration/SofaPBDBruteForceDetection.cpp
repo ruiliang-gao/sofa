@@ -21,7 +21,10 @@ int SofaPBDBruteForceDetectionClass = sofa::core::RegisterObject("Wrapper for SO
         .add<SofaPBDBruteForceDetection>()
         ;
 
-SofaPBDBruteForceDetection::SofaPBDBruteForceDetection(): sofa::component::collision::BruteForceDetection()
+SofaPBDBruteForceDetection::SofaPBDBruteForceDetection(): sofa::component::collision::BruteForceDetection(),
+    showContactDetails(initData(&showContactDetails, true, "showContactDetails", "Show contact details. (default=false)")),
+    showContactDetailsScale(initData(&showContactDetailsScale, (float) 0.02, "showContactDetailsScale", "Scale for contact details display. (default=0.02)"))
+
 {
     this->f_printLog.setValue(true);
 }
@@ -413,10 +416,14 @@ void SofaPBDBruteForceDetection::draw(const core::visual::VisualParams* vparams)
     if (!vparams->displayFlags().getShowBehavior())
         return;
 
+    if (!showContactDetails.getValue())
+        return;
+
     vparams->drawTool()->saveLastState();
     vparams->drawTool()->enableLighting();
 
-    sofa::defaulttype::Vec4f normalArrowColor(0.8f, 0.2f, 0.2f, 0.9f);
+    std::stringstream oss;
+    sofa::defaulttype::Vec4f normalArrowColor(0.8f, 0.2f, 0.2f, 0.66f);
     for (std::map<std::pair<core::CollisionModel*, core::CollisionModel*>, sofa::helper::vector<sofa::core::collision::SofaPBDCollisionDetectionOutput>>::const_iterator cm_it = collisionOutputs.begin(); cm_it != collisionOutputs.end(); cm_it++)
     {
         for (size_t r = 0; r < cm_it->second.size(); r++)
@@ -424,6 +431,19 @@ void SofaPBDBruteForceDetection::draw(const core::visual::VisualParams* vparams)
             vparams->drawTool()->drawSphere(cm_it->second[r].point[0], 0.015f);
             vparams->drawTool()->drawSphere(cm_it->second[r].point[1], 0.015f);
             vparams->drawTool()->drawArrow(cm_it->second[r].point[0], cm_it->second[r].point[0] + cm_it->second[r].normal, 0.01f, 0.01f, normalArrowColor, 8);
+
+            oss.str("");
+            oss << "Contact " << r << ", pt. 0: " << cm_it->second[r].point[0];
+            vparams->drawTool()->draw3DText((std::max(1.0f + showContactDetailsScale.getValue(), 2.0f)) * cm_it->second[r].point[0], showContactDetailsScale.getValue(), normalArrowColor, oss.str().c_str());
+
+            oss.str("");
+            oss << "Contact " << r << ", pt. 1: " << cm_it->second[r].point[1];
+            vparams->drawTool()->draw3DText((std::max(1.0f + showContactDetailsScale.getValue(), 2.0f)) * cm_it->second[r].point[1], showContactDetailsScale.getValue(), normalArrowColor, oss.str().c_str());
+
+            sofa::defaulttype::Vector3 midPoint = cm_it->second[r].point[0] + (0.5f * (cm_it->second[r].point[1] - cm_it->second[r].point[0]));
+            oss.str("");
+            oss << "Contact point " << r << ": Normal = " << cm_it->second[r].normal << ", distance = " << cm_it->second[r].value;
+            vparams->drawTool()->draw3DText((std::max(1.0f + showContactDetailsScale.getValue(), 2.0f)) * midPoint, showContactDetailsScale.getValue(), normalArrowColor, oss.str().c_str());
         }
     }
 

@@ -1098,8 +1098,7 @@ namespace sofa
                 * @param corr_v1 velocity correction of second body
                 * @param corr_omega1 angular velocity correction of second body
                 */
-                static bool velocitySolve_RigidBodyContactConstraint(
-                    const Real invMass0,					// inverse mass is zero if body is static
+                static bool velocitySolve_RigidBodyContactConstraint(const Real invMass0,					// inverse mass is zero if body is static
                     const Vector3r &x0, 					// center of mass of body 0
                     const Vector3r &v0,						// velocity of body 0
                     const Matrix3r &inertiaInverseW0,		// inverse inertia tensor (world space) of body 0
@@ -1115,7 +1114,8 @@ namespace sofa
                     Real &sum_impulses,						// sum of all impulses
                     Eigen::Matrix<Real, 3, 5> &constraintInfo,		// precomputed contact info
                     Vector3r &corr_v0, Vector3r &corr_omega0,
-                    Vector3r &corr_v1, Vector3r &corr_omega1);
+                    Vector3r &corr_v1, Vector3r &corr_omega1, Real &corrMagnitude,
+                    Real& frictionImpulse);
 
 
                 /** Initialize contact between a rigid body and a particle and return

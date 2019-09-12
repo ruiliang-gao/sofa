@@ -365,6 +365,8 @@ namespace sofa
 
                     Vector3r m_corrLin_rb1, m_corrLin_rb2;
                     Vector3r m_corrAng_rb1, m_corrAng_rb2;
+                    Real m_correctionMagnitude;
+                    Real m_frictionImpulse;
 
                     Eigen::Matrix<Real, 3, 5> m_constraintInfo;
 

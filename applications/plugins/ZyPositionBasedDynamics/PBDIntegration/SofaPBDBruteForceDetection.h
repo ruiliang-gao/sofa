@@ -26,6 +26,9 @@ namespace sofa
                     SOFA_CLASS(SofaPBDBruteForceDetection, sofa::component::collision::BruteForceDetection);
                     SofaPBDBruteForceDetection();
 
+                    Data<bool>  showContactDetails; ///< Show contact point details. (default=false)
+                    Data<float> showContactDetailsScale; ///< Scale for contact point details display. (default=0.02)
+
                     void addCollisionPair(const std::pair<core::CollisionModel*, core::CollisionModel*>& coll_pair);
 
                     virtual void beginBroadPhase();
