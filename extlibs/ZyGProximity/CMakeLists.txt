@@ -1,10 +1,10 @@
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 
-add_subdirectory(cutil)
+add_subdirectory(zycutil)
 
 find_package(CudPP REQUIRED)
 if (NOT CUDPP_FOUND)
-    add_subdirectory(cudpp)
+    add_subdirectory(zycudpp)
     include_directories("${CMAKE_CURRENT_SOURCE_DIR}/cudpp/include")
 endif()
 

@@ -4,7 +4,17 @@ project(SofaImplicitField)
 set(SOFAIMPLICITFIELD_VERSION 1.0)
 set(SOFA_HAVE_SOFAIMPLICITFIELD 1)
 
-find_package(SofaDistanceGrid REQUIRED)
+find_package(Eigen3 REQUIRED)
+
+message(STATUS "SofaDistanceGrid plugin dependency: Setting include directories and linkage dependencies manually.")
+include_directories(${CMAKE_SOURCE_DIR}/applications/plugins/SofaDistanceGrid)
+
+include_directories(${EIGEN3_INCLUDE_DIR}
+                    ${CMAKE_SOURCE_DIR}/SofaKernel
+                    ${CMAKE_SOURCE_DIR}/SofaKernel/framework
+                    ${CMAKE_SOURCE_DIR}/SofaKernel/modules
+                    ${CMAKE_SOURCE_DIR}/SofaKernel/extlibs
+                    ${CMAKE_BINARY_DIR}/include)
 
 set(HEADER_FILES
     config.h

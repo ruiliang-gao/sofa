@@ -6,8 +6,14 @@ sofa_add_plugin(CImgPlugin CImgPlugin ON) # ON by default and first as it is use
 sofa_add_plugin(SofaEulerianFluid SofaEulerianFluid)
 sofa_add_plugin(SofaSphFluid SofaSphFluid)
 sofa_add_plugin(SofaMiscCollision SofaMiscCollision ON) # Contains DefaultCollisionGroupManager
-sofa_add_plugin(SofaDistanceGrid SofaDistanceGrid)
-sofa_add_plugin(SofaImplicitField SofaImplicitField)
+
+if (EXISTS ${CMAKE_SOURCE_DIR}/applications/plugins/BeamAdapter)
+    sofa_add_plugin(SofaDistanceGrid SofaDistanceGrid ON)
+    sofa_add_plugin(SofaImplicitField SofaImplicitField ON)
+else()
+    sofa_add_plugin(SofaImplicitField SofaImplicitField)
+endif()
+
 sofa_add_plugin(SofaVolumetricData SofaVolumetricData)  ##TRANSITIONAL DEPEND ON DISTANCEGRID & IMPLICIT
 sofa_add_plugin(MultiThreading MultiThreading)
 sofa_add_plugin(image image)           # Depends on CImagePlugin, soft dependency to MultiThreading
@@ -72,9 +78,22 @@ sofa_add_plugin(ZyPipeline ZyPipeline ON)
 if (PLUGIN_ZYOBBTREEGPU)
     sofa_add_plugin(ZyObbTreeGPU ZyObbTreeGPU ON)
 endif()
-sofa_add_plugin(ZyBVHModels ZyBVHModels ON)
 
-# sofa_add_plugin(PDBSofaPlugin PDBSofaPlugin ON)
+if (EXISTS ${CMAKE_SOURCE_DIR}/applications/plugins/ZyBVHModels)
+    sofa_add_plugin(ZyBVHModels ZyBVHModels ON)
+endif()
+
+if (EXISTS ${CMAKE_SOURCE_DIR}/applications/plugins/ZySPModels)
+    sofa_add_plugin(ZySPModels ZySPModels ON)
+endif()
+
+if (EXISTS ${CMAKE_SOURCE_DIR}/applications/plugins/PBDSofaPlugin)
+    sofa_add_plugin(PBDSofaPlugin PBDSofaPlugin ON)
+endif()
 
 sofa_add_plugin(ZyPBDDistanceBasedCollisionDetection ZyPBDDistanceBasedCollisionDetection ON)
 sofa_add_plugin(ZyPositionBasedDynamics ZyPositionBasedDynamics ON)
+
+if (EXISTS ${CMAKE_SOURCE_DIR}/applications/plugins/BeamAdapter)
+	sofa_add_plugin(BeamAdapter BeamAdapter ON)
+endif()

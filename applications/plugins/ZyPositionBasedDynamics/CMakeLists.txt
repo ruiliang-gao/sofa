@@ -35,10 +35,10 @@ include_directories(${CMAKE_SOURCE_DIR}/SofaKernel
                     ${EIGEN3_INCLUDE_DIR}
                     ${EIGEN3_INCLUDE_DIR}/unsupported)
 
-include_directories(${CMAKE_SOURCE_DIR}/extlibs/impulse-based-dynamics
-                    ${CMAKE_SOURCE_DIR}/extlibs/impulse-based-dynamics/simulator
-                    ${CMAKE_SOURCE_DIR}/extlibs/impulse-based-dynamics/executable
-                    ${CMAKE_SOURCE_DIR}/extlibs/impulse-based-dynamics/extern/gl3w)
+include_directories(${CMAKE_SOURCE_DIR}/extlibs/impulse-based-simulator
+                    ${CMAKE_SOURCE_DIR}/extlibs/impulse-based-simulator/simulator
+                    ${CMAKE_SOURCE_DIR}/extlibs/impulse-based-simulator/executable
+                    ${CMAKE_SOURCE_DIR}/extlibs/impulse-based-simulator/extern/gl3w)
 
 if (ZyPipeline_FOUND)
     message(STATUS "Found ZyPipeline package.")

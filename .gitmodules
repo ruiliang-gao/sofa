@@ -17,3 +17,9 @@
 [submodule "impulse-based-dynamics"]
 	path = extlibs/impulse-based-dynamics
 	url = ssh://git@git.simedis.com/tracks/SPE/impulse-based-simulator.git
+[submodule "extlibs/impulse-based-simulator"]
+	path = extlibs/impulse-based-simulator
+	url = ssh://git@git.simedis.com/tracks/SPE/impulse-based-simulator.git
+[submodule "extlibs/fcl"]
+	path = extlibs/fcl
+	url = https://github.com/flexible-collision-library/fcl.git

@@ -45,17 +45,24 @@ if(SOFA_BUILD_METIS)
 endif()
 
 option(SOFA_BUILD_ZY_WORKER_THREADS
-"Build the ZyWorkerThreads library.  It is used by the ZyObbTreeGPU plugin." ON)
+"Build the ZyWorkerThreads library." ON)
 if (SOFA_BUILD_ZY_WORKER_THREADS)
     add_subdirectory(ZyWorkerThreads ${CMAKE_BINARY_DIR}/extlibs/ZyWorkerThreads)
     list(APPEND EXTLIBS_TARGETS ZyWorkerThreads)
 endif()
 
 option(SOFA_BUILD_ZY_BVH_MODELS
-"Build the ZyBVHModels library.  It is used by the ZyObbTreeGPU plugin." ON)
+"Build the ZyBVHModels library." ON)
 if (SOFA_BUILD_ZY_BVH_MODELS)
     add_subdirectory(ZyBVHModels ${CMAKE_BINARY_DIR}/extlibs/ZyBVHModels)
     list(APPEND EXTLIBS_TARGETS ZyBVHModels)
+endif()
+
+option(SOFA_BUILD_ZY_SP_MODELS
+"Build the ZyBVHModels library." ON)
+if (SOFA_BUILD_ZY_SP_MODELS)
+    add_subdirectory(ZySPModels ${CMAKE_BINARY_DIR}/extlibs/ZySPModels)
+    list(APPEND EXTLIBS_TARGETS ZySPModels)
 endif()
 
 foreach(target ${EXTLIBS_TARGETS})

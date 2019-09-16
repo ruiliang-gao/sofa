@@ -75,7 +75,6 @@ else()
     message(STATUS "${PROJECT_NAME}: Qt5 not found, using Qt4")
 
     set(QT4_NO_LINK_QTMAIN 1)
-    #find_package(Qt4 QUIET COMPONENTS qtcore qtgui qtwidgets REQUIRED)
     find_package(Qt4 QUIET COMPONENTS qtcore qtgui REQUIRED)
 
     qt4_wrap_cpp(MOC_FILES ${MOC_HEADER_FILES})
@@ -111,7 +110,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/extlibs/ZyWorkerThreads
     ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity
     ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/CyberX3D/include
-    ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cutil/include
+    ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/zycutil/include
     ${CMAKE_SOURCE_DIR}/extlibs/ZyPQP/include
     ${CMAKE_SOURCE_DIR}/extlibs/ZyBVHModels
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -123,7 +122,7 @@ cuda_include_directories(
     ${CMAKE_BINARY_DIR}/include
     ${CMAKE_SOURCE_DIR}/extlibs/ZyWorkerThreads
     ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity
-    ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cutil/include
+    ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/zycutil/include
     ${CMAKE_SOURCE_DIR}/extlibs/ZyPQP/include
     ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/CyberX3D/include
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -178,8 +177,8 @@ if (NOT WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 endif (NOT WIN32)
 
-target_link_libraries(${PROJECT_NAME} cudpp ${Boost_THREAD_LIBRARY} ${Boost_REGEX_LIBRARY} ${QT_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} ZyWorkerThreads ZyBVHModels cutil)
+target_link_libraries(${PROJECT_NAME} zycudpp ${Boost_THREAD_LIBRARY} ${Boost_REGEX_LIBRARY} ${QT_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ZyWorkerThreads ZyBVHModels zycutil)
 
 target_link_libraries(${PROJECT_NAME} SofaOpenglVisual)
 

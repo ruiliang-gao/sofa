@@ -1,0 +1,12 @@
+# CMake package configuration file for the ZySPModels library
+
+@PACKAGE_INIT@
+
+if(NOT TARGET ZySPModels)
+	include("${CMAKE_CURRENT_LIST_DIR}/ZySPModelsTargets.cmake")
+endif()
+
+check_required_components(ZySPModels)
+
+set(ZySPModels_LIBRARIES ZySPModels)
+set(ZySPModels_INCLUDE_DIRS @PACKAGE_SPMODELS_INCLUDE_DIR@)

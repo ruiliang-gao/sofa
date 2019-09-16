@@ -1,5 +1,9 @@
-project(SPModels)
-add_definitions("-DSOFA_BUILD_SPMODELS_PLUGIN")
+project(ZySPModelsPlugin)
+add_definitions("-DSOFA_BUILD_ZYSPMODELS_PLUGIN")
+
+set(ZY_SPMODELS_MAJOR_VERSION 0)
+set(ZY_SPMODELS_MINOR_VERSION 2)
+set(ZY_SPMODELS_VERSION ${ZY_SPMODELS_MAJOR_VERSION}.${ZY_SPMODELS_MINOR_VERSION})
 
 set(HEADER_FILES
     initSPModels.h
@@ -34,10 +38,10 @@ if(SOFA-EXTERNAL_GLEW)
     add_definitions("-DSOFA_HAVE_GLEW")
 endif()
 
-include_directories(${CMAKE_SOURCE_DIR}/trulibs
-                    ${CMAKE_SOURCE_DIR}/trulibs/PQP/include
+include_directories(${CMAKE_SOURCE_DIR}/extlibs
+                    ${CMAKE_SOURCE_DIR}/extlibs/ZyPQP/include
                     ${CMAKE_SOURCE_DIR}/extlibs/tinyxml
-                    ${CMAKE_SOURCE_DIR}/trulibs/BVHModels
+                    ${CMAKE_SOURCE_DIR}/extlibs/ZyBVHModels
                     ${CMAKE_SOURCE_DIR}/framework
                     ${CMAKE_SOURCE_DIR}/modules
                     ${CMAKE_BINARY_DIR}/include
@@ -45,9 +49,7 @@ include_directories(${CMAKE_SOURCE_DIR}/trulibs
                     ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})
-target_link_libraries(${PROJECT_NAME} BVHModels PQP)
+# target_link_libraries(${PROJECT_NAME} ZyBVHModels ZyPQP)
 target_link_libraries(${PROJECT_NAME} SofaDefaultType SofaBaseCollision SofaCore SofaHelper)
 
-if (TRUPHYSICS_INSTALLER)
-    sofa_install_library(LIBRARY_NAME ${PROJECT_NAME} LIBRARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}" LIBRARY_HEADER_FILES ${HEADER_FILES})
-endif()
+sofa_create_package(${PROJECT_NAME} ${ZY_SPMODELS_VERSION} ${PROJECT_NAME} ${PROJECT_NAME})

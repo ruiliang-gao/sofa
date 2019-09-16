@@ -61,7 +61,7 @@ set(SOURCE_FILES
 include_directories(
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/extlibs/ZyPQP/include
-        ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cutil/include ### is in the wrong path
+        ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/zycutil/include ### is in the wrong path
         ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/CyberX3D/include
 )
 
@@ -76,8 +76,8 @@ set(SOURCE_FILES_CUDPP
 )
 
 set(CUDA_SOURCE_FILES_CUDPP
-	${gProximity_baseDir}/bvh_kernels.cu
-	${gProximity_baseDir}/cuda_collision.cu
+    ${gProximity_baseDir}/bvh_kernels.cu
+    ${gProximity_baseDir}/cuda_collision.cu
     ${gProximity_baseDir}/lbvh.cu
     ${gProximity_baseDir}/cuda_bvh_constru.cu
     ${gProximity_baseDir}/cuda_bvh_constru_state.cu
@@ -93,7 +93,7 @@ set(CUDA_SOURCE_FILES_CUDPP
 # endif (CUDPP_FOUND)
 
 # Fine, always use the local version of CudPP
-include_directories(${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp/include ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/cudpp/src)
+include_directories(${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/zycudpp/include ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/zycudpp ${CMAKE_SOURCE_DIR}/extlibs/ZyGProximity/zycudpp/src)
 
 if (NOT WIN32)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
@@ -116,10 +116,10 @@ endif (WIN32)
 if (CUDPP_FOUND)
     target_link_libraries(${PROJECT_NAME} ${CUDPP_LIBRARIES})
 else (CUDPP_FOUND)
-    target_link_libraries(${PROJECT_NAME} cudpp)
+    target_link_libraries(${PROJECT_NAME} zycudpp)
 endif (CUDPP_FOUND)
 
-target_link_libraries(${PROJECT_NAME} cutil CyberX3D ZyPQP tinyxml)
+target_link_libraries(${PROJECT_NAME} zycutil CyberX3D ZyPQP tinyxml)
 
 if (NOT WIN32)
   target_link_libraries(${PROJECT_NAME} GL GLU GLEW)
