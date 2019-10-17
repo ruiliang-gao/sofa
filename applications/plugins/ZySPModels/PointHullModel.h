@@ -12,6 +12,8 @@
 #include "PointHull_Container.h"
 #include "PointHull_Computation.h"
 
+#include <GL/gl.h>
+
 namespace sofa
 {
     namespace component

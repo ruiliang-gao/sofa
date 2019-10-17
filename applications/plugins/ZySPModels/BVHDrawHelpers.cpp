@@ -1,5 +1,7 @@
 #include "BVHDrawHelpers.h"
 
+#include <GL/gl.h>
+
 void BVHDrawHelpers::drawObbVolume(const sofa::defaulttype::Vector3 &halfExtents, const Vec4f &color, bool emphasize)
 {
     if (emphasize)

@@ -1,7 +1,7 @@
 #include "PointHullModel.h"
 
 #include "BVHDrawHelpers.h"
-#include <PQP/include/PQP.h>
+#include <ZyPQP/include/PQP.h>
 
 namespace sofa
 {

@@ -1348,11 +1348,11 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
         if (contactIDs.size() > 0)
         {
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     registered pair checks: " << m_pairChecks.size();
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "Registered pair checks: " << m_pairChecks.size();
             for (std::map<unsigned int, std::pair<ObbTreeGPUCollisionModel<Vec3Types>*, ObbTreeGPUCollisionModel<Vec3Types>*> >::const_iterator it = m_pairChecks.begin(); it != m_pairChecks.end(); it++)
-                msg_info("ObbTreeGPUCollisionDetection_Threaded") << "       - " << it->first << ": " << it->second.first->getName() << " -- " << it->second.second->getName();
+                msg_info("ObbTreeGPUCollisionDetection_Threaded") << " - " << it->first << ": " << it->second.first->getName() << " -- " << it->second.second->getName();
 
-            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "    contact ID vectors:";
+            msg_info("ObbTreeGPUCollisionDetection_Threaded") << "Contact ID vectors:";
 #endif
             for (std::map<unsigned int, std::vector<int> >::iterator contacts_it = contactIDs.begin(); contacts_it != contactIDs.end(); contacts_it++)
             {
@@ -1361,7 +1361,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
                 {
 
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG
-                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "     result index " << contacts_it->first << ": " << contactIDVec.size() << " contacts";
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "Result index " << contacts_it->first << ": " << contactIDVec.size() << " contacts";
 #ifdef OBBTREEGPUCOLLISIONDETECTION_THREADED_ENDNARROWPHASE_DEBUG_VERBOSE                    
                     msg_info("ObbTreeGPUCollisionDetection_Threaded") << " -- ";
 					for (std::vector<int>::const_iterator id_it = contactIDVec.begin(); id_it != contactIDVec.end(); id_it++)
@@ -1371,7 +1371,7 @@ void ObbTreeGPUCollisionDetection_Threaded::endNarrowPhase()
 #else
                     msg_info("ObbTreeGPUCollisionDetection_Threaded");
 #endif
-                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "      for model pair " << task_k->getModelName1(contacts_it->first) << " -- " << task_k->getModelName2(contacts_it->first);
+                    msg_info("ObbTreeGPUCollisionDetection_Threaded") << "For model pair " << task_k->getModelName1(contacts_it->first) << " -- " << task_k->getModelName2(contacts_it->first);
 #endif
                     bool allContactDataVectorsFound = true;
 

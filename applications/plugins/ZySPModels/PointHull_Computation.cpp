@@ -4,7 +4,7 @@
 #include <SofaBaseTopology/MeshTopology.h>
 #include <SofaBaseMechanics/MechanicalObject.h>
 
-#include <PQP/include/PQP.h>
+#include <ZyPQP/include/PQP.h>
 
 namespace sofa
 {
