@@ -56,7 +56,8 @@ int SofaPBDPointCollisionModelClass = sofa::core::RegisterObject("PBD plugin ada
                             .add< SofaPBDPointCollisionModel >()
                             .addDescription("PBD plugin adapter class for point collision models.");
 
-SofaPBDPointCollisionModel::SofaPBDPointCollisionModel(): /*sofa::core::CollisionModel(),*/ sofa::component::collision::PointModel()
+SofaPBDPointCollisionModel::SofaPBDPointCollisionModel(): /*sofa::core::CollisionModel(),*/ sofa::component::collision::PointModel(),
+    m_initCalled(false), m_initCallCount(0)
 {
     m_d = new SofaPBDPointCollisionModelPrivate();
     this->f_printLog.setValue(false);
@@ -137,64 +138,74 @@ void SofaPBDPointCollisionModel::bwdInit()
     msg_info("SofaPBDPointCollisionModel") << "SofaPBDRigidBodyModel instances on peer/child level: " << pbdRigidBodies.size();
     msg_info("SofaPBDPointCollisionModel") << "SofaPBDLineBodyModel instances on peer/child level: " << pbdLineModels.size();
 
-    if (!m_d->m_pbdRigidBodyModelName.empty())
+    if (!m_initCalled)
     {
-        std::string targetRigidBodyName = m_d->m_pbdRigidBodyModelName.substr(1);
-
-        msg_info("SofaPBDPointCollisionModel") << "Searching for target SofaPBDRigidBody named: " << targetRigidBodyName;
-        if (pbdRigidBodies.size() > 0)
+        if (!m_d->m_pbdRigidBodyModelName.empty())
         {
-            for (size_t k = 0; k < pbdRigidBodies.size(); k++)
+            std::string targetRigidBodyName = m_d->m_pbdRigidBodyModelName.substr(1);
+
+            msg_info("SofaPBDPointCollisionModel") << "Searching for target SofaPBDRigidBody named: " << targetRigidBodyName;
+            if (pbdRigidBodies.size() > 0)
             {
-                msg_info("SofaPBDPointCollisionModel") << "Comparing: " << pbdRigidBodies[k]->getName() << " == " << targetRigidBodyName;
-                if (pbdRigidBodies[k]->getName().compare(targetRigidBodyName) == 0)
+                for (size_t k = 0; k < pbdRigidBodies.size(); k++)
                 {
-                    msg_info("SofaPBDPointCollisionModel") << "Found specified SofaPBDRigidBody instance: " << pbdRigidBodies[k]->getName();
-                    m_d->m_pbdRigidBody = pbdRigidBodies[k];
+                    msg_info("SofaPBDPointCollisionModel") << "Comparing: " << pbdRigidBodies[k]->getName() << " == " << targetRigidBodyName;
+                    if (pbdRigidBodies[k]->getName().compare(targetRigidBodyName) == 0)
+                    {
+                        msg_info("SofaPBDPointCollisionModel") << "Found specified SofaPBDRigidBody instance: " << pbdRigidBodies[k]->getName();
+                        m_d->m_pbdRigidBody = pbdRigidBodies[k];
+                        break;
+                    }
+                }
+            }
+
+            if (m_d->m_pbdRigidBody)
+            {
+                msg_info("SofaPBDPointCollisionModel") << "rigidBodyModel link specified and found.";
+                m_d->m_usePBDRigidBody = true;
+            }
+            else
+            {
+                msg_error("SofaPBDPointCollisionModel") << "rigidBodyModel link specified, but no SofaPBDRigidBody instance found on peer/child level!";
+            }
+        }
+
+        if (!m_d->m_pbdLineModelName.empty())
+        {
+            std::string targetLineModel = m_d->m_pbdLineModelName.substr(1);
+            for (size_t k = 0; k < pbdLineModels.size(); k++)
+            {
+                if (pbdLineModels[k]->getName().compare(targetLineModel) == 0)
+                {
+                    msg_info("SofaPBDPointCollisionModel") << "Found specified SofaPBDLineModel instance: " << pbdLineModels[k]->getName();
+                    m_d->m_pbdLineModel = pbdLineModels[k];
                     break;
                 }
             }
-        }
 
-        if (m_d->m_pbdRigidBody)
-        {
-            msg_info("SofaPBDPointCollisionModel") << "rigidBodyModel link specified and found.";
-            m_d->m_usePBDRigidBody = true;
-        }
-        else
-        {
-            msg_error("SofaPBDPointCollisionModel") << "rigidBodyModel link specified, but no SofaPBDRigidBody instance found on peer/child level!";
-        }
-    }
-
-    if (!m_d->m_pbdLineModelName.empty())
-    {
-        std::string targetLineModel = m_d->m_pbdLineModelName.substr(1);
-        for (size_t k = 0; k < pbdLineModels.size(); k++)
-        {
-            if (pbdLineModels[k]->getName().compare(targetLineModel) == 0)
+            if (m_d->m_pbdLineModel)
             {
-                msg_info("SofaPBDPointCollisionModel") << "Found specified SofaPBDLineModel instance: " << pbdLineModels[k]->getName();
-                m_d->m_pbdLineModel = pbdLineModels[k];
-                break;
+                msg_info("SofaPBDPointCollisionModel") << "lineModel link specified and found.";
+                m_d->m_usePBDLineModel = true;
+            }
+            else
+            {
+                msg_error("SofaPBDPointCollisionModel") << "lineModel link specified, but no SofaPBDLineModel instance found on peer/child level!";
             }
         }
 
-        if (m_d->m_pbdLineModel)
+        if (m_d->m_usePBDLineModel && m_d->m_usePBDRigidBody)
         {
-            msg_info("SofaPBDPointCollisionModel") << "lineModel link specified and found.";
-            m_d->m_usePBDLineModel = true;
+            msg_warning("SofaPBDPointCollisionModel") << "Specified both lineModel and rigidBodyModel to use. Prioritizing lineModel.";
+            m_d->m_usePBDRigidBody = false;
         }
-        else
-        {
-            msg_error("SofaPBDPointCollisionModel") << "lineModel link specified, but no SofaPBDLineModel instance found on peer/child level!";
-        }
+        m_initCalled = true;
+        m_initCallCount++;
     }
-
-    if (m_d->m_usePBDLineModel && m_d->m_usePBDRigidBody)
+    else
     {
-        msg_warning("SofaPBDPointCollisionModel") << "Specified both lineModel and rigidBodyModel to use. Prioritizing lineModel.";
-        m_d->m_usePBDRigidBody = false;
+        msg_warning("SofaPBDPointCollisionModel") << "init/bwdInit have already been called " << m_initCallCount << " times, not initializing again.";
+        m_initCallCount++;
     }
 }
 
@@ -293,7 +304,7 @@ void SofaPBDPointCollisionModel::computeBoundingTree(int maxDepth)
         if (m_d->m_usePBDRigidBody)
         {
             msg_info("SofaPBDPointCollisionModel") << "Use SofaPBDRigidBody geometry for BVH update.";
-            const PBDRigidBodyGeometry& pbdRBGeom = m_d->m_pbdRigidBody->getRigidBodyGeometry();
+            const RigidBodyGeometry& pbdRBGeom = m_d->m_pbdRigidBody->getRigidBodyGeometry();
             for (int i = 0; i < npoints; i++)
             {
                 const Vector3r& rbp = pbdRBGeom.getVertexData().getPosition(i);
@@ -306,14 +317,14 @@ void SofaPBDPointCollisionModel::computeBoundingTree(int maxDepth)
         if (m_d->m_usePBDLineModel)
         {
             msg_info("SofaPBDPointCollisionModel") << "Use SofaPBDLineModel geometry for BVH update.";
-            PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
-            const PBDParticleData &pd = model->getParticles();
+            SimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+            const ParticleData &pd = model->getParticles();
 
-            PBDLineModel::Edges& lm_edges = m_d->m_pbdLineModel->getPBDLineModel()->getEdges();
+            LineModel::Edges& lm_edges = m_d->m_pbdLineModel->getPBDLineModel()->getEdges();
             unsigned int pt_idx = 0;
             for (int i = 0; i < lm_edges.size(); i++)
             {
-                const PBDLineModel::OrientedEdge& edge = lm_edges[i];
+                const LineModel::OrientedEdge& edge = lm_edges[i];
                 const Vector3r& lpt_i1 = pd.getPosition(edge.m_vert[0]);
                 const Vector3r& lpt_i2 = pd.getPosition(edge.m_vert[1]);
                 defaulttype::Vector3 pt1(lpt_i1[0], lpt_i1[1], lpt_i1[2]);
@@ -367,10 +378,10 @@ const sofa::defaulttype::Vec3 SofaPBDPointCollisionModel::getCoord(unsigned int 
 
     if (m_d->m_usePBDLineModel)
     {
-        PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
-        const PBDParticleData &pd = model->getParticles();
+        SimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+        const ParticleData &pd = model->getParticles();
 
-        PBDLineModel::Edges& lm_edges = m_d->m_pbdLineModel->getPBDLineModel()->getEdges();
+        LineModel::Edges& lm_edges = m_d->m_pbdLineModel->getPBDLineModel()->getEdges();
         if (idx > lm_edges.size())
         {
             msg_info("SofaPBDPointCollisionModel") << "Index " << idx << " lies beyond line model size " << lm_edges.size() << ", returning zeroVec.";
@@ -379,13 +390,13 @@ const sofa::defaulttype::Vec3 SofaPBDPointCollisionModel::getCoord(unsigned int 
 
         if (idx == lm_edges.size())
         {
-            const PBDLineModel::OrientedEdge& edge = lm_edges.back();
+            const LineModel::OrientedEdge& edge = lm_edges.back();
             const Vector3r& lpt = pd.getPosition(edge.m_vert[1]);
             return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
         }
         else
         {
-            const PBDLineModel::OrientedEdge& edge = lm_edges[idx];
+            const LineModel::OrientedEdge& edge = lm_edges[idx];
             const Vector3r& lpt = pd.getPosition(edge.m_vert[0]);
             return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
         }
@@ -423,22 +434,22 @@ const sofa::defaulttype::Vec3 SofaPBDPointCollisionModel::getDeriv(unsigned int 
 
     if (m_d->m_usePBDLineModel)
     {
-        PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
-        const PBDParticleData &pd = model->getParticles();
+        SimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+        const ParticleData &pd = model->getParticles();
 
-        PBDLineModel::Edges& lm_edges = m_d->m_pbdLineModel->getPBDLineModel()->getEdges();
+        LineModel::Edges& lm_edges = m_d->m_pbdLineModel->getPBDLineModel()->getEdges();
         if (idx > lm_edges.size())
             return zeroVec;
 
         if (idx == lm_edges.size())
         {
-            const PBDLineModel::OrientedEdge& edge = lm_edges.back();
+            const LineModel::OrientedEdge& edge = lm_edges.back();
             const Vector3r& lpt = pd.getVelocity(edge.m_vert[1]);
             return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
         }
         else
         {
-            const PBDLineModel::OrientedEdge& edge = lm_edges[idx];
+            const LineModel::OrientedEdge& edge = lm_edges[idx];
             const Vector3r& lpt = pd.getVelocity(edge.m_vert[0]);
             return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
         }

@@ -4,12 +4,9 @@
 #include <sofa/core/objectmodel/BaseObject.h>
 #include "initZyPositionBasedDynamicsPlugin.h"
 
-#include <PBDCommon/PBDCommon.h>
-#include "PBDModels/PBDSimulationModel.h"
+#include <Common/Common.h>
+#include "SimulationModel.h"
 #include "SofaPBDTimeStep.h"
-
-// #include "PBDIntegration/GeometryConversion.h"
-// #include "PBDIntegration/MechObjConversion.h"
 
 #include <sofa/core/topology/BaseMeshTopology.h>
 #include <SofaBaseMechanics/MechanicalObject.h>
@@ -34,12 +31,13 @@ namespace sofa
                     Data<sofa::defaulttype::Vec3d> GRAVITATION;
                     Data<sofa::helper::OptionsGroup> SIMULATION_METHOD;
 
-                    SofaPBDSimulation(BaseContext* context = nullptr);
+                    SofaPBDSimulation(sofa::core::objectmodel::BaseContext* context = nullptr);
                     ~SofaPBDSimulation();
 
                     void init();
                     void bwdInit();
                     void reset();
+                    void cleanup();
 
                     void draw(const core::visual::VisualParams*) override;
 
@@ -48,8 +46,8 @@ namespace sofa
                     static void setCurrent(SofaPBDSimulation* tm);
                     static bool hasCurrent();
 
-                    PBDSimulationModel *getModel() { return m_model; }
-                    void setModel(PBDSimulationModel *model) { m_model = model; }
+                    SimulationModel *getModel() { return m_model; }
+                    void setModel(SimulationModel *model) { m_model = model; }
 
                     int getSimulationMethod() const { return SIMULATION_METHOD.getValue().getSelectedId(); }
                     void setSimulationMethod(const int val);
@@ -60,18 +58,14 @@ namespace sofa
                     void setTimeStep(SofaPBDTimeStepInterface* ts) { m_timeStep = ts; }
 
                 protected:
-                    BaseContext* m_context;
+                    sofa::core::objectmodel::BaseContext* m_context;
                     sofa::simulation::Node::SPtr m_rootNode;
 
-                    PBDSimulationModel *m_model;
+                    SimulationModel *m_model;
                     SofaPBDTimeStepInterface* m_timeStep;
                     std::function<void()> m_simulationMethodChanged;
 
                     virtual void initParameters();
-
-                    // TODO: Decide if centralizing conversion is better or not
-                    /*std::shared_ptr<GeometryConversion> m_geometryConverter;
-                    std::shared_ptr<MechObjConversion> m_mechObjConverter;*/
 
                 private:
                     static SofaPBDSimulation *current;

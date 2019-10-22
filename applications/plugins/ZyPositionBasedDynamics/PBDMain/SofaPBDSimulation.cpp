@@ -1,5 +1,5 @@
 #include "SofaPBDSimulation.h"
-#include "PBDUtils/PBDTimeManager.h"
+#include "TimeManager.h"
 
 #include "PBDMain/SofaPBDTimeStep.h"
 
@@ -32,7 +32,7 @@ SofaPBDSimulation::SofaPBDSimulation(BaseContext *context): sofa::core::objectmo
     m_rootNode = nullptr;
 
     msg_info("PBDSimulation") << "Instantiating PBDSimulationModel.";
-    m_model = new PBDSimulationModel();
+    m_model = new SimulationModel();
 
     m_simulationMethodChanged = nullptr;
 }
@@ -204,18 +204,40 @@ void SofaPBDSimulation::bwdInit()
     msg_info("PBDSimulation") << "Converted geometries OK: " << convGeoResult << ", converted MechanicalObjects OK: " << convMechObjResult;*/
 }
 
+void SofaPBDSimulation::cleanup()
+{
+    msg_info("PBDSimulation") << "cleanup()";
+
+    if (m_timeStep)
+    {
+        m_timeStep->cleanup();
+        delete m_timeStep;
+        m_timeStep = nullptr;
+    }
+
+    if (m_model)
+    {
+        m_model->cleanup();
+        delete m_model;
+        m_model = nullptr;
+    }
+}
+
 void SofaPBDSimulation::reset()
 {
     msg_info("PBDSimulation") << "reset()";
 
-    if (m_model)
-        m_model->reset();
-
     if (m_timeStep)
         m_timeStep->reset();
 
-    PBDTimeManager::getCurrent()->setTime(static_cast<Real>(0.0));
-    PBDTimeManager::getCurrent()->setTimeStepSize(static_cast<Real>(0.005));
+    if (TimeManager::getCurrent())
+    {
+        TimeManager::getCurrent()->setTime(static_cast<Real>(0.0));
+        TimeManager::getCurrent()->setTimeStepSize(static_cast<Real>(0.005));
+    }
+
+    if (m_model)
+        m_model->reset();
 }
 
 void SofaPBDSimulation::setSimulationMethod(const int val)
@@ -249,7 +271,7 @@ void SofaPBDSimulation::setSimulationMethod(const int val)
 
         Real timeStepSize = static_cast<Real>(0.005);
         msg_info("SofaPBDSimulation") << "Setting time step size to: " << timeStepSize;
-        PBDTimeManager::getCurrent()->setTimeStepSize(timeStepSize);
+        TimeManager::getCurrent()->setTimeStepSize(timeStepSize);
     }
     else if (method == PBDSimulationMethods::XPBD)
     {

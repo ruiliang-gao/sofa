@@ -1,7 +1,7 @@
 #ifndef BOUNDINGSPHEREHIERARCHY_H
 #define BOUNDINGSPHEREHIERARCHY_H
 
-#include "PBDCommon/PBDCommon.h"
+#include "Common/Common.h"
 #include "BoundingSphere.h"
 #include "kdTree.h"
 

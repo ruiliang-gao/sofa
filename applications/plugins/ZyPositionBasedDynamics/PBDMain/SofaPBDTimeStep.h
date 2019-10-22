@@ -3,14 +3,14 @@
 
 #include <sofa/core/objectmodel/BaseObject.h>
 #include <sofa/helper/OptionsGroup.h>
+#include <sofa/simulation/Node.h>
 
 #include "initZyPositionBasedDynamicsPlugin.h"
 
-#include "PBDModels/PBDSimulationModel.h"
-
+#include "SimulationModel.h"
 #include "CollisionDetection.h"
-#include "PBDIntegration/SofaPBDBruteForceDetection.h"
 
+#include "PBDIntegration/SofaPBDBruteForceDetection.h"
 #include "PBDMain/SofaPBDTimeStepInterface.h"
 
 #define MIN_PARALLEL_SIZE 64
@@ -43,9 +43,9 @@ namespace sofa
 
                     void draw(const core::visual::VisualParams*) override;
 
-                    virtual void step();
+                    virtual void step(const sofa::core::ExecParams* params, SReal dt);
 
-                    void setCollisionDetection(PBDSimulationModel &model, CollisionDetection *cd);
+                    void setCollisionDetection(SimulationModel &model, CollisionDetection *cd);
                     CollisionDetection *getCollisionDetection();
 
                     Data<int> MAX_ITERATIONS;
@@ -61,35 +61,26 @@ namespace sofa
 
                     virtual void initParameters();
 
-                    void positionConstraintProjection(PBDSimulationModel &model);
-                    void velocityConstraintProjection(PBDSimulationModel &model);
+                    void positionConstraintProjection(SimulationModel &model);
+                    void velocityConstraintProjection(SimulationModel &model);
+
+                    sofa::simulation::Node* gnode;
 
                     SofaPBDSimulation* m_simulation;
 
                     // Built-in collision detection of the PBD library
                     CollisionDetection *m_collisionDetection;
 
+                    // Sofa collision detection pipelines
+                    sofa::core::collision::Pipeline* m_collisionPipeline;
+                    sofa::core::collision::Pipeline::SPtr m_collisionPipelineLocal;
+
                     // Sofa-integrated collision pipeline
                     SofaPBDBruteForceDetection* m_sofaPBDCollisionDetection;
 
                     /** Clear accelerations and add gravitation.
                     */
-                    void clearAccelerations(PBDSimulationModel &model);
-
-                    /// TODO: Check for re-entrancy!
-                    /*static void contactCallbackFunction(const unsigned int contactType,
-                        const unsigned int bodyIndex1, const unsigned int bodyIndex2,
-                        const Vector3r &cp1, const Vector3r &cp2,
-                        const Vector3r &normal, const Real dist,
-                        const Real restitutionCoeff, const Real frictionCoeff, void *userData);*/
-
-                    /// TODO: Check for re-entrancy!
-                    /*static void solidContactCallbackFunction(const unsigned int contactType,
-                        const unsigned int bodyIndex1, const unsigned int bodyIndex2,
-                        const unsigned int tetIndex, const Vector3r &bary,
-                        const Vector3r &cp1, const Vector3r &cp2,
-                        const Vector3r &normal, const Real dist,
-                        const Real restitutionCoeff, const Real frictionCoeff, void *userData);*/
+                    void clearAccelerations(SimulationModel &model);
             };
         }
     }

@@ -4,8 +4,8 @@
 #include "initZyPositionBasedDynamicsPlugin.h"
 #include <SofaMeshCollision/TriangleModel.h>
 
-#include "PBDRigidBody.h"
-#include "PBDModels/PBDLineModel.h"
+#include "RigidBody.h"
+#include "LineModel.h"
 
 namespace sofa
 {
@@ -15,6 +15,7 @@ namespace sofa
         {
             using namespace sofa::core::objectmodel;
             using namespace sofa::core;
+            using namespace PBD;
 
             class SofaPBDTriangleCollisionModel;
 
@@ -113,8 +114,8 @@ namespace sofa
                         return boCanCreate;
                     }
 
-                    const PBDRigidBody* getPBDRigidBody() const;
-                    PBDRigidBody* getPBDRigidBody();
+                    const RigidBody* getPBDRigidBody() const;
+                    RigidBody* getPBDRigidBody();
 
                     const int getPBDRigidBodyIndex() const;
 
@@ -139,6 +140,8 @@ namespace sofa
                     Data<float> showIndicesScale; ///< Scale for indices display. (default=0.02)
 
                 private:
+                    bool m_initCalled;
+                    unsigned int m_initCallCount;
                     SofaPBDTriangleCollisionModelPrivate* m_d;
             };
         }

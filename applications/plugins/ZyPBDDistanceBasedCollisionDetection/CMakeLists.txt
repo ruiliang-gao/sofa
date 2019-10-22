@@ -22,6 +22,12 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/applications/plugins/ZyPositionBasedDynamics)
 
+                include_directories(${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics
+                                    ${CMAKE_SOURCE_DIR}/extlibs/GenericParameters/GenericParameters
+                                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/PositionBasedDynamics
+                                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation
+                                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Utils)
+
 include_directories(${CMAKE_SOURCE_DIR}/SofaKernel
                     ${CMAKE_SOURCE_DIR}/SofaKernel/modules
                     ${EIGEN3_INCLUDE_DIR}
@@ -46,8 +52,6 @@ set(SOURCE_FILES initZyPBDDistanceBasedCollisionDetectionPlugin.cpp
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} SofaCore SofaSimulationCore
-    ZyPositionBasedDynamics_CommonUtils ZyPositionBasedDynamics_Models
-    ZyPositionBasedDynamics_Constraints ZyPositionBasedDynamics_Simulation
-    ZyPositionBasedDynamics_Dynamics)
+   Discregrid PositionBasedDynamics Simulation Utils)
 
 sofa_create_package(${PROJECT_NAME} ${ZY_POSITION_BASED_DYNAMICS_VERSION} ${PROJECT_NAME} ${PROJECT_NAME})

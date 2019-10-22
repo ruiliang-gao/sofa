@@ -4,8 +4,10 @@
 #include "initZyPositionBasedDynamicsPlugin.h"
 #include <SofaMeshCollision/LineModel.h>
 
-#include "PBDRigidBody.h"
-#include "PBDModels/PBDLineModel.h"
+#include "RigidBody.h"
+#include "LineModel.h"
+
+using namespace PBD;
 
 namespace sofa
 {
@@ -99,18 +101,20 @@ namespace sofa
                     bool usesPBDRigidBody() const;
                     bool usesPBDLineModel() const;
 
-                    const PBDRigidBody* getPBDRigidBody() const;
-                    PBDRigidBody* getPBDRigidBody();
+                    const RigidBody* getPBDRigidBody() const;
+                    RigidBody* getPBDRigidBody();
 
                     const int getPBDRigidBodyIndex() const;
 
-                    const PBDLineModel* getPBDLineModel() const;
-                    PBDLineModel* getPBDLineModel();
+                    const PBD::LineModel* getPBDLineModel() const;
+                    PBD::LineModel* getPBDLineModel();
 
                     const sofa::defaulttype::Vec3 getCoord(unsigned int) const;
                     const sofa::defaulttype::Vec3 getDeriv(unsigned int) const;
 
                 private:
+                    bool m_initCalled;
+                    unsigned int m_initCallCount;
                     SofaPBDLineCollisionModelPrivate* m_d;
             };
         }

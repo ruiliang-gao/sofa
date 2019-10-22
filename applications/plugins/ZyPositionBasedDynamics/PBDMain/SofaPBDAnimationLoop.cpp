@@ -1,5 +1,5 @@
 #include "SofaPBDAnimationLoop.h"
-#include "PBDModels/PBDSimulationModel.h"
+#include "SimulationModel.h"
 
 #include <sofa/core/ObjectFactory.h>
 
@@ -19,8 +19,6 @@
 #include <sofa/helper/AdvancedTimer.h>
 #include <sofa/core/visual/VisualParams.h>
 
-#include "PBDIntegration/SofaPBDCollisionVisitor.h"
-
 using namespace sofa::simulation::PBDSimulation;
 
 SOFA_DECL_CLASS(SofaPBDAnimationLoop)
@@ -30,7 +28,7 @@ int SofaPBDAnimationLoopClass = sofa::core::RegisterObject("DefaultAnimationLoop
                             .addDescription("DefaultAnimationLoop-derived class to run the PBD simulation loop.");
 
 SofaPBDAnimationLoop::SofaPBDAnimationLoop(sofa::simulation::Node*& gnode):
-    sofa::simulation::DefaultAnimationLoop(gnode), m_simulation(nullptr), m_collisionPipeline(nullptr),
+    sofa::simulation::DefaultAnimationLoop(gnode), m_simulation(nullptr),
     SUB_STEPS_PER_ITERATION(initData(&SUB_STEPS_PER_ITERATION, 5, "SubStepsPerIteration", "Number of solver substeps per iteration of the simulation"))
 {
     m_dt = 0.0;
@@ -46,6 +44,11 @@ SofaPBDAnimationLoop::~SofaPBDAnimationLoop()
     }
 }
 
+SofaPBDSimulation* SofaPBDAnimationLoop::getSimulation()
+{
+    return m_simulation;
+}
+
 void SofaPBDAnimationLoop::setNode(simulation::Node* node)
 {
     msg_info("SofaPBDAnimationLoop") << "setNode(" << node->getName() << ")";
@@ -54,49 +57,40 @@ void SofaPBDAnimationLoop::setNode(simulation::Node* node)
 
 void SofaPBDAnimationLoop::init()
 {
-    if (!gnode)
-        gnode = dynamic_cast<sofa::simulation::Node*>(this->getContext());
-
-    sofa::simulation::Node::SPtr currentRootNode = sofa::simulation::getSimulation()->getCurrentRootNode();
-    if (currentRootNode && currentRootNode->collisionPipeline)
+    if (!m_simulation)
     {
-        m_collisionPipeline = currentRootNode->collisionPipeline.get();
-        msg_info("SofaPBDAnimationLoop") << "currentRootNode has a valid collisionPipeline instance.";
+        msg_info("SofaPBDAnimationLoop") << "Instantiating SofaPBDSimulation instance.";
+        m_simulation = new SofaPBDSimulation();
+        SofaPBDSimulation::setCurrent(m_simulation);
+
+        m_simulation->init();
     }
-    else
-    {
-        if (!currentRootNode)
-        {
-            msg_error("SofaPBDAnimationLoop") << "currentRootNode is a NULL pointer!";
-        }
-        else
-        {
-            msg_warning("SofaPBDAnimationLoop") << "currentRootNode has no valid collisionPipeline instance set!";
-
-            BaseObjectDescription desc("DefaultCollisionPipeline", "DefaultPipeline");
-            BaseObject::SPtr obj = sofa::core::ObjectFactory::getInstance()->createObject(currentRootNode.get(), &desc);
-            if (obj)
-            {
-                m_collisionPipelineLocal.reset(dynamic_cast<sofa::core::collision::Pipeline*>(obj.get()));
-                msg_info("SofaPBDAnimationLoop") << "Instantiated Pipeline object: " << m_collisionPipelineLocal->getName() << " of type " << m_collisionPipelineLocal->getTypeName();
-            }
-            else
-            {
-                msg_error("SofaPBDAnimationLoop") << "Failed to instantiate Pipeline object. Collision detection will not be functional!";
-            }
-        }
-    }
-    m_context = gnode->getContext();
-
-    m_simulation = new SofaPBDSimulation();
-    SofaPBDSimulation::setCurrent(m_simulation);
-
-    m_simulation->init();
 }
 
 void SofaPBDAnimationLoop::bwdInit()
 {
-    m_simulation->bwdInit();
+    if (m_simulation)
+    {
+        m_simulation->bwdInit();
+    }
+}
+
+void SofaPBDAnimationLoop::reset()
+{
+    if (m_simulation)
+    {
+        m_simulation->reset();
+        delete m_simulation;
+        m_simulation = nullptr;
+    }
+}
+
+void SofaPBDAnimationLoop::cleanup()
+{
+    if (m_simulation)
+    {
+        m_simulation->cleanup();
+    }
 }
 
 void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
@@ -138,35 +132,17 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
     Real dtPerSubStep = timeDelta / SUB_STEPS_PER_ITERATION.getValue();
 
     msg_info("SofaPBDAnimationLoop") << "Setting per-substep time delta to: " << dtPerSubStep;
-    PBDTimeManager::getCurrent()->setTimeStepSize(dtPerSubStep);
+    TimeManager::getCurrent()->setTimeStepSize(dtPerSubStep);
 
     sofa::helper::AdvancedTimer::stepBegin("StepPBDTimeLoop");
     msg_info("SofaPBDAnimationLoop") << "Sub steps: " << SUB_STEPS_PER_ITERATION.getValue();
     for (unsigned int k = 0; k < SUB_STEPS_PER_ITERATION.getValue(); k++)
     {
-        sofa::helper::AdvancedTimer::stepBegin("SofaPBDCollisionVisitor");
-
-        msg_info("SofaPBDAnimationLoop") << "Starting collision detection.";
-        if (m_collisionPipeline)
-        {
-            msg_info("SofaPBDAnimationLoop") << "Using collision pipeline instance from simulation root node: " << m_collisionPipeline->getName();
-            SofaPBDCollisionVisitor pbd_col_visitor(m_collisionPipeline, params, dt);
-            gnode->execute(pbd_col_visitor);
-        }
-        else
-        {
-            msg_info("SofaPBDAnimationLoop") << "Using locally instantiated collision pipeline object: " << m_collisionPipelineLocal->getName();
-            SofaPBDCollisionVisitor pbd_col_visitor(m_collisionPipelineLocal.get(), params, dt);
-            gnode->execute(pbd_col_visitor);
-        }
-
-        sofa::helper::AdvancedTimer::stepEnd("SofaPBDCollisionVisitor");
-
         msg_info("SofaPBDAnimationLoop") << "Sub-step " << k;
         SofaPBDTimeStepInterface* timeStep = m_simulation->getTimeStep();
         if (timeStep)
         {
-            timeStep->step();
+            timeStep->step(params, dt);
         }
         else
         {

@@ -1,7 +1,7 @@
 #ifndef AABB_H
 #define AABB_H
 
-#include "PBDCommon/PBDCommon.h"
+#include "Common/Common.h"
 
 namespace sofa
 {

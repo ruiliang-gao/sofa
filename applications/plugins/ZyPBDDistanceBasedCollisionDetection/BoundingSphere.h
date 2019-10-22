@@ -1,7 +1,7 @@
 #ifndef BOUNDINGSPHERE_H
 #define BOUNDINGSPHERE_H
 
-#include <PBDCommon/PBDCommon.h>
+#include <Common/Common.h>
 
 namespace sofa
 {

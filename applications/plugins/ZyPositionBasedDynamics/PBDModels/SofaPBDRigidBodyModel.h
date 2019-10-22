@@ -1,7 +1,7 @@
 #ifndef SOFAPDBTRIANGLEMODEL_H
 #define SOFAPDBTRIANGLEMODEL_H
 
-#include "PBDTriangleModel.h"
+#include "TriangleModel.h"
 #include "SofaPBDModelBase.h"
 
 using namespace sofa::defaulttype;

@@ -13,7 +13,7 @@
 #include <sofa/simulation/CollisionEndEvent.h>
 
 #include "SofaPBDSimulation.h"
-#include "PBDUtils/PBDTimeManager.h"
+#include "TimeManager.h"
 
 namespace sofa
 {
@@ -39,8 +39,12 @@ namespace sofa
 
                     virtual void init() override;
                     virtual void bwdInit() override;
+                    void reset();
+                    void cleanup();
 
                     void draw(const core::visual::VisualParams*) override;
+
+                    SofaPBDSimulation* getSimulation();
 
                     /// perform one animation step
                     /*
@@ -53,10 +57,6 @@ namespace sofa
 
                protected:
                     SofaPBDSimulation* m_simulation;
-                    BaseContext* m_context;
-
-                    sofa::core::collision::Pipeline* m_collisionPipeline;
-                    sofa::core::collision::Pipeline::SPtr m_collisionPipelineLocal;
 
                     Real m_dt;
                     Real m_prevDt;

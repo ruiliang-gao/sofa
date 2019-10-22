@@ -72,7 +72,8 @@ int SofaPBDTriangleCollisionModelClass = sofa::core::RegisterObject("PBD plugin 
 
 SofaPBDTriangleCollisionModel::SofaPBDTriangleCollisionModel(): sofa::component::collision::TriangleModel(),
     showIndices(initData(&showIndices, true, "showIndices", "Show indices. (default=false)")),
-    showIndicesScale(initData(&showIndicesScale, (float) 0.02, "showIndicesScale", "Scale for indices display. (default=0.02)"))
+    showIndicesScale(initData(&showIndicesScale, (float) 0.02, "showIndicesScale", "Scale for indices display. (default=0.02)")),
+    m_initCalled(false), m_initCallCount(0)
 
 {
     m_d = new SofaPBDTriangleCollisionModelPrivate();
@@ -143,262 +144,271 @@ void SofaPBDTriangleCollisionModel::bwdInit()
         msg_info("SofaPBDTriangleCollisionModel") << "SofaPBDLineBodyModel instances on peer/child level: " << pbdLineModels.size();
     }
 
-    if (!m_d->m_pbdRigidBodyModelName.empty())
+    if (!m_initCalled)
     {
-        std::string targetRigidBodyName = m_d->m_pbdRigidBodyModelName.substr(1);
-
-        if (this->f_printLog.getValue())
-            msg_info("SofaPBDTriangleCollisionModel") << "Searching for target SofaPBDRigidBody named: " << targetRigidBodyName;
-
-        if (pbdRigidBodies.size() > 0)
+        if (!m_d->m_pbdRigidBodyModelName.empty())
         {
-            for (size_t k = 0; k < pbdRigidBodies.size(); k++)
+            std::string targetRigidBodyName = m_d->m_pbdRigidBodyModelName.substr(1);
+
+            if (this->f_printLog.getValue())
+                msg_info("SofaPBDTriangleCollisionModel") << "Searching for target SofaPBDRigidBody named: " << targetRigidBodyName;
+
+            if (pbdRigidBodies.size() > 0)
+            {
+                for (size_t k = 0; k < pbdRigidBodies.size(); k++)
+                {
+                    if (this->f_printLog.getValue())
+                        msg_info("SofaPBDTriangleCollisionModel") << "Comparing: " << pbdRigidBodies[k]->getName() << " == " << targetRigidBodyName;
+
+                    if (pbdRigidBodies[k]->getName().compare(targetRigidBodyName) == 0)
+                    {
+                        if (this->f_printLog.getValue())
+                            msg_info("SofaPBDTriangleCollisionModel") << "Found specified SofaPBDRigidBody instance: " << pbdRigidBodies[k]->getName();
+
+                        m_d->m_pbdRigidBody = pbdRigidBodies[k];
+                        break;
+                    }
+                }
+            }
+
+            unsigned int ntriangles = 0;
+            if (m_d->m_pbdRigidBody)
+            {
+                ntriangles = m_d->m_pbdRigidBody->getRigidBodyGeometry().getMesh().numFaces();
+
+                if (this->f_printLog.getValue())
+                {
+                    msg_info("SofaPBDTriangleCollisionModel") << "rigidBodyModel link specified and found.";
+                }
+
+                if (ntriangles == 0)
+                {
+                    msg_warning("SofaPBDTriangleCollisionModel") << "PBD rigid body geometry reports 0 triangles! This is most likely incorrect. Have its init/bwdInit not run yet? Calling them now.";
+                    m_d->m_pbdRigidBody->init();
+                    m_d->m_pbdRigidBody->bwdInit();
+
+                    ntriangles = m_d->m_pbdRigidBody->getRigidBodyGeometry().getMesh().numFaces();
+                }
+            }
+            else
+            {
+                msg_error("SofaPBDTriangleCollisionModel") << "rigidBodyModel link specified, but no SofaPBDRigidBody instance found on peer/child level!";
+            }
+
+            if (this->f_printLog.getValue())
+                msg_info("SofaPBDTriangleCollisionModel") << "Size of collision model (triangles): " << ntriangles;
+
+            if (ntriangles != size)
             {
                 if (this->f_printLog.getValue())
-                    msg_info("SofaPBDTriangleCollisionModel") << "Comparing: " << pbdRigidBodies[k]->getName() << " == " << targetRigidBodyName;
+                    msg_info("SofaPBDTriangleCollisionModel") << "Resizing collision model to: " << ntriangles;
 
-                if (pbdRigidBodies[k]->getName().compare(targetRigidBodyName) == 0)
+                resize(ntriangles);
+            }
+
+            // Initialize lookup for vertex to index data to avoid excessive queries to PBD rigid body geometry
+            if (this->f_printLog.getValue())
+            {
+                msg_info("SofaPBDTriangleCollisionModel") << "===================================================";
+                msg_info("SofaPBDTriangleCollisionModel") << "SofaPBDTriangleCollisionModel aux. data filled HERE";
+                msg_info("SofaPBDTriangleCollisionModel") << "===================================================";
+            }
+            m_d->m_vertexToIndex_1.resize(ntriangles);
+            m_d->m_vertexToIndex_2.resize(ntriangles);
+            m_d->m_vertexToIndex_3.resize(ntriangles);
+
+            m_d->m_edgeToIndex_1.resize(ntriangles);
+            m_d->m_edgeToIndex_2.resize(ntriangles);
+            m_d->m_edgeToIndex_3.resize(ntriangles);
+
+            m_d->m_vertex_1.resize(ntriangles);
+            m_d->m_vertex_2.resize(ntriangles);
+            m_d->m_vertex_3.resize(ntriangles);
+
+            m_d->m_numTriangles = ntriangles;
+
+            VertexData& vertexData = m_d->m_pbdRigidBody->getRigidBodyGeometry().getVertexData();
+            Utilities::IndexedFaceMesh& rbGeometry = m_d->m_pbdRigidBody->getRigidBodyGeometry().getMesh();
+            const Utilities::IndexedFaceMesh::FaceData& meshFaces = rbGeometry.getFaceData();
+            Utilities::IndexedFaceMesh::Edges& meshEdges = rbGeometry.getEdges();
+
+            if (this->f_printLog.getValue())
+            {
+                msg_info("SofaPBDTriangleCollisionModel") << "Size of PBD triangle mesh (number of faces): " << meshFaces.size();
+                msg_info("SofaPBDTriangleCollisionModel") << "Size of PBD triangle mesh (number of edges): " << meshEdges.size();
+            }
+
+            // Hard coded for triangle meshes - this should serve most cases, however, even if it is a loss of generality
+            if (rbGeometry.getVerticesPerFace() == 3)
+            {
+                for (unsigned int k = 0; k < meshFaces.size(); k++)
                 {
-                    if (this->f_printLog.getValue())
-                        msg_info("SofaPBDTriangleCollisionModel") << "Found specified SofaPBDRigidBody instance: " << pbdRigidBodies[k]->getName();
+                    const Utilities::IndexedFaceMesh::Face& f = meshFaces[k];
 
-                    m_d->m_pbdRigidBody = pbdRigidBodies[k];
-                    break;
+                    for (unsigned int l = 0; l < rbGeometry.getVerticesPerFace(); l++)
+                    {
+                        Utilities::IndexedFaceMesh::Edge& e = meshEdges[f.m_edges[l]];
+
+                        if (this->f_printLog.getValue())
+                            msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Edge " << l << " indices -- " << e.m_vert[0] << " - " << e.m_vert[1];
+                    }
+
+                    for (unsigned int l = 0; l < rbGeometry.getVerticesPerFace(); l++)
+                    {
+                        Utilities::IndexedFaceMesh::Edge& e = meshEdges[f.m_edges[l]];
+                        if (l == 0)
+                        {
+                            if (this->f_printLog.getValue())
+                                msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face " << k << " vertex " << l << ": Index " << e.m_vert[0];
+
+                            m_d->m_vertexToIndex_1[k] = e.m_vert[0];
+                            Vector3r vt = vertexData.getPosition(e.m_vert[0]);
+                            m_d->m_vertex_1[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
+                        }
+                        else if (l == 1)
+                        {
+                            if (this->f_printLog.getValue())
+                                msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face " << k << " vertex " << l << ": Index " << e.m_vert[0];
+
+                            m_d->m_vertexToIndex_2[k] = e.m_vert[0];
+                            Vector3r vt = vertexData.getPosition(e.m_vert[0]);
+                            m_d->m_vertex_2[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
+                        }
+                        else if (l == 2)
+                        {
+                            if (this->f_printLog.getValue())
+                                msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face " << k << " vertex " << l << ": Index " << e.m_vert[0];
+
+                            m_d->m_vertexToIndex_3[k] = e.m_vert[0];
+                            Vector3r vt = vertexData.getPosition(e.m_vert[0]);
+                            m_d->m_vertex_3[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
+                        }
+                    }
+
+                    bool idx_1_eq_2 = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_2[k]);
+                    bool idx_1_eq_3 = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_3[k]);
+                    bool idx_2_eq_3 = (m_d->m_vertexToIndex_2[k] == m_d->m_vertexToIndex_3[k]);
+
+                    if (idx_1_eq_2 || idx_1_eq_3 || idx_2_eq_3)
+                    {
+                        if (idx_1_eq_2)
+                        {
+                            msg_warning("SofaPBDTriangleCollisionModel") << "Mesh index 1 and 2 (" << m_d->m_vertexToIndex_1[k] << " - " << m_d->m_vertexToIndex_2[k] << ") are equal! Explicit index swap required.";
+                            const Utilities::IndexedFaceMesh::Edge& e = meshEdges[f.m_edges[0]];
+                            m_d->m_vertexToIndex_1[k] = e.m_vert[1];
+
+                            Vector3r vt = vertexData.getPosition(e.m_vert[1]);
+                            m_d->m_vertex_1[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
+
+                            bool idx_1_eq_2_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_2[k]);
+                            bool idx_1_eq_3_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_3[k]);
+                            bool idx_2_eq_3_a = (m_d->m_vertexToIndex_2[k] == m_d->m_vertexToIndex_3[k]);
+
+                            if (idx_1_eq_2_a || idx_1_eq_3_a || idx_2_eq_3_a)
+                            {
+                                msg_warning("SofaPBDTriangleCollisionModel") << "Mesh indices still not unique after swap! idx_1_eq_2_a = " << idx_1_eq_2_a << ", idx_1_eq_3_a = " << idx_1_eq_3_a << ", idx_2_eq_3_a = " << idx_2_eq_3_a;
+                            }
+                            else
+                            {
+                                if (this->f_printLog.getValue())
+                                    msg_info("SofaPBDTriangleCollisionModel") << "Corrected face indices for face " << k << ": " << m_d->m_vertexToIndex_1[k] << "," << m_d->m_vertexToIndex_2[k] << "," << m_d->m_vertexToIndex_3[k];
+                            }
+                        }
+
+                        if (idx_1_eq_3)
+                        {
+                            msg_warning("SofaPBDTriangleCollisionModel") << "Mesh index 1 and 3 (" << m_d->m_vertexToIndex_1[k] << " - " << m_d->m_vertexToIndex_3[k] << ") are equal! Explicit index swap required.";
+                            const Utilities::IndexedFaceMesh::Edge& e = meshEdges[f.m_edges[2]];
+                            m_d->m_vertexToIndex_3[k] = e.m_vert[1];
+
+                            Vector3r vt = vertexData.getPosition(e.m_vert[1]);
+                            m_d->m_vertex_3[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
+
+                            bool idx_1_eq_2_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_2[k]);
+                            bool idx_1_eq_3_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_3[k]);
+                            bool idx_2_eq_3_a = (m_d->m_vertexToIndex_2[k] == m_d->m_vertexToIndex_3[k]);
+
+                            if (idx_1_eq_2_a || idx_1_eq_3_a || idx_2_eq_3_a)
+                            {
+                                msg_warning("SofaPBDTriangleCollisionModel") << "Mesh indices still not unique after swap! idx_1_eq_2_a = " << idx_1_eq_2_a << ", idx_1_eq_3_a = " << idx_1_eq_3_a << ", idx_2_eq_3_a = " << idx_2_eq_3_a;
+                            }
+                            else
+                            {
+                                if (this->f_printLog.getValue())
+                                    msg_info("SofaPBDTriangleCollisionModel") << "Corrected face indices for face " << k << ": " << m_d->m_vertexToIndex_1[k] << "," << m_d->m_vertexToIndex_2[k] << "," << m_d->m_vertexToIndex_3[k];
+                            }
+                        }
+
+                        if (idx_2_eq_3)
+                        {
+                            msg_warning("SofaPBDTriangleCollisionModel") << "Mesh index 2 and 3 (" << m_d->m_vertexToIndex_2[k] << " - " << m_d->m_vertexToIndex_3[k] << ") are equal! Explicit index swap required.";
+                            Utilities::IndexedFaceMesh::Edge& e = meshEdges[f.m_edges[0]];
+                            m_d->m_vertexToIndex_2[k] = e.m_vert[1];
+
+                            Vector3r vt = vertexData.getPosition(e.m_vert[1]);
+                            m_d->m_vertex_2[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
+
+                            bool idx_1_eq_2_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_2[k]);
+                            bool idx_1_eq_3_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_3[k]);
+                            bool idx_2_eq_3_a = (m_d->m_vertexToIndex_2[k] == m_d->m_vertexToIndex_3[k]);
+
+                            if (idx_1_eq_2_a || idx_1_eq_3_a || idx_2_eq_3_a)
+                            {
+                                msg_warning("SofaPBDTriangleCollisionModel") << "Mesh indices still not unique after swap! idx_1_eq_2_a = " << idx_1_eq_2_a << ", idx_1_eq_3_a = " << idx_1_eq_3_a << ", idx_2_eq_3_a = " << idx_2_eq_3_a;
+                            }
+                            else
+                            {
+                                if (this->f_printLog.getValue())
+                                    msg_info("SofaPBDTriangleCollisionModel") << "Corrected face indices for face " << k << ": " << m_d->m_vertexToIndex_1[k] << "," << m_d->m_vertexToIndex_2[k] << "," << m_d->m_vertexToIndex_3[k];
+                            }
+                        }
+                    }
                 }
             }
-        }
 
-        unsigned int ntriangles = 0;
-        if (m_d->m_pbdRigidBody)
-        {
-            ntriangles = m_d->m_pbdRigidBody->getRigidBodyGeometry().getMesh().numFaces();
-
-            if (this->f_printLog.getValue())
-            {
-                msg_info("SofaPBDTriangleCollisionModel") << "rigidBodyModel link specified and found.";
-            }
-
-            if (ntriangles == 0)
-            {
-                msg_warning("SofaPBDTriangleCollisionModel") << "PBD rigid body geometry reports 0 triangles! This is most likely incorrect. Have its init/bwdInit not run yet? Calling them now.";
-                m_d->m_pbdRigidBody->init();
-                m_d->m_pbdRigidBody->bwdInit();
-
-                ntriangles = m_d->m_pbdRigidBody->getRigidBodyGeometry().getMesh().numFaces();
-            }
-        }
-        else
-        {
-            msg_error("SofaPBDTriangleCollisionModel") << "rigidBodyModel link specified, but no SofaPBDRigidBody instance found on peer/child level!";
-        }
-
-        if (this->f_printLog.getValue())
-            msg_info("SofaPBDTriangleCollisionModel") << "Size of collision model (triangles): " << ntriangles;
-
-        if (ntriangles != size)
-        {
-            if (this->f_printLog.getValue())
-                msg_info("SofaPBDTriangleCollisionModel") << "Resizing collision model to: " << ntriangles;
-
-            resize(ntriangles);
-        }
-
-        // Initialize lookup for vertex to index data to avoid excessive queries to PBD rigid body geometry
-        if (this->f_printLog.getValue())
-        {
-            msg_info("SofaPBDTriangleCollisionModel") << "===================================================";
-            msg_info("SofaPBDTriangleCollisionModel") << "SofaPBDTriangleCollisionModel aux. data filled HERE";
-            msg_info("SofaPBDTriangleCollisionModel") << "===================================================";
-        }
-        m_d->m_vertexToIndex_1.resize(ntriangles);
-        m_d->m_vertexToIndex_2.resize(ntriangles);
-        m_d->m_vertexToIndex_3.resize(ntriangles);
-
-        m_d->m_edgeToIndex_1.resize(ntriangles);
-        m_d->m_edgeToIndex_2.resize(ntriangles);
-        m_d->m_edgeToIndex_3.resize(ntriangles);
-
-        m_d->m_vertex_1.resize(ntriangles);
-        m_d->m_vertex_2.resize(ntriangles);
-        m_d->m_vertex_3.resize(ntriangles);
-
-        m_d->m_numTriangles = ntriangles;
-
-        const PBDVertexData& vertexData = m_d->m_pbdRigidBody->getRigidBodyGeometry().getVertexData();
-        const Utilities::PBDIndexedFaceMesh& rbGeometry = m_d->m_pbdRigidBody->getRigidBodyGeometry().getMesh();
-        const Utilities::PBDIndexedFaceMesh::FaceData& meshFaces = rbGeometry.getFaceData();
-        const Utilities::PBDIndexedFaceMesh::Edges& meshEdges = rbGeometry.getEdges();
-
-        if (this->f_printLog.getValue())
-        {
-            msg_info("SofaPBDTriangleCollisionModel") << "Size of PBD triangle mesh (number of faces): " << meshFaces.size();
-            msg_info("SofaPBDTriangleCollisionModel") << "Size of PBD triangle mesh (number of edges): " << meshEdges.size();
-        }
-
-        // Hard coded for triangle meshes - this should serve most cases, however, even if it is a loss of generality
-        if (rbGeometry.getNumVerticesPerFace() == 3)
-        {
             for (unsigned int k = 0; k < meshFaces.size(); k++)
             {
-                /// TODO: Check for equal sequences: 1 == 2, 1 == 3, 2 == 3 in edge vertex index order - edges might not be in clock- or counter-clockwise order!
-                const Utilities::PBDIndexedFaceMesh::Face& f = meshFaces[k];
-
-                for (unsigned int l = 0; l < rbGeometry.getNumVerticesPerFace(); l++)
+                const Utilities::IndexedFaceMesh::Face& f = meshFaces[k];
+                for (unsigned int l = 0; l < rbGeometry.getVerticesPerFace(); l++)
                 {
-                    const Utilities::PBDIndexedFaceMesh::Edge& e = meshEdges[f.m_edges[l]];
-
-                    if (this->f_printLog.getValue())
-                        msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Edge " << l << " indices -- " << e.m_vert[0] << " - " << e.m_vert[1];
-                }
-
-                for (unsigned int l = 0; l < rbGeometry.getNumVerticesPerFace(); l++)
-                {
-                    const Utilities::PBDIndexedFaceMesh::Edge& e = meshEdges[f.m_edges[l]];
                     if (l == 0)
                     {
                         if (this->f_printLog.getValue())
-                            msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face " << k << " vertex " << l << ": Index " << e.m_vert[0];
+                            msg_info("SofaPBDTriangleCollisionModel") << this->getName() << ": Face " << k << " edge " << l << ": Index " << f.m_edges[l];
 
-                        m_d->m_vertexToIndex_1[k] = e.m_vert[0];
-                        Vector3r vt = vertexData.getPosition(e.m_vert[0]);
-                        m_d->m_vertex_1[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
+                        m_d->m_edgeToIndex_1[k] = f.m_edges[l];
                     }
                     else if (l == 1)
                     {
                         if (this->f_printLog.getValue())
-                            msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face " << k << " vertex " << l << ": Index " << e.m_vert[0];
+                            msg_info("SofaPBDTriangleCollisionModel") << this->getName() << ": Face " << k << " edge " << l << ": Index " << f.m_edges[l];
 
-                        m_d->m_vertexToIndex_2[k] = e.m_vert[0];
-                        Vector3r vt = vertexData.getPosition(e.m_vert[0]);
-                        m_d->m_vertex_2[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
+                        m_d->m_edgeToIndex_2[k] = f.m_edges[l];
                     }
                     else if (l == 2)
                     {
                         if (this->f_printLog.getValue())
-                            msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face " << k << " vertex " << l << ": Index " << e.m_vert[0];
+                            msg_info("SofaPBDTriangleCollisionModel") << this->getName() << ": Face " << k << " edge " << l << ": Index " << f.m_edges[l];
 
-                        m_d->m_vertexToIndex_3[k] = e.m_vert[0];
-                        Vector3r vt = vertexData.getPosition(e.m_vert[0]);
-                        m_d->m_vertex_3[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
-                    }
-                }
-
-                bool idx_1_eq_2 = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_2[k]);
-                bool idx_1_eq_3 = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_3[k]);
-                bool idx_2_eq_3 = (m_d->m_vertexToIndex_2[k] == m_d->m_vertexToIndex_3[k]);
-
-                if (idx_1_eq_2 || idx_1_eq_3 || idx_2_eq_3)
-                {
-                    if (idx_1_eq_2)
-                    {
-                        msg_warning("SofaPBDTriangleCollisionModel") << "Mesh index 1 and 2 (" << m_d->m_vertexToIndex_1[k] << " - " << m_d->m_vertexToIndex_2[k] << ") are equal! Explicit index swap required.";
-                        const Utilities::PBDIndexedFaceMesh::Edge& e = meshEdges[f.m_edges[0]];
-                        m_d->m_vertexToIndex_1[k] = e.m_vert[1];
-
-                        Vector3r vt = vertexData.getPosition(e.m_vert[1]);
-                        m_d->m_vertex_1[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
-
-                        bool idx_1_eq_2_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_2[k]);
-                        bool idx_1_eq_3_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_3[k]);
-                        bool idx_2_eq_3_a = (m_d->m_vertexToIndex_2[k] == m_d->m_vertexToIndex_3[k]);
-
-                        if (idx_1_eq_2_a || idx_1_eq_3_a || idx_2_eq_3_a)
-                        {
-                            msg_warning("SofaPBDTriangleCollisionModel") << "Mesh indices still not unique after swap! idx_1_eq_2_a = " << idx_1_eq_2_a << ", idx_1_eq_3_a = " << idx_1_eq_3_a << ", idx_2_eq_3_a = " << idx_2_eq_3_a;
-                        }
-                        else
-                        {
-                            if (this->f_printLog.getValue())
-                                msg_info("SofaPBDTriangleCollisionModel") << "Corrected face indices for face " << k << ": " << m_d->m_vertexToIndex_1[k] << "," << m_d->m_vertexToIndex_2[k] << "," << m_d->m_vertexToIndex_3[k];
-                        }
-                    }
-
-                    if (idx_1_eq_3)
-                    {
-                        msg_warning("SofaPBDTriangleCollisionModel") << "Mesh index 1 and 3 (" << m_d->m_vertexToIndex_1[k] << " - " << m_d->m_vertexToIndex_3[k] << ") are equal! Explicit index swap required.";
-                        const Utilities::PBDIndexedFaceMesh::Edge& e = meshEdges[f.m_edges[2]];
-                        m_d->m_vertexToIndex_3[k] = e.m_vert[1];
-
-                        Vector3r vt = vertexData.getPosition(e.m_vert[1]);
-                        m_d->m_vertex_3[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
-
-                        bool idx_1_eq_2_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_2[k]);
-                        bool idx_1_eq_3_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_3[k]);
-                        bool idx_2_eq_3_a = (m_d->m_vertexToIndex_2[k] == m_d->m_vertexToIndex_3[k]);
-
-                        if (idx_1_eq_2_a || idx_1_eq_3_a || idx_2_eq_3_a)
-                        {
-                            msg_warning("SofaPBDTriangleCollisionModel") << "Mesh indices still not unique after swap! idx_1_eq_2_a = " << idx_1_eq_2_a << ", idx_1_eq_3_a = " << idx_1_eq_3_a << ", idx_2_eq_3_a = " << idx_2_eq_3_a;
-                        }
-                        else
-                        {
-                            if (this->f_printLog.getValue())
-                                msg_info("SofaPBDTriangleCollisionModel") << "Corrected face indices for face " << k << ": " << m_d->m_vertexToIndex_1[k] << "," << m_d->m_vertexToIndex_2[k] << "," << m_d->m_vertexToIndex_3[k];
-                        }
-                    }
-
-                    if (idx_2_eq_3)
-                    {
-                        msg_warning("SofaPBDTriangleCollisionModel") << "Mesh index 2 and 3 (" << m_d->m_vertexToIndex_2[k] << " - " << m_d->m_vertexToIndex_3[k] << ") are equal! Explicit index swap required.";
-                        const Utilities::PBDIndexedFaceMesh::Edge& e = meshEdges[f.m_edges[0]];
-                        m_d->m_vertexToIndex_2[k] = e.m_vert[1];
-
-                        Vector3r vt = vertexData.getPosition(e.m_vert[1]);
-                        m_d->m_vertex_2[k] = sofa::defaulttype::Vec3(vt[0], vt[1], vt[2]);
-
-                        bool idx_1_eq_2_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_2[k]);
-                        bool idx_1_eq_3_a = (m_d->m_vertexToIndex_1[k] == m_d->m_vertexToIndex_3[k]);
-                        bool idx_2_eq_3_a = (m_d->m_vertexToIndex_2[k] == m_d->m_vertexToIndex_3[k]);
-
-                        if (idx_1_eq_2_a || idx_1_eq_3_a || idx_2_eq_3_a)
-                        {
-                            msg_warning("SofaPBDTriangleCollisionModel") << "Mesh indices still not unique after swap! idx_1_eq_2_a = " << idx_1_eq_2_a << ", idx_1_eq_3_a = " << idx_1_eq_3_a << ", idx_2_eq_3_a = " << idx_2_eq_3_a;
-                        }
-                        else
-                        {
-                            if (this->f_printLog.getValue())
-                                msg_info("SofaPBDTriangleCollisionModel") << "Corrected face indices for face " << k << ": " << m_d->m_vertexToIndex_1[k] << "," << m_d->m_vertexToIndex_2[k] << "," << m_d->m_vertexToIndex_3[k];
-                        }
+                        m_d->m_edgeToIndex_3[k] = f.m_edges[l];
                     }
                 }
             }
-        }
 
-        for (unsigned int k = 0; k < meshFaces.size(); k++)
-        {
-            const Utilities::PBDIndexedFaceMesh::Face& f = meshFaces[k];
-            for (unsigned int l = 0; l < rbGeometry.getNumVerticesPerFace(); l++)
+            if (this->f_printLog.getValue())
             {
-                if (l == 0)
-                {
-                    if (this->f_printLog.getValue())
-                        msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face " << k << " edge " << l << ": Index " << f.m_edges[l];
-
-                    m_d->m_edgeToIndex_1[k] = f.m_edges[l];
-                }
-                else if (l == 1)
-                {
-                    if (this->f_printLog.getValue())
-                        msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face " << k << " edge " << l << ": Index " << f.m_edges[l];
-
-                    m_d->m_edgeToIndex_2[k] = f.m_edges[l];
-                }
-                else if (l == 2)
-                {
-                    if (this->f_printLog.getValue())
-                        msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face " << k << " edge " << l << ": Index " << f.m_edges[l];
-
-                    m_d->m_edgeToIndex_3[k] = f.m_edges[l];
-                }
+                msg_info("SofaPBDTriangleCollisionModel") << this->getName() << ": Face edge indices vector sizes:" << m_d->m_edgeToIndex_1.size() << "," << m_d->m_edgeToIndex_2.size() << "," << m_d->m_edgeToIndex_3.size();
+                for (unsigned int k = 0; k < m_d->m_numTriangles; k++)
+                    msg_info("SofaPBDTriangleCollisionModel") << this->getName() << ": Face " << k << " edge indices:" << m_d->m_edgeToIndex_1[k] << "," << m_d->m_edgeToIndex_2[k] << "," << m_d->m_edgeToIndex_3[k];
             }
         }
-
-        if (this->f_printLog.getValue())
-        {
-            msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face edge indices vector sizes:" << m_d->m_edgeToIndex_1.size() << "," << m_d->m_edgeToIndex_2.size() << "," << m_d->m_edgeToIndex_3.size();
-            for (unsigned int k = 0; k < m_d->m_numTriangles; k++)
-                msg_info("SofaPBDLineCollisionModel") << this->getName() << ": Face " << k << " edge indices:" << m_d->m_edgeToIndex_1[k] << "," << m_d->m_edgeToIndex_2[k] << "," << m_d->m_edgeToIndex_3[k];
-        }
+        m_initCalled = true;
+        m_initCallCount++;
+    }
+    else
+    {
+        msg_warning("SofaPBDTriangleCollisionModel") << "init/bwdInit have already been called " << m_initCallCount << " times, not initializing again.";
+        m_initCallCount++;
     }
 }
 
@@ -411,7 +421,7 @@ void SofaPBDTriangleCollisionModel::draw(const core::visual::VisualParams* vpara
     {
         defaulttype::Vec4f color(1.0, 1.0, 1.0, 1.0);
 
-        const Utilities::PBDIndexedFaceMesh::FaceData& meshFaceData = this->getPBDRigidBody()->getGeometry().getMesh().getFaceData();
+        const Utilities::IndexedFaceMesh::FaceData& meshFaceData = this->getPBDRigidBody()->getGeometry().getMesh().getFaceData();
 
         vparams->drawTool()->saveLastState();
         std::ostringstream oss;
@@ -538,11 +548,11 @@ void SofaPBDTriangleCollisionModel::computeBoundingTree(int maxDepth)
     m_d->m_cubeModel->resize(size);  // size = number of triangles
     if (!empty())
     {
-        const PBDRigidBodyGeometry& rbGeometry = m_d->m_pbdRigidBody->getRigidBodyGeometry();
-        const Utilities::PBDIndexedFaceMesh::Faces& faces = rbGeometry.getMesh().getFaces();
-        const PBDVertexData& vertices = rbGeometry.getVertexData();
+        RigidBodyGeometry& rbGeometry = m_d->m_pbdRigidBody->getRigidBodyGeometry();
+        Utilities::IndexedFaceMesh::Faces& faces = rbGeometry.getMesh().getFaces();
+        VertexData& vertices = rbGeometry.getVertexData();
 
-        const unsigned int numVerticesPerFace = rbGeometry.getMesh().getNumVerticesPerFace();
+        const unsigned int numVerticesPerFace = rbGeometry.getMesh().getVerticesPerFace();
         const unsigned int numFaces = rbGeometry.getMesh().numFaces();
         const SReal distance = (SReal)this->proximity.getValue();
 
@@ -628,7 +638,7 @@ void SofaPBDTriangleCollisionModel::computeBoundingTree(int maxDepth)
     }
 }
 
-const PBDRigidBody* SofaPBDTriangleCollisionModel::getPBDRigidBody() const
+const RigidBody* SofaPBDTriangleCollisionModel::getPBDRigidBody() const
 {
     if (m_d->m_pbdRigidBody)
         return m_d->m_pbdRigidBody->getPBDRigidBody();
@@ -636,7 +646,7 @@ const PBDRigidBody* SofaPBDTriangleCollisionModel::getPBDRigidBody() const
     return nullptr;
 }
 
-PBDRigidBody* SofaPBDTriangleCollisionModel::getPBDRigidBody()
+RigidBody* SofaPBDTriangleCollisionModel::getPBDRigidBody()
 {
     if (m_d->m_pbdRigidBody)
         return m_d->m_pbdRigidBody->getPBDRigidBody();

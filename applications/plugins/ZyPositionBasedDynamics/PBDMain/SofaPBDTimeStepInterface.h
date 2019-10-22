@@ -27,7 +27,12 @@ namespace sofa
 
                     virtual void draw(const core::visual::VisualParams*) = 0;
 
-                    virtual void step() = 0;
+                    virtual void step(const sofa::core::ExecParams* params, SReal dt) = 0;
+
+                protected:
+                    virtual void preStep() = 0;
+                    virtual void doCollisionDetection(const sofa::core::ExecParams* params, SReal dt) = 0;
+                    virtual void postStep() = 0;
             };
         }
     }

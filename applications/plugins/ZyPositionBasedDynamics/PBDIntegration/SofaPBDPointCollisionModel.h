@@ -4,8 +4,8 @@
 #include "initZyPositionBasedDynamicsPlugin.h"
 #include <SofaMeshCollision/PointModel.h>
 
-#include "PBDRigidBody.h"
-#include "PBDModels/PBDLineModel.h"
+#include "RigidBody.h"
+#include "LineModel.h"
 
 namespace sofa
 {
@@ -96,6 +96,8 @@ namespace sofa
                     const sofa::defaulttype::Vec3 getDeriv(unsigned int) const;
 
                 private:
+                    bool m_initCalled;
+                    unsigned int m_initCallCount;
                     SofaPBDPointCollisionModelPrivate* m_d;
             };
         }

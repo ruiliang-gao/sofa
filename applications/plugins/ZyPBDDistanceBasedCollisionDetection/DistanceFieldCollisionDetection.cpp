@@ -1,9 +1,9 @@
 #include "DistanceFieldCollisionDetection.h"
-#include "PBDCommon/IdFactory.h"
+#include "IDFactory.h"
 #include "omp.h"
 
 using namespace sofa::simulation::PBDDistanceBasedCD;
-using namespace sofa::simulation::PBDSimulation::Utilities;
+using namespace Utilities;
 
 int DistanceFieldCollisionDetection::DistanceFieldCollisionBox::TYPE_ID = IDFactory::getId();
 int DistanceFieldCollisionDetection::DistanceFieldCollisionSphere::TYPE_ID = IDFactory::getId();
@@ -25,13 +25,13 @@ DistanceFieldCollisionDetection::~DistanceFieldCollisionDetection()
 {
 }
 
-void DistanceFieldCollisionDetection::collisionDetection(PBDSimulationModel &model)
+void DistanceFieldCollisionDetection::collisionDetection(SimulationModel &model)
 {
     model.resetContacts();
-    const PBDSimulationModel::RigidBodyVector &rigidBodies = model.getRigidBodies();
-    const PBDSimulationModel::TriangleModelVector &triModels = model.getTriangleModels();
-    const PBDSimulationModel::TetModelVector &tetModels = model.getTetModels();
-    const PBDParticleData &pd = model.getParticles();
+    const SimulationModel::RigidBodyVector &rigidBodies = model.getRigidBodies();
+    const SimulationModel::TriangleModelVector &triModels = model.getTriangleModels();
+    const SimulationModel::TetModelVector &tetModels = model.getTetModels();
+    const ParticleData &pd = model.getParticles();
 
     std::vector < std::pair<unsigned int, unsigned int>> coPairs;
     for (unsigned int i = 0; i < m_collisionObjects.size(); i++)
@@ -101,8 +101,8 @@ void DistanceFieldCollisionDetection::collisionDetection(PBDSimulationModel &mod
                 (co2->m_bodyType == CollisionDetection::CollisionObject::RigidBodyCollisionObjectType) &&
                 ((DistanceFieldCollisionObject*) co1)->m_testMesh)
             {
-                PBDRigidBody *rb1 = rigidBodies[co1->m_bodyIndex];
-                PBDRigidBody *rb2 = rigidBodies[co2->m_bodyIndex];
+                RigidBody *rb1 = rigidBodies[co1->m_bodyIndex];
+                RigidBody *rb2 = rigidBodies[co2->m_bodyIndex];
                 const Real restitutionCoeff = rb1->getRestitutionCoeff() * rb2->getRestitutionCoeff();
                 const Real frictionCoeff = rb1->getFrictionCoeff() + rb2->getFrictionCoeff();
                 collisionDetectionRigidBodies(rb1, (DistanceFieldCollisionObject*)co1, rb2, (DistanceFieldCollisionObject*)co2,
@@ -114,11 +114,11 @@ void DistanceFieldCollisionDetection::collisionDetection(PBDSimulationModel &mod
                     (co2->m_bodyType == CollisionDetection::CollisionObject::RigidBodyCollisionObjectType) &&
                     ((DistanceFieldCollisionObject*)co1)->m_testMesh)
             {
-                PBDTriangleModel *tm = triModels[co1->m_bodyIndex];
-                PBDRigidBody *rb2 = rigidBodies[co2->m_bodyIndex];
-                const unsigned int offset = tm->getIndexOffset();
-                const PBDIndexedFaceMesh &mesh = tm->getParticleMesh();
-                const unsigned int numVert = mesh.numVertices();
+                TriangleModel *tm = triModels[co1->m_bodyIndex];
+                RigidBody *rb2 = rigidBodies[co2->m_bodyIndex];
+                unsigned int offset = tm->getIndexOffset();
+                IndexedFaceMesh &mesh = tm->getParticleMesh();
+                unsigned int numVert = mesh.numVertices();
                 const Real restitutionCoeff = tm->getRestitutionCoeff() * rb2->getRestitutionCoeff();
                 const Real frictionCoeff = tm->getFrictionCoeff() + rb2->getFrictionCoeff();
                 collisionDetectionRBSolid(pd, offset, numVert, (DistanceFieldCollisionObject*)co1, rb2, (DistanceFieldCollisionObject*)co2,
@@ -130,10 +130,10 @@ void DistanceFieldCollisionDetection::collisionDetection(PBDSimulationModel &mod
                     (co2->m_bodyType == CollisionDetection::CollisionObject::RigidBodyCollisionObjectType) &&
                     ((DistanceFieldCollisionObject*)co1)->m_testMesh)
             {
-                PBDTetrahedronModel *tm = tetModels[co1->m_bodyIndex];
-                PBDRigidBody *rb2 = rigidBodies[co2->m_bodyIndex];
+                TetModel *tm = tetModels[co1->m_bodyIndex];
+                RigidBody *rb2 = rigidBodies[co2->m_bodyIndex];
                 const unsigned int offset = tm->getIndexOffset();
-                const PBDIndexedTetrahedronMesh &mesh = tm->getParticleMesh();
+                IndexedTetMesh &mesh = tm->getParticleMesh();
                 const unsigned int numVert = mesh.numVertices();
                 const Real restitutionCoeff = tm->getRestitutionCoeff() * rb2->getRestitutionCoeff();
                 const Real frictionCoeff = tm->getFrictionCoeff() + rb2->getFrictionCoeff();
@@ -146,10 +146,10 @@ void DistanceFieldCollisionDetection::collisionDetection(PBDSimulationModel &mod
                 (co2->m_bodyType == CollisionDetection::CollisionObject::TetModelCollisionObjectType) &&
                 ((DistanceFieldCollisionObject*)co1)->m_testMesh)
             {
-                PBDTetrahedronModel *tm1 = tetModels[co1->m_bodyIndex];
-                PBDTetrahedronModel *tm2 = tetModels[co2->m_bodyIndex];
+                TetModel *tm1 = tetModels[co1->m_bodyIndex];
+                TetModel *tm2 = tetModels[co2->m_bodyIndex];
                 const unsigned int offset = tm1->getIndexOffset();
-                const PBDIndexedTetrahedronMesh &mesh = tm1->getParticleMesh();
+                IndexedTetMesh &mesh = tm1->getParticleMesh();
                 const unsigned int numVert = mesh.numVertices();
                 const Real restitutionCoeff = tm1->getRestitutionCoeff() * tm2->getRestitutionCoeff();
                 const Real frictionCoeff = tm1->getFrictionCoeff() + tm2->getFrictionCoeff();
@@ -186,7 +186,7 @@ void DistanceFieldCollisionDetection::collisionDetection(PBDSimulationModel &mod
     }
 }
 
-void DistanceFieldCollisionDetection::collisionDetectionRigidBodies(PBDRigidBody *rb1, DistanceFieldCollisionObject *co1, PBDRigidBody *rb2, DistanceFieldCollisionObject *co2,
+void DistanceFieldCollisionDetection::collisionDetectionRigidBodies(RigidBody *rb1, DistanceFieldCollisionObject *co1, RigidBody *rb2, DistanceFieldCollisionObject *co2,
     const Real restitutionCoeff, const Real frictionCoeff
     , std::vector<std::vector<ContactData> > &contacts_mt
     )
@@ -194,7 +194,7 @@ void DistanceFieldCollisionDetection::collisionDetectionRigidBodies(PBDRigidBody
     if ((rb1->getMass() == 0.0) && (rb2->getMass() == 0.0))
         return;
 
-    const PBDVertexData &vd = rb1->getGeometry().getVertexData();
+    VertexData &vd = rb1->getGeometry().getVertexData();
 
     const Vector3r &com2 = rb2->getPosition();
 
@@ -269,8 +269,8 @@ void DistanceFieldCollisionDetection::collisionDetectionRigidBodies(PBDRigidBody
 }
 
 
-void DistanceFieldCollisionDetection::collisionDetectionRBSolid(const PBDParticleData &pd, const unsigned int offset, const unsigned int numVert,
-    DistanceFieldCollisionObject *co1, PBDRigidBody *rb2, DistanceFieldCollisionObject *co2,
+void DistanceFieldCollisionDetection::collisionDetectionRBSolid(const ParticleData &pd, const unsigned int offset, const unsigned int numVert,
+    DistanceFieldCollisionObject *co1, RigidBody *rb2, DistanceFieldCollisionObject *co2,
     const Real restitutionCoeff, const Real frictionCoeff
     , std::vector<std::vector<ContactData> > &contacts_mt
     )
@@ -348,8 +348,8 @@ void DistanceFieldCollisionDetection::collisionDetectionRBSolid(const PBDParticl
     bvh.traverse_depth_first(predicate, cb);
 }
 
-void DistanceFieldCollisionDetection::collisionDetectionSolidSolid(const PBDParticleData &pd, const unsigned int offset, const unsigned int numVert,
-    DistanceFieldCollisionObject *co1, PBDTetrahedronModel *tm2, DistanceFieldCollisionObject *co2,
+void DistanceFieldCollisionDetection::collisionDetectionSolidSolid(const ParticleData &pd, const unsigned int offset, const unsigned int numVert,
+    DistanceFieldCollisionObject *co1, TetModel *tm2, DistanceFieldCollisionObject *co2,
     const Real restitutionCoeff, const Real frictionCoeff
     , std::vector<std::vector<ContactData> > &contacts_mt
 )
@@ -780,7 +780,7 @@ void DistanceFieldCollisionDetection::DistanceFieldCollisionObject::initTetBVH(c
     }
 }
 
-bool DistanceFieldCollisionDetection::findRefTetAt(const PBDParticleData &pd, PBDTetrahedronModel *tm, const DistanceFieldCollisionDetection::DistanceFieldCollisionObject *co, const Vector3r &X,
+bool DistanceFieldCollisionDetection::findRefTetAt(const ParticleData &pd, TetModel *tm, const DistanceFieldCollisionDetection::DistanceFieldCollisionObject *co, const Vector3r &X,
     unsigned int &tetIndex, Vector3r &barycentricCoordinates)
 {
     const TetMeshBSH &bvh0 = ((DistanceFieldCollisionDetection::DistanceFieldCollisionObject*) co)->m_bvhTets0;

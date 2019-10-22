@@ -1,10 +1,10 @@
 #include "CollisionDetection.h"
 
-#include <PBDUtils/PBDIndexedFaceMesh.h>
-#include <PBDUtils/PBDIndexedTetrahedronMesh.h>
+#include <IndexedFaceMesh.h>
+#include <IndexedTetMesh.h>
 
 using namespace sofa::simulation::PBDDistanceBasedCD;
-using namespace sofa::simulation::PBDSimulation::Utilities;
+using namespace Utilities;
 
 int CollisionDetection::CollisionObjectWithoutGeometry::TYPE_ID = IDFactory::getId();
 
@@ -76,12 +76,12 @@ void CollisionDetection::setSolidContactCallback(CollisionDetection::SolidContac
     m_solidContactCBUserData = userData;
 }
 
-void CollisionDetection::updateAABBs(PBDSimulationModel &model)
+void CollisionDetection::updateAABBs(SimulationModel &model)
 {
-    const PBDSimulationModel::RigidBodyVector &rigidBodies = model.getRigidBodies();
-    const PBDSimulationModel::TriangleModelVector &triModels = model.getTriangleModels();
-    const PBDSimulationModel::TetModelVector &tetModels = model.getTetModels();
-    const PBDParticleData &pd = model.getParticles();
+    SimulationModel::RigidBodyVector &rigidBodies = model.getRigidBodies();
+    SimulationModel::TriangleModelVector &triModels = model.getTriangleModels();
+    SimulationModel::TetModelVector &tetModels = model.getTetModels();
+    ParticleData &pd = model.getParticles();
 
     for (unsigned int i = 0; i < m_collisionObjects.size(); i++)
     {
@@ -90,17 +90,17 @@ void CollisionDetection::updateAABBs(PBDSimulationModel &model)
     }
 }
 
-void CollisionDetection::updateAABB(PBDSimulationModel &model, CollisionDetection::CollisionObject *co)
+void CollisionDetection::updateAABB(SimulationModel &model, CollisionDetection::CollisionObject *co)
 {
-    const PBDSimulationModel::RigidBodyVector &rigidBodies = model.getRigidBodies();
-    const PBDSimulationModel::TriangleModelVector &triModels = model.getTriangleModels();
-    const PBDSimulationModel::TetModelVector &tetModels = model.getTetModels();
-    const PBDParticleData &pd = model.getParticles();
+    SimulationModel::RigidBodyVector &rigidBodies = model.getRigidBodies();
+    SimulationModel::TriangleModelVector &triModels = model.getTriangleModels();
+    SimulationModel::TetModelVector &tetModels = model.getTetModels();
+    ParticleData &pd = model.getParticles();
     if (co->m_bodyType == CollisionDetection::CollisionObject::RigidBodyCollisionObjectType)
     {
         const unsigned int rbIndex = co->m_bodyIndex;
-        PBDRigidBody *rb = rigidBodies[rbIndex];
-        const PBDVertexData &vd = rb->getGeometry().getVertexData();
+        RigidBody *rb = rigidBodies[rbIndex];
+        const VertexData &vd = rb->getGeometry().getVertexData();
 
         co->m_aabb.m_p[0] = vd.getPosition(0);
         co->m_aabb.m_p[1] = vd.getPosition(0);
@@ -112,9 +112,9 @@ void CollisionDetection::updateAABB(PBDSimulationModel &model, CollisionDetectio
     else if (co->m_bodyType == CollisionDetection::CollisionObject::TriangleModelCollisionObjectType)
     {
         const unsigned int modelIndex = co->m_bodyIndex;
-        PBDTriangleModel *tm = triModels[modelIndex];
+        TriangleModel *tm = triModels[modelIndex];
         const unsigned int offset = tm->getIndexOffset();
-        const PBDIndexedFaceMesh &mesh = tm->getParticleMesh();
+        IndexedFaceMesh &mesh = tm->getParticleMesh();
         const unsigned int numVert = mesh.numVertices();
 
         co->m_aabb.m_p[0] = pd.getPosition(offset);
@@ -127,9 +127,9 @@ void CollisionDetection::updateAABB(PBDSimulationModel &model, CollisionDetectio
     else if (co->m_bodyType == CollisionDetection::CollisionObject::TetModelCollisionObjectType)
     {
         const unsigned int modelIndex = co->m_bodyIndex;
-        PBDTetrahedronModel *tm = tetModels[modelIndex];
+        TetModel *tm = tetModels[modelIndex];
         const unsigned int offset = tm->getIndexOffset();
-        const PBDIndexedTetrahedronMesh &mesh = tm->getParticleMesh();
+        IndexedTetMesh &mesh = tm->getParticleMesh();
         const unsigned int numVert = mesh.numVertices();
 
         co->m_aabb.m_p[0] = pd.getPosition(offset);

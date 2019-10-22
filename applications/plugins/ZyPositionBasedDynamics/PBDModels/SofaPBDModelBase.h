@@ -6,11 +6,13 @@
 #include <sofa/defaulttype/Quat.h>
 #include <sofa/core/objectmodel/Data.h>
 
-#include <PBDRigidBody.h>
-#include <PBDRigidBodyGeometry.h>
+#include <RigidBody.h>
+#include <RigidBodyGeometry.h>
+#include <SimulationModel.h>
 
 using namespace sofa::defaulttype;
 using namespace sofa::core::objectmodel;
+using namespace PBD;
 
 namespace sofa
 {
@@ -43,10 +45,12 @@ namespace sofa
                     virtual Quaternion getRotationQuat() const { return rotationQuat.getValue(); }
 
                     virtual bool hasPBDRigidBody() const;
-                    virtual const PBDRigidBodyGeometry& getRigidBodyGeometry() const;
 
-                    virtual const PBDRigidBody* getPBDRigidBody() const;
-                    virtual PBDRigidBody* getPBDRigidBody();
+                    virtual RigidBodyGeometry& getRigidBodyGeometry();
+                    virtual const RigidBodyGeometry& getRigidBodyGeometry() const;
+
+                    virtual const RigidBody* getPBDRigidBody() const;
+                    virtual RigidBody* getPBDRigidBody();
 
                     /// @}
                 protected:
@@ -59,7 +63,8 @@ namespace sofa
                     virtual void buildModel() = 0;
                     virtual void initializeModel() = 0;
 
-                    PBDRigidBody* m_pbdRigidBody;
+                    RigidBody* m_pbdRigidBody;
+                    SimulationModel* m_simulationModel;
 
             };
         }

@@ -44,7 +44,22 @@ void SofaIPDTimeStep::draw(const core::visual::VisualParams* vparams)
 
 }
 
-void SofaIPDTimeStep::step()
+void SofaIPDTimeStep::preStep()
+{
+
+}
+
+void SofaIPDTimeStep::doCollisionDetection(const sofa::core::ExecParams *params, SReal dt)
+{
+
+}
+
+void SofaIPDTimeStep::step(const core::ExecParams *params, SReal dt)
+{
+
+}
+
+void SofaIPDTimeStep::postStep()
 {
 
 }

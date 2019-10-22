@@ -1,7 +1,7 @@
 #ifndef DISTANCEFIELDCOLLISIONDETECTION_H
 #define DISTANCEFIELDCOLLISIONDETECTION_H
 
-#include "PBDCommon/PBDCommon.h"
+#include "Common/Common.h"
 #include "CollisionDetection.h"
 #include "Aabb.h"
 #include "BoundingSphereHierarchy.h"
@@ -146,23 +146,23 @@ namespace sofa
                 };
 
             protected:
-                void collisionDetectionRigidBodies(PBDRigidBody *rb1, DistanceFieldCollisionObject *co1, PBDRigidBody *rb2, DistanceFieldCollisionObject *co2,
+                void collisionDetectionRigidBodies(RigidBody *rb1, DistanceFieldCollisionObject *co1, RigidBody *rb2, DistanceFieldCollisionObject *co2,
                     const Real restitutionCoeff, const Real frictionCoeff
                     , std::vector<std::vector<ContactData> > &contacts_mt
                     );
-                void collisionDetectionRBSolid(const PBDParticleData &pd, const unsigned int offset, const unsigned int numVert,
-                    DistanceFieldCollisionObject *co1, PBDRigidBody *rb2, DistanceFieldCollisionObject *co2,
+                void collisionDetectionRBSolid(const ParticleData &pd, const unsigned int offset, const unsigned int numVert,
+                    DistanceFieldCollisionObject *co1, RigidBody *rb2, DistanceFieldCollisionObject *co2,
                     const Real restitutionCoeff, const Real frictionCoeff
                     , std::vector<std::vector<ContactData> > &contacts_mt
                     );
 
-                void collisionDetectionSolidSolid(const PBDParticleData &pd, const unsigned int offset, const unsigned int numVert,
-                    DistanceFieldCollisionObject *co1, PBDTetrahedronModel *tm2, DistanceFieldCollisionObject *co2,
+                void collisionDetectionSolidSolid(const ParticleData &pd, const unsigned int offset, const unsigned int numVert,
+                    DistanceFieldCollisionObject *co1, TetModel *tm2, DistanceFieldCollisionObject *co2,
                     const Real restitutionCoeff, const Real frictionCoeff
                     , std::vector<std::vector<ContactData> > &contacts_mt
                 );
 
-                bool findRefTetAt(const PBDParticleData &pd, PBDTetrahedronModel *tm, const DistanceFieldCollisionDetection::DistanceFieldCollisionObject *co, const Vector3r &X,
+                bool findRefTetAt(const ParticleData &pd, TetModel *tm, const DistanceFieldCollisionDetection::DistanceFieldCollisionObject *co, const Vector3r &X,
                     unsigned int &tetIndex, Vector3r &barycentricCoordinates);
 
 
@@ -170,7 +170,7 @@ namespace sofa
                 DistanceFieldCollisionDetection();
                 virtual ~DistanceFieldCollisionDetection();
 
-                virtual void collisionDetection(PBDSimulationModel &model);
+                virtual void collisionDetection(SimulationModel &model);
 
                 virtual bool isDistanceFieldCollisionObject(CollisionObject *co) const;
 

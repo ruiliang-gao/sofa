@@ -24,8 +24,8 @@ int TPBDLine<DataTypes>::i1() const
     if (this->model->usesPBDRigidBody() && !this->model->usesPBDLineModel())
     {
         msg_info("TPBDLine") << "Use SofaPBDRigidBody.";
-        const PBDRigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
-        const Utilities::PBDIndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
+        RigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
+        Utilities::IndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
 
         if (this->index < edges.size())
             return edges[this->index].m_vert[0];
@@ -36,7 +36,7 @@ int TPBDLine<DataTypes>::i1() const
     if (!this->model->usesPBDRigidBody() && this->model->usesPBDLineModel())
     {
         msg_info("TPBDLine") << "Use SofaPBDLineModel.";
-        PBDLineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
+        PBD::LineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
 
         if (this->index < lm_edges.size())
             return lm_edges[this->index].m_vert[0];
@@ -53,8 +53,8 @@ int TPBDLine<DataTypes>::i2() const
     if (this->model->usesPBDRigidBody() && !this->model->usesPBDLineModel())
     {
         msg_info("TPBDLine") << "Use SofaPBDRigidBody.";
-        const PBDRigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
-        const Utilities::PBDIndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
+        RigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
+        Utilities::IndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
 
         if (this->index < edges.size())
             return edges[this->index].m_vert[1];
@@ -65,7 +65,7 @@ int TPBDLine<DataTypes>::i2() const
     if (!this->model->usesPBDRigidBody() && this->model->usesPBDLineModel())
     {
         msg_info("TPBDLine") << "Use SofaPBDLineModel.";
-        PBDLineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
+        PBD::LineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
 
         if (this->index < lm_edges.size())
             return lm_edges[this->index].m_vert[1];
@@ -83,8 +83,8 @@ const typename DataTypes::Coord TPBDLine<DataTypes>::p1() const
 
     if (this->model->usesPBDRigidBody() && !this->model->usesPBDLineModel())
     {
-        const PBDRigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
-        const Utilities::PBDIndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
+        RigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
+        Utilities::IndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
 
         if (this->index < edges.size())
         {
@@ -101,12 +101,12 @@ const typename DataTypes::Coord TPBDLine<DataTypes>::p1() const
 
     if (!this->model->usesPBDRigidBody() && this->model->usesPBDLineModel())
     {
-        PBDLineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
+        PBD::LineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
 
         if (this->index < lm_edges.size())
         {
-            PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
-            const PBDParticleData &pd = model->getParticles();
+            SimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+            const ParticleData &pd = model->getParticles();
             if (lm_edges[this->index].m_vert[0] < this->model->getPBDLineModel()->getNumPoints())
             {
                 const Vector3r& pt = pd.getPosition(lm_edges[this->index].m_vert[0]);
@@ -129,8 +129,8 @@ const typename DataTypes::Coord TPBDLine<DataTypes>::p2() const
 
     if (this->model->usesPBDRigidBody() && !this->model->usesPBDLineModel())
     {
-        const PBDRigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
-        const Utilities::PBDIndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
+        RigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
+        Utilities::IndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
 
         if (this->index < edges.size())
         {
@@ -148,12 +148,12 @@ const typename DataTypes::Coord TPBDLine<DataTypes>::p2() const
 
     if (!this->model->usesPBDRigidBody() && this->model->usesPBDLineModel())
     {
-        PBDLineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
+        PBD::LineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
 
         if (this->index < lm_edges.size())
         {
-            PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
-            const PBDParticleData &pd = model->getParticles();
+            SimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+            const ParticleData &pd = model->getParticles();
             if (lm_edges[this->index].m_vert[1] < this->model->getPBDLineModel()->getNumPoints())
             {
                 const Vector3r& pt = pd.getPosition(lm_edges[this->index].m_vert[1]);
@@ -188,8 +188,8 @@ const typename DataTypes::Deriv TPBDLine<DataTypes>::v1() const
 
     if (this->model->usesPBDRigidBody() && !this->model->usesPBDLineModel())
     {
-        const PBDRigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
-        const Utilities::PBDIndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
+        RigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
+        Utilities::IndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
 
         if (this->index < edges.size())
         {
@@ -216,22 +216,22 @@ const typename DataTypes::Deriv TPBDLine<DataTypes>::v1() const
 
     if (!this->model->usesPBDRigidBody() && this->model->usesPBDLineModel())
     {
-        PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
-        const PBDParticleData &pd = model->getParticles();
+        SimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+        const ParticleData &pd = model->getParticles();
 
-        PBDLineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
+        PBD::LineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
         if (this->index > lm_edges.size())
             return zeroVec;
 
         if (this->index == lm_edges.size())
         {
-            const PBDLineModel::OrientedEdge& edge = lm_edges.back();
+            const PBD::LineModel::OrientedEdge& edge = lm_edges.back();
             const Vector3r& lpt = pd.getVelocity(edge.m_vert[0]);
             return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
         }
         else
         {
-            const PBDLineModel::OrientedEdge& edge = lm_edges[this->index];
+            const PBD::LineModel::OrientedEdge& edge = lm_edges[this->index];
             const Vector3r& lpt = pd.getVelocity(edge.m_vert[0]);
             return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
         }
@@ -247,8 +247,8 @@ const typename DataTypes::Deriv TPBDLine<DataTypes>::v2() const
 
     if (this->model->usesPBDRigidBody() && !this->model->usesPBDLineModel())
     {
-        const PBDRigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
-        const Utilities::PBDIndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
+        RigidBodyGeometry& pbdRBGeom = this->model->getPBDRigidBody()->getGeometry();
+        Utilities::IndexedFaceMesh::Edges& edges = pbdRBGeom.getMesh().getEdges();
 
         if (this->index < edges.size())
         {
@@ -275,22 +275,22 @@ const typename DataTypes::Deriv TPBDLine<DataTypes>::v2() const
 
     if (!this->model->usesPBDRigidBody() && this->model->usesPBDLineModel())
     {
-        PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
-        const PBDParticleData &pd = model->getParticles();
+        SimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+        const ParticleData &pd = model->getParticles();
 
-        PBDLineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
+        PBD::LineModel::Edges& lm_edges = this->model->getPBDLineModel()->getEdges();
         if (this->index > lm_edges.size())
             return zeroVec;
 
         if (this->index == lm_edges.size())
         {
-            const PBDLineModel::OrientedEdge& edge = lm_edges.back();
+            const PBD::LineModel::OrientedEdge& edge = lm_edges.back();
             const Vector3r& lpt = pd.getVelocity(edge.m_vert[0]);
             return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
         }
         else
         {
-            const PBDLineModel::OrientedEdge& edge = lm_edges[this->index];
+            const PBD::LineModel::OrientedEdge& edge = lm_edges[this->index];
             const Vector3r& lpt = pd.getVelocity(edge.m_vert[0]);
             return sofa::defaulttype::Vector3(lpt[0], lpt[1], lpt[2]);
         }

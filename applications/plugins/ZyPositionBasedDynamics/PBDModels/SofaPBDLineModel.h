@@ -1,7 +1,7 @@
 #ifndef SOFAPDBLINEMODEL_H
 #define SOFAPDBLINEMODEL_H
 
-#include "PBDLineModel.h"
+#include "LineModel.h"
 #include "SofaPBDModelBase.h"
 
 namespace sofa
@@ -25,7 +25,7 @@ namespace sofa
 
                     virtual void draw(const core::visual::VisualParams*) override;
 
-                    std::shared_ptr<PBDLineModel> getPBDLineModel() const;
+                    std::shared_ptr<LineModel> getPBDLineModel() const;
 
                 protected:
                     void buildModel();

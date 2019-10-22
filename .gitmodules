@@ -23,3 +23,12 @@
 [submodule "extlibs/fcl"]
 	path = extlibs/fcl
 	url = https://github.com/flexible-collision-library/fcl.git
+[submodule "extlibs/PositionBasedDynamics"]
+	path = extlibs/PositionBasedDynamics
+	url = https://github.com/InteractiveComputerGraphics/PositionBasedDynamics.git
+[submodule "extlibs/Discregrid"]
+	path = extlibs/Discregrid
+	url = https://github.com/InteractiveComputerGraphics/Discregrid.git
+[submodule "extlibs/GenericParameters"]
+	path = extlibs/GenericParameters
+	url = https://github.com/InteractiveComputerGraphics/GenericParameters.git

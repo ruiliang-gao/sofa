@@ -1,10 +1,10 @@
 #ifndef COLLISIONDETECTION_H
 #define COLLISIONDETECTION_H
 
-#include <PBDCommon/PBDCommon.h>
-#include <PBDCommon/IdFactory.h>
+#include <Common/Common.h>
+#include <IDFactory.h>
 
-#include <PBDModels/PBDSimulationModel.h>
+#include <SimulationModel.h>
 
 #include <vector>
 
@@ -16,7 +16,7 @@ namespace sofa
     {
         namespace PBDDistanceBasedCD
         {
-            using namespace sofa::simulation::PBDSimulation;
+            using namespace PBD;
 
             class CollisionDetection
             {
@@ -98,12 +98,12 @@ namespace sofa
 
                 std::vector<CollisionObject*> &getCollisionObjects() { return m_collisionObjects; }
 
-                virtual void collisionDetection(PBDSimulationModel &model) = 0;
+                virtual void collisionDetection(SimulationModel &model) = 0;
 
                 void setContactCallback(CollisionDetection::ContactCallbackFunction val, void *userData);
                 void setSolidContactCallback(CollisionDetection::SolidContactCallbackFunction val, void *userData);
-                void updateAABBs(PBDSimulationModel &model);
-                void updateAABB(PBDSimulationModel &model, CollisionDetection::CollisionObject *co);
+                void updateAABBs(SimulationModel &model);
+                void updateAABB(SimulationModel &model, CollisionDetection::CollisionObject *co);
             };
         }
     }
