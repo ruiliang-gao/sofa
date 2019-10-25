@@ -8,6 +8,7 @@ sofa_add_plugin(SofaSphFluid SofaSphFluid)
 sofa_add_plugin(SofaMiscCollision SofaMiscCollision ON) # Contains DefaultCollisionGroupManager
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/applications/plugins/BeamAdapter)
+    message(STATUS "Adding BeamAdapter depencencies: SofaDistanceGrid and SofaImplicitField")
     sofa_add_plugin(SofaDistanceGrid SofaDistanceGrid ON)
     sofa_add_plugin(SofaImplicitField SofaImplicitField ON)
 else()
@@ -91,7 +92,7 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/applications/plugins/PBDSofaPlugin)
     sofa_add_plugin(PBDSofaPlugin PBDSofaPlugin ON)
 endif()
 
-sofa_add_plugin(ZyPBDDistanceBasedCollisionDetection ZyPBDDistanceBasedCollisionDetection ON)
+# sofa_add_plugin(ZyPBDDistanceBasedCollisionDetection ZyPBDDistanceBasedCollisionDetection ON)
 sofa_add_plugin(ZyPositionBasedDynamics ZyPositionBasedDynamics ON)
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/applications/plugins/BeamAdapter)

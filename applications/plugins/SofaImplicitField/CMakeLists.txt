@@ -55,7 +55,12 @@ add_subdirectory(SofaImplicitField_test)
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${EXTRA_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_HAVE_SOFAIMPLICITFIELD")
-target_link_libraries(${PROJECT_NAME} PUBLIC SofaDistanceGrid)
+
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+        target_link_libraries(${PROJECT_NAME} PUBLIC SofaDistanceGrid_d)
+else()
+    target_link_libraries(${PROJECT_NAME} PUBLIC SofaDistanceGrid)
+endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<INSTALL_INTERFACE:include>")

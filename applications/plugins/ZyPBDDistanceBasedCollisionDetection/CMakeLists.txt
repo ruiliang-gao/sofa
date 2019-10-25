@@ -22,11 +22,13 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/applications/plugins/ZyPositionBasedDynamics)
 
-                include_directories(${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics
-                                    ${CMAKE_SOURCE_DIR}/extlibs/GenericParameters/GenericParameters
-                                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/PositionBasedDynamics
-                                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation
-                                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Utils)
+include_directories(${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics
+                    ${CMAKE_SOURCE_DIR}/extlibs/GenericParameters/GenericParameters
+                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics
+                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Common
+                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Utils
+                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/PositionBasedDynamics
+                    ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation)
 
 include_directories(${CMAKE_SOURCE_DIR}/SofaKernel
                     ${CMAKE_SOURCE_DIR}/SofaKernel/modules
@@ -34,20 +36,22 @@ include_directories(${CMAKE_SOURCE_DIR}/SofaKernel
                     ${EIGEN3_INCLUDE_DIR}/unsupported)
 
 set(HEADER_FILES initZyPBDDistanceBasedCollisionDetectionPlugin.h
-                 CollisionDetection.h
-                 Aabb.h
-                 BoundingSphere.h
-                 BoundingSphereHierarchy.h
-                 DistanceFieldCollisionDetection.h
-                 kdTree.h
-                 kdTree.inl
-                 MiniBall.h
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/CollisionDetection.h
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/Aabb.h
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/BoundingSphere.h
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/BoundingSphereHierarchy.h
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/DistanceFieldCollisionDetection.h
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/CubicSDFCollisionDetection.h
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/kdTree.h
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/kdTree.inl
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/extern/Miniball/MiniBall.h
                  )
 
 set(SOURCE_FILES initZyPBDDistanceBasedCollisionDetectionPlugin.cpp
-                 CollisionDetection.cpp
-                 BoundingSphereHierarchy.cpp
-                 DistanceFieldCollisionDetection.cpp
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/CollisionDetection.cpp
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/BoundingSphereHierarchy.cpp
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/DistanceFieldCollisionDetection.cpp
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/CubicSDFCollisionDetection.cpp
                  )
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
