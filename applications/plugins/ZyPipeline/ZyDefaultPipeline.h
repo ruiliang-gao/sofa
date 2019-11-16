@@ -46,6 +46,8 @@ namespace Zyklio
 				std::set< std::string > getResponseList() const;
 			
 			protected:
+                void filterCollisionModelsToProcess(const sofa::helper::vector<sofa::core::CollisionModel*>& collisionModels, sofa::helper::vector<sofa::core::CollisionModel*>& processedCollisionModels);
+
 				// -- Pipeline interface
 				/// Remove collision response from last step
 				void doCollisionReset();

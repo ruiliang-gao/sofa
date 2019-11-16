@@ -165,7 +165,7 @@ void SofaPBDSimulation::init()
 
 void SofaPBDSimulation::initParameters()
 {
-    msg_info("PBDSimulation") << "initParameters()";
+    msg_info("SofaPBDSimulation") << "initParameters()";
     GRAVITATION.setGroup("Simulation");
     GRAVITATION.setValue(sofa::defaulttype::Vec3d(0, -9.81, 0));
 
@@ -201,7 +201,38 @@ void SofaPBDSimulation::bwdInit()
     bool convGeoResult = m_geometryConverter->convertToPBDObjects();
     bool convMechObjResult = m_mechObjConverter->convertToPBDObjects();
 
+}
     msg_info("PBDSimulation") << "Converted geometries OK: " << convGeoResult << ", converted MechanicalObjects OK: " << convMechObjResult;*/
+
+    SimulationModel::RigidBodyVector &rb = this->m_model->getRigidBodies();
+    ParticleData& pd = this->m_model->getParticles();
+    OrientationData& od = this->m_model->getOrientations();
+    msg_info("SofaPBDSimulation") << "================== Simulation bwdInit ==================";
+    msg_info("SofaPBDSimulation") << "Retrieved data arrays from model: rigidBodies = " << rb.size() << ", particles = " << pd.size() << ", particle orientations = " << od.size();
+
+    const size_t numBodies = rb.size();
+    for (size_t i = 0; i < numBodies; i++)
+    {
+        msg_info("SofaPBDSimulation") << "Rigid body " << i << " current position = " << rb[i]->getPosition()[0] << ", " << rb[i]->getPosition()[1] << ", " << rb[i]->getPosition()[2] << ")";
+        msg_info("SofaPBDSimulation") << "Rigid body " << i << " current velocity = " << rb[i]->getVelocity()[0] << ", " << rb[i]->getVelocity()[1] << ", " << rb[i]->getVelocity()[2] << ")";
+        msg_info("SofaPBDSimulation") << "Rigid body " << i << " current acceler. = " << rb[i]->getAcceleration()[0] << ", " << rb[i]->getAcceleration()[1] << ", " << rb[i]->getAcceleration()[2] << ")";
+    }
+
+    const size_t numParticles = pd.size();
+    for (size_t i = 0; i < numParticles; i++)
+    {
+        msg_info("SofaPBDSimulation") << "Particle " << i << " current position = (" << pd.getPosition(i)[0] << ", " << pd.getPosition(i)[1] << ", " << pd.getPosition(i)[2] << ")";
+        msg_info("SofaPBDSimulation") << "Particle " << i << " current velocity = (" << pd.getVelocity(i)[0] << ", " << pd.getVelocity(i)[1] << ", " << pd.getVelocity(i)[2] << ")";
+        msg_info("SofaPBDSimulation") << "Particle " << i << " current acceler. = (" << pd.getAcceleration(i)[0] << ", " << pd.getAcceleration(i)[1] << ", " << pd.getAcceleration(i)[2] << ")";
+    }
+
+    for (size_t i = 0; i < numParticles; i++)
+    {
+        msg_info("SofaPBDSimulation") << "Particle " << i << " current quaternion = (" << od.getQuaternion(i).x() << ", " << od.getQuaternion(i).y() << ", " << od.getQuaternion(i).z() << ", " << od.getQuaternion(i).w() << ")";
+        msg_info("SofaPBDSimulation") << "Particle " << i << " current rot. vel.  = (" << od.getVelocity(i)[0] << ", " << od.getVelocity(i)[1] << ", " << od.getVelocity(i)[2] << ")";
+        msg_info("SofaPBDSimulation") << "Particle " << i << " current rot. acc.  = (" << od.getAcceleration(i)[0] << ", " << od.getAcceleration(i)[1] << ", " << od.getAcceleration(i)[2] << ")";
+    }
+    msg_info("SofaPBDSimulation") << "================== Simulation bwdInit ==================";
 }
 
 void SofaPBDSimulation::cleanup()

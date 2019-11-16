@@ -27,9 +27,9 @@ namespace sofa
 					virtual void reset();
 
 					/// get the set of response available with the current collision pipeline
-					virtual std::set< std::string > getResponseList() const;
+                    virtual std::set<std::string> getResponseList() const;
 
-                    virtual void doCollisionDetection(const sofa::helper::vector<core::CollisionModel*>&) {}
+                    virtual void doCollisionDetection(const sofa::helper::vector<core::CollisionModel*>&);
                     virtual void doCollisionResponse() {}
                     virtual void doCollisionReset() {}
 
@@ -43,6 +43,46 @@ namespace sofa
 
 				protected:
 					bool m_doInit;
+
+                    // Hooks for derived classes to process specific stages of collision detection/collision model types separately.
+                    virtual void filterCollisionModelsToProcess(const sofa::helper::vector<core::CollisionModel*>& collisionModels, sofa::helper::vector<core::CollisionModel*>& processedCollisionModels);
+
+                    virtual bool doBVHUpdates() { return true; }
+                    virtual bool preBroadPhase(const sofa::helper::vector<core::CollisionModel*>& collisionModels)
+                    {
+                        SOFA_UNUSED(collisionModels);
+                        return true;
+                    }
+
+                    virtual bool doBroadPhase(const sofa::helper::vector<core::CollisionModel*>& collisionModels)
+                    {
+                        SOFA_UNUSED(collisionModels);
+                        return true;
+                    }
+
+                    virtual bool postBroadPhase(const sofa::helper::vector<core::CollisionModel*>& collisionModels)
+                    {
+                        SOFA_UNUSED(collisionModels);
+                        return true;
+                    }
+
+                    virtual bool preNarrowPhase(const sofa::helper::vector<core::CollisionModel*>& collisionModels)
+                    {
+                        SOFA_UNUSED(collisionModels);
+                        return true;
+                    }
+
+                    virtual bool doNarrowPhase(const sofa::helper::vector<core::CollisionModel*>& collisionModels)
+                    {
+                        SOFA_UNUSED(collisionModels);
+                        return true;
+                    }
+
+                    virtual bool postNarrowPhase(const sofa::helper::vector<core::CollisionModel*>& collisionModels)
+                    {
+                        SOFA_UNUSED(collisionModels);
+                        return true;
+                    }
 			};
 		}
 	}

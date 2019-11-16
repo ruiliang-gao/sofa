@@ -181,6 +181,11 @@ ZySingleThreadedCollisionPipeline::~ZySingleThreadedCollisionPipeline()
     }
 }
 
+void  ZySingleThreadedCollisionPipeline::filterCollisionModelsToProcess(const sofa::helper::vector<core::CollisionModel*>& collisionModels, sofa::helper::vector<core::CollisionModel*>& processedCollisionModels)
+{
+
+}
+
 void ZySingleThreadedCollisionPipeline::init()
 {
     if (!m_doInit)

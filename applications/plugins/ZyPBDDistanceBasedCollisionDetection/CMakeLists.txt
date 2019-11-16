@@ -24,6 +24,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 include_directories(${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics
                     ${CMAKE_SOURCE_DIR}/extlibs/GenericParameters/GenericParameters
+                    ${CMAKE_SOURCE_DIR}/extlibs/Discregrid/discregrid/include
                     ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics
                     ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Common
                     ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Utils
@@ -37,7 +38,7 @@ include_directories(${CMAKE_SOURCE_DIR}/SofaKernel
 
 set(HEADER_FILES initZyPBDDistanceBasedCollisionDetectionPlugin.h
                  ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/CollisionDetection.h
-                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/Aabb.h
+                 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/AABB.h
                  ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/BoundingSphere.h
                  ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/BoundingSphereHierarchy.h
                  ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/DistanceFieldCollisionDetection.h

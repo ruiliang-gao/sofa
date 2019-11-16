@@ -27,7 +27,8 @@ find_package(Eigen3 REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/PBDCommon
                     ${CMAKE_CURRENT_SOURCE_DIR}/PBDSimulation
-                    ${CMAKE_SOURCE_DIR}/applications/plugins/ZyPBDDistanceBasedCollisionDetection)
+                    # ${CMAKE_SOURCE_DIR}/applications/plugins/ZyPBDDistanceBasedCollisionDetection
+                    )
 
 include_directories(${CMAKE_SOURCE_DIR}/SofaKernel
                     ${CMAKE_SOURCE_DIR}/SofaKernel/modules
@@ -228,14 +229,11 @@ set(HEADER_FILES initZyPositionBasedDynamicsPlugin.h
                  PBDMain/SofaIPDTimeStep.h
                  PBDMain/SofaPBDSimulation.h
 
-#                 PBDModels/SofaPBDModelBase.h
-#                 PBDModels/SofaPBDLineModel.h
-#                 PBDModels/SofaPBDRigidBodyModel.h
-#                 PBDModels/SofaPBDTriangleMeshModel.h
-#                 PBDModels/SofaPBDTetrahedronMeshModel.h
-
-#                 PBDIntegration/GeometryAdapterBase.h
-#                 PBDIntegration/MechanicalObjectAdapterBase.h
+                 PBDModels/SofaPBDModelBase.h
+                 PBDModels/SofaPBDLineModel.h
+                 PBDModels/SofaPBDRigidBodyModel.h
+                 PBDModels/SofaPBDTriangleMeshModel.h
+                 PBDModels/SofaPBDTetrahedronMeshModel.h
 
                  PBDIntegration/SofaPBDPipeline.h
                  PBDIntegration/SofaPBDCollisionVisitor.h
@@ -264,14 +262,11 @@ set(SOURCE_FILES initZyPositionBasedDynamicsPlugin.cpp
                  PBDMain/SofaPBDTimeStep.cpp
                  PBDMain/SofaPBDSimulation.cpp
 
-#                 PBDModels/SofaPBDModelBase.cpp
-#                 PBDModels/SofaPBDLineModel.cpp
-#                 PBDModels/SofaPBDRigidBodyModel.cpp
-#                 PBDModels/SofaPBDTriangleMeshModel.cpp
-#                 PBDModels/SofaPBDTetrahedronMeshModel.cpp
-
-#                 PBDIntegration/GeometryAdapterBase.cpp
-#                 PBDIntegration/MechanicalObjectAdapterBase.cpp
+                 PBDModels/SofaPBDModelBase.cpp
+                 PBDModels/SofaPBDLineModel.cpp
+                 PBDModels/SofaPBDRigidBodyModel.cpp
+                 PBDModels/SofaPBDTriangleMeshModel.cpp
+                 PBDModels/SofaPBDTetrahedronMeshModel.cpp
 
                  PBDIntegration/SofaPBDPipeline.cpp
                  PBDIntegration/SofaPBDCollisionVisitor.cpp
@@ -303,11 +298,14 @@ set(SOURCE_FILES initZyPositionBasedDynamicsPlugin.cpp
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 # target_link_libraries(${PROJECT_NAME} PUBLIC SofaCore PUBLIC SofaSimulationCore PUBLIC SofaBaseMechanics PUBLIC SofaBaseCollision PUBLIC ${PROJECT_NAME}_CommonUtils PUBLIC ${PROJECT_NAME}_Models PUBLIC ${PROJECT_NAME}_Constraints PUBLIC ${PROJECT_NAME}_Dynamics PUBLIC ${PROJECT_NAME}_Simulation PUBLIC ZyPBDDistanceBasedCollisionDetection)
-target_link_libraries(${PROJECT_NAME} PUBLIC SofaCore PUBLIC SofaSimulationCore PUBLIC SofaBaseMechanics PUBLIC SofaBaseCollision PUBLIC ZyPBDDistanceBasedCollisionDetection)
+target_link_libraries(${PROJECT_NAME} PUBLIC SofaCore PUBLIC SofaSimulationCore PUBLIC SofaBaseMechanics PUBLIC SofaBaseCollision)
 if (ZyPipeline_FOUND)
     message(STATUS "Found ZyPipeline package.")
     target_link_libraries(${PROJECT_NAME} PUBLIC ZyPipeline)
 endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC Discregrid)
+target_link_libraries(${PROJECT_NAME} PUBLIC Utils PUBLIC Simulation PUBLIC PositionBasedDynamics)
 
 if (SOFA_BUILD_IMPULSE_BASED_DYNAMICS)
     target_link_libraries(${PROJECT_NAME} PRIVATE ${IPD_SIMULATOR_LIBRARY_NAME} PRIVATE ${IPD_DYNAMICS_LIBRARY_NAME})

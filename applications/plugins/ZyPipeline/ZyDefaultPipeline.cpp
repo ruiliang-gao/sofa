@@ -89,6 +89,11 @@ void ZyDefaultPipeline::bwdInit()
 	}
 }
 
+void ZyDefaultPipeline::filterCollisionModelsToProcess(const sofa::helper::vector<sofa::core::CollisionModel*>& collisionModels, sofa::helper::vector<sofa::core::CollisionModel*>& processedCollisionModels)
+{
+
+}
+
 void ZyDefaultPipeline::computeCollisionReset()
 {
     msg_info("ZyDefaultPipeline") << "computeCollisionReset()";
@@ -102,7 +107,7 @@ void ZyDefaultPipeline::computeCollisionReset()
 	}
 	else if (m_operationMode == PIPELINE_MODE_MULTI_THREADED_TASKS)
 	{
-        m_zyPipelines[0]->computeCollisionReset();
+            m_zyPipelines[0]->computeCollisionReset();
 	}
 }
 

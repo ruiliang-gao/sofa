@@ -29,5 +29,3 @@ include_directories(${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Utils)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extlibs/position-based-dynamics/PositionBasedDynamics ${CMAKE_BINARY_DIR}/extlibs/PositionBasedDynamics/PositionBasedDynamics)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extlibs/position-based-dynamics/Simulation ${CMAKE_BINARY_DIR}/extlibs/PositionBasedDynamics/Simulation)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extlibs/position-based-dynamics/Utils ${CMAKE_BINARY_DIR}/extlibs/PositionBasedDynamics/Utils)
-
-# sofa_generate_package(${PROJECT_NAME} ${POSITION_BASED_DYNAMICS_VERSION} ${PROJECT_NAME} ${PROJECT_NAME})

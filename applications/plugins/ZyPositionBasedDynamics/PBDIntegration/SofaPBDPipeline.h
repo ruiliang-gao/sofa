@@ -2,6 +2,7 @@
 #define SOFAPBDPIPELINE_H
 
 #include <sofa/core/objectmodel/Data.h>
+#include <sofa/core/objectmodel/Tag.h>
 #include <ZyPipelineInterface.h>
 
 #include "initZyPositionBasedDynamicsPlugin.h"
@@ -35,6 +36,9 @@ namespace sofa
             using namespace sofa::core::objectmodel;
             using namespace sofa::core::collision;
 
+            static sofa::core::objectmodel::Tag tagPBDCollisionPipeline = sofa::core::objectmodel::Tag("SofaPBDPipeline");
+
+
             class SOFA_ZY_POSITION_BASED_DYNAMICS_PLUGIN_API SofaPBDPipeline: public sofa::core::collision::ZyPipelineInterface
             {
                 public:
@@ -51,6 +55,11 @@ namespace sofa
 
                     bool isDefaultPipeline() const { return false; }
 
+                    void increaseExternalCallCount();
+                    void resetExternalCallCount();
+                    unsigned int getExternalCallCount() const;
+                    unsigned int getInternalCallCount() const;
+
                 protected:
                     Intersection* pipelineIntersectionMethod;
                     BroadPhaseDetection* pipelineBroadPhaseDetection;
@@ -60,6 +69,9 @@ namespace sofa
                     CollisionGroupManager* pipelineGroupManager;
 
                     Data<int> depth;
+
+                    unsigned int m_callCountExternal;
+                    unsigned int m_callCountInternal;
             };
         }
     }

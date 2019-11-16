@@ -1,3 +1,7 @@
+set(PBD_UTILS_LIBRARY_MAJOR_VERSION 0)
+set(PBD_UTILS_LIBRARY_MINOR_VERSION 1)
+set(PBD_UTILS_LIBRARY_VERSION ${PBD_UTILS_LIBRARY_MAJOR_VERSION}.${PBD_UTILS_LIBRARY_MINOR_VERSION})
+
 include(GetGitRevisionDescription)
 get_git_head_revision(GIT_REFSPEC GIT_SHA1)
 git_local_changes(GIT_LOCAL_CHANGES)
@@ -6,7 +10,7 @@ if (${GIT_LOCAL_CHANGES} STREQUAL "DIRTY")
 endif()
 configure_file("${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Utils/Version.h.in" "${CMAKE_BINARY_DIR}/extlibs/PositionBasedDynamics/Utils/Version.h" @ONLY)
 
-add_library(Utils
+add_library(Utils SHARED
 	${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Utils/FileSystem.h
 	${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Utils/Hashmap.h
 	${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Utils/IndexedFaceMesh.cpp
@@ -46,3 +50,5 @@ install(TARGETS Utils
 install(DIRECTORY .
 DESTINATION include/Utils
 FILES_MATCHING PATTERN "*.h")
+
+sofa_create_package("Utils" ${PBD_UTILS_LIBRARY_VERSION} "Utils" "Utils")

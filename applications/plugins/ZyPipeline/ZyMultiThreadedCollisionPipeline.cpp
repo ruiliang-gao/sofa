@@ -155,6 +155,11 @@ void ZyMultiThreadedCollisionPipeline::setup(BroadPhaseDetection* broadPhaseDete
     this->groupManager = groupManager;
 }
 
+void ZyMultiThreadedCollisionPipeline::filterCollisionModelsToProcess(const sofa::helper::vector<core::CollisionModel*>& collisionModels, sofa::helper::vector<core::CollisionModel*>& processedCollisionModels)
+{
+
+}
+
 // This is the same as in DefaultPipeline, except for the parallelized update of CubeModel instances.
 // TODO: Find a better way to encapsulate this, instead of copy/paste from the super class?
 void ZyMultiThreadedCollisionPipeline::doCollisionDetection(const sofa::helper::vector<core::CollisionModel*>& collisionModels)

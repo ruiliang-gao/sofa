@@ -84,6 +84,8 @@ namespace Zyklio
                 bool isDefaultPipeline() const { return true; }
 
             protected:
+                void filterCollisionModelsToProcess(const sofa::helper::vector<core::CollisionModel*>& collisionModels, sofa::helper::vector<core::CollisionModel*>& processedCollisionModels);
+
                 ZySingleThreadedCollisionPipelineImpl* m_pipelineImpl;
 
                 Intersection* pipelineIntersectionMethod;

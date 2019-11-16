@@ -571,12 +571,15 @@ function(sofa_generate_package)
         set(include_install_dir "${_INCLUDE_ROOT_DIR}")
         message(WARNING "sofa_generate_package(${_NAME}): INCLUDE_ROOT_DIR is deprecated. Please use INCLUDE_INSTALL_DIR instead.")
     endif()
+
+    message(STATUS "sofa_install_targets(${_NAME} ${_TARGETS} ${include_install_dir} ${_INCLUDE_SOURCE_DIR})")
     sofa_install_targets("${_NAME}" "${_TARGETS}" "${include_install_dir}" "${_INCLUDE_SOURCE_DIR}")
     sofa_write_package_config_files("${_NAME}" "${_VERSION}")
 endfunction()
 
 macro(sofa_create_package package_name version the_targets include_install_dir)
     message(WARNING "Deprecated macro. Use the keyword argument function 'sofa_generate_package' instead")
+    message(STATUS "sofa_create_package(${package_name} ${version} ${the_targets} ${include_install_dir})")
     # ARGV4 is a non-breaking additional argument to handle INCLUDE_SOURCE_DIR (see sofa_generate_package)
     # TODO: add a real argument "include_source_dir" to this macro
     sofa_generate_package(NAME "${package_name}" VERSION "${version}" TARGETS "${the_targets}" INCLUDE_INSTALL_DIR "${include_install_dir}" INCLUDE_SOURCE_DIR "${ARGV4}")

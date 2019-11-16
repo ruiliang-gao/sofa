@@ -53,30 +53,56 @@ PipelineImpl::~PipelineImpl()
 
 void PipelineImpl::init()
 {
+    msg_info("PipelineImpl") << "---------------------------------------------------------------------------";
+    msg_info("PipelineImpl") << "init()";
     simulation::Node* root = dynamic_cast<simulation::Node*>(getContext());
-    if(root == NULL) return;
+    if (root == NULL)
+    {
+        msg_info("PipelineImpl") << "Failed to convert getContext() to sofa::simulation::Node*, trying current simulation root node.";
+        root = sofa::simulation::getSimulation()->getCurrentRootNode().get();
+        if (root == NULL)
+        {
+            msg_warning("PipelineImpl") << "Failed to retrieve current simulation root node, PipelineImpl init() failed!";
+            return;
+        }
+    }
 
     intersectionMethods.clear();
     root->getTreeObjects<Intersection>(&intersectionMethods);
+
+    msg_info("PipelineImpl") << "Intersection instances found in scene: " << intersectionMethods.size();
+
     intersectionMethod = (intersectionMethods.empty() ? NULL : intersectionMethods[0]);
 
     broadPhaseDetections.clear();
     root->getTreeObjects<BroadPhaseDetection>(&broadPhaseDetections);
+
+    msg_info("PipelineImpl") << "BroadPhaseDetection instances found in scene: " << broadPhaseDetections.size();
+
     broadPhaseDetection = (broadPhaseDetections.empty() ? NULL : broadPhaseDetections[0]);
 
     narrowPhaseDetections.clear();
     root->getTreeObjects<NarrowPhaseDetection>(&narrowPhaseDetections);
+
+    msg_info("PipelineImpl") << "NarrowPhaseDetection instances found in scene: " << narrowPhaseDetections.size();
+
     narrowPhaseDetection = (narrowPhaseDetections.empty() ? NULL : narrowPhaseDetections[0]);
 
     contactManagers.clear();
     root->getTreeObjects<ContactManager>(&contactManagers);
+
+    msg_info("PipelineImpl") << "ContactManager instances found in scene: " << contactManagers.size();
+
     contactManager = (contactManagers.empty() ? NULL : contactManagers[0]);
 
     groupManagers.clear();
     root->getTreeObjects<CollisionGroupManager>(&groupManagers);
+
+    msg_info("PipelineImpl") << "CollisionGroupManager instances found in scene: " << groupManagers.size();
+
     groupManager = (groupManagers.empty() ? NULL : groupManagers[0]);
 
-    if (intersectionMethod==NULL)
+    if (intersectionMethod == NULL)
     {
         msg_warning(this) <<"no intersection component defined. Switching to the DiscreteIntersection component. " << msgendl
                             "To remove this warning, you can add an intersection component to your scene. " << msgendl
@@ -86,6 +112,7 @@ void PipelineImpl::init()
         sofa::core::objectmodel::BaseObject::SPtr obj = sofa::core::ObjectFactory::CreateObject(getContext(), &discreteIntersectionDesc);
         intersectionMethod = dynamic_cast<Intersection*>(obj.get());
     }
+    msg_info("PipelineImpl") << "---------------------------------------------------------------------------";
 }
 
 void PipelineImpl::reset()

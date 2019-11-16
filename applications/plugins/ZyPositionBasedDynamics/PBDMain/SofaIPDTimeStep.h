@@ -32,12 +32,14 @@ namespace sofa
 
                     virtual void draw(const core::visual::VisualParams*);
 
-                    virtual void preStep();
                     virtual void step(const sofa::core::ExecParams* params, SReal dt);
-                    virtual void postStep();
 
                 protected:
                     std::shared_ptr<IPS::Simulator> m_simulator;
+
+                    virtual void preStep();
+                    virtual void doCollisionDetection(const sofa::core::ExecParams* params, SReal dt);
+                    virtual void postStep();
             };
         }
     }

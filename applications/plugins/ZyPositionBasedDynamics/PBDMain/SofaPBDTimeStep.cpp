@@ -23,6 +23,7 @@
 
 #include <PBDIntegration/SofaPBDCollisionVisitor.h>
 #include <PBDIntegration/SofaPBDCollisionDetectionOutput.h>
+#include <PBDIntegration/SofaPBDPipeline.h>
 
 using namespace sofa::defaulttype;
 using namespace sofa::simulation::PBDSimulation;
@@ -231,19 +232,30 @@ void SofaPBDTimeStep::preStep()
 
     msg_info("SofaPBDTimeStep") << "Time step: " << h;
 
+    SimulationModel::RigidBodyVector &rb = model->getRigidBodies();
+    ParticleData &pd = model->getParticles();
+    OrientationData &od = model->getOrientations();
+
+    msg_info("SofaPBDTimeStep") << "================== PBD preStep (before acc. reset) ==================";
+    msg_info("SofaPBDTimeStep") << "Retrieved data arrays from model: rigidBodies = " << rb.size() << ", particles = " << pd.size() << ", particle orientations = " << od.size();
+
+    const int numBodies = (int) rb.size();
+    const int numParticles = (int) pd.size();
+
+    for (size_t i = 0; i < numBodies; i++)
+    {
+        // msg_info("SofaPBDTimeStep") << "Rigid body " << k << ": position = (" << rb[k]->getPosition()[0] << ", " << rb[k]->getPosition()[1] << ", " << rb[k]->getPosition()[2] << "), orientation = (" << rb[k]->getRotation().x() << ", " << rb[k]->getRotation().y() << ", " << rb[k]->getRotation().z() << ", " << rb[k]->getRotation().w() << ")";
+        msg_info("SofaPBDTimeStep") << "Rigid body " << i << " current position = " << rb[i]->getPosition()[0] << ", " << rb[i]->getPosition()[1] << ", " << rb[i]->getPosition()[2] << ")";
+        msg_info("SofaPBDTimeStep") << "Rigid body " << i << " current velocity = " << rb[i]->getVelocity()[0] << ", " << rb[i]->getVelocity()[1] << ", " << rb[i]->getVelocity()[2] << ")";
+        msg_info("SofaPBDTimeStep") << "Rigid body " << i << " current acceler. = " << rb[i]->getAcceleration()[0] << ", " << rb[i]->getAcceleration()[1] << ", " << rb[i]->getAcceleration()[2] << ")";
+    }
+    msg_info("SofaPBDTimeStep") << "================== PBD preStep (before acc. reset) ==================";
+
     //////////////////////////////////////////////////////////////////////////
     // rigid body models
     //////////////////////////////////////////////////////////////////////////
     msg_info("SofaPBDTimeStep") << "Clearing accelerations.";
     clearAccelerations(*model);
-    SimulationModel::RigidBodyVector &rb = model->getRigidBodies();
-    ParticleData &pd = model->getParticles();
-    OrientationData &od = model->getOrientations();
-
-    msg_info("SofaPBDTimeStep") << "Retrieved data arrays from model: rigidBodies = " << rb.size() << ", particles = " << pd.size() << ", particle orientations = " << od.size();
-
-    const int numBodies = (int) rb.size();
-    const int numParticles = (int) pd.size();
 
     #pragma omp parallel if(numBodies > MIN_PARALLEL_SIZE) default(shared)
     {
@@ -252,9 +264,20 @@ void SofaPBDTimeStep::preStep()
         #pragma omp for schedule(static) nowait
         for (int i = 0; i < numBodies; i++)
         {
+            msg_info("SofaPBDTimeStep") << "Rigid body " << i << " old position = " << rb[i]->getOldPosition()[0] << ", " << rb[i]->getOldPosition()[1] << ", " << rb[i]->getOldPosition()[2] << ")";
             rb[i]->getLastPosition() = rb[i]->getOldPosition();
+
+            msg_info("SofaPBDTimeStep") << "Rigid body " << i << " current position = " << rb[i]->getPosition()[0] << ", " << rb[i]->getPosition()[1] << ", " << rb[i]->getPosition()[2] << ")";
+            msg_info("SofaPBDTimeStep") << "Rigid body " << i << " current velocity = " << rb[i]->getVelocity()[0] << ", " << rb[i]->getVelocity()[1] << ", " << rb[i]->getVelocity()[2] << ")";
+            msg_info("SofaPBDTimeStep") << "Rigid body " << i << " current acceler. = " << rb[i]->getAcceleration()[0] << ", " << rb[i]->getAcceleration()[1] << ", " << rb[i]->getAcceleration()[2] << ")";
+
             rb[i]->getOldPosition() = rb[i]->getPosition();
             TimeIntegration::semiImplicitEuler(h, rb[i]->getMass(), rb[i]->getPosition(), rb[i]->getVelocity(), rb[i]->getAcceleration());
+
+            msg_info("SofaPBDTimeStep") << "Rigid body " << i << " position after semiImplicitEuler = " << rb[i]->getPosition()[0] << ", " << rb[i]->getPosition()[1] << ", " << rb[i]->getPosition()[2] << ")";
+            msg_info("SofaPBDTimeStep") << "Rigid body " << i << " velocity after semiImplicitEuler = " << rb[i]->getVelocity()[0] << ", " << rb[i]->getVelocity()[1] << ", " << rb[i]->getVelocity()[2] << ")";
+            msg_info("SofaPBDTimeStep") << "Rigid body " << i << " acceler. after semiImplicitEuler = " << rb[i]->getAcceleration()[0] << ", " << rb[i]->getAcceleration()[1] << ", " << rb[i]->getAcceleration()[2] << ")";
+
             rb[i]->getLastRotation() = rb[i]->getOldRotation();
             rb[i]->getOldRotation() = rb[i]->getRotation();
             TimeIntegration::semiImplicitEulerRotation(h, rb[i]->getMass(), rb[i]->getInertiaTensorInverseW(), rb[i]->getRotation(), rb[i]->getAngularVelocity(), rb[i]->getTorque());
@@ -294,6 +317,15 @@ void SofaPBDTimeStep::preStep()
             TimeIntegration::semiImplicitEulerRotation(h, od.getMass(i), od.getInvMass(i) * Matrix3r::Identity() ,od.getQuaternion(i), od.getVelocity(i), Vector3r(0,0,0));
         }
     }
+
+    msg_info("SofaPBDTimeStep") << "================== PBD preStep (before positionConstraintProjection) ==================";
+    msg_info("SofaPBDTimeStep") << "Retrieved data arrays from model: rigidBodies = " << rb.size() << ", particles = " << pd.size() << ", particle orientations = " << od.size();
+
+    for (size_t k = 0; k < numBodies; k++)
+    {
+        msg_info("SofaPBDTimeStep") << "Rigid body " << k << ": position = (" << rb[k]->getPosition()[0] << ", " << rb[k]->getPosition()[1] << ", " << rb[k]->getPosition()[2] << "), orientation = (" << rb[k]->getRotation().x() << ", " << rb[k]->getRotation().y() << ", " << rb[k]->getRotation().z() << ", " << rb[k]->getRotation().w() << ")";
+    }
+    msg_info("SofaPBDTimeStep") << "================== PBD preStep (before positionConstraintProjection) ==================";
 
     // START_TIMING("position constraints projection");
     msg_info("SofaPBDTimeStep") << "Calling positionConstraintProjection()";
@@ -366,6 +398,15 @@ void SofaPBDTimeStep::preStep()
             else
                 TimeIntegration::angularVelocityUpdateSecondOrder(h, od.getMass(i), od.getQuaternion(i), od.getOldQuaternion(i), od.getLastQuaternion(i), od.getVelocity(i));
         }
+
+        msg_info("SofaPBDTimeStep") << "================== PBD preStep (after velocity updates) ==================";
+        msg_info("SofaPBDTimeStep") << "Retrieved data arrays from model: rigidBodies = " << rb.size() << ", particles = " << pd.size() << ", particle orientations = " << od.size();
+
+        for (size_t k = 0; k < numBodies; k++)
+        {
+            msg_info("SofaPBDTimeStep") << "Rigid body " << k << ": position = (" << rb[k]->getPosition()[0] << ", " << rb[k]->getPosition()[1] << ", " << rb[k]->getPosition()[2] << "), orientation = (" << rb[k]->getRotation().x() << ", " << rb[k]->getRotation().y() << ", " << rb[k]->getRotation().z() << ", " << rb[k]->getRotation().w() << ")";
+        }
+        msg_info("SofaPBDTimeStep") << "================== PBD preStep (after velocity updates) ==================";
     }
 }
 
@@ -385,13 +426,17 @@ void SofaPBDTimeStep::doCollisionDetection(const ExecParams *params, SReal dt)
             {
                 msg_info("SofaPBDAnimationLoop") << "Using collision pipeline instance from simulation root node: " << m_collisionPipeline->getName();
                 SofaPBDCollisionVisitor pbd_col_visitor(m_collisionPipeline, params, dt);
+                msg_info("SofaPBDAnimationLoop") << "SofaPBDCollisionVisitor instantiated, calling gnode->execute()";
                 gnode->execute(pbd_col_visitor);
+                msg_info("SofaPBDAnimationLoop") << "SofaPBDCollisionVisitor pass done.";
             }
             else
             {
                 msg_info("SofaPBDAnimationLoop") << "Using locally instantiated collision pipeline object: " << m_collisionPipelineLocal->getName();
                 SofaPBDCollisionVisitor pbd_col_visitor(m_collisionPipelineLocal.get(), params, dt);
+                msg_info("SofaPBDAnimationLoop") << "SofaPBDCollisionVisitor instantiated, calling gnode->execute()";
                 gnode->execute(pbd_col_visitor);
+                msg_info("SofaPBDAnimationLoop") << "SofaPBDCollisionVisitor pass done.";
             }
 
             sofa::helper::AdvancedTimer::stepEnd("SofaPBDCollisionVisitor");
@@ -477,6 +522,26 @@ void SofaPBDTimeStep::doCollisionDetection(const ExecParams *params, SReal dt)
                     }
                 }
             }
+
+            msg_info("SofaPBDTimeStep") << "==============================================================";
+            if (dynamic_cast<SofaPBDPipeline*>(this->m_collisionPipeline))
+            {
+                SofaPBDPipeline* sofaPBDPipeline = dynamic_cast<SofaPBDPipeline*>(this->m_collisionPipeline);
+                msg_info("SofaPBDTimeStep") << "SofaPBDPipeline (m_collisionPipeline) calls in this iteration: External = " << sofaPBDPipeline->getExternalCallCount() << ", internal = " << sofaPBDPipeline->getInternalCallCount();
+                sofaPBDPipeline->resetExternalCallCount();
+            }
+
+            if (dynamic_cast<SofaPBDPipeline*>(this->m_collisionPipelineLocal.get()))
+            {
+                SofaPBDPipeline* sofaPBDPipeline = dynamic_cast<SofaPBDPipeline*>(this->m_collisionPipelineLocal.get());
+                msg_info("SofaPBDTimeStep") << "SofaPBDPipeline (m_collisionPipelineLocal) calls in this iteration: External = " << sofaPBDPipeline->getExternalCallCount() << ", internal = " << sofaPBDPipeline->getInternalCallCount();
+                sofaPBDPipeline->resetExternalCallCount();
+            }
+            msg_info("SofaPBDTimeStep") << "==============================================================";
+        }
+        else
+        {
+            msg_warning("SofaPBDTimeStep") << "No SOFAPBDBruteForceDetection instance found, collision detection is non-functional!";
         }
     }
     else
@@ -484,6 +549,7 @@ void SofaPBDTimeStep::doCollisionDetection(const ExecParams *params, SReal dt)
         msg_info("SofaPBDTimeStep") << "Using PBD-integrated collision detection.";
         if (m_collisionDetection)
         {
+            SimulationModel* model = SofaPBDSimulation::getCurrent()->getModel();
             // START_TIMING("collision detection");
             m_collisionDetection->collisionDetection(*model);
             // STOP_TIMING_AVG;
@@ -501,6 +567,44 @@ void SofaPBDTimeStep::step(const core::ExecParams *params, SReal dt)
         return;
     }
 
+    if (!m_simulation->getModel())
+    {
+        msg_warning("SofaPBDTimeStep") << "No valid SimulationModel instance, aborting!";
+        return;
+    }
+
+    SimulationModel::RigidBodyVector &rb = this->m_simulation->getModel()->getRigidBodies();
+    ParticleData& pd = this->m_simulation->getModel()->getParticles();
+    OrientationData& od = this->m_simulation->getModel()->getOrientations();
+    msg_info("SofaPBDTimeStep") << "================== SofaPBDTimeStep at begin of step " << dt << " ==================";
+    msg_info("SofaPBDTimeStep") << "Retrieved data arrays from model: rigidBodies = " << rb.size() << ", particles = " << pd.size() << ", particle orientations = " << od.size();
+
+    const size_t numBodies = rb.size();
+    for (size_t i = 0; i < numBodies; i++)
+    {
+        msg_info("SofaPBDTimeStep") << "Rigid body " << i << " current position = " << rb[i]->getPosition()[0] << ", " << rb[i]->getPosition()[1] << ", " << rb[i]->getPosition()[2] << ")";
+        msg_info("SofaPBDTimeStep") << "Rigid body " << i << " current velocity = " << rb[i]->getVelocity()[0] << ", " << rb[i]->getVelocity()[1] << ", " << rb[i]->getVelocity()[2] << ")";
+        msg_info("SofaPBDTimeStep") << "Rigid body " << i << " current acceler. = " << rb[i]->getAcceleration()[0] << ", " << rb[i]->getAcceleration()[1] << ", " << rb[i]->getAcceleration()[2] << ")";
+    }
+
+    const size_t numParticles = pd.size();
+    for (size_t i = 0; i < numParticles; i++)
+    {
+        msg_info("SofaPBDTimeStep") << "Particle " << i << " current position = (" << pd.getPosition(i)[0] << ", " << pd.getPosition(i)[1] << ", " << pd.getPosition(i)[2] << ")";
+        msg_info("SofaPBDTimeStep") << "Particle " << i << " current velocity = (" << pd.getVelocity(i)[0] << ", " << pd.getVelocity(i)[1] << ", " << pd.getVelocity(i)[2] << ")";
+        msg_info("SofaPBDTimeStep") << "Particle " << i << " current acceler. = (" << pd.getAcceleration(i)[0] << ", " << pd.getAcceleration(i)[1] << ", " << pd.getAcceleration(i)[2] << ")";
+    }
+
+    for (size_t i = 0; i < numParticles; i++)
+    {
+        msg_info("SofaPBDTimeStep") << "Particle " << i << " current quaternion = (" << od.getQuaternion(i).x() << ", " << od.getQuaternion(i).y() << ", " << od.getQuaternion(i).z() << ", " << od.getQuaternion(i).w() << ")";
+        msg_info("SofaPBDTimeStep") << "Particle " << i << " current rot. vel.  = (" << od.getVelocity(i)[0] << ", " << od.getVelocity(i)[1] << ", " << od.getVelocity(i)[2] << ")";
+        msg_info("SofaPBDTimeStep") << "Particle " << i << " current rot. acc.  = (" << od.getAcceleration(i)[0] << ", " << od.getAcceleration(i)[1] << ", " << od.getAcceleration(i)[2] << ")";
+
+    }
+
+    msg_info("SofaPBDTimeStep") << "================== SofaPBDTimeStep at begin of step " << dt << " ==================";
+
     this->preStep();
     this->doCollisionDetection(params, dt);
     this->postStep();
@@ -508,8 +612,12 @@ void SofaPBDTimeStep::step(const core::ExecParams *params, SReal dt)
 
 void SofaPBDTimeStep::postStep()
 {
-
     msg_info("SofaPBDTimeStep") << "Calling velocityConstraintProjection()";
+
+    SimulationModel* model = SofaPBDSimulation::getCurrent()->getModel();
+    TimeManager *tm = TimeManager::getCurrent();
+    const Real h = tm->getTimeStepSize();
+
     velocityConstraintProjection(*model);
 
     //////////////////////////////////////////////////////////////////////////
@@ -558,11 +666,28 @@ void SofaPBDTimeStep::postStep()
     msg_info("SofaPBDTimeStep") << "Setting new simulation time: " << (tm->getTime() + h);
     tm->setTime(tm->getTime() + h);
 
+    SimulationModel::RigidBodyVector &rb = model->getRigidBodies();
+    ParticleData& pd = model->getParticles();
+    OrientationData& od = model->getOrientations();
     msg_info("SofaPBDTimeStep") << "Particles: " << pd.size();
-    for (int i = 0; i < (int) pd.size(); i++)
+
+    msg_info("SofaPBDTimeStep") << "================== PBD postStep ==================";
+    msg_info("SofaPBDTimeStep") << "Retrieved data arrays from model: rigidBodies = " << rb.size() << ", particles = " << pd.size() << ", particle orientations = " << od.size();
+
+    const int numBodies = (int) rb.size();
+    const int numParticles = (int) pd.size();
+
+    for (size_t k = 0; k < numBodies; k++)
+    {
+        msg_info("SofaPBDTimeStep") << "Rigid body " << k << ": position = (" << rb[k]->getPosition()[0] << ", " << rb[k]->getPosition()[1] << ", " << rb[k]->getPosition()[2] << "), orientation = (" << rb[k]->getRotation().x() << ", " << rb[k]->getRotation().y() << ", " << rb[k]->getRotation().z() << ", " << rb[k]->getRotation().w() << ")";
+    }
+
+    for (int i = 0; i < numParticles; i++)
     {
         msg_info("SofaPBDTimeStep") << "Particle " << i << ": position = (" << pd.getPosition(i)[0] << "," << pd.getPosition(i)[1] << "," << pd.getPosition(i)[2] << "), velocity = (" << pd.getVelocity(i)[0] << "," << pd.getVelocity(i)[1] << "," << pd.getVelocity(i)[2] << ")";
     }
+
+    msg_info("SofaPBDTimeStep") << "================== PBD postStep ==================";
 
     // STOP_TIMING_AVG;
 }
@@ -612,7 +737,6 @@ void SofaPBDTimeStep::positionConstraintProjection(SimulationModel &model)
         m_iterations++;
     }
 }
-
 
 void SofaPBDTimeStep::velocityConstraintProjection(SimulationModel &model)
 {
@@ -682,8 +806,8 @@ void SofaPBDTimeStep::velocityConstraintProjection(SimulationModel &model)
 
 void SofaPBDTimeStep::draw(const core::visual::VisualParams* vparams)
 {
-    /*if (!vparams->displayFlags().getShowBehaviorModels())
-        return;*/
+    if (!vparams->displayFlags().getShowBehaviorModels())
+        return;
 
     SimulationModel* model = SofaPBDSimulation::getCurrent()->getModel();
     const SimulationModel::RigidBodyContactConstraintVector& rbConstraints = model->getRigidBodyContactConstraints();

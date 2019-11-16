@@ -18,6 +18,10 @@ SofaPBDModelBase::~SofaPBDModelBase()
         // Just invalidate the pointer.
         m_pbdRigidBody = nullptr;
     }
+
+    // Same goes for the SimulationModel pointer
+    if (m_simulationModel)
+        m_simulationModel = nullptr;
 }
 
 void SofaPBDModelBase::bwdInit()

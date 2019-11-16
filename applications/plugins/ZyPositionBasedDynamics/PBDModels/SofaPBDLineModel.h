@@ -15,7 +15,7 @@ namespace sofa
             {
                 public:
                     SOFA_CLASS(SofaPBDLineModel, SofaPBDModelBase);
-                    SofaPBDLineModel();
+                    SofaPBDLineModel(SimulationModel *model = nullptr);
 
                     void init();
                     void bwdInit();

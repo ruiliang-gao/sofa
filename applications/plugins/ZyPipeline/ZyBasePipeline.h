@@ -2,9 +2,11 @@
 #define SOFA_COMPONENT_COLLISION_ZyPipeline_H
 
 #include "initZyPipeline.h"
-
 #include "ZyPipelineInterface.h"
+
 #include <sofa/simulation/PipelineImpl.h>
+#include <SofaBaseCollision/BruteForceDetection.h>
+#include <SofaBaseCollision/DefaultContactManager.h>
 
 namespace sofa
 {
@@ -47,6 +49,15 @@ namespace sofa
                     sofa::helper::vector<ZyPipelineInterface*> m_pipeline_interfaces;
 					// Main pipeline interface (responsible for pipeline call sequence); this replaces the DefaultPipeline
                     ZyPipelineInterface::SPtr m_pipeline;
+
+                    // Default Intersection instance in case none is detected in current scene
+                    sofa::core::objectmodel::BaseObject::SPtr m_intersectionMethod;
+
+                    // Default BruteForceDetection instance in case none is detected in current scene
+                    sofa::core::objectmodel::BaseObject::SPtr m_bruteForceDetection;
+
+                    // Default ContactManager instance in case none is detected in current scene
+                    sofa::core::objectmodel::BaseObject::SPtr m_defaultContactManager;
 			};
 		}
 	}

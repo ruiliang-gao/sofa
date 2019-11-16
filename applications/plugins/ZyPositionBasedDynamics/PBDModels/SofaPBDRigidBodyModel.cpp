@@ -8,9 +8,9 @@
 #include <SofaLoader/MeshObjLoader.h>
 
 #include <PBDMain/SofaPBDSimulation.h>
-#include <PBDUtils/PBDIndexedFaceMesh.h>
 
-#include <PBDSimulation/PBDRigidBodyGeometry.h>
+#include <IndexedFaceMesh.h>
+#include <RigidBodyGeometry.h>
 
 #ifdef _WIN32
 #include <gl/glut.h>
@@ -31,14 +31,14 @@ namespace sofa
                     {
                         m_numPoints = 0;
                         m_numFaces = 0;
-                        m_pbdIndexedFaceMesh.reset(new Utilities::PBDIndexedFaceMesh());
+                        m_pbdIndexedFaceMesh.reset(new Utilities::IndexedFaceMesh());
                         m_densitySet = m_massSet = false;
 
                         m_pbdRBIndex = -1;
                     }
 
-                    std::shared_ptr<Utilities::PBDIndexedFaceMesh> m_pbdIndexedFaceMesh;
-                    PBDVertexData m_vertexData;
+                    std::shared_ptr<Utilities::IndexedFaceMesh> m_pbdIndexedFaceMesh;
+                    VertexData m_vertexData;
 
                     std::string m_srcLoader;
                     sofa::core::loader::BaseLoader* m_srcLoaderObject;
@@ -56,9 +56,10 @@ namespace sofa
 }
 
 using namespace sofa::simulation::PBDSimulation;
-using namespace sofa::simulation::PBDSimulation::Utilities;
 using namespace sofa::core::objectmodel;
 using namespace sofa::defaulttype;
+
+using namespace PBD;
 
 SOFA_DECL_CLASS(SofaPBDRigidBodyModel)
 
@@ -66,7 +67,7 @@ int SofaPBDRigidBodyModelClass = sofa::core::RegisterObject("Wrapper class for P
                             .add< SofaPBDRigidBodyModel >()
                             .addDescription("Encapsulates sets of particles in an indexed triangle mesh.");
 
-SofaPBDRigidBodyModel::SofaPBDRigidBodyModel(): SofaPBDModelBase(),
+SofaPBDRigidBodyModel::SofaPBDRigidBodyModel(SimulationModel* model): SofaPBDModelBase(model),
     mass(initData(&mass, 0.0, "mass", "Rigid body total mass.")),
     inertiaTensor(initData(&inertiaTensor, Vec3d(1.0, 1.0, 1.0), "inertiaTensor", "Rigid body inertia tensor.")),
     density(initData(&density, 1.0, "density", "Rigid body material density.")),
@@ -276,8 +277,8 @@ void SofaPBDRigidBodyModel::buildModel()
                         if (meshObjLoader)
                             msg_info("SofaPBDRigidBodyModel") << "Texture coords in mesh: " << meshObjLoader->texCoords.getValue().size();
 
-                        PBDIndexedFaceMesh& mesh = *(m_d->m_pbdIndexedFaceMesh);
-                        PBDVertexData& vd = m_d->m_vertexData;
+                        Utilities::IndexedFaceMesh& mesh = *(m_d->m_pbdIndexedFaceMesh);
+                        VertexData& vd = m_d->m_vertexData;
 
                         mesh.release();
 
@@ -364,13 +365,17 @@ void SofaPBDRigidBodyModel::buildModel()
 void SofaPBDRigidBodyModel::initializeModel()
 {
     msg_info("SofaPBDRigidBodyModel") << "initializeModel() " << this->getName();
-    PBDIndexedFaceMesh& mesh = *(m_d->m_pbdIndexedFaceMesh);
+    Utilities::IndexedFaceMesh& mesh = *(m_d->m_pbdIndexedFaceMesh);
 
     msg_info("SofaPBDRigidBodyModel") << "Instantiating PBD rigid body object.";
-    m_pbdRigidBody = new PBDRigidBody();
+    m_pbdRigidBody = new RigidBody();
 
     msg_info("SofaPBDRigidBodyModel") << "Calling initBody on PBD rigid body object.";
     msg_info("SofaPBDRigidBodyModel") << "Position: " << translation.getValue() << ", orientation: " << rotationQuat.getValue();
+
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " position before initBody() = " << m_pbdRigidBody->getPosition()[0] << ", " << m_pbdRigidBody->getPosition()[1] << ", " << m_pbdRigidBody->getPosition()[2] << ")";
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " velocity before initBody() = " << m_pbdRigidBody->getVelocity()[0] << ", " << m_pbdRigidBody->getVelocity()[1] << ", " << m_pbdRigidBody->getVelocity()[2] << ")";
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " acceler. before initBody() = " << m_pbdRigidBody->getAcceleration()[0] << ", " << m_pbdRigidBody->getAcceleration()[1] << ", " << m_pbdRigidBody->getAcceleration()[2] << ")";
 
     if (m_d->m_massSet && m_d->m_densitySet)
     {
@@ -411,11 +416,9 @@ void SofaPBDRigidBodyModel::initializeModel()
             Vector3r(scale.getValue()[0], scale.getValue()[1], scale.getValue()[2]));
     }
 
-    /*m_pbdRigidBody->initBody(density.getValue(),
-        Vector3r(translation.getValue()[0], translation.getValue()[1], translation.getValue()[2]),
-        Quaternionr(rotationQuat.getValue()[3], rotationQuat.getValue()[0], rotationQuat.getValue()[1], rotationQuat.getValue()[2]),
-        m_d->m_vertexData, mesh,
-        Vector3r(scale.getValue()[0], scale.getValue()[1], scale.getValue()[2]));*/
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " position after initBody() = " << m_pbdRigidBody->getPosition()[0] << ", " << m_pbdRigidBody->getPosition()[1] << ", " << m_pbdRigidBody->getPosition()[2] << ")";
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " velocity after initBody() = " << m_pbdRigidBody->getVelocity()[0] << ", " << m_pbdRigidBody->getVelocity()[1] << ", " << m_pbdRigidBody->getVelocity()[2] << ")";
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " acceler. after initBody() = " << m_pbdRigidBody->getAcceleration()[0] << ", " << m_pbdRigidBody->getAcceleration()[1] << ", " << m_pbdRigidBody->getAcceleration()[2] << ")";
 
     if (m_d->m_massSet)
     {
@@ -433,7 +436,7 @@ void SofaPBDRigidBodyModel::initializeModel()
     msg_info("SofaPBDRigidBodyModel") << "Setting restution coefficient: " << restitutionCoefficient.getValue();
     m_pbdRigidBody->setRestitutionCoeff(static_cast<Real>(restitutionCoefficient.getValue()));
 
-    PBDSimulationModel::RigidBodyVector& rigidBodies = SofaPBDSimulation::getCurrent()->getModel()->getRigidBodies();
+    SimulationModel::RigidBodyVector& rigidBodies = SofaPBDSimulation::getCurrent()->getModel()->getRigidBodies();
     msg_info("SofaPBDRigidBodyModel") << "Adding rigid body to PBDSimulationModel. Number of rigid bodies before insertion: " << rigidBodies.size();
 
     rigidBodies.emplace_back(m_pbdRigidBody);
@@ -444,7 +447,7 @@ void SofaPBDRigidBodyModel::initializeModel()
     else
         m_d->m_pbdRBIndex = rigidBodies.size() - 1;
 
-    PBDRigidBodyGeometry& rbGeometry = m_pbdRigidBody->getGeometry();
+    RigidBodyGeometry& rbGeometry = m_pbdRigidBody->getGeometry();
 
     msg_info("SofaPBDRigidBodyModel") << "initializeModel() done: vertexCount = " << rbGeometry.getVertexData().size() << ", edgeCount = " << rbGeometry.getMesh().numEdges();
 
@@ -468,7 +471,7 @@ void SofaPBDRigidBodyModel::draw(const core::visual::VisualParams* vparams)
     /*if (!vparams->displayFlags().getShowCollisionModels())
         return;*/
 
-    PBDRigidBodyGeometry& rbGeometry = m_pbdRigidBody->getGeometry();
+    RigidBodyGeometry& rbGeometry = m_pbdRigidBody->getGeometry();
 
     Vec4f colour(1,0,0,0.5);
     Vec4f colour2(0,0,1,0.5);
@@ -490,13 +493,13 @@ void SofaPBDRigidBodyModel::draw(const core::visual::VisualParams* vparams)
     glEnd();
     glPointSize(1.0f);
 
-    Utilities::PBDIndexedFaceMesh::Edges& meshEdges = rbGeometry.getMesh().getEdges();
+    Utilities::IndexedFaceMesh::Edges& meshEdges = rbGeometry.getMesh().getEdges();
     // Draw mesh lines
     glLineWidth(2.0f);
     glBegin(GL_LINES);
     for (unsigned int k = 0; k < meshEdges.size(); k++)
     {
-        const PBDIndexedFaceMesh::Edge& edge = meshEdges[k];
+        const Utilities::IndexedFaceMesh::Edge& edge = meshEdges[k];
         const Vector3r& pt1 = rbGeometry.getVertexData().getPosition(edge.m_vert[0]);
         const Vector3r& pt2 = rbGeometry.getVertexData().getPosition(edge.m_vert[1]);
         glColor4f(colour.x(), colour.y(), colour.z(), colour.w());

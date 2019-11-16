@@ -5,7 +5,7 @@
     
     <!-- Collision detection components -->
     <DefaultContactManager name="Response" response="default" />
-    <BruteForceDetection name="PBDBruteForceDetection" />
+    <SofaPBDBruteForceDetection name="pBDBruteForceDetection" />
     <PBDCollisionModelsIntersection alarmDistance="0.3" contactDistance="0.2" name="PBDProximityIntersection" />
     
     <!-- Use our custom DefaultPipeline implementation -->

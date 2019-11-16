@@ -255,8 +255,6 @@ bool BruteForceDetection::keepCollisionBetween(core::CollisionModel *cm1, core::
     return true;
 }
 
-
-
 void BruteForceDetection::addCollisionPair(const std::pair<core::CollisionModel*, core::CollisionModel*>& cmPair)
 {
     sofa::helper::AdvancedTimer::StepVar bfTimer("BruteForceDetection::addCollisionPair");

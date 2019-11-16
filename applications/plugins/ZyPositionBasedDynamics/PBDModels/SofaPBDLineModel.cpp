@@ -21,10 +21,10 @@ namespace sofa
                         m_numPoints = 0;
                         m_numEdges = 0;
                         m_numQuaternions = 0;
-                        m_pbdLineModel.reset(new PBDLineModel());
+                         m_pbdLineModel.reset(new LineModel());
                     }
 
-                    std::shared_ptr<PBDLineModel> m_pbdLineModel;
+                    std::shared_ptr<LineModel> m_pbdLineModel;
 
                     std::string m_srcLoader;
                     sofa::core::loader::BaseLoader* m_srcLoaderObject;
@@ -54,7 +54,7 @@ int SofaPBDLineModelClass = sofa::core::RegisterObject("Wrapper class for PBD Li
                             .add< SofaPBDLineModel >()
                             .addDescription("Encapsulates sets of particles connected in a chain.");
 
-SofaPBDLineModel::SofaPBDLineModel(): SofaPBDModelBase()
+SofaPBDLineModel::SofaPBDLineModel(SimulationModel* model): SofaPBDModelBase(model)
 {
     m_d.reset(new SofaPBDLineModelPrivate());
 }
@@ -144,14 +144,14 @@ void SofaPBDLineModel::parse(BaseObjectDescription* arg)
     BaseObject::parse(arg);
 }
 
-std::shared_ptr<PBDLineModel> SofaPBDLineModel::getPBDLineModel() const
+std::shared_ptr<LineModel> SofaPBDLineModel::getPBDLineModel() const
 {
     return m_d->m_pbdLineModel;
 }
 
 void SofaPBDLineModel::init()
 {
-    m_d->m_pbdLineModel.reset(new PBDLineModel());
+    m_d->m_pbdLineModel.reset(new LineModel());
 }
 
 void SofaPBDLineModel::bwdInit()
@@ -286,12 +286,12 @@ void SofaPBDLineModel::buildModel()
 
 void SofaPBDLineModel::initializeModel()
 {
-    PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+    SimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
 
-    model->addLineModel(m_d->m_pbdLineModel.get(), m_d->m_numPoints, m_d->m_numQuaternions, &(m_d->m_points[0]), &(m_d->m_quaternions)[0], &(m_d->m_indices)[0], &(m_d->m_indicesQuaternions)[0]);
+    model->addLineModel(m_d->m_numPoints, m_d->m_numQuaternions, &(m_d->m_points[0]), &(m_d->m_quaternions)[0], &(m_d->m_indices)[0], &(m_d->m_indicesQuaternions)[0]);
 
     // TODO: Set mass from SOFA classes, and/or from given mass in SofaPBDBaseModel
-    PBDParticleData &pd = model->getParticles();
+    ParticleData &pd = model->getParticles();
     const int nPointsTotal = pd.getNumberOfParticles();
     for (int i = nPointsTotal - 1; i > nPointsTotal - m_d->m_numPoints; i--)
     {
@@ -302,7 +302,7 @@ void SofaPBDLineModel::initializeModel()
     // TODO: Are free-moving line models sensible? Include an option to fix first point, or not?
     pd.setMass(nPointsTotal - m_d->m_numPoints, 0.0);
 
-    PBDOrientationData &od = model->getOrientations();
+    OrientationData &od = model->getOrientations();
     const unsigned int nQuaternionsTotal = od.getNumberOfQuaternions();
     for (unsigned int i = nQuaternionsTotal - 1; i > nQuaternionsTotal - m_d->m_numQuaternions; i--)
     {
@@ -318,7 +318,7 @@ void SofaPBDLineModel::initializeModel()
     const unsigned int offset = model->getLineModels()[rodNumber]->getIndexOffset();
     const unsigned int offsetQuaternions = model->getLineModels()[rodNumber]->getIndexOffsetQuaternions();
     const size_t nEdges = model->getLineModels()[rodNumber]->getEdges().size();
-    const PBDLineModel::Edges &edges = model->getLineModels()[rodNumber]->getEdges();
+    const LineModel::Edges &edges = model->getLineModels()[rodNumber]->getEdges();
 
     msg_info("SofaPBDLineModel") << "Adding constraints: startIndex = " << offset << ", startIndexQuaternions = " << offsetQuaternions;
     msg_info("SofaPBDLineModel") << "Constraints to add: stretchSchear = " << m_d->m_numEdges << ", bendTwist" << m_d->m_numEdges - 1;
@@ -356,9 +356,9 @@ void SofaPBDLineModel::draw(const core::visual::VisualParams* vparams)
         return;
 
     // Draw simulation model
-    PBDSimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
-    const PBDParticleData &pd = model->getParticles();
-    const PBDOrientationData &od = model->getOrientations();
+    SimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
+    const ParticleData &pd = model->getParticles();
+    const OrientationData &od = model->getOrientations();
     sofa::defaulttype::Vec4f red(0.8f, 0.0f, 0.0f, 1);
     sofa::defaulttype::Vec4f green(0.0f, 0.8f, 0.0f, 1);
     sofa::defaulttype::Vec4f blue(0.0f, 0.0f, 0.8f, 1);

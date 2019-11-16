@@ -23,14 +23,35 @@ int SofaPBDPipelineClass = sofa::core::RegisterObject("Adapter class to integrat
                             .add< SofaPBDPipeline >()
                             .addDescription("Adapter class to integrate SOFA's collision detection with the PBD framework.");
 
-SofaPBDPipeline::SofaPBDPipeline(): ZyPipelineInterface(), depth(initData(&depth, 6, "depth", "Max depth of bounding trees"))
+SofaPBDPipeline::SofaPBDPipeline(): ZyPipelineInterface(), depth(initData(&depth, 6, "depth", "Max depth of bounding trees")),
+    m_callCountInternal(0), m_callCountExternal(0)
 {
-
+    this->addTag(sofa::simulation::PBDSimulation::tagPBDCollisionPipeline);
 }
 
 SofaPBDPipeline::~SofaPBDPipeline()
 {
 
+}
+
+void SofaPBDPipeline::increaseExternalCallCount()
+{
+    m_callCountExternal++;
+}
+
+void SofaPBDPipeline::resetExternalCallCount()
+{
+    m_callCountExternal = 0;
+}
+
+unsigned int SofaPBDPipeline::getExternalCallCount() const
+{
+    return m_callCountExternal;
+}
+
+unsigned int SofaPBDPipeline::getInternalCallCount() const
+{
+    return m_callCountInternal;
 }
 
 void SofaPBDPipeline::setup(BroadPhaseDetection* broadPhaseDetection, NarrowPhaseDetection* narrowPhaseDetection, Intersection* intersection, ContactManager* contactManager, CollisionGroupManager* groupManager)
@@ -91,11 +112,14 @@ void SofaPBDPipeline::setup(BroadPhaseDetection* broadPhaseDetection, NarrowPhas
 void SofaPBDPipeline::doCollisionReset()
 {
     msg_info("SofaPBDPipeline") << "doCollisionReset()";
+    m_callCountExternal = 0;
+    m_callCountInternal = 0;
 }
 
 void SofaPBDPipeline::doCollisionDetection(const sofa::helper::vector<core::CollisionModel*>& collisionModels)
 {
-    msg_info("SofaPBDPipeline") << "doCollisionDetection()";
+    m_callCountInternal++;
+    msg_info("SofaPBDPipeline") << "doCollisionDetection() -- called " << m_callCountInternal << " times so far.";
     msg_info("SofaPBDPipeline") << "Collision model instances in scene: " << collisionModels.size();
 
     if (!this->pipelineIntersectionMethod || !this->pipelineNarrowPhaseDetection || !this->pipelineBroadPhaseDetection)

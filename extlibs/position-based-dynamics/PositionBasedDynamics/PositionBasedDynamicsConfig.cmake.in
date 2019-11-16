@@ -1,0 +1,8 @@
+# CMake package configuration file for the PositionBasedDynamics plugin
+
+@PACKAGE_INIT@
+if(NOT TARGET PositionBasedDynamics)
+	include("${CMAKE_CURRENT_LIST_DIR}/PositionBasedDynamics.cmake")
+endif()
+
+check_required_components(PositionBasedDynamics)

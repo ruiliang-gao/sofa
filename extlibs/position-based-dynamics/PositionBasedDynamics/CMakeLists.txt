@@ -1,4 +1,8 @@
-add_library(PositionBasedDynamics
+set(PBD_POSITION_BASED_DYNAMICS_LIBRARY_MAJOR_VERSION 0)
+set(PBD_POSITION_BASED_DYNAMICS_LIBRARY_MINOR_VERSION 1)
+set(PBD_POSITION_BASED_DYNAMICS_LIBRARY_VERSION ${PBD_POSITION_BASED_DYNAMICS_LIBRARY_MAJOR_VERSION}.${PBD_POSITION_BASED_DYNAMICS_LIBRARY_MINOR_VERSION})
+
+add_library(PositionBasedDynamics SHARED
 		 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Common/Common.h
 		
 		 ${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/PositionBasedDynamics/DirectPositionBasedSolverForStiffRodsInterface.h
@@ -33,6 +37,4 @@ install(DIRECTORY .
 DESTINATION include/PositionBasedDynamics
 FILES_MATCHING PATTERN "*.h")
 
-
-
-
+sofa_create_package("PositionBasedDynamics" ${PBD_POSITION_BASED_DYNAMICS_LIBRARY_VERSION} "PositionBasedDynamics" "PositionBasedDynamics")

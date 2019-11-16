@@ -68,6 +68,8 @@ namespace Zyklio
                 bool isDefaultPipeline() const { return true; }
 
             protected:
+                void filterCollisionModelsToProcess(const sofa::helper::vector<core::CollisionModel*>& collisionModels, sofa::helper::vector<core::CollisionModel*>& processedCollisionModels);
+
                 MultiThread_Scheduler<CPUBVHUpdateTask>* m_scheduler_updateBVH;
                 std::vector<CPUBVHUpdateTask*> m_cpuBVHUpdateTasks;
 

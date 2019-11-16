@@ -1,5 +1,6 @@
 #include "SofaPBDAnimationLoop.h"
 #include "SimulationModel.h"
+#include "Utils/Timing.h"
 
 #include <sofa/core/ObjectFactory.h>
 
@@ -20,6 +21,8 @@
 #include <sofa/core/visual/VisualParams.h>
 
 using namespace sofa::simulation::PBDSimulation;
+
+INIT_TIMING
 
 SOFA_DECL_CLASS(SofaPBDAnimationLoop)
 
@@ -80,8 +83,6 @@ void SofaPBDAnimationLoop::reset()
     if (m_simulation)
     {
         m_simulation->reset();
-        delete m_simulation;
-        m_simulation = nullptr;
     }
 }
 
@@ -90,6 +91,8 @@ void SofaPBDAnimationLoop::cleanup()
     if (m_simulation)
     {
         m_simulation->cleanup();
+        delete m_simulation;
+        m_simulation = nullptr;
     }
 }
 
@@ -136,7 +139,7 @@ void SofaPBDAnimationLoop::step(const sofa::core::ExecParams *params, SReal dt)
 
     sofa::helper::AdvancedTimer::stepBegin("StepPBDTimeLoop");
     msg_info("SofaPBDAnimationLoop") << "Sub steps: " << SUB_STEPS_PER_ITERATION.getValue();
-    for (unsigned int k = 0; k < SUB_STEPS_PER_ITERATION.getValue(); k++)
+    for (unsigned int k = 0; k < 1 /*SUB_STEPS_PER_ITERATION.getValue()*/; k++)
     {
         msg_info("SofaPBDAnimationLoop") << "Sub-step " << k;
         SofaPBDTimeStepInterface* timeStep = m_simulation->getTimeStep();

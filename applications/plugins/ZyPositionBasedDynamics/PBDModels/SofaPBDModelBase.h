@@ -23,8 +23,10 @@ namespace sofa
             class SofaPBDModelBase: public BaseObject
             {
                 public:
-                    SofaPBDModelBase();
+                    SofaPBDModelBase(SimulationModel *model);
                     virtual ~SofaPBDModelBase();
+
+                    void bwdInit();
 
                     /// @name Initial transformations accessors.
                     /// @{

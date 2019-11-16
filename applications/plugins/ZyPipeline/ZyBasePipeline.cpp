@@ -23,9 +23,9 @@ ZyPipeline::ZyPipeline() : sofa::simulation::PipelineImpl()
 	
 }
 
-
 ZyPipeline::~ZyPipeline()
 {
+
 }
 
 void ZyPipeline::reset()
@@ -45,21 +45,79 @@ void ZyPipeline::init()
 {
 	PipelineImpl::init();
     msg_info("ZyBasePipeline") << "--- PipelineImpl members after init ---";
+
+    bool broadPhaseMissing = false;
+    bool narrowPhaseMissing = false;
+    bool intersectionMethodMissing = false;
+    msg_info("ZyBasePipeline") << " broadPhaseDetection: memory location = " << this->broadPhaseDetection;
+    if (this->broadPhaseDetection)
+    {
+        msg_info("ZyBasePipeline") << "  named " << this->broadPhaseDetection->getName() << " of type " << this->broadPhaseDetection->getTypeName();
+    }
+    else
+    {
+        broadPhaseMissing = true;
+        msg_warning("ZyBasePipeline") << "No BroadPhaseDetection instance exists in the current scene.";
+    }
+
     msg_info("ZyBasePipeline") << " narrowPhaseDetection: memory location = " << this->narrowPhaseDetection;
 	if (this->narrowPhaseDetection)
+    {
         msg_info("ZyBasePipeline") << "  named " << this->narrowPhaseDetection->getName() << " of type " << this->narrowPhaseDetection->getTypeName();
+    }
+    else
+    {
+        narrowPhaseMissing = true;
+        msg_warning("ZyBasePipeline") << "No NarrowPhaseDetection instance exists in the current scene.";
+    }
 
-    msg_info("ZyBasePipeline") << " broadPhaseDetection: memory location = " << this->broadPhaseDetection;
-	if (this->broadPhaseDetection)
-        msg_info("ZyBasePipeline") << "  named " << this->broadPhaseDetection->getName() << " of type " << this->broadPhaseDetection->getTypeName();
+    if (broadPhaseMissing || narrowPhaseMissing)
+    {
+        sofa::core::objectmodel::BaseObjectDescription bruteForceDesc("Default BruteForceDetection", "BruteForceDetection");
+        m_bruteForceDetection = sofa::core::ObjectFactory::CreateObject(getContext(), &bruteForceDesc);
+
+        if (broadPhaseMissing)
+        {
+            msg_info("ZyBasePipeline") << "Using default BruteForceDetection instance as BroadPhaseDetection.";
+            this->broadPhaseDetection = dynamic_cast<BroadPhaseDetection*>(m_bruteForceDetection.get());
+        }
+
+        if (narrowPhaseMissing)
+        {
+            msg_info("ZyBasePipeline") << "Using default BruteForceDetection instance as NarrowPhaseDetection.";
+            this->narrowPhaseDetection = dynamic_cast<NarrowPhaseDetection*>(m_bruteForceDetection.get());
+        }
+    }
 
     msg_info("ZyBasePipeline") << " intersectionMethod: memory location = " << this->intersectionMethod;
 	if (this->intersectionMethod)
+    {
         msg_info("ZyBasePipeline") << "  named " << this->intersectionMethod->getName() << " of type " << this->intersectionMethod->getTypeName();
+    }
+    else
+    {
+        intersectionMethodMissing = true;
+        msg_warning("ZyBasePipeline") << "No intersectionMethod instance exists in the current scene.";
+    }
+
+    if (intersectionMethodMissing)
+    {
+        sofa::core::objectmodel::BaseObjectDescription discreteIntersectionDesc("Default Intersection","DiscreteIntersection");
+        m_intersectionMethod = sofa::core::ObjectFactory::CreateObject(getContext(), &discreteIntersectionDesc);
+        this->intersectionMethod = dynamic_cast<Intersection*>(m_intersectionMethod.get());
+    }
 
     msg_info("ZyBasePipeline") << " contactManager: memory location = " << this->contactManager;
 	if (this->contactManager)
+    {
         msg_info("ZyBasePipeline") << "  named " << this->contactManager->getName() << " of type " << this->contactManager->getTypeName();
+    }
+    else
+    {
+        sofa::core::objectmodel::BaseObjectDescription contactManagerDesc("Default ContactManager", "DefaultContactManager");
+        m_defaultContactManager = sofa::core::ObjectFactory::CreateObject(getContext(), &contactManagerDesc);
+        this->contactManager = dynamic_cast<DefaultContactManager*>(m_defaultContactManager.get());
+    }
 
     msg_info("ZyBasePipeline") << " groupManager: memory location = " << this->groupManager;
 	if (this->groupManager)
@@ -97,14 +155,13 @@ void ZyPipeline::bwdInit()
 				temp_pipeline_interfaces[k]->setActive(true);
 				temp_pipeline_interfaces[k]->init();
 
+                msg_info("ZyBasePipeline") << " - object " << k << ": " << temp_pipeline_interfaces[k]->getName() << " of type " << temp_pipeline_interfaces[k]->getTypeName();
 				temp_pipeline_interfaces[k]->setup(this->broadPhaseDetection, this->narrowPhaseDetection, this->intersectionMethod, this->contactManager, this->groupManager);
 
 				temp_pipeline_interfaces[k]->bwdInit();
 
 				// Call setActive(true) twice: init() might reset it to false.
 				temp_pipeline_interfaces[k]->setActive(true);
-
-                msg_info("ZyBasePipeline") << " - object " << k << ": " << temp_pipeline_interfaces[k]->getName() << " of type " << temp_pipeline_interfaces[k]->getTypeName();
 
 				if (temp_pipeline_interfaces[k]->isDefaultPipeline())
 				{
@@ -140,10 +197,11 @@ void ZyPipeline::doCollisionDetection(const sofa::helper::vector<core::Collision
         msg_info("ZyPipeline") << "m_pipeline instance valid: " << m_pipeline->getName();
         msg_info("ZyPipeline") << "CollisionModel instances in scene: " << collisionModels.size();
 
+
 		m_pipeline->doCollisionDetection(collisionModels);
 
-		for (size_t k = 0; k < m_pipeline_interfaces.size(); ++k)
-			m_pipeline_interfaces[k]->doCollisionDetection(collisionModels);
+        for (size_t k = 0; k < m_pipeline_interfaces.size(); ++k)
+            m_pipeline_interfaces[k]->doCollisionDetection(collisionModels);
 	}
     else
     {

@@ -1,4 +1,5 @@
 #include "SofaPBDCollisionVisitor.h"
+#include "SofaPBDPipeline.h"
 
 using namespace sofa::simulation::PBDSimulation;
 using namespace sofa::core;
@@ -65,13 +66,29 @@ Visitor::Result SofaPBDCollisionVisitor::processNodeTopDown(simulation::Node* no
 
     if (node->collisionPipeline != NULL)
     {
+        msg_info("SofaPBDCollisionVisitor") << "=======================================================================";
         msg_info("SofaPBDCollisionVisitor") << "Node has a valid collisionPipeline instance: " << node->collisionPipeline->getName() << " of type " << node->collisionPipeline->getTypeName();
         processCollisionPipeline(node, node->collisionPipeline);
+        if (node->collisionPipeline->hasTag(sofa::simulation::PBDSimulation::tagPBDCollisionPipeline))
+        {
+            msg_info("SofaPBDCollisionVisitor") << "Increasing node->collisionPipeline SofaPBDCollisionVisitor visit counter.";
+            SofaPBDPipeline* sofaPBDPipeline = dynamic_cast<SofaPBDPipeline*>(node->collisionPipeline.get());
+            sofaPBDPipeline->increaseExternalCallCount();
+        }
+        msg_info("SofaPBDCollisionVisitor") << "=======================================================================";
     }
     else
     {
+        msg_info("SofaPBDCollisionVisitor") << "=======================================================================";
         msg_info("SofaPBDCollisionVisitor") << "Node has no valid collisionPipeline instance set. Using instance provided to SofaPBDCollisionVisitor.";
         processCollisionPipeline(node, m_pipeline);
+        if (m_pipeline->hasTag(sofa::simulation::PBDSimulation::tagPBDCollisionPipeline))
+        {
+            msg_info("SofaPBDCollisionVisitor") << "Increasing m_pipeline SofaPBDCollisionVisitor visit counter.";
+            SofaPBDPipeline* sofaPBDPipeline = dynamic_cast<SofaPBDPipeline*>(m_pipeline);
+            sofaPBDPipeline->increaseExternalCallCount();
+        }
+        msg_info("SofaPBDCollisionVisitor") << "=======================================================================";
     }
 
     return RESULT_PRUNE;

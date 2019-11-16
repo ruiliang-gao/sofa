@@ -1,4 +1,8 @@
-add_library(Simulation
+set(PBD_SIMULATION_LIBRARY_MAJOR_VERSION 0)
+set(PBD_SIMULATION_LIBRARY_MINOR_VERSION 1)
+set(PBD_SIMULATION_LIBRARY_VERSION ${PBD_SIMULATION_LIBRARY_MAJOR_VERSION}.${PBD_SIMULATION_LIBRARY_MINOR_VERSION})
+
+add_library(Simulation SHARED
 		${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/AABB.h
 		${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/CollisionDetection.cpp
 		${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/Simulation/CollisionDetection.h
@@ -46,21 +50,21 @@ add_library(Simulation
 # Discregrid
 ############################################################
 include_directories(${ExternalInstallDir}/Discregrid/include)
-set(SIMULATION_DEPENDENCIES ${SIMULATION_DEPENDENCIES} Discregrid)
+#set(SIMULATION_DEPENDENCIES ${SIMULATION_DEPENDENCIES} Discregrid)
 
 ############################################################
 # GenericParameters
 ############################################################
 include_directories(${ExternalInstallDir}/GenericParameters/include)
-set(SIMULATION_DEPENDENCIES ${SIMULATION_DEPENDENCIES} GenericParameters)
+#set(SIMULATION_DEPENDENCIES ${SIMULATION_DEPENDENCIES} GenericParameters)
 
-add_dependencies(Simulation ${SIMULATION_DEPENDENCIES})
+#add_dependencies(Simulation ${SIMULATION_DEPENDENCIES})
 
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 include_directories(/${CMAKE_SOURCE_DIR}/extlibs/PositionBasedDynamics/extern/Miniball)
 
-target_link_libraries(Simulation PositionBasedDynamics)
+target_link_libraries(Simulation PositionBasedDynamics Discregrid)
 
 
 install(TARGETS Simulation
@@ -71,3 +75,5 @@ install(TARGETS Simulation
 install(DIRECTORY .
 DESTINATION include/Simulation
 FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
+
+sofa_create_package("Simulation" ${PBD_SIMULATION_LIBRARY_VERSION} "Simulation" "Simulation")

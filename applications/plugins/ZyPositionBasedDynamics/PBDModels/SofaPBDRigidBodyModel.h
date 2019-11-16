@@ -1,7 +1,7 @@
 #ifndef SOFAPDBTRIANGLEMODEL_H
 #define SOFAPDBTRIANGLEMODEL_H
 
-#include "TriangleModel.h"
+#include "RigidBody.h"
 #include "SofaPBDModelBase.h"
 
 using namespace sofa::defaulttype;
@@ -17,7 +17,7 @@ namespace sofa
             {
                 public:
                     SOFA_CLASS(SofaPBDRigidBodyModel, SofaPBDModelBase);
-                    SofaPBDRigidBodyModel();
+                    SofaPBDRigidBodyModel(SimulationModel *model = nullptr);
 
                     void init();
                     void bwdInit();

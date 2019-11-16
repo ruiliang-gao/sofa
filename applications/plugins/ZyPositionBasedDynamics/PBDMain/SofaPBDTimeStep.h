@@ -21,7 +21,7 @@ namespace sofa
     {
         namespace PBDSimulation
         {
-            using namespace sofa::simulation::PBDDistanceBasedCD;
+            using namespace PBD;
             using namespace sofa::component::collision;
 
             class SofaPBDSimulation;
@@ -57,7 +57,9 @@ namespace sofa
                     unsigned int m_iterations;
                     unsigned int m_iterationsV;
 
-                    void stepSimulation();
+                    virtual void preStep();
+                    virtual void doCollisionDetection(const sofa::core::ExecParams* params, SReal dt);
+                    virtual void postStep();
 
                     virtual void initParameters();
 
