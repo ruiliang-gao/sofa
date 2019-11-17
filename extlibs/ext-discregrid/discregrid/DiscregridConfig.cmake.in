@@ -1,0 +1,8 @@
+# CMake package configuration file for the Discregrid plugin
+
+@PACKAGE_INIT@
+if(NOT TARGET Discregrid)
+	include("${CMAKE_CURRENT_LIST_DIR}/Discregrid.cmake")
+endif()
+
+check_required_components(Discregrid)
