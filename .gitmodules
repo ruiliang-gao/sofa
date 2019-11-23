@@ -32,3 +32,6 @@
 [submodule "extlibs/GenericParameters"]
 	path = extlibs/GenericParameters
 	url = https://github.com/InteractiveComputerGraphics/GenericParameters.git
+[submodule "PositionBasedDynamics"]
+	url = git@github.com:faichele/PositionBasedDynamics.git
+	branch = master
