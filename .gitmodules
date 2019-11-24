@@ -23,9 +23,6 @@
 [submodule "extlibs/fcl"]
 	path = extlibs/fcl
 	url = https://github.com/flexible-collision-library/fcl.git
-[submodule "extlibs/PositionBasedDynamics"]
-	path = extlibs/PositionBasedDynamics
-	url = https://github.com/InteractiveComputerGraphics/PositionBasedDynamics.git
 [submodule "extlibs/Discregrid"]
 	path = extlibs/Discregrid
 	url = https://github.com/InteractiveComputerGraphics/Discregrid.git
@@ -35,3 +32,6 @@
 [submodule "PositionBasedDynamics"]
 	url = git@github.com:faichele/PositionBasedDynamics.git
 	branch = master
+[submodule "applications/plugins/SofaROSConnector"]
+	path = applications/plugins/SofaROSConnector
+	url = https://github.com/faichele/SofaROSConnector.git

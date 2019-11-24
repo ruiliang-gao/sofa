@@ -9,6 +9,7 @@ find_package(Eigen3 REQUIRED)
 include_directories(
 	${CMAKE_SOURCE_DIR}/extlibs/Discregrid/extern
 	${CMAKE_SOURCE_DIR}/extlibs/Discregrid/discregrid/include
+        ${CMAKE_BINARY_DIR}/extlibs/Discregrid/cmd
 	${EIGEN3_INCLUDE_DIR}
 )
 
