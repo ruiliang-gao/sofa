@@ -228,13 +228,26 @@ void SofaPBDRigidBodyModel::init()
 
 void SofaPBDRigidBodyModel::bwdInit()
 {
-    buildModel();
-    initializeModel();
+    msg_info("SofaPBDRigidBodyModel") << "bwdInit() " << this->getName();
+    if (!m_initDone)
+    {
+        buildModel();
+        initializeModel();
+
+        m_initDone = true;
+    }
 }
 
 void SofaPBDRigidBodyModel::buildModel()
 {
     msg_info("SofaPBDRigidBodyModel") << "buildModel() " << this->getName();
+
+    if (m_initDone)
+    {
+        msg_warning("SofaPBDRigidBodyModel") << "Model initialization already done, not initializing again!";
+        return;
+    }
+
     if (m_d->m_srcLoader != "")
     {
         msg_info("SofaPBDRigidBodyModel") << "Found source loader instance: " << m_d->m_srcLoader;
@@ -365,6 +378,13 @@ void SofaPBDRigidBodyModel::buildModel()
 void SofaPBDRigidBodyModel::initializeModel()
 {
     msg_info("SofaPBDRigidBodyModel") << "initializeModel() " << this->getName();
+
+    if (m_initDone)
+    {
+        msg_warning("SofaPBDRigidBodyModel") << "Model initialization already done, not initializing again!";
+        return;
+    }
+
     Utilities::IndexedFaceMesh& mesh = *(m_d->m_pbdIndexedFaceMesh);
 
     msg_info("SofaPBDRigidBodyModel") << "Instantiating PBD rigid body object.";
@@ -373,9 +393,9 @@ void SofaPBDRigidBodyModel::initializeModel()
     msg_info("SofaPBDRigidBodyModel") << "Calling initBody on PBD rigid body object.";
     msg_info("SofaPBDRigidBodyModel") << "Position: " << translation.getValue() << ", orientation: " << rotationQuat.getValue();
 
-    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " position before initBody() = " << m_pbdRigidBody->getPosition()[0] << ", " << m_pbdRigidBody->getPosition()[1] << ", " << m_pbdRigidBody->getPosition()[2] << ")";
-    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " velocity before initBody() = " << m_pbdRigidBody->getVelocity()[0] << ", " << m_pbdRigidBody->getVelocity()[1] << ", " << m_pbdRigidBody->getVelocity()[2] << ")";
-    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " acceler. before initBody() = " << m_pbdRigidBody->getAcceleration()[0] << ", " << m_pbdRigidBody->getAcceleration()[1] << ", " << m_pbdRigidBody->getAcceleration()[2] << ")";
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " position before initBody() = (" << m_pbdRigidBody->getPosition()[0] << ", " << m_pbdRigidBody->getPosition()[1] << ", " << m_pbdRigidBody->getPosition()[2] << ")";
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " velocity before initBody() = (" << m_pbdRigidBody->getVelocity()[0] << ", " << m_pbdRigidBody->getVelocity()[1] << ", " << m_pbdRigidBody->getVelocity()[2] << ")";
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " acceler. before initBody() = (" << m_pbdRigidBody->getAcceleration()[0] << ", " << m_pbdRigidBody->getAcceleration()[1] << ", " << m_pbdRigidBody->getAcceleration()[2] << ")";
 
     if (m_d->m_massSet && m_d->m_densitySet)
     {
@@ -416,9 +436,9 @@ void SofaPBDRigidBodyModel::initializeModel()
             Vector3r(scale.getValue()[0], scale.getValue()[1], scale.getValue()[2]));
     }
 
-    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " position after initBody() = " << m_pbdRigidBody->getPosition()[0] << ", " << m_pbdRigidBody->getPosition()[1] << ", " << m_pbdRigidBody->getPosition()[2] << ")";
-    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " velocity after initBody() = " << m_pbdRigidBody->getVelocity()[0] << ", " << m_pbdRigidBody->getVelocity()[1] << ", " << m_pbdRigidBody->getVelocity()[2] << ")";
-    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " acceler. after initBody() = " << m_pbdRigidBody->getAcceleration()[0] << ", " << m_pbdRigidBody->getAcceleration()[1] << ", " << m_pbdRigidBody->getAcceleration()[2] << ")";
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " position after initBody() = (" << m_pbdRigidBody->getPosition()[0] << ", " << m_pbdRigidBody->getPosition()[1] << ", " << m_pbdRigidBody->getPosition()[2] << ")";
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " velocity after initBody() = (" << m_pbdRigidBody->getVelocity()[0] << ", " << m_pbdRigidBody->getVelocity()[1] << ", " << m_pbdRigidBody->getVelocity()[2] << ")";
+    msg_info("SofaPBDRigidBodyModel") << "Rigid body " << getName() << " acceler. after initBody() = (" << m_pbdRigidBody->getAcceleration()[0] << ", " << m_pbdRigidBody->getAcceleration()[1] << ", " << m_pbdRigidBody->getAcceleration()[2] << ")";
 
     if (m_d->m_massSet)
     {
@@ -468,8 +488,8 @@ void SofaPBDRigidBodyModel::initializeModel()
 
 void SofaPBDRigidBodyModel::draw(const core::visual::VisualParams* vparams)
 {
-    /*if (!vparams->displayFlags().getShowCollisionModels())
-        return;*/
+    if (!vparams->displayFlags().getShowCollisionModels())
+        return;
 
     RigidBodyGeometry& rbGeometry = m_pbdRigidBody->getGeometry();
 

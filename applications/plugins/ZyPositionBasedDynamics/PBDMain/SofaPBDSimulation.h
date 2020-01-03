@@ -28,7 +28,7 @@ namespace sofa
                 public:
                     SOFA_CLASS(SofaPBDSimulation, sofa::core::objectmodel::BaseObject);
 
-                    Data<sofa::defaulttype::Vec3d> GRAVITATION;
+                    Data<sofa::defaulttype::Vec3d> GRAVITY;
                     Data<sofa::helper::OptionsGroup> SIMULATION_METHOD;
 
                     SofaPBDSimulation(sofa::core::objectmodel::BaseContext* context = nullptr);

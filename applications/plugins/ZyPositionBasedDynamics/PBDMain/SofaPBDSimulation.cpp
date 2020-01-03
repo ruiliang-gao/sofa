@@ -24,7 +24,7 @@ using namespace std;
 SofaPBDSimulation* SofaPBDSimulation::current = nullptr;
 
 SofaPBDSimulation::SofaPBDSimulation(BaseContext *context): sofa::core::objectmodel::BaseObject(),
-    GRAVITATION(initData(&GRAVITATION, sofa::defaulttype::Vec3d(0, -9.81, 0), "Gravitation", "Vector to define the gravitational acceleration."))
+    GRAVITY(initData(&GRAVITY, sofa::defaulttype::Vec3d(0, -9.81, 0), "Gravitation", "Vector to define the gravitational acceleration."))
 {
     m_context = context;
     m_timeStep = nullptr;
@@ -82,18 +82,21 @@ void SofaPBDSimulation::init()
 
     initParameters();
 
-    msg_info("SofaPBDSimulation") << "Gravitation vector set: " << GRAVITATION.getValue();
-
     msg_info("SofaPBDSimulation") << "setSimulationMethod(" << PBDSimulationMethods::PBD << ")";
     setSimulationMethod(static_cast<int>(PBDSimulationMethods::PBD));
-
-    //m_geometryConverter.reset(new GeometryConversion(m_model));
-    //m_mechObjConverter.reset(new MechObjConversion(m_model));
 
     if (!m_context)
         m_context = dynamic_cast<sofa::simulation::Node*>(this->getContext());
 
     m_rootNode = sofa::simulation::getSimulation()->getCurrentRootNode();
+
+    msg_info("SofaPBDSimulation") << "Default gravity vector set: " << GRAVITY.getValue();
+    if (m_rootNode)
+    {
+        const sofa::defaulttype::Vec3 gravitySofa = m_rootNode->getGravity();
+        msg_info("SofaPBDSimulation") << "Gravity vector from SOFA root scene node: " << gravitySofa;
+        GRAVITY.setValue(gravitySofa);
+    }
 
     if (!m_context)
     {
@@ -166,10 +169,10 @@ void SofaPBDSimulation::init()
 void SofaPBDSimulation::initParameters()
 {
     msg_info("SofaPBDSimulation") << "initParameters()";
-    GRAVITATION.setGroup("Simulation");
-    GRAVITATION.setValue(sofa::defaulttype::Vec3d(0, -9.81, 0));
+    GRAVITY.setGroup("Simulation");
+    GRAVITY.setValue(sofa::defaulttype::Vec3d(0, -9.81, 0));
 
-    msg_info("SofaPBDSimulation") << "Gravitation vector set: " << GRAVITATION.getValue();
+    msg_info("SofaPBDSimulation") << "Gravitation vector set: " << GRAVITY.getValue();
 
     helper::OptionsGroup methodOptions(3, "0 - Position-Based Dynamics (PBD)",
                                        "1 - eXtended Position-Based Dynamics (XPBD)",

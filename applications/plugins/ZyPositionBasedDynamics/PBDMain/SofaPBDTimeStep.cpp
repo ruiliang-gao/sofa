@@ -19,6 +19,7 @@
 #include <SofaBaseCollision/DefaultPipeline.h>
 
 #include <sofa/helper/AdvancedTimer.h>
+#include <sofa/simulation/Node.h>
 #include <sofa/core/visual/VisualParams.h>
 
 #include <PBDIntegration/SofaPBDCollisionVisitor.h>
@@ -39,11 +40,12 @@ SofaPBDTimeStep::SofaPBDTimeStep(SofaPBDSimulation* pbdSimulation): sofa::core::
     MAX_ITERATIONS_V(initData(&MAX_ITERATIONS_V, 5, "Max. velocity iterations", "Maximal number of iterations of the velocity solver.")),
     m_simulation(pbdSimulation)
 {
+    gnode = nullptr;
     m_iterations = 0;
     m_iterationsV = 0;
 
-    m_collisionDetection = NULL;
-    m_sofaPBDCollisionDetection = NULL;
+    m_collisionDetection = nullptr;
+    m_sofaPBDCollisionDetection = nullptr;
 }
 
 SofaPBDTimeStep::~SofaPBDTimeStep()
@@ -64,14 +66,22 @@ void SofaPBDTimeStep::init()
     msg_info("SofaPBDTimeStep") << "MAX_ITERATIONS = " << MAX_ITERATIONS.getValue();
     msg_info("SofaPBDTimeStep") << "MAX_ITERATIONS_V = " << MAX_ITERATIONS_V.getValue();
 
+    msg_info("SofaPBDTimeStep") << "Initializing sofa::simulation::Node instance...";
     if (!gnode)
     {
+        msg_info("SofaPBDTimeStep") << "Trying to retrieve Node instance from context.";
         gnode = dynamic_cast<sofa::simulation::Node*>(this->getContext());
 
         if (!gnode)
         {
+            msg_warning("SofaPBDTimeStep") << "Retrieving node instance from context failed, using current Simulation root node instead.";
             gnode = sofa::simulation::getSimulation()->getCurrentRootNode().get();
         }
+    }
+
+    if (gnode)
+    {
+        msg_info("SofaPBDTimeStep") << "gnode = " << gnode->getName() << " of type " << gnode->getClassName();
     }
 
     sofa::simulation::Node::SPtr currentRootNode = sofa::simulation::getSimulation()->getCurrentRootNode();
@@ -178,7 +188,7 @@ void SofaPBDTimeStep::clearAccelerations(SimulationModel &model)
 
     SimulationModel::RigidBodyVector &rb = model.getRigidBodies();
     SofaPBDSimulation *sim = SofaPBDSimulation::getCurrent();
-    sofa::defaulttype::Vec3d gravitation = sim->GRAVITATION.getValue();
+    sofa::defaulttype::Vec3d gravitation = sim->GRAVITY.getValue();
     Vector3r grav(gravitation.x(), gravitation.y(), gravitation.z());
     for (size_t i = 0; i < rb.size(); i++)
     {
@@ -426,6 +436,7 @@ void SofaPBDTimeStep::doCollisionDetection(const ExecParams *params, SReal dt)
             {
                 msg_info("SofaPBDAnimationLoop") << "Using collision pipeline instance from simulation root node: " << m_collisionPipeline->getName();
                 SofaPBDCollisionVisitor pbd_col_visitor(m_collisionPipeline, params, dt);
+                msg_info("SofaPBDAnimationLoop") << "Instantiated SofaPBDCollisionVisitor: " << pbd_col_visitor.getClassName() << ", category: " << pbd_col_visitor.getCategoryName();
                 msg_info("SofaPBDAnimationLoop") << "SofaPBDCollisionVisitor instantiated, calling gnode->execute()";
                 gnode->execute(pbd_col_visitor);
                 msg_info("SofaPBDAnimationLoop") << "SofaPBDCollisionVisitor pass done.";
@@ -434,6 +445,7 @@ void SofaPBDTimeStep::doCollisionDetection(const ExecParams *params, SReal dt)
             {
                 msg_info("SofaPBDAnimationLoop") << "Using locally instantiated collision pipeline object: " << m_collisionPipelineLocal->getName();
                 SofaPBDCollisionVisitor pbd_col_visitor(m_collisionPipelineLocal.get(), params, dt);
+                msg_info("SofaPBDAnimationLoop") << "Instantiated SofaPBDCollisionVisitor: " << pbd_col_visitor.getClassName() << ", category: " << pbd_col_visitor.getCategoryName();
                 msg_info("SofaPBDAnimationLoop") << "SofaPBDCollisionVisitor instantiated, calling gnode->execute()";
                 gnode->execute(pbd_col_visitor);
                 msg_info("SofaPBDAnimationLoop") << "SofaPBDCollisionVisitor pass done.";

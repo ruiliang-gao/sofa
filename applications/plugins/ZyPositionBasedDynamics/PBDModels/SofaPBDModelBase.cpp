@@ -4,7 +4,7 @@
 
 using namespace sofa::simulation::PBDSimulation;
 
-SofaPBDModelBase::SofaPBDModelBase(SimulationModel *model): BaseObject(), m_pbdRigidBody(nullptr)
+SofaPBDModelBase::SofaPBDModelBase(SimulationModel *model): BaseObject(), m_pbdRigidBody(nullptr), m_initDone(false)
 {
     msg_info("SofaPBDModelBase") << "SimulationModel instance = " << model;
     m_simulationModel = model;

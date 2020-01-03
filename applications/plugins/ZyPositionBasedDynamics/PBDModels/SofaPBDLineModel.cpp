@@ -157,8 +157,14 @@ void SofaPBDLineModel::init()
 void SofaPBDLineModel::bwdInit()
 {
     msg_info("SofaPBDLineModel") << "bwdInit() " << this->getName();
-    buildModel();
-    initializeModel();
+
+    if (!m_initDone)
+    {
+        buildModel();
+        initializeModel();
+
+        m_initDone = true;
+    }
 }
 
 void SofaPBDLineModel::cleanup()
@@ -168,6 +174,13 @@ void SofaPBDLineModel::cleanup()
 
 void SofaPBDLineModel::buildModel()
 {
+
+    if (m_initDone)
+    {
+        msg_warning("SofaPBDLineModel") << "Model initialization already done, not initializing again!";
+        return;
+    }
+
     if (m_d->m_srcLoader != "")
     {
         msg_info("SofaPBDLineModel") << "Found source loader instance: " << m_d->m_srcLoader;
@@ -286,6 +299,12 @@ void SofaPBDLineModel::buildModel()
 
 void SofaPBDLineModel::initializeModel()
 {
+    if (m_initDone)
+    {
+        msg_warning("SofaPBDLineModel") << "Model initialization already done, not initializing again!";
+        return;
+    }
+
     SimulationModel *model = SofaPBDSimulation::getCurrent()->getModel();
 
     model->addLineModel(m_d->m_numPoints, m_d->m_numQuaternions, &(m_d->m_points[0]), &(m_d->m_quaternions)[0], &(m_d->m_indices)[0], &(m_d->m_indicesQuaternions)[0]);

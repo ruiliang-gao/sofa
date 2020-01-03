@@ -150,6 +150,7 @@ public:
     void execute(simulation::Visitor& action, bool precomputedOrder=false)
     {
         simulation::Visitor* p = &action;
+        //msg_info("Node") << "Executing visitor: " << p->getClassName();
         executeVisitor(p, precomputedOrder);
     }
 

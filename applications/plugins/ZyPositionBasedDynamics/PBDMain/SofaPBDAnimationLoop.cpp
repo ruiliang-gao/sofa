@@ -1,6 +1,7 @@
 #include "SofaPBDAnimationLoop.h"
 #include "SimulationModel.h"
 #include "Utils/Timing.h"
+#include "Utils/Logger.h"
 
 #include <sofa/core/ObjectFactory.h>
 
@@ -23,6 +24,8 @@
 using namespace sofa::simulation::PBDSimulation;
 
 INIT_TIMING
+
+INIT_LOGGING
 
 SOFA_DECL_CLASS(SofaPBDAnimationLoop)
 

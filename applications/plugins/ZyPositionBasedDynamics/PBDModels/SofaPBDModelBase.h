@@ -68,6 +68,7 @@ namespace sofa
                     RigidBody* m_pbdRigidBody;
                     SimulationModel* m_simulationModel;
 
+                    bool m_initDone;
             };
         }
     }

@@ -12,6 +12,7 @@ if (EXISTS ${CMAKE_SOURCE_DIR}/applications/plugins/BeamAdapter)
     sofa_add_plugin(SofaDistanceGrid SofaDistanceGrid ON)
     sofa_add_plugin(SofaImplicitField SofaImplicitField ON)
 else()
+    sofa_add_plugin(SofaDistanceGrid SofaDistanceGrid)
     sofa_add_plugin(SofaImplicitField SofaImplicitField)
 endif()
 
