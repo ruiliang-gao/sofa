@@ -51,6 +51,7 @@ function(windeployqt target build_dir install_dir)
     install(
         DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/windeployqt/"
         DESTINATION ${install_dir}
+        COMPONENT applications
         )
 
     # windeployqt doesn't work correctly with the system runtime libraries,
@@ -64,6 +65,7 @@ function(windeployqt target build_dir install_dir)
     install(
         PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
         DESTINATION ${install_dir}
+        COMPONENT applications
     )
     
     # foreach(lib ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS})
