@@ -84,6 +84,9 @@ HexahedralFEMForceField<DataTypes>::HexahedralFEMForceField()
     : f_method(initData(&f_method,std::string("large"),"method","\"large\" or \"polar\" displacements"))
     , f_poissonRatio(initData(&f_poissonRatio,(Real)0.45f,"poissonRatio",""))
     , f_youngModulus(initData(&f_youngModulus,(Real)5000,"youngModulus",""))
+    , f_plasticMaxThreshold(initData(&f_plasticMaxThreshold, (Real)0.f, "plasticMaxThreshold", "Plastic Max Threshold in terms of volume change"))
+    , f_plasticYieldThreshold(initData(&f_plasticYieldThreshold, (Real)0.f, "plasticYieldThreshold", "Plastic Yield Threshold"))
+    , f_plasticCreep(initData(&f_plasticCreep, (Real)0.1f, "plasticCreep", "Plastic Creep Factor * dt [0,1]. Warning this factor depends on dt."))
     , hexahedronInfo(initData(&hexahedronInfo, "hexahedronInfo", "Internal hexahedron data"))
     , hexahedronHandler(nullptr)
 {
@@ -375,7 +378,19 @@ void HexahedralFEMForceField<DataTypes>::computeForce( Displacement &F, const Di
     F = K*Depl;
 }
 
-
+template<class DataTypes>
+void HexahedralFEMForceField<DataTypes>::computeJacobian(Mat33 &J, const helper::fixed_array<Coord, 8> &coords)
+{
+    Coord horizontal = (coords[1] - coords[0] + coords[2] - coords[3] + coords[5] - coords[4] + coords[6] - coords[7]) * .25;
+    Coord vertical = (coords[3] - coords[0] + coords[2] - coords[1] + coords[7] - coords[4] + coords[6] - coords[5]) * .25;
+    Coord deep = (coords[4] - coords[0] + coords[7] - coords[3] + coords[5] - coords[1] + coords[6] - coords[2]) * .25;
+    for (int c = 0; c < 3; ++c)
+    {
+        J[c][0] = horizontal[c] / 2;
+        J[c][1] = vertical[c] / 2;
+        J[c][2] = deep[c] / 2;
+    }
+}
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -410,6 +425,15 @@ void HexahedralFEMForceField<DataTypes>::initLarge(const int i)
     for(int w=0; w<8; ++w)
         hexahedronInf[i].rotatedInitialElements[w] = R_0_1*nodes[w];
 
+    if (f_plasticMaxThreshold.getValue() > 0)
+    {
+        //initialize hexahedronInf[i] with the plasticity params
+        hexahedronInf[i].plasticYieldThreshold = this->f_plasticYieldThreshold.getValue();
+        hexahedronInf[i].plasticMaxThreshold = this->f_plasticMaxThreshold.getValue();
+        Mat33 J;
+        computeJacobian(J, hexahedronInf[i].rotatedInitialElements);
+        hexahedronInf[i].materialDeformationInverse = J.inverted();; ///initialize the per element material deformation
+    }
     computeMaterialStiffness( hexahedronInf[i].materialMatrix, f_youngModulus.getValue(), f_poissonRatio.getValue() );
     computeElementStiffness( hexahedronInf[i].stiffness, hexahedronInf[i].materialMatrix, hexahedronInf[i].rotatedInitialElements);
 
@@ -466,6 +490,31 @@ void HexahedralFEMForceField<DataTypes>::accumulateForceLarge( WDataRefVecDeriv&
     for(int w=0; w<8; ++w)
         deformed[w] = R_0_2 * nodes[w];
 
+    // Compute the plasticity deformation
+    if (hexahedronInf[i].plasticYieldThreshold > 0)
+    {
+        Mat33 J;
+        computeJacobian(J, deformed); /// compute the jacobian (world over reference)
+        Mat33 totalF = J * hexahedronInf[i].materialDeformationInverse; /// Total Deformation Gradient F = J (world) * J^-1 (material)
+        Real Fnorm = defaulttype::trace(totalF.multTranspose(totalF)); /// Frobenius norm of totalF
+
+        Real plastic_ratio = .0; /// this ratio describes the mount of deformation is absorbed in a timestep
+
+        if (Fnorm > 3 + 6 * hexahedronInf[i].plasticYieldThreshold)
+        {
+            plastic_ratio = 2 * f_plasticCreep.getValue()/* deltaT * flow rate*/ * (Fnorm - 3 - 6 * hexahedronInf[i].plasticYieldThreshold) / Fnorm;
+            //work hardening
+            hexahedronInf[i].plasticYieldThreshold += 0.1 /*hardening param*/ * plastic_ratio * Fnorm;
+            for (int k = 0; k < 8; ++k)
+            {
+                hexahedronInf[i].elementPlasticOffset[k] += plastic_ratio * (deformed[k] - hexahedronInf[i].rotatedInitialElements[k]);
+                hexahedronInf[i].rotatedInitialElements[k] += plastic_ratio * (deformed[k] - hexahedronInf[i].rotatedInitialElements[k]);
+            }
+            //TODO Check Fracture...
+            computeJacobian(J, hexahedronInf[i].rotatedInitialElements);
+            hexahedronInf[i].materialDeformationInverse = J.inverted();
+        }
+    }
 
     // displacement
     Displacement D;

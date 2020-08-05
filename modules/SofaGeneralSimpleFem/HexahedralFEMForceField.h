@@ -31,6 +31,7 @@
 
 #include <SofaBaseTopology/HexahedronSetTopologyContainer.h>
 #include <SofaBaseTopology/TopologyData.h>
+#include <SofaBaseTopology/HexahedronSetTopologyModifier.h>
 
 namespace sofa
 {
@@ -128,6 +129,12 @@ protected:
         Transformation rotation;
         ElementStiffness stiffness;
 
+        //plasticity attributes per element
+        Transformation materialDeformationInverse; ///jacobian of refernce space over material space
+        helper::fixed_array<Coord, 8> elementPlasticOffset; ///the plastic displacements per node
+        Real plasticYieldThreshold;
+        Real plasticMaxThreshold;
+
         HexahedronInformation() {}
 
         /// Output stream
@@ -196,6 +203,13 @@ public:
     Data<std::string> f_method; ///< the computation method of the displacements
     Data<Real> f_poissonRatio;
     Data<Real> f_youngModulus;
+
+    /// Plasticity related Parameters & Methods
+    Data<Real> f_plasticMaxThreshold;
+    Data<Real> f_plasticYieldThreshold; ///< Plastic Yield Threshold (on the deformation gradient)
+    Data<Real> f_plasticCreep; ///< this parameters is different from the article, here it includes the multiplication by dt
+    void computeJacobian(Mat33 &J, const helper::fixed_array<Coord, 8> &coords); ///< Compute the constant value jacobian (approximation) from the input hexahedral element
+
     /// container that stotes all requires information for each hexahedron
     topology::HexahedronData<sofa::helper::vector<HexahedronInformation> > hexahedronInfo;
 
