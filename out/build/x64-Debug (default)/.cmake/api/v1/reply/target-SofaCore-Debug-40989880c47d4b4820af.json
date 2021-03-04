@@ -1,0 +1,2087 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "bin/SofaCore_d.dll"
+		},
+		{
+			"path" : "lib/SofaCore_d.lib"
+		},
+		{
+			"path" : "bin/SofaCore_d.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"sofa_install_targets_in_package",
+			"sofa_add_targets_to_package",
+			"target_link_libraries",
+			"target_compile_options",
+			"target_compile_definitions",
+			"sofa_auto_set_target_compile_definitions",
+			"sofa_auto_set_target_properties",
+			"add_definitions",
+			"include",
+			"target_include_directories",
+			"sofa_auto_set_target_include_directories"
+		],
+		"files" : 
+		[
+			"SofaKernel/modules/SofaCore/CMakeLists.txt",
+			"SofaKernel/SofaFramework/SofaMacrosInstall.cmake",
+			"SofaKernel/SofaFramework/CMakeLists.txt",
+			"SofaKernel/cmake/CompilerOptions.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 263,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 266,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 246,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 548,
+				"parent" : 3
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 264,
+				"parent" : 0
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 5,
+				"file" : 2,
+				"line" : 42,
+				"parent" : 6
+			},
+			{
+				"command" : 8,
+				"file" : 1,
+				"line" : 243,
+				"parent" : 2
+			},
+			{
+				"command" : 7,
+				"file" : 1,
+				"line" : 311,
+				"parent" : 8
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 395,
+				"parent" : 9
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 397,
+				"parent" : 9
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 10,
+				"file" : 4,
+				"line" : 115,
+				"parent" : 12
+			},
+			{
+				"file" : 3,
+				"parent" : 13
+			},
+			{
+				"command" : 9,
+				"file" : 3,
+				"line" : 43,
+				"parent" : 14
+			},
+			{
+				"command" : 12,
+				"file" : 1,
+				"line" : 313,
+				"parent" : 8
+			},
+			{
+				"command" : 11,
+				"file" : 1,
+				"line" : 434,
+				"parent" : 16
+			},
+			{
+				"command" : 11,
+				"file" : 1,
+				"line" : 437,
+				"parent" : 16
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MP -wd4250 -wd4251 -wd4275 -wd4675 -wd4996 /Zc:__cplusplus /MDd /Zi /Ob0 /Od /RTC1"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "-DFRAMEWORK_TEST_RESOURCES_DIR=\\\"C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/SofaFramework/resources/tests\\\""
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "/bigobj"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-DGTEST_LINKED_AS_SHARED_LIBRARY=1"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-D_VARIADIC_MAX=10"
+				},
+				{
+					"fragment" : "-std:c++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 5,
+					"define" : "BOOST_ALL_DYN_LINK"
+				},
+				{
+					"backtrace" : 10,
+					"define" : "SOFA_BUILD_CORE"
+				},
+				{
+					"backtrace" : 11,
+					"define" : "SOFA_BUILD_SOFACORE"
+				},
+				{
+					"define" : "SofaCore_EXPORTS"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "_USE_MATH_DEFINES"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 17,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaCore/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaFramework"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/src"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/../SofaSimulationCore/src"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/../SofaDefaultType/src"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/../SofaCore/src"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/GTest"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaDefaultType/src"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/extlibs/json"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/include"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "C:/local/boost_1_75_0"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/extlibs/gtest/include"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/Eigenfiles/eigen-3.3.9"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159,
+				160,
+				161,
+				162,
+				163,
+				164,
+				165,
+				166,
+				167,
+				168,
+				169,
+				170,
+				171,
+				172,
+				173,
+				174,
+				175,
+				176,
+				177,
+				178,
+				179,
+				180,
+				181,
+				182,
+				183,
+				184,
+				185,
+				186,
+				187,
+				188,
+				189,
+				190,
+				191,
+				192,
+				193,
+				194,
+				195,
+				196,
+				197,
+				198,
+				199,
+				200,
+				201,
+				202,
+				203,
+				204,
+				205,
+				206,
+				207,
+				208,
+				209,
+				210,
+				211,
+				212,
+				213,
+				214,
+				215,
+				216,
+				217,
+				218,
+				219,
+				220,
+				221,
+				222,
+				223,
+				224,
+				225,
+				226,
+				227,
+				228,
+				229,
+				230,
+				231,
+				232,
+				233,
+				234,
+				235,
+				236,
+				237,
+				238,
+				239,
+				240,
+				241,
+				242,
+				243,
+				244,
+				245,
+				246,
+				247
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 5,
+			"id" : "gtest::@ef9a098a0028635bb168"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "SofaDefaultType::@1318efe8fa84f2296a09"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "SofaHelper::@6b0a012b96bc28259d9c"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "SofaFramework"
+	},
+	"id" : "SofaCore::@a34c98dda7edb9352447",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 4,
+				"path" : "lib"
+			},
+			{
+				"backtrace" : 4,
+				"path" : "bin"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/install/x64-Debug (default)"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/machine:x64 /debug /INCREMENTAL",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "..\\..\\..\\lib\\SofaDefaultType_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "..\\..\\..\\lib\\SofaHelper_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "glu32.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "opengl32.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\lib\\win64\\glew32.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_system-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_filesystem-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_program_options-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_thread-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_chrono-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_date_time-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_atomic-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\gtest_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "SofaCore",
+	"nameOnDisk" : "SofaCore_d.dll",
+	"paths" : 
+	{
+		"build" : "SofaKernel/SofaFramework/SofaCore",
+		"source" : "SofaKernel/modules/SofaCore"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130,
+				131,
+				132,
+				133,
+				134,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				141,
+				142,
+				143,
+				144,
+				145,
+				146
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159,
+				160,
+				161,
+				162,
+				163,
+				164,
+				165,
+				166,
+				167,
+				168,
+				169,
+				170,
+				171,
+				172,
+				173,
+				174,
+				175,
+				176,
+				177,
+				178,
+				179,
+				180,
+				181,
+				182,
+				183,
+				184,
+				185,
+				186,
+				187,
+				188,
+				189,
+				190,
+				191,
+				192,
+				193,
+				194,
+				195,
+				196,
+				197,
+				198,
+				199,
+				200,
+				201,
+				202,
+				203,
+				204,
+				205,
+				206,
+				207,
+				208,
+				209,
+				210,
+				211,
+				212,
+				213,
+				214,
+				215,
+				216,
+				217,
+				218,
+				219,
+				220,
+				221,
+				222,
+				223,
+				224,
+				225,
+				226,
+				227,
+				228,
+				229,
+				230,
+				231,
+				232,
+				233,
+				234,
+				235,
+				236,
+				237,
+				238,
+				239,
+				240,
+				241,
+				242,
+				243,
+				244,
+				245,
+				246,
+				247
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/BaseMapping.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/BaseState.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/BehaviorModel.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/CategoryLibrary.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/CollisionElement.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/CollisionModel.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/ComponentLibrary.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/ConstraintParams.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/DataEngine.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/DataTracker.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/ExecParams.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/Mapping.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/Mapping.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/MechanicalParams.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/Multi2Mapping.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/Multi2Mapping.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/MultiMapping.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/MultiMapping.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/MultiVecId.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/ObjectFactory.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/PathResolver.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/SofaLibrary.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/sptr.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/State.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/State.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/VecId.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseAnimationLoop.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseConstraint.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseConstraintCorrection.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseConstraintSet.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseController.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseForceField.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseInteractionConstraint.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseInteractionForceField.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseInteractionProjectiveConstraintSet.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseLMConstraint.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseMass.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseMechanicalState.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseProjectiveConstraintSet.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseRotationFinder.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseVectorOperations.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/Constraint.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/Constraint.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ConstraintCorrection.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ConstraintCorrection.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ConstraintSolver.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ForceField.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ForceField.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/LMConstraint.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/LMConstraint.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/LinearSolver.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/Mass.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/Mass.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MechanicalState.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MixedInteractionConstraint.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MixedInteractionConstraint.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MixedInteractionForceField.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MixedInteractionForceField.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MultiMatrix.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MultiMatrixAccessor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MultiVec.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/OdeSolver.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/PairInteractionConstraint.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/PairInteractionConstraint.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/PairInteractionForceField.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/PairInteractionForceField.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/PairInteractionProjectiveConstraintSet.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/PairInteractionProjectiveConstraintSet.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ProjectiveConstraintSet.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ProjectiveConstraintSet.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/RotationMatrix.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/BroadPhaseDetection.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/CollisionAlgorithm.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/CollisionGroupManager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/Contact.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/ContactManager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/Detection.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/DetectionOutput.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/Intersection.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/Intersection.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/IntersectorFactory.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/NarrowPhaseDetection.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/Pipeline.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/config.h.in",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/core.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/init.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/BaseLoader.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/ImageLoader.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/Material.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/MeshLoader.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/PrimitiveGroup.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/SceneLoader.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/VoxelLoader.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/AbstractDataLink.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/AspectPool.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Base.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseClass.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseContext.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseData.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseLink.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseNode.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseObject.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseObjectDescription.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/ClassInfo.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/ComponentState.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/ConfigurationSetting.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Context.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/ContextObject.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DDGNode.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Data.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DataContentValue.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DataFileName.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DataLink.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DetachNodeEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Event.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/GUIEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/HapticDeviceEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/JoystickEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/KeypressedEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/KeyreleasedEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/IdleEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Link.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/MouseEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/ScriptEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/SPtr.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Tag.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DataCallback.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/BaseMeshTopology.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/BaseTopology.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/BaseTopologyData.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/BaseTopologyEngine.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/BaseTopologyObject.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/TopologicalMapping.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/Topology.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/TopologyChange.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/TopologyElementHandler.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/TopologyHandler.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/DisplayFlags.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/DrawTool.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/Shader.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/VisualLoop.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/VisualManager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/VisualModel.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/VisualParams.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/logging/RichConsoleStyleMessageFormatter.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/logging/PerComponentLoggingMessageHandler.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/DrawToolGL.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/BaseMapping.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/BaseState.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/BehaviorModel.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/CategoryLibrary.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/CollisionModel.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/ComponentLibrary.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/ConstraintParams.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/DataEngine.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/DataTracker.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/ExecParams.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/Mapping.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/MechanicalParams.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/Multi2Mapping.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/MultiMapping.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/ObjectFactory.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/PathResolver.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/SofaLibrary.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/State.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseAnimationLoop.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseConstraint.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseConstraintCorrection.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseConstraintSet.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseForceField.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseInteractionForceField.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseLMConstraint.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseMass.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseMechanicalState.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/BaseProjectiveConstraintSet.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/Constraint.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ConstraintCorrection.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ConstraintSolver.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ForceField.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/LMConstraint.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/LinearSolver.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/Mass.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MechanicalState.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MixedInteractionConstraint.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MixedInteractionForceField.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MultiMatrix.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/MultiMatrixAccessor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/OdeSolver.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/PairInteractionConstraint.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/PairInteractionForceField.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/PairInteractionProjectiveConstraintSet.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/behavior/ProjectiveConstraintSet.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/Contact.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/Intersection.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/collision/Pipeline.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/init.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/BaseLoader.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/MeshLoader.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/SceneLoader.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/loader/VoxelLoader.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/AbstractDataLink.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/AspectPool.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Base.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseClass.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseContext.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseData.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseLink.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseNode.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseObject.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/BaseObjectDescription.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/ClassInfo.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/ComponentState.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/ConfigurationSetting.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/ContextObject.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Context.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DDGNode.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Data.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DataContentValue.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DataCallback.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DataFileName.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DataLink.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/DetachNodeEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Event.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/GUIEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/HapticDeviceEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/JoystickEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/KeypressedEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/KeyreleasedEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/MouseEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/ScriptEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/IdleEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/objectmodel/Tag.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/BaseMeshTopology.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/BaseTopology.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/BaseTopologyObject.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/Topology.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/TopologyChange.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/TopologyElementHandler.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/topology/TopologyHandler.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/Shader.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/DisplayFlags.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/VisualLoop.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/VisualManager.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/VisualModel.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/VisualParams.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/logging/RichConsoleStyleMessageFormatter.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/logging/PerComponentLoggingMessageHandler.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaCore/src/sofa/core/visual/DrawToolGL.cpp",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

@@ -32,6 +32,7 @@
 #include "QMenuFilesRecentlyOpened.h"
 #include "PickHandlerCallBacks.h"
 
+
 #include <sofa/gui/BaseGUI.h>
 #include <sofa/gui/ViewerFactory.h>
 
@@ -301,6 +302,7 @@ public:
     void dragEnterEvent( QDragEnterEvent* event) override;
 
     void dropEvent(QDropEvent* event) override;
+
 
 protected:
     /// init data member from RealGUI for the viewer initialisation in the GUI

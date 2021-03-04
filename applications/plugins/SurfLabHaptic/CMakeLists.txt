@@ -24,7 +24,10 @@ find_package(SofaGeneral REQUIRED)
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_SURFLABHAPTIC")
 target_link_libraries(${PROJECT_NAME} SofaComponentGeneral)
+target_link_libraries(${PROJECT_NAME} SofaComponentGeneral ${OPENHAPTICS_LIBRARIES} Sensable SofaGuiCommon SofaGuiQt)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/..")
+${CMAKE_CURRENT_SOURCE_DIR}/../../sofa/gui
+${CMAKE_CURRENT_SOURCE_DIR}/../../sofa/gui/qt
 
 install(TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION bin

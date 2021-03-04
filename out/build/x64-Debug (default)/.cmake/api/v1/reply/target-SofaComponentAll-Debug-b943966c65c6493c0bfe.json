@@ -1,0 +1,1290 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "bin/SofaComponentAll_d.dll"
+		},
+		{
+			"path" : "lib/SofaComponentAll_d.lib"
+		},
+		{
+			"path" : "bin/SofaComponentAll_d.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"sofa_install_targets_in_package",
+			"sofa_add_targets_to_package",
+			"sofa_create_package_with_targets",
+			"target_link_libraries",
+			"target_compile_definitions",
+			"sofa_auto_set_target_compile_definitions",
+			"sofa_auto_set_target_properties",
+			"add_definitions",
+			"include",
+			"target_include_directories",
+			"sofa_auto_set_target_include_directories"
+		],
+		"files" : 
+		[
+			"applications/collections/SofaComponentAll/CMakeLists.txt",
+			"SofaKernel/SofaFramework/SofaMacrosInstall.cmake",
+			"SofaKernel/cmake/CompilerOptions.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 20,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 29,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 50,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 246,
+				"parent" : 3
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 548,
+				"parent" : 4
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 21,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 25,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 1,
+				"line" : 243,
+				"parent" : 3
+			},
+			{
+				"command" : 7,
+				"file" : 1,
+				"line" : 311,
+				"parent" : 8
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 395,
+				"parent" : 9
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 397,
+				"parent" : 9
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 10,
+				"file" : 3,
+				"line" : 115,
+				"parent" : 12
+			},
+			{
+				"file" : 2,
+				"parent" : 13
+			},
+			{
+				"command" : 9,
+				"file" : 2,
+				"line" : 43,
+				"parent" : 14
+			},
+			{
+				"command" : 12,
+				"file" : 1,
+				"line" : 313,
+				"parent" : 8
+			},
+			{
+				"command" : 11,
+				"file" : 1,
+				"line" : 434,
+				"parent" : 16
+			},
+			{
+				"command" : 11,
+				"file" : 1,
+				"line" : 437,
+				"parent" : 16
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MP -wd4250 -wd4251 -wd4275 -wd4675 -wd4996 /Zc:__cplusplus /MDd /Zi /Ob0 /Od /RTC1"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-DFRAMEWORK_TEST_RESOURCES_DIR=\\\"C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/SofaFramework/resources/tests\\\""
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "/bigobj"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-DGTEST_LINKED_AS_SHARED_LIBRARY=1"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-D_VARIADIC_MAX=10"
+				},
+				{
+					"fragment" : "-std:c++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 6,
+					"define" : "BOOST_ALL_DYN_LINK"
+				},
+				{
+					"backtrace" : 10,
+					"define" : "SOFA_BUILD_COMPONENT_ALL"
+				},
+				{
+					"backtrace" : 11,
+					"define" : "SOFA_BUILD_SOFACOMPONENTALL"
+				},
+				{
+					"define" : "SofaComponentAll_EXPORTS"
+				},
+				{
+					"backtrace" : 6,
+					"define" : "USING_DOUBLE"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "_USE_MATH_DEFINES"
+				},
+				{
+					"backtrace" : 6,
+					"define" : "use_namespace"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 17,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/applications/collections/SofaComponentAll/.."
+				},
+				{
+					"backtrace" : 18,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaComponentAll"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/SofaBase/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaBase"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaBaseLinearSolver/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaBaseLinearSolver"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaSimulationCore/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaFramework"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaCore/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/../SofaSimulationCore/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/../SofaDefaultType/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/../SofaCore/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/GTest"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaDefaultType/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaEigen2Solver/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaEigen2Solver"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaBaseTopology/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaBaseTopology"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaSimulationCommon/.."
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaSimulation"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaBaseCollision/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaBaseCollision"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaBaseMechanics/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaBaseMechanics"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaBaseVisual/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaBaseVisual"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaBaseUtils/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaBaseUtils"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/SofaCommon/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaCommon"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaSimpleFem/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaSimpleFem"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaRigid/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaRigid"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaDeformable/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaDeformable"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaObjectInteraction/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaObjectInteraction"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaMeshCollision/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaMeshCollision"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaEngine/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaEngine"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaExplicitOdeSolver/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaExplicitOdeSolver"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaImplicitOdeSolver/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaImplicitOdeSolver"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaLoader/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaLoader"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaGeneral/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneral"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaBoundaryCondition/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaBoundaryCondition"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralMeshCollision/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralMeshCollision"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralVisual/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralVisual"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGraphComponent/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGraphComponent"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaSimulationTree/.."
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralAnimationLoop/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralAnimationLoop"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralDeformable/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralDeformable"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralEngine/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralEngine"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralExplicitOdeSolver/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralExplicitOdeSolver"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralImplicitOdeSolver/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralImplicitOdeSolver"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralLinearSolver/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralLinearSolver"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralRigid/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralRigid"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralObjectInteraction/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralObjectInteraction"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralSimpleFem/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralSimpleFem"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralTopology/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralTopology"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaTopologyMapping/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaTopologyMapping"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaUserInteraction/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaUserInteraction"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaConstraint/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaConstraint"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGeneralLoader/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaGeneralLoader"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaMisc/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaMisc"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaMiscExtra/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaMiscExtra"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaMiscTopology/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaMiscTopology"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaMiscEngine/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaMiscEngine"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaNonUniformFem/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaNonUniformFem"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaDenseSolver/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaDenseSolver"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/extlibs/newmat/."
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/Newmat"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaMiscFem/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaMiscFem"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaMiscForceField/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaMiscForceField"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaMiscMapping/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaMiscMapping"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaMiscSolver/src"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaMiscSolver"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaOpenglVisual/src"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug (default)/include/SofaOpenglVisual"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/extlibs/json"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/include"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "C:/local/boost_1_75_0"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/extlibs/gtest/include"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/Eigenfiles/eigen-3.3.9"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				2
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 6,
+			"id" : "newmat::@f8bb682a7ce39865f180"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "gtest::@ef9a098a0028635bb168"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaCore::@a34c98dda7edb9352447"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaDefaultType::@1318efe8fa84f2296a09"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaHelper::@6b0a012b96bc28259d9c"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaSimulationCore::@d5f763c13f082b031681"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaSimulationTree::@9e4e4cc7fad47dedf752"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaSimulationCommon::@26b5a397515e74861880"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaBaseLinearSolver::@1f0abf65d224a37bc025"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaBase::@12babb72e6d24740dab1"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaEigen2Solver::@8c32f7e42cb2615b3d91"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaBaseTopology::@823c3eadcf25d4d93c78"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaMeshCollision::@53505d36abd0f9974ad0"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaObjectInteraction::@ad135ed89d8fc99af1d4"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaExplicitOdeSolver::@bfa321bed5e32e7c9ad2"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaEngine::@1288d1dc2d106d0920ab"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaImplicitOdeSolver::@82602392c0ceee414df1"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaBaseCollision::@7e47d0fc2e6200299097"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaBaseVisual::@abf9eac13781073d27f6"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaBaseUtils::@7c696c1053a48d2e3325"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaBaseMechanics::@2ef2cc1f17c5a115174f"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaSimpleFem::@f521b8ef8e4456e73325"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaRigid::@1a68571e9a984c5e0cf7"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaDeformable::@51fdd638c4546f2831de"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralRigid::@d0e1b28b33b7f3ea1f64"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralLinearSolver::@99ac029279a50b8dc5da"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralSimpleFem::@723ed9dfac015cd76867"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralObjectInteraction::@e753c62e81504e36cf75"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralTopology::@4fcd474a5625389b4a95"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralVisual::@9370a5764c6665804346"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaLoader::@c736cd2e6fa36087012f"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralMeshCollision::@3417de8432af1bf4e4eb"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGraphComponent::@42174085b9feb03f8532"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaBoundaryCondition::@92e4742d3ec4569fbade"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralAnimationLoop::@75b7d224c22e88fe8203"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralDeformable::@b92729bffbfba253ae2d"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralExplicitOdeSolver::@737864429e758e57778c"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralEngine::@d8a188982b1d378c2412"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralImplicitOdeSolver::@3df268247a0ecd53051a"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneral::@73e53c3917b6de000403"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaCommon::@a013f80d9a92cbe9886d"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaMisc::@80d899f628176dde786d"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaTopologyMapping::@3aec65fd9e278d00c8f3"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaUserInteraction::@337060b30510ab42b941"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaConstraint::@327da2a14c5c1de04113"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaGeneralLoader::@00feded9715cdd62aa6b"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaDenseSolver::@33bb04decfe9c9ae0963"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaNonUniformFem::@39161691d3027e681703"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "SofaOpenglVisual::@568b07ead85b89128f59"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaMiscTopology::@27345b2662caa2070da4"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaMiscForceField::@15d42a9734717130a432"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaMiscExtra::@8112291a58293fd3a442"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaMiscSolver::@cd62e74b47a2e23751ef"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaMiscEngine::@72b22cf1b8c9eeb457ab"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaMiscFem::@8001ed0b5ddb6d56c6ff"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "SofaMiscMapping::@77ee3235d86d86e7dc5f"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "Collections"
+	},
+	"id" : "SofaComponentAll::@92f106ea242be3e59205",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 5,
+				"path" : "lib"
+			},
+			{
+				"backtrace" : 5,
+				"path" : "bin"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/install/x64-Debug (default)"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/machine:x64 /debug /INCREMENTAL",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "..\\..\\..\\lib\\SofaBase_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "..\\..\\..\\lib\\SofaCommon_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "..\\..\\..\\lib\\SofaGeneral_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "..\\..\\..\\lib\\SofaMisc_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 7,
+				"fragment" : "..\\..\\..\\lib\\SofaOpenglVisual_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaEngine_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaExplicitOdeSolver_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaLoader_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralAnimationLoop_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralDeformable_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralEngine_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralExplicitOdeSolver_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralImplicitOdeSolver_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralRigid_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralObjectInteraction_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaConstraint_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaImplicitOdeSolver_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaUserInteraction_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralVisual_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGraphComponent_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaBaseUtils_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralLoader_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\lib\\win64\\zlibd.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaMiscExtra_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralMeshCollision_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaMeshCollision_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaBaseCollision_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaObjectInteraction_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaTopologyMapping_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaMiscEngine_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaNonUniformFem_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaDenseSolver_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralLinearSolver_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaMiscFem_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\newmat_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaMiscForceField_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaDeformable_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaBoundaryCondition_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralTopology_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaMiscMapping_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaRigid_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaGeneralSimpleFem_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaBaseMechanics_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaEigen2Solver_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaSimpleFem_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaBaseLinearSolver_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaMiscSolver_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaSimulationTree_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaMiscTopology_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\lib\\win64\\zlibd.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaBaseVisual_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaBaseTopology_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaSimulationCommon_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaSimulationCore_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaCore_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaDefaultType_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaHelper_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "glu32.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "opengl32.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\lib\\win64\\glew32.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_system-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_filesystem-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_program_options-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_thread-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_chrono-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_date_time-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_atomic-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\gtest_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "SofaComponentAll",
+	"nameOnDisk" : "SofaComponentAll_d.dll",
+	"paths" : 
+	{
+		"build" : "applications/collections/SofaComponentAll",
+		"source" : "applications/collections/SofaComponentAll"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				2
+			]
+		},
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				3
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"path" : "applications/collections/SofaComponentAll/config.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "applications/collections/SofaComponentAll/initComponentAll.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "applications/collections/SofaComponentAll/initComponentAll.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "applications/collections/SofaComponentAll/README.md",
+			"sourceGroupIndex" : 2
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

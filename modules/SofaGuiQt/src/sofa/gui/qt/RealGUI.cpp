@@ -58,6 +58,7 @@
 #include "QSofaStatWidget.h"
 #include "viewer/SofaViewer.h"
 
+
 #include <sofa/gui/BaseViewer.h>
 #include <SofaSimulationCommon/xml/XML.h>
 #include <sofa/simulation/DeactivatedNodeVisitor.h>
@@ -350,6 +351,7 @@ RealGUI::RealGUI ( const char* viewername)
       timerStep(nullptr),
       backgroundImage(nullptr),
       pluginManager_dialog(nullptr),
+      
       recentlyOpenedFilesManager(sofa::gui::BaseGUI::getConfigDirectoryPath() + "/runSofa.ini"),
       saveReloadFile(false),
       displayFlag(nullptr),
@@ -365,6 +367,7 @@ RealGUI::RealGUI ( const char* viewername)
     parseOptions();
 
     createPluginManager();
+
 
     createRecentFilesMenu(); // configure Recently Opened Menu
 
@@ -1185,6 +1188,9 @@ void RealGUI::showPluginManager()
     pluginManager_dialog->show();
 }
 
+
+
+
 //------------------------------------
 
 void RealGUI::showMouseManager()
@@ -1808,6 +1814,8 @@ void RealGUI::createSofaWindowDataGraph()
     m_sofaWindowDataGraph->hide();
 #endif
 }
+
+
 
 //------------------------------------
 
