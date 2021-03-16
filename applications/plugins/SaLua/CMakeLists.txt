@@ -48,7 +48,6 @@ else()
             ${LUA_SRC_DIR}/lzio.c
             ${LUA_SRC_DIR}/lauxlib.c
             ${LUA_SRC_DIR}/lbaselib.c
-            ${LUA_SRC_DIR}/lbitlib.c
             ${LUA_SRC_DIR}/lcorolib.c
             ${LUA_SRC_DIR}/ldblib.c
             ${LUA_SRC_DIR}/liolib.c
