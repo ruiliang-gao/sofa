@@ -30,6 +30,18 @@
 #include <SofaBaseTopology/TopologyData.h>
 #include <sofa/core/topology/TopologyHandler.h>
 
+#include <sofa/config.h>
+#include <sofa/config/sharedlibrary_defines.h>
+
+#define SOFAGENERALDEFORMABLE_VERSION @PROJECT_VERSION@
+
+#ifdef SOFA_BUILD_SOFAGENERALDEFORMABLE
+#  define SOFA_TARGET @PROJECT_NAME@
+#  define SOFA_SOFAGENERALDEFORMABLE_API SOFA_EXPORT_DYNAMIC_LIBRARY
+#else
+#  define SOFA_SOFAGENERALDEFORMABLE_API SOFA_IMPORT_DYNAMIC_LIBRARY
+#endif
+
 namespace sofa::component::forcefield
 {
 

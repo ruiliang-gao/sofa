@@ -107,6 +107,7 @@ set(MOC_HEADER_FILES
     ${SRC_ROOT}/SofaVideoRecorderManager.h
     ${SRC_ROOT}/SofaPluginManager.h
     ${SRC_ROOT}/WDoubleLineEdit.h    
+    ${SRC_ROOT}/report_score.h
     )
 set(HEADER_FILES
     ${SRC_ROOT}/config.h.in
@@ -131,6 +132,7 @@ set(SOURCE_FILES
     ${SRC_ROOT}/FileManagement.cpp
     ${SRC_ROOT}/GenGraphForm.cpp
     ${SRC_ROOT}/GraphListenerQListView.cpp
+    ${SRC_ROOT}/report_score.cpp
     ${SRC_ROOT}/LinkWidget.cpp
     ${SRC_ROOT}/MaterialDataWidget.cpp
     ${SRC_ROOT}/RGBAColorDataWidget.cpp
@@ -167,6 +169,7 @@ set(UI_FILES
     ${SRC_ROOT}/MouseManager.ui
     ${SRC_ROOT}/PluginManager.ui
     ${SRC_ROOT}/VideoRecorderManager.ui    
+    ${SRC_ROOT}/report_score.ui
 )
 
 if(SOFA_DUMP_VISITOR_INFO)

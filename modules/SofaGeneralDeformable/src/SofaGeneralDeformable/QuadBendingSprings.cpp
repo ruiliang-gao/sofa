@@ -26,6 +26,7 @@
 #include <sofa/core/behavior/PairInteractionForceField.inl>
 #include <sofa/defaulttype/VecTypes.h>
 #include <sofa/core/ObjectFactory.h>
+#include <SofaGeneralDeformable/QuadularBendingSprings.h>
 
 namespace sofa::component::interactionforcefield
 {

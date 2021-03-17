@@ -21,6 +21,7 @@
 ******************************************************************************/
 #define SOFA_COMPONENT_FORCEFIELD_TRIANGULARBENDINGSPRINGS_CPP
 #include <SofaGeneralDeformable/TriangularBendingSprings.inl>
+#include <SofaGeneralDeformable/TriangularBendingSprings.h>
 #include <sofa/defaulttype/VecTypes.h>
 #include <sofa/core/ObjectFactory.h>
 

@@ -21,6 +21,7 @@
 ******************************************************************************/
 #define SOFA_COMPONENT_FORCEFIELD_REGULARGRIDSPRINGFORCEFIELD_CPP
 #include <SofaGeneralDeformable/RegularGridSpringForceField.inl>
+#include <SofaGeneralDeformable/RegularGridSpringForceField.h>
 #include <sofa/core/behavior/PairInteractionForceField.inl>
 #include <sofa/defaulttype/VecTypes.h>
 #include <sofa/core/ObjectFactory.h>

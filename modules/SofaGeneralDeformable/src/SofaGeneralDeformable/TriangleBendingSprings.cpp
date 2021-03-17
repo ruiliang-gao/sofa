@@ -21,6 +21,7 @@
 ******************************************************************************/
 #define SOFA_COMPONENT_INTERACTIONFORCEFIELD_TRIANGLEBENDINGSPRINGS_CPP
 #include <SofaGeneralDeformable/TriangleBendingSprings.inl>
+#include <SofaGeneralDeformable/TriangleBendingSprings.h>
 #include <SofaDeformable/StiffSpringForceField.inl>
 #include <sofa/core/behavior/PairInteractionForceField.inl>
 #include <sofa/defaulttype/VecTypes.h>

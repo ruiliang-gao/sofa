@@ -22,6 +22,7 @@
 #define SOFA_COMPONENT_FORCEFIELD_TRIANGULARBIQUADRATICSPRINGSFORCEFIELD_CPP
 
 #include <SofaGeneralDeformable/TriangularBiquadraticSpringsForceField.inl>
+#include <SofaGeneralDeformable/TriangularBiquadraticSpringsForceField.h>
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/defaulttype/VecTypes.h>
 

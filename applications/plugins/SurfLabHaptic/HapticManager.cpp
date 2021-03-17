@@ -23,6 +23,12 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 #include "HapticManager.h"
+#include "GUIManager.h"
+#include "BaseGUI.h"
+#include "RealGUI.h"
+using sofa::gui::GUIManager;
+using sofa::gui::BaseGui;
+using sofa::gui::qt::RealGui;
 
 #define int2string(a) std::to_string(a)
 namespace sofa
