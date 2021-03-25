@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/SofaFramework/SofaMacros.cmake
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/extlibs/newmat/CMakeLists.txt
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/extlibs/newmat/NewmatConfig.cmake.in
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/extlibs/newmat/NewmatConfigVersion.cmake
+C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.19/Modules/BasicConfigVersion-ExactVersion.cmake.in

@@ -1,0 +1,43 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaGeneralSimpleFem/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaGeneralSimpleFem::@723ed9dfac015cd76867"
+		},
+		{
+			"id" : "SofaGeneralSimpleFem_relocatable_install::@723ed9dfac015cd76867"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@723ed9dfac015cd76867",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaGeneralSimpleFem",
+		"source" : "modules/SofaGeneralSimpleFem"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

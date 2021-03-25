@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\initSofaGeneralDeformable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\FastTriangularBendingSprings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\FrameSpringForceField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\QuadBendingSprings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\QuadularBendingSprings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\RegularGridSpringForceField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangleBendingSprings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularBendingSprings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularBiquadraticSpringsForceField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularQuadraticSpringsForceField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularTensorMassForceField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\VectorSpringForceField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\config.h.in">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\initSofaGeneralDeformable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\FastTriangularBendingSprings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\FastTriangularBendingSprings.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\FrameSpringForceField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\FrameSpringForceField.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\QuadBendingSprings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\QuadBendingSprings.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\QuadularBendingSprings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\QuadularBendingSprings.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\RegularGridSpringForceField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\RegularGridSpringForceField.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangleBendingSprings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangleBendingSprings.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularBendingSprings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularBendingSprings.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularBiquadraticSpringsForceField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularBiquadraticSpringsForceField.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularQuadraticSpringsForceField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularQuadraticSpringsForceField.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularTensorMassForceField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\TriangularTensorMassForceField.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\VectorSpringForceField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\src\SofaGeneralDeformable\VectorSpringForceField.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralDeformable\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{BF7846FD-3A47-3DBC-A76C-A3950F42764E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{C1C74F81-87E9-3AA4-94C6-46027A16BE81}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

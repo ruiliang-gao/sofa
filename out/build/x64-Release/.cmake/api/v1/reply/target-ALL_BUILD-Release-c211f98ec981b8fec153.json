@@ -1,0 +1,46 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"applications/plugins/CImgPlugin/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "CImgPlugin::@c426f8923f74a1eaaac1"
+		},
+		{
+			"id" : "CImgPlugin_relocatable_install::@c426f8923f74a1eaaac1"
+		},
+		{
+			"id" : "CImgPlugin_test::@a741fbce5922b3080e38"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@c426f8923f74a1eaaac1",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "applications/plugins/CImgPlugin",
+		"source" : "applications/plugins/CImgPlugin"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

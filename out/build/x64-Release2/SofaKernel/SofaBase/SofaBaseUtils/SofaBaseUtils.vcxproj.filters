@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\initSofaBaseUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\messageHandlerComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\MakeAliasComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\MakeDataAliasComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\InfoComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\RequiredPlugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\AddResourceRepository.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\config.h.in">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\initSofaBaseUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\messageHandlerComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\MakeAliasComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\MakeDataAliasComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\InfoComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\RequiredPlugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\src\SofaBaseUtils\AddResourceRepository.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseUtils\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{BD92AB85-B826-365A-809A-B253B05BE617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{F5CC8CFF-A111-3DF9-92ED-ECAC98939358}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

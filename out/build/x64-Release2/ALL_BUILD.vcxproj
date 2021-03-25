@@ -1,0 +1,860 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3E6ECF97-43DC-3931-92CE-EC24DD428B86}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\CMakeLists.txt">
+      <StdOutEncoding>UTF-8</StdOutEncoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src -BC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2 --check-stamp-file C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\Eigenfiles\eigen-3.3.9\build\Eigen3Config.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\Eigenfiles\eigen-3.3.9\build\Eigen3ConfigVersion.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\Eigenfiles\eigen-3.3.9\build\Eigen3Targets.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\SofaFramework\CMakeParseLibraryList.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\SofaFramework\SofaMacros.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\SofaFramework\SofaMacrosConfigure.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\SofaFramework\SofaMacrosInstall.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\SofaFramework\SofaMacrosPython.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\SofaFramework\SofaMacrosUtils.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\cmake\CompilerOptions.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\CMakeFiles\3.19.20122902-MSVC_2\CMakeCCompiler.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\CMakeFiles\3.19.20122902-MSVC_2\CMakeCXXCompiler.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\CMakeFiles\3.19.20122902-MSVC_2\CMakeRCCompiler.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\CMakeFiles\3.19.20122902-MSVC_2\CMakeSystem.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeCInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeCXXInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeDependentOption.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeGenericSystem.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeInitializeConfigs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeLanguageInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeParseArguments.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeRCInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CPack.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CPackComponent.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\CPackIFW.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\Compiler\MSVC-C.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\FindBoost.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\Platform\Windows-MSVC.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\Platform\Windows.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\Platform\WindowsPaths.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\WriteBasicConfigVersionFile.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Templates\CPackConfig.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\ZERO_CHECK.vcxproj">
+      <Project>{6F5DEC64-695A-3411-A7D1-219B0B22CF74}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\CImgPlugin\CImgPlugin.vcxproj">
+      <Project>{224CFC75-6005-3D77-8703-78C0D416F5EC}</Project>
+      <Name>CImgPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\CImgPlugin\CImgPlugin_relocatable_install.vcxproj">
+      <Project>{0512EECC-5676-3738-8523-9F892889E68F}</Project>
+      <Name>CImgPlugin_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\CImgPlugin\CImgPlugin_test\CImgPlugin_test.vcxproj">
+      <Project>{45FA391C-DA2D-3329-8C96-AC351A4FBA78}</Project>
+      <Name>CImgPlugin_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\QGLViewer.vcxproj">
+      <Project>{3746C370-5DF0-3A27-B7CE-D36EBDFD9BC7}</Project>
+      <Name>QGLViewer</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\SceneCreator\SceneCreator.vcxproj">
+      <Project>{4DCD122B-7FE0-3845-958A-842C10219ED8}</Project>
+      <Name>SceneCreator</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\SceneCreator\SceneCreator_relocatable_install.vcxproj">
+      <Project>{B78FF35D-9C4D-314A-B935-05C5DBA6350C}</Project>
+      <Name>SceneCreator_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\SceneCreator\SceneCreator_test\SceneCreator_test.vcxproj">
+      <Project>{FBF9ADEA-7095-3B8E-B930-F09E96FB3270}</Project>
+      <Name>SceneCreator_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaAdvanced\SofaAdvanced.vcxproj">
+      <Project>{FCF965EB-56E7-3400-BBDE-785644606653}</Project>
+      <Name>SofaAdvanced</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBase.vcxproj">
+      <Project>{B1FFA01A-D44F-3D0C-A830-38E631EC9C3E}</Project>
+      <Name>SofaBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBaseCollision\SofaBaseCollision.vcxproj">
+      <Project>{FD7C45B0-0BD0-333C-B1FE-CF5C66DE04DF}</Project>
+      <Name>SofaBaseCollision</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBaseCollision\SofaBaseCollision_test\SofaBaseCollision_test.vcxproj">
+      <Project>{D75EE883-DE69-3C76-A83C-4CAD5D31E072}</Project>
+      <Name>SofaBaseCollision_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBaseLinearSolver\SofaBaseLinearSolver.vcxproj">
+      <Project>{C6546FCC-C4C9-324D-A52C-9D7C1F472678}</Project>
+      <Name>SofaBaseLinearSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBaseLinearSolver\SofaBaseLinearSolver_test\SofaBaseLinearSolver_test.vcxproj">
+      <Project>{EFEBC7D4-36AA-3DE6-B5FF-F374BC1C5889}</Project>
+      <Name>SofaBaseLinearSolver_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBaseMechanics\SofaBaseMechanics.vcxproj">
+      <Project>{1D9AB2DF-7DE4-3E65-A60E-E0D9CC78C64E}</Project>
+      <Name>SofaBaseMechanics</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBaseTopology\SofaBaseTopology.vcxproj">
+      <Project>{BD5458E0-5FB4-3C89-A07B-992F82CE14E5}</Project>
+      <Name>SofaBaseTopology</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBaseTopology\SofaBaseTopology_test\SofaBaseTopology_test.vcxproj">
+      <Project>{F7F753A6-963C-32D4-BA18-7183B895984D}</Project>
+      <Name>SofaBaseTopology_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBaseUtils\SofaBaseUtils.vcxproj">
+      <Project>{7B303FA7-29D1-388D-84AC-6A72A3DC215A}</Project>
+      <Name>SofaBaseUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBaseVisual\SofaBaseUtils_test\SofaBaseUtils_test.vcxproj">
+      <Project>{B88BA369-174A-3884-AC6C-EC14CB2416C7}</Project>
+      <Name>SofaBaseUtils_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaBaseVisual\SofaBaseVisual.vcxproj">
+      <Project>{E6E9DA1C-C853-3FC2-9027-69A7E6300656}</Project>
+      <Name>SofaBaseVisual</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaBoundaryCondition\SofaBoundaryCondition.vcxproj">
+      <Project>{4C93112F-17D0-377A-97ED-EB2C951D8BE7}</Project>
+      <Name>SofaBoundaryCondition</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaBoundaryCondition\SofaBoundaryCondition_relocatable_install.vcxproj">
+      <Project>{E5D465C9-164E-39F1-A7B3-A39C6B2332A6}</Project>
+      <Name>SofaBoundaryCondition_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaBoundaryCondition\SofaBoundaryCondition_test\SofaBoundaryCondition_test.vcxproj">
+      <Project>{1D435899-B0FB-3EFF-AB64-6582B2AEFE78}</Project>
+      <Name>SofaBoundaryCondition_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaCommon\SofaCommon.vcxproj">
+      <Project>{62AB72AB-3689-3DF4-B36A-F866E5712592}</Project>
+      <Name>SofaCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\collections\SofaComponentAll\SofaComponentAll.vcxproj">
+      <Project>{4EDCBCF9-BE1F-3F4B-A884-CCE1DADF7794}</Project>
+      <Name>SofaComponentAll</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaConstraint\SofaConstraint.vcxproj">
+      <Project>{5D78146E-C3E5-311A-BDD6-B47537DA3904}</Project>
+      <Name>SofaConstraint</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaConstraint\SofaConstraint_relocatable_install.vcxproj">
+      <Project>{433FE68A-F5FA-3F17-8E64-797CD57DA98B}</Project>
+      <Name>SofaConstraint_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaConstraint\SofaConstraint_test\SofaConstraint_test.vcxproj">
+      <Project>{4654358C-0B1C-3A56-B6D5-E02B48919771}</Project>
+      <Name>SofaConstraint_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaCore\SofaCore.vcxproj">
+      <Project>{D69FDEB6-3A69-3B07-B453-B0C4FDAA2124}</Project>
+      <Name>SofaCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaCore\SofaCore_simutest\SofaCore_simutest.vcxproj">
+      <Project>{147AF462-D480-39FC-9CB4-93152AFF5B0F}</Project>
+      <Name>SofaCore_simutest</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaCore\SofaCore_test\SofaCore_test.vcxproj">
+      <Project>{CD19455E-BDA7-3073-9D32-199A667C3544}</Project>
+      <Name>SofaCore_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaDefaultType\SofaDefaultType.vcxproj">
+      <Project>{EB43E268-5A0D-3889-BED3-9B1249608A76}</Project>
+      <Name>SofaDefaultType</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaDefaultType\SofaDefaultType_simutest\SofaDefaultType_simutest.vcxproj">
+      <Project>{84B097A6-38E4-322F-A212-1F15B4A4C128}</Project>
+      <Name>SofaDefaultType_simutest</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaDefaultType\SofaDefaultType_test\SofaDefaultType_test.vcxproj">
+      <Project>{15A157C7-413A-3B7B-91BF-0E40ECF686B8}</Project>
+      <Name>SofaDefaultType_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaDeformable\SofaDeformable.vcxproj">
+      <Project>{DE39344C-FF53-3FD4-A682-F728A737140C}</Project>
+      <Name>SofaDeformable</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaDeformable\SofaDeformable_relocatable_install.vcxproj">
+      <Project>{D5EDF890-874D-3289-9802-64B38422798D}</Project>
+      <Name>SofaDeformable_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaDeformable\SofaDeformable_test\SofaDeformable_test.vcxproj">
+      <Project>{1E4546C4-D703-318F-8FDF-EB52A56CB454}</Project>
+      <Name>SofaDeformable_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaDenseSolver\SofaDenseSolver.vcxproj">
+      <Project>{93C03F71-CCD1-3BFA-B59D-FBC41B0B4C06}</Project>
+      <Name>SofaDenseSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaDenseSolver\SofaDenseSolver_relocatable_install.vcxproj">
+      <Project>{65D0EF58-BC02-304E-814D-603D8AA70F40}</Project>
+      <Name>SofaDenseSolver_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaBase\SofaEigen2Solver\SofaEigen2Solver.vcxproj">
+      <Project>{7D2A628A-A0E8-3CB0-841B-A4BEFBA46B9E}</Project>
+      <Name>SofaEigen2Solver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaEngine\SofaEngine.vcxproj">
+      <Project>{CF975328-799E-37A8-82B4-E47D55192B60}</Project>
+      <Name>SofaEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaEngine\SofaEngine_relocatable_install.vcxproj">
+      <Project>{7247E9CF-9CF0-3558-9CB6-E512C00235D0}</Project>
+      <Name>SofaEngine_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaEngine\SofaEngine_test\SofaEngine_test.vcxproj">
+      <Project>{29B22A7A-FD3F-32F3-8B2F-F924E6A74003}</Project>
+      <Name>SofaEngine_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaExplicitOdeSolver\SofaExplicitOdeSolver.vcxproj">
+      <Project>{1F6CF0EB-F9CF-30DA-9901-30FB0030A063}</Project>
+      <Name>SofaExplicitOdeSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaExplicitOdeSolver\SofaExplicitOdeSolver_relocatable_install.vcxproj">
+      <Project>{927FC8C8-AB51-33F8-A1F1-D30F971FA60E}</Project>
+      <Name>SofaExplicitOdeSolver_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaExplicitOdeSolver\SofaExplicitOdeSolver_test\SofaExplicitOdeSolver_test.vcxproj">
+      <Project>{6BA26ED6-6931-33BD-9D64-A1088CFAB0E8}</Project>
+      <Name>SofaExplicitOdeSolver_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaExporter\SofaExporter.vcxproj">
+      <Project>{C5A295EE-AFE6-3D11-9058-E7A48F7C85C0}</Project>
+      <Name>SofaExporter</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaExporter\SofaExporter_relocatable_install.vcxproj">
+      <Project>{C0914EAF-ED89-3AD3-BF8B-D08DC32F820F}</Project>
+      <Name>SofaExporter_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaExporter\SofaExporter_test\SofaExporter_test.vcxproj">
+      <Project>{807B699C-BE2E-3673-92B8-15803CA08CFA}</Project>
+      <Name>SofaExporter_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaFramework.vcxproj">
+      <Project>{08F342F8-B41A-30B3-B2B8-DA691C4B1472}</Project>
+      <Name>SofaFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\tools\SofaGTestMain\SofaGTestMain.vcxproj">
+      <Project>{9F4AFE03-8E62-343C-BE8E-5D00E19C4516}</Project>
+      <Name>SofaGTestMain</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaGeneral\SofaGeneral.vcxproj">
+      <Project>{375C682D-D584-3061-BD3A-77E8A2FB701B}</Project>
+      <Name>SofaGeneral</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralAnimationLoop\SofaGeneralAnimationLoop.vcxproj">
+      <Project>{6499F394-438B-3B4F-A8FE-6E5FA0C3B93B}</Project>
+      <Name>SofaGeneralAnimationLoop</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralAnimationLoop\SofaGeneralAnimationLoop_relocatable_install.vcxproj">
+      <Project>{41F5A4B4-0A6B-31F8-800C-BCC8F0F68A5C}</Project>
+      <Name>SofaGeneralAnimationLoop_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralDeformable\SofaGeneralDeformable.vcxproj">
+      <Project>{EE7C0445-411B-3DA4-9B7D-41F3091FAD1F}</Project>
+      <Name>SofaGeneralDeformable</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralDeformable\SofaGeneralDeformable_relocatable_install.vcxproj">
+      <Project>{73CE64B2-B084-3F32-999E-E2BDFFFD9B1C}</Project>
+      <Name>SofaGeneralDeformable_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralEngine\SofaGeneralEngine.vcxproj">
+      <Project>{974BF7A8-38C7-3734-AAB2-99EE7218E4C8}</Project>
+      <Name>SofaGeneralEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralEngine\SofaGeneralEngine_relocatable_install.vcxproj">
+      <Project>{44D8943C-354F-35DF-98C0-541B4B8F9F9B}</Project>
+      <Name>SofaGeneralEngine_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralEngine\SofaGeneralEngine_test\SofaGeneralEngine_test.vcxproj">
+      <Project>{FD47465E-9A91-385F-97FC-074A305D36AD}</Project>
+      <Name>SofaGeneralEngine_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralExplicitOdeSolver\SofaGeneralExplicitOdeSolver.vcxproj">
+      <Project>{13F5E1A6-5548-37C0-8327-C70AAF45E424}</Project>
+      <Name>SofaGeneralExplicitOdeSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralExplicitOdeSolver\SofaGeneralExplicitOdeSolver_relocatable_install.vcxproj">
+      <Project>{9F00810E-5CB5-37B9-BAD4-232C920CD32F}</Project>
+      <Name>SofaGeneralExplicitOdeSolver_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralExplicitOdeSolver\SofaGeneralExplicitOdeSolver_test\SofaGeneralExplicitOdeSolver_test.vcxproj">
+      <Project>{320F7FF3-0D60-31DB-9A05-AFA40CA6C83B}</Project>
+      <Name>SofaGeneralExplicitOdeSolver_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralImplicitOdeSolver\SofaGeneralImplicitOdeSolver.vcxproj">
+      <Project>{AC5B2E44-4E63-3734-842A-926FFBC8D77C}</Project>
+      <Name>SofaGeneralImplicitOdeSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralImplicitOdeSolver\SofaGeneralImplicitOdeSolver_relocatable_install.vcxproj">
+      <Project>{21B7D18A-E310-3627-AE96-9F263CD5AE70}</Project>
+      <Name>SofaGeneralImplicitOdeSolver_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralImplicitOdeSolver\SofaGeneralImplicitOdeSolver_test\SofaGeneralImplicitOdeSolver_test.vcxproj">
+      <Project>{2E47436A-7565-3705-A7B8-FF3138420C41}</Project>
+      <Name>SofaGeneralImplicitOdeSolver_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralLinearSolver\SofaGeneralLinearSolver.vcxproj">
+      <Project>{F7445075-97E3-3B31-B3D5-0388B7051589}</Project>
+      <Name>SofaGeneralLinearSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralLinearSolver\SofaGeneralLinearSolver_relocatable_install.vcxproj">
+      <Project>{C2E17464-38E2-3729-BC33-160B6823E70C}</Project>
+      <Name>SofaGeneralLinearSolver_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralLoader\SofaGeneralLoader.vcxproj">
+      <Project>{168F2AFA-5344-355A-A44D-BCE6A3DA2DF9}</Project>
+      <Name>SofaGeneralLoader</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralLoader\SofaGeneralLoader_relocatable_install.vcxproj">
+      <Project>{7AAD6187-F7AB-3B2F-81C1-C01759F8A206}</Project>
+      <Name>SofaGeneralLoader_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralLoader\SofaGeneralLoader_test\SofaGeneralLoader_test.vcxproj">
+      <Project>{733C3577-7293-3C6B-BBF0-98AC8EC67ABF}</Project>
+      <Name>SofaGeneralLoader_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralMeshCollision\SofaGeneralMeshCollision.vcxproj">
+      <Project>{69139D36-AB32-3D19-89F0-6190315A294E}</Project>
+      <Name>SofaGeneralMeshCollision</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralMeshCollision\SofaGeneralMeshCollision_relocatable_install.vcxproj">
+      <Project>{C2B6491B-FAB2-3BB1-900D-9BB08309FCC8}</Project>
+      <Name>SofaGeneralMeshCollision_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralObjectInteraction\SofaGeneralObjectInteraction.vcxproj">
+      <Project>{74C3E7A8-B2FC-3760-B342-F20FAFDEB3BA}</Project>
+      <Name>SofaGeneralObjectInteraction</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralObjectInteraction\SofaGeneralObjectInteraction_relocatable_install.vcxproj">
+      <Project>{1A25DEB0-B07D-361F-9D78-D80F9B57C3FB}</Project>
+      <Name>SofaGeneralObjectInteraction_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralRigid\SofaGeneralRigid.vcxproj">
+      <Project>{3F8A4D35-1644-3981-9530-7DB4FFFBDBD5}</Project>
+      <Name>SofaGeneralRigid</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralRigid\SofaGeneralRigid_relocatable_install.vcxproj">
+      <Project>{EC40D703-A9A8-313B-A3E9-53EE40C48127}</Project>
+      <Name>SofaGeneralRigid_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralSimpleFem\SofaGeneralSimpleFem.vcxproj">
+      <Project>{5B300D8B-A841-318A-8167-202322513CC1}</Project>
+      <Name>SofaGeneralSimpleFem</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralSimpleFem\SofaGeneralSimpleFem_relocatable_install.vcxproj">
+      <Project>{C0F0678B-6EA8-3BBC-BC40-89A367041C4D}</Project>
+      <Name>SofaGeneralSimpleFem_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralTopology\SofaGeneralTopology.vcxproj">
+      <Project>{CAAEB0C4-DA86-3BBD-88D4-F96C0F6F3AFF}</Project>
+      <Name>SofaGeneralTopology</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralTopology\SofaGeneralTopology_relocatable_install.vcxproj">
+      <Project>{CD95561F-0FF2-3471-9732-F634E7451B9A}</Project>
+      <Name>SofaGeneralTopology_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralTopology\SofaGeneralTopology_test\SofaGeneralTopology_test.vcxproj">
+      <Project>{F9A9E5E4-257A-365F-B74C-4A7E2D22F6CF}</Project>
+      <Name>SofaGeneralTopology_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralVisual\SofaGeneralVisual.vcxproj">
+      <Project>{EF0B4802-3A4C-304E-A59C-69552D52E92E}</Project>
+      <Name>SofaGeneralVisual</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGeneralVisual\SofaGeneralVisual_relocatable_install.vcxproj">
+      <Project>{FFF80D4B-CA16-301E-B738-D4A3E05BA763}</Project>
+      <Name>SofaGeneralVisual_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGraphComponent\SofaGraphComponent.vcxproj">
+      <Project>{E1BD3622-38CB-354B-9615-7C4C9D7FBAA3}</Project>
+      <Name>SofaGraphComponent</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGraphComponent\SofaGraphComponent_relocatable_install.vcxproj">
+      <Project>{510AC4C9-858B-3438-9161-91DBCEF1BD10}</Project>
+      <Name>SofaGraphComponent_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaGraphComponent\SofaGraphComponent_test\SofaGraphComponent_test.vcxproj">
+      <Project>{0A684E2A-8090-35A6-AB94-44CD8DED4287}</Project>
+      <Name>SofaGraphComponent_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaGui\SofaGui.vcxproj">
+      <Project>{A11BE667-FA9A-338C-84C4-36714A3A55AC}</Project>
+      <Name>SofaGui</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaGui\SofaGuiCommon\SofaGuiCommon.vcxproj">
+      <Project>{A44F8379-55AC-326C-9934-3E7793E151B1}</Project>
+      <Name>SofaGuiCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaGui\SofaGuiMain\SofaGuiMain.vcxproj">
+      <Project>{C5F8CA63-AFBD-3CE2-83E0-3ACC85DE478A}</Project>
+      <Name>SofaGuiMain</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaGui\SofaGuiQt\SofaGuiQt.vcxproj">
+      <Project>{4A73F870-6ED9-3886-B0DE-F65C136593A3}</Project>
+      <Name>SofaGuiQt</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaHaptics\SofaHaptics.vcxproj">
+      <Project>{BD515C11-26CE-30A2-B1BD-049D79C7F5B8}</Project>
+      <Name>SofaHaptics</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaHaptics\SofaHaptics_relocatable_install.vcxproj">
+      <Project>{CA98C4D4-03B8-3B83-A357-AFC1C7A020BE}</Project>
+      <Name>SofaHaptics_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaHaptics\SofaHaptics_test\SofaHaptics_test.vcxproj">
+      <Project>{F70F497C-9710-30D5-9CEA-6A86B73BA139}</Project>
+      <Name>SofaHaptics_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaHelper\SofaHelper.vcxproj">
+      <Project>{AC65F615-7138-37E5-BFBF-B610DEB2EFD8}</Project>
+      <Name>SofaHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaHelper\SofaHelper_simutest\SofaHelper_simutest.vcxproj">
+      <Project>{E3996B17-17F1-3536-ACD7-D3C4AFDB2972}</Project>
+      <Name>SofaHelper_simutest</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaHelper\SofaHelper_test\SofaHelper_test.vcxproj">
+      <Project>{C3B7C35D-C2F4-33A7-93C0-BB1988F78437}</Project>
+      <Name>SofaHelper_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaImplicitOdeSolver\SofaImplicitOdeSolver.vcxproj">
+      <Project>{DD5166A4-E938-3DAE-82CB-082B671C1F1B}</Project>
+      <Name>SofaImplicitOdeSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaImplicitOdeSolver\SofaImplicitOdeSolver_relocatable_install.vcxproj">
+      <Project>{C15DA92E-9874-3524-94BB-CCE0AD04998E}</Project>
+      <Name>SofaImplicitOdeSolver_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaImplicitOdeSolver\SofaImplicitOdeSolver_test\SofaImplicitOdeSolver_test.vcxproj">
+      <Project>{3613601F-70F1-3C38-926E-E9424BA7B7EA}</Project>
+      <Name>SofaImplicitOdeSolver_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaLoader\SofaLoader.vcxproj">
+      <Project>{9E179A48-1065-3AEC-99E8-B1FF0B83E3E2}</Project>
+      <Name>SofaLoader</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaLoader\SofaLoader_relocatable_install.vcxproj">
+      <Project>{64D90E77-487E-3564-848A-335C06C4E0EB}</Project>
+      <Name>SofaLoader_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaLoader\SofaLoader_test\SofaLoader_test.vcxproj">
+      <Project>{B3FBDA89-4961-37E6-B50E-D37609BE7817}</Project>
+      <Name>SofaLoader_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaMeshCollision\SofaMeshCollision.vcxproj">
+      <Project>{3529806A-D2E4-3551-8CBD-3BDD880F5B4C}</Project>
+      <Name>SofaMeshCollision</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaMeshCollision\SofaMeshCollision_relocatable_install.vcxproj">
+      <Project>{6C916B1E-7D0B-3109-8070-A37D1361114B}</Project>
+      <Name>SofaMeshCollision_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaMeshCollision\SofaMeshCollision_test\SofaMeshCollision_test.vcxproj">
+      <Project>{4BC83AC4-203E-3F6A-AB4B-61D01DF87A3B}</Project>
+      <Name>SofaMeshCollision_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaMisc\SofaMisc.vcxproj">
+      <Project>{2F405BD7-8E81-3672-86C0-93E2CABA649A}</Project>
+      <Name>SofaMisc</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\SofaMiscCollision\SofaMiscCollision.vcxproj">
+      <Project>{5BD0598B-FAA3-3C7C-855F-478CE6ADDFFF}</Project>
+      <Name>SofaMiscCollision</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\SofaMiscCollision\SofaMiscCollision_relocatable_install.vcxproj">
+      <Project>{E9FC35FA-AA26-32B0-82D4-5D4E26659751}</Project>
+      <Name>SofaMiscCollision_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscEngine\SofaMiscEngine.vcxproj">
+      <Project>{22763B71-79B1-313E-80C6-D4E44F35F9FE}</Project>
+      <Name>SofaMiscEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscEngine\SofaMiscEngine_relocatable_install.vcxproj">
+      <Project>{D4CDA160-B409-3B48-8A65-DA0BED271F92}</Project>
+      <Name>SofaMiscEngine_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscExtra\SofaMiscExtra.vcxproj">
+      <Project>{08CFF473-39C0-3E73-98A7-D07A3482B3B3}</Project>
+      <Name>SofaMiscExtra</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscExtra\SofaMiscExtra_relocatable_install.vcxproj">
+      <Project>{57782B74-64CE-30A3-9A48-12284D9A6270}</Project>
+      <Name>SofaMiscExtra_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscExtra\SofaMiscExtra_test\SofaMiscExtra_test.vcxproj">
+      <Project>{3337E134-A657-3648-B02C-25737473B001}</Project>
+      <Name>SofaMiscExtra_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscFem\SofaMiscFem.vcxproj">
+      <Project>{71458FED-9FEE-335D-AB18-C7BF5EB909A1}</Project>
+      <Name>SofaMiscFem</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscFem\SofaMiscFem_relocatable_install.vcxproj">
+      <Project>{8B9507B8-AFE0-3F5E-95FA-A80DF140CF89}</Project>
+      <Name>SofaMiscFem_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscFem\SofaMiscFem_test\SofaMiscFem_test.vcxproj">
+      <Project>{BD6A04A9-1292-3FB3-B37D-8DA8DC55704D}</Project>
+      <Name>SofaMiscFem_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscForceField\SofaMiscForceField.vcxproj">
+      <Project>{F7AD4ADF-D7D3-370B-94FA-4CD86C390B04}</Project>
+      <Name>SofaMiscForceField</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscForceField\SofaMiscForceField_relocatable_install.vcxproj">
+      <Project>{5AA99E37-F805-3FB1-97F3-6B73773183BA}</Project>
+      <Name>SofaMiscForceField_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscForceField\SofaMiscForceField_test\SofaMiscForceField_test.vcxproj">
+      <Project>{1DB9CF4E-591E-36F3-BC27-45DAC5C8BFD5}</Project>
+      <Name>SofaMiscForceField_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscMapping\SofaMiscMapping.vcxproj">
+      <Project>{111D5B6C-70EF-3273-AB06-23CE3C8D8C81}</Project>
+      <Name>SofaMiscMapping</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscMapping\SofaMiscMapping_relocatable_install.vcxproj">
+      <Project>{D59EF4C1-73E0-329D-BC2E-622CCCDABA5E}</Project>
+      <Name>SofaMiscMapping_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscMapping\SofaMiscMapping_test\SofaMiscMapping_test.vcxproj">
+      <Project>{280BDD1D-6F31-3103-952F-8505F79CF01A}</Project>
+      <Name>SofaMiscMapping_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscSolver\SofaMiscSolver.vcxproj">
+      <Project>{49238C65-0857-3D7D-90F4-CC255A9BE991}</Project>
+      <Name>SofaMiscSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscSolver\SofaMiscSolver_relocatable_install.vcxproj">
+      <Project>{2E93F340-985E-3D88-A1D2-986E88C4809C}</Project>
+      <Name>SofaMiscSolver_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscSolver\SofaMiscSolver_test\SofaMiscSolver_test.vcxproj">
+      <Project>{CA05E823-6A6A-3E35-B04F-A2898C64D1DB}</Project>
+      <Name>SofaMiscSolver_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscTopology\SofaMiscTopology.vcxproj">
+      <Project>{3DDBE6F5-6250-3984-AFED-486537802AAC}</Project>
+      <Name>SofaMiscTopology</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscTopology\SofaMiscTopology_relocatable_install.vcxproj">
+      <Project>{0C60A2CE-D02B-3550-8C66-139BB7CB8E7E}</Project>
+      <Name>SofaMiscTopology_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaMiscTopology\SofaMiscTopology_test\SofaMiscTopology_test.vcxproj">
+      <Project>{51BA70D0-6341-3D59-9DAC-F8A22FD2BA72}</Project>
+      <Name>SofaMiscTopology_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaNonUniformFem\SofaNonUniformFem.vcxproj">
+      <Project>{C616C1E9-795B-328E-AB1F-34E3F1D738C0}</Project>
+      <Name>SofaNonUniformFem</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaNonUniformFem\SofaNonUniformFem_relocatable_install.vcxproj">
+      <Project>{BD283C3E-38AB-3B29-B8CD-A4F183F38B18}</Project>
+      <Name>SofaNonUniformFem_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaObjectInteraction\SofaObjectInteraction.vcxproj">
+      <Project>{E0688530-B0DE-3128-9EA0-203FA6204E37}</Project>
+      <Name>SofaObjectInteraction</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaObjectInteraction\SofaObjectInteraction_relocatable_install.vcxproj">
+      <Project>{811C0DCC-1456-3D9A-AFCB-C833A20A6C66}</Project>
+      <Name>SofaObjectInteraction_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaOpenglVisual\SofaOpenglVisual.vcxproj">
+      <Project>{100B3AEE-9686-3C8D-84A2-57E0C5BB120C}</Project>
+      <Name>SofaOpenglVisual</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaOpenglVisual\SofaOpenglVisual_relocatable_install.vcxproj">
+      <Project>{87E6534A-46E8-3421-A598-83D459C3DD3F}</Project>
+      <Name>SofaOpenglVisual_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaOpenglVisual\SofaOpenglVisual_test\SofaOpenglVisual_test.vcxproj">
+      <Project>{DD200971-5EDE-3CD2-A110-4A3703B78F27}</Project>
+      <Name>SofaOpenglVisual_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaPreconditioner\SofaPreconditioner.vcxproj">
+      <Project>{88D172F1-8BA8-377F-BEBF-6C6DDA8694AF}</Project>
+      <Name>SofaPreconditioner</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaPreconditioner\SofaPreconditioner_relocatable_install.vcxproj">
+      <Project>{71F20873-FB79-3569-BCB6-6F3B4232EA3A}</Project>
+      <Name>SofaPreconditioner_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaRigid\SofaRigid.vcxproj">
+      <Project>{0263DF3F-5B28-360F-83D1-633B7EF0ECD7}</Project>
+      <Name>SofaRigid</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaRigid\SofaRigid_relocatable_install.vcxproj">
+      <Project>{2298CCC6-FC43-3F32-8A36-44BB626377CF}</Project>
+      <Name>SofaRigid_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaRigid\SofaRigid_test\SofaRigid_test.vcxproj">
+      <Project>{814E15B5-E356-3162-B590-D7017B1A725D}</Project>
+      <Name>SofaRigid_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaSimpleFem\SofaSimpleFem.vcxproj">
+      <Project>{AD8EDC7B-737E-323E-A982-657881FA4DE9}</Project>
+      <Name>SofaSimpleFem</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaSimpleFem\SofaSimpleFem_relocatable_install.vcxproj">
+      <Project>{82FD46A9-6138-39FC-B563-E3342F81FC13}</Project>
+      <Name>SofaSimpleFem_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\modules\SofaSimpleFem\SofaSimpleFem_test\SofaSimpleFem_test.vcxproj">
+      <Project>{F55A1682-F3A0-3697-9EF7-6513F169B9B9}</Project>
+      <Name>SofaSimpleFem_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaSimulation\SofaSimulation.vcxproj">
+      <Project>{02E11423-D37F-304A-9D38-B256AD8ACFC3}</Project>
+      <Name>SofaSimulation</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaSimulation\SofaSimulationCommon\SofaSimulationCommon.vcxproj">
+      <Project>{46EB417A-621B-3AF6-8251-A0911F2701B7}</Project>
+      <Name>SofaSimulationCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaSimulationCore\SofaSimulationCore.vcxproj">
+      <Project>{69100EE6-8FCF-3D67-B302-F42E5ACABBA7}</Project>
+      <Name>SofaSimulationCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaSimulationCore\SofaSimulationCore_simutest\SofaSimulationCore_simutest.vcxproj">
+      <Project>{B1BAD52D-7161-313D-A6C3-8AC384E9815D}</Project>
+      <Name>SofaSimulationCore_simutest</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaSimulationCore\SofaSimulationCore_test\SofaSimulationCore_test.vcxproj">
+      <Project>{93840B8F-0B40-3655-B289-53757DFB328D}</Project>
+      <Name>SofaSimulationCore_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaSimulation\SofaSimulationGraph\SofaSimulationGraph.vcxproj">
+      <Project>{3C81C69D-8588-3E6C-A6FA-EEC5E5C54CD4}</Project>
+      <Name>SofaSimulationGraph</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaSimulation\SofaSimulationGraph\SofaSimulationGraph_test\SofaSimulationGraph_test.vcxproj">
+      <Project>{2F361F58-B708-3481-AC8B-45924A37EFA6}</Project>
+      <Name>SofaSimulationGraph_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaSimulation\SofaSimulationTree\SofaSimulationTree.vcxproj">
+      <Project>{AEDDCD18-4E56-36BD-AF24-EC45E11126BB}</Project>
+      <Name>SofaSimulationTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaSimulation\SofaSimulationTree\SofaSimulationTree_test\SofaSimulationTree_test.vcxproj">
+      <Project>{1C0A0F9F-2260-327E-B6BE-6883D3DF413A}</Project>
+      <Name>SofaSimulationTree_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaSparseSolver\SofaSparseSolver.vcxproj">
+      <Project>{61214D7F-93F6-3AEA-BD58-5396E85C2986}</Project>
+      <Name>SofaSparseSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaSparseSolver\SofaSparseSolver_relocatable_install.vcxproj">
+      <Project>{11E5BBC8-F021-364B-A2EE-C42D1DA961DA}</Project>
+      <Name>SofaSparseSolver_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\SofaTest\SofaTest.vcxproj">
+      <Project>{8D4E9437-4314-3CFE-BAAD-C758CE515EB5}</Project>
+      <Name>SofaTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\SofaTest\SofaTest_relocatable_install.vcxproj">
+      <Project>{F118F3AA-AFC3-32B5-86A6-AC11D9DD48DD}</Project>
+      <Name>SofaTest_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaTopologyMapping\SofaTopologyMapping.vcxproj">
+      <Project>{4FDE904A-AD76-3931-93AD-FD8F1ADD9F11}</Project>
+      <Name>SofaTopologyMapping</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaTopologyMapping\SofaTopologyMapping_relocatable_install.vcxproj">
+      <Project>{7F980B5B-714B-3A11-9622-4C9D45F00478}</Project>
+      <Name>SofaTopologyMapping_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaUserInteraction\SofaUserInteraction.vcxproj">
+      <Project>{F53D36C2-F2DF-35B6-9D55-590A85B8D967}</Project>
+      <Name>SofaUserInteraction</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaUserInteraction\SofaUserInteraction_relocatable_install.vcxproj">
+      <Project>{50795055-A3EC-34BE-8B54-7680B2C663A1}</Project>
+      <Name>SofaUserInteraction_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaValidation\SofaValidation.vcxproj">
+      <Project>{FB752E17-9333-3B58-AC21-632EF4B5F045}</Project>
+      <Name>SofaValidation</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaValidation\SofaValidation_relocatable_install.vcxproj">
+      <Project>{08518721-7C6F-36A6-B0EB-6C9494CB613E}</Project>
+      <Name>SofaValidation_relocatable_install</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaValidation\SofaValidation_test\SofaValidation_test.vcxproj">
+      <Project>{21A931D4-0A50-3F91-B9C2-7EE11EBDB561}</Project>
+      <Name>SofaValidation_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaHelper\SofaHelper_test\system\TestPlugin\TestPlugin.vcxproj">
+      <Project>{48E7D57D-C169-3A3D-A1CF-86D5688EF7E8}</Project>
+      <Name>TestPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaSparseSolver\extlibs\csparse\csparse.vcxproj">
+      <Project>{C929FDB2-9E3B-3B1E-AB64-73917EAE7D95}</Project>
+      <Name>csparse</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\projects\runSofa\do_always.vcxproj">
+      <Project>{CCEE55A0-C8EA-3034-950B-56C9F61EF212}</Project>
+      <Name>do_always</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\extlibs\gtest\gtest.vcxproj">
+      <Project>{10F9ABDC-0DB2-3363-9C0D-B5A287D07947}</Project>
+      <Name>gtest</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaSparseSolver\extlibs\metis-5.1.0\metis.vcxproj">
+      <Project>{965C696B-DF8F-3F76-B56D-7D881F709D05}</Project>
+      <Name>metis</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\extlibs\newmat\newmat.vcxproj">
+      <Project>{D4D2FB2A-8B08-38CC-B1B2-E1222E51B2DD}</Project>
+      <Name>newmat</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\projects\runSofa\runSofa.vcxproj">
+      <Project>{B2FF9F60-D597-38DC-AF96-DE1F685A9A91}</Project>
+      <Name>runSofa</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\projects\runSofa\runSofa_test\runSofa_test.vcxproj">
+      <Project>{4C32CB12-7397-398A-886E-32F60B797E0C}</Project>
+      <Name>runSofa_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\applications\plugins\SceneCreator\sceneCreatorExamples\sceneCreatorExamples.vcxproj">
+      <Project>{6D17C4F5-C1C1-3C77-ADD6-12B7108553DB}</Project>
+      <Name>sceneCreatorExamples</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\extlibs\tinyxml\tinyxml.vcxproj">
+      <Project>{4D5FB77B-CED8-32A6-8437-A14D0081FC1E}</Project>
+      <Name>tinyxml</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

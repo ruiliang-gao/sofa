@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\initSofaGraphComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\AddFrameButtonSetting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\AddRecordedCameraButtonSetting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\AttachBodyButtonSetting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\FixPickedParticleButtonSetting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\Gravity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\MouseButtonSetting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\PauseAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\PauseAnimationOnEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SofaDefaultPathSetting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\StatsSetting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\ViewerSetting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckDuplicatedName.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckMissingRequiredPlugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckAPIChange.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckUsingAlias.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckerVisitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckerListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\APIVersion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\config.h.in">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\initSofaGraphComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\AddFrameButtonSetting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\AddRecordedCameraButtonSetting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\AttachBodyButtonSetting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\FixPickedParticleButtonSetting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\Gravity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\InteractingBehaviorModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\MouseButtonSetting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\PauseAnimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\PauseAnimationOnEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SofaDefaultPathSetting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\StatsSetting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\ViewerSetting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckDuplicatedName.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckMissingRequiredPlugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckAPIChange.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckUsingAlias.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckerVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\SceneCheckerListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\src\SofaGraphComponent\APIVersion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGraphComponent\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{BF7846FD-3A47-3DBC-A76C-A3950F42764E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{C1C74F81-87E9-3AA4-94C6-46027A16BE81}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

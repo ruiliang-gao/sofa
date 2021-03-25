@@ -1,0 +1,1336 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "bin/SofaSimulationCore_d.dll"
+		},
+		{
+			"path" : "lib/SofaSimulationCore_d.lib"
+		},
+		{
+			"path" : "bin/SofaSimulationCore_d.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"sofa_install_targets_in_package",
+			"sofa_add_targets_to_package",
+			"target_link_libraries",
+			"target_compile_options",
+			"target_compile_definitions",
+			"sofa_auto_set_target_compile_definitions",
+			"sofa_auto_set_target_properties",
+			"add_definitions",
+			"include",
+			"target_include_directories",
+			"sofa_auto_set_target_include_directories"
+		],
+		"files" : 
+		[
+			"SofaKernel/modules/SofaSimulationCore/CMakeLists.txt",
+			"SofaKernel/SofaFramework/SofaMacrosInstall.cmake",
+			"SofaKernel/SofaFramework/CMakeLists.txt",
+			"SofaKernel/cmake/CompilerOptions.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 149,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 159,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 246,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 548,
+				"parent" : 3
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 150,
+				"parent" : 0
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 5,
+				"file" : 2,
+				"line" : 42,
+				"parent" : 6
+			},
+			{
+				"command" : 8,
+				"file" : 1,
+				"line" : 243,
+				"parent" : 2
+			},
+			{
+				"command" : 7,
+				"file" : 1,
+				"line" : 311,
+				"parent" : 8
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 395,
+				"parent" : 9
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 397,
+				"parent" : 9
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 10,
+				"file" : 4,
+				"line" : 115,
+				"parent" : 12
+			},
+			{
+				"file" : 3,
+				"parent" : 13
+			},
+			{
+				"command" : 9,
+				"file" : 3,
+				"line" : 43,
+				"parent" : 14
+			},
+			{
+				"command" : 12,
+				"file" : 1,
+				"line" : 313,
+				"parent" : 8
+			},
+			{
+				"command" : 11,
+				"file" : 1,
+				"line" : 434,
+				"parent" : 16
+			},
+			{
+				"command" : 11,
+				"file" : 1,
+				"line" : 437,
+				"parent" : 16
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MP -wd4250 -wd4251 -wd4275 -wd4675 -wd4996 /Zc:__cplusplus /MDd /Zi /Ob0 /Od /RTC1"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "-DFRAMEWORK_TEST_RESOURCES_DIR=\\\"C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/SofaFramework/resources/tests\\\""
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "/bigobj"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-DGTEST_LINKED_AS_SHARED_LIBRARY=1"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-D_VARIADIC_MAX=10"
+				},
+				{
+					"fragment" : "-std:c++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 5,
+					"define" : "BOOST_ALL_DYN_LINK"
+				},
+				{
+					"backtrace" : 10,
+					"define" : "SOFA_BUILD_SIMULATION_CORE"
+				},
+				{
+					"backtrace" : 11,
+					"define" : "SOFA_BUILD_SOFASIMULATIONCORE"
+				},
+				{
+					"define" : "SofaSimulationCore_EXPORTS"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "_USE_MATH_DEFINES"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 17,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaSimulationCore/src"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug/include/SofaFramework"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaCore/src"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/src"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/../SofaSimulationCore/src"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/../SofaDefaultType/src"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaHelper/../SofaCore/src"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug/include/GTest"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaDefaultType/src"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/extlibs/json"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/include"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "C:/local/boost_1_75_0"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/extlibs/gtest/include"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/Eigenfiles/eigen-3.3.9"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130,
+				131,
+				132
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 5,
+			"id" : "gtest::@ef9a098a0028635bb168"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "SofaCore::@a34c98dda7edb9352447"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "SofaDefaultType::@1318efe8fa84f2296a09"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "SofaHelper::@6b0a012b96bc28259d9c"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "SofaFramework"
+	},
+	"id" : "SofaSimulationCore::@d5f763c13f082b031681",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 4,
+				"path" : "lib"
+			},
+			{
+				"backtrace" : 4,
+				"path" : "bin"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/install/x64-Debug"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/machine:x64 /debug /INCREMENTAL",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "..\\..\\..\\lib\\SofaCore_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaDefaultType_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\SofaHelper_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "glu32.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "opengl32.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\..\\..\\..\\lib\\win64\\glew32.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_system-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_filesystem-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_program_options-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_thread-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_chrono-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_date_time-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "C:\\local\\boost_1_75_0\\lib64-msvc-14.2\\boost_atomic-vc142-mt-gd-x64-1_75.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "..\\..\\..\\lib\\gtest_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "SofaSimulationCore",
+	"nameOnDisk" : "SofaSimulationCore_d.dll",
+	"paths" : 
+	{
+		"build" : "SofaKernel/SofaFramework/SofaSimulationCore",
+		"source" : "SofaKernel/modules/SofaSimulationCore"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130,
+				131,
+				132
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/config.h.in",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/simulationcore.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/AnimateBeginEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/AnimateEndEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/AnimateVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/BehaviorUpdatePositionVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CactusStackStorage.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/ClassSystem.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CleanupVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CollisionAnimationLoop.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CollisionBeginEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CollisionEndEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CollisionVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Colors.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/DeactivatedNodeVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/DefaultAnimationLoop.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/DefaultVisualManagerLoop.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/DeleteVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/ExportGnuplotVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/ExportOBJVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/InitVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/IntegrateBeginEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/IntegrateEndEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/LocalStorage.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalComputeEnergyVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalMatrixVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalOperations.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalVPrintVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MutationListener.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Node.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Node.inl",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/ParallelVisitorScheduler.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/PauseEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/PipelineImpl.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/PositionEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/PrintVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/PropagateEventVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/ResetVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/SceneLoaderFactory.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Simulation.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/SolveVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/StateChangeVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/TopologyChangeVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateBoundingBoxVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateContextVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateInternalDataVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateLinksVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateMappingEndEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateMappingVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/VectorOperations.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/VelocityThresholdVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Visitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/VisitorExecuteFunc.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/VisitorScheduler.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/VisualVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/WriteStateVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/XMLPrintVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/init.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalGetMomentumVisitor.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/BaseSimulationExporter.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/TaskScheduler.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/DefaultTaskScheduler.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Task.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/InitTasks.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Locks.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/VisitorAsync.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/events/SimulationInitDoneEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/events/SimulationInitStartEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/events/SimulationStartEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/events/SimulationStopEvent.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/testing/Node_test.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/AnimateBeginEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/AnimateEndEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/AnimateVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/BehaviorUpdatePositionVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CactusStackStorage.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CleanupVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CollisionAnimationLoop.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CollisionBeginEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CollisionEndEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/CollisionVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/DeactivatedNodeVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/DefaultAnimationLoop.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/DefaultVisualManagerLoop.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/DeleteVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/ExportGnuplotVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/ExportOBJVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/InitVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/IntegrateBeginEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/IntegrateEndEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalMatrixVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalOperations.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalVPrintVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MutationListener.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Node.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/ParallelVisitorScheduler.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/PauseEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/PipelineImpl.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/PositionEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/PrintVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/PropagateEventVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/ResetVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/SceneLoaderFactory.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Simulation.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/SolveVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/StateChangeVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/TopologyChangeVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateBoundingBoxVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateContextVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateInternalDataVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateLinksVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateMappingEndEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/UpdateMappingVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/VectorOperations.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/VelocityThresholdVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Visitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/VisitorScheduler.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/VisualVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/WriteStateVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/XMLPrintVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/init.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/MechanicalComputeEnergyVisitor.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/BaseSimulationExporter.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/TaskScheduler.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/DefaultTaskScheduler.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/Task.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/InitTasks.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/events/SimulationInitDoneEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/events/SimulationInitStartEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/events/SimulationStartEvent.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "SofaKernel/modules/SofaSimulationCore/src/sofa/simulation/events/SimulationStopEvent.cpp",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

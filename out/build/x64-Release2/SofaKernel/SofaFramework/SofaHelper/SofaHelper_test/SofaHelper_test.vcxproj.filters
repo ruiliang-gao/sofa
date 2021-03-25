@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\types\Color_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\types\Material_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\KdTree_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\Utils_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\Quater_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\SVector_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\vector_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\io\MeshOBJ_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\io\XspLoader_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\system\FileMonitor_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\system\FileRepository_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\system\FileSystem_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\system\PluginManager_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\system\atomic_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\logging\logging_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\testing\TestMessageHandler_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\gl\GLSLShader_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\SofaHelper_test\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{F5CC8CFF-A111-3DF9-92ED-ECAC98939358}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

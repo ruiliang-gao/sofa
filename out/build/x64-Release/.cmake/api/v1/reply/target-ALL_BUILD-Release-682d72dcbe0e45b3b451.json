@@ -1,0 +1,46 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaGeneralTopology/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaGeneralTopology_relocatable_install::@4fcd474a5625389b4a95"
+		},
+		{
+			"id" : "SofaGeneralTopology_test::@71ec553ba29ddf5edfd3"
+		},
+		{
+			"id" : "SofaGeneralTopology::@4fcd474a5625389b4a95"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@4fcd474a5625389b4a95",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaGeneralTopology",
+		"source" : "modules/SofaGeneralTopology"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

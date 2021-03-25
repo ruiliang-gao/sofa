@@ -1,0 +1,43 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaGeneralRigid/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaGeneralRigid::@d0e1b28b33b7f3ea1f64"
+		},
+		{
+			"id" : "SofaGeneralRigid_relocatable_install::@d0e1b28b33b7f3ea1f64"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@d0e1b28b33b7f3ea1f64",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaGeneralRigid",
+		"source" : "modules/SofaGeneralRigid"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

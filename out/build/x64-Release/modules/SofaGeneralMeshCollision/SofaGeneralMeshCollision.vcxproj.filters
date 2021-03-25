@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\initSofaGeneralMeshCollision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\DirectSAP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\IncrSAP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\MeshDiscreteIntersection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\MeshMinProximityIntersection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\TriangleOctree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\TriangleOctreeModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\config.h.in">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\initSofaGeneralMeshCollision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\DirectSAP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\IncrSAP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\MeshDiscreteIntersection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\MeshDiscreteIntersection.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\MeshMinProximityIntersection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\TriangleOctree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\src\SofaGeneralMeshCollision\TriangleOctreeModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGeneralMeshCollision\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{BF7846FD-3A47-3DBC-A76C-A3950F42764E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{C1C74F81-87E9-3AA4-94C6-46027A16BE81}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

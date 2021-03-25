@@ -1,0 +1,43 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"applications/plugins/SofaTest/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaTest::@2890372529b8537b6242"
+		},
+		{
+			"id" : "SofaTest_relocatable_install::@2890372529b8537b6242"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@2890372529b8537b6242",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "applications/plugins/SofaTest",
+		"source" : "applications/plugins/SofaTest"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

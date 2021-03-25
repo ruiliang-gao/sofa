@@ -1,0 +1,43 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaGeneralAnimationLoop/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaGeneralAnimationLoop::@75b7d224c22e88fe8203"
+		},
+		{
+			"id" : "SofaGeneralAnimationLoop_relocatable_install::@75b7d224c22e88fe8203"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@75b7d224c22e88fe8203",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaGeneralAnimationLoop",
+		"source" : "modules/SofaGeneralAnimationLoop"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

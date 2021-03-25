@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\initSofaConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\BilateralInteractionConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ConstraintAnimationLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ConstraintAttachBodyPerformer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ConstraintSolverImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ConstraintStoreLambdaVisitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ContactIdentifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\FreeMotionAnimationLoop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\FrictionContact.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\GenericConstraintCorrection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\GenericConstraintSolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LCPConstraintSolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LMDNewProximityIntersection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LinearSolverConstraintCorrection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LocalMinDistance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\MappingGeometricStiffnessForceField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\PrecomputedConstraintCorrection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\SlidingConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\StickContactConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\StopperConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\UncoupledConstraintCorrection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\UniformConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\UnilateralInteractionConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\BarycentricDistanceLMConstraintContact.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\DOFBlockerLMConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\FixedLMConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\DistanceLMContactConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\DistanceLMConstraint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LMConstraintSolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LMConstraintDirectSolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\config.h.in">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\initSofaConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\BilateralConstraintResolution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\BilateralInteractionConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\BilateralInteractionConstraint.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ConstraintAnimationLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ConstraintAttachBodyPerformer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ConstraintAttachBodyPerformer.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ConstraintSolverImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ConstraintStoreLambdaVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ContactDescription.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\ContactIdentifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\FreeMotionAnimationLoop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\FrictionContact.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\FrictionContact.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\GenericConstraintCorrection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\GenericConstraintSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LCPConstraintSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LMDNewProximityIntersection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LMDNewProximityIntersection.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LinearSolverConstraintCorrection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LinearSolverConstraintCorrection.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LocalMinDistance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LocalMinDistance.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\MappingGeometricStiffnessForceField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\MappingGeometricStiffnessForceField.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\PrecomputedConstraintCorrection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\PrecomputedConstraintCorrection.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\SlidingConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\SlidingConstraint.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\StickContactConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\StickContactConstraint.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\StopperConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\StopperConstraint.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\UncoupledConstraintCorrection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\UncoupledConstraintCorrection.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\UniformConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\UniformConstraint.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\UnilateralInteractionConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\UnilateralInteractionConstraint.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\BarycentricDistanceLMConstraintContact.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\BarycentricDistanceLMConstraintContact.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\DOFBlockerLMConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\DOFBlockerLMConstraint.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\FixedLMConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\FixedLMConstraint.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\DistanceLMContactConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\DistanceLMContactConstraint.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\DistanceLMConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\DistanceLMConstraint.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LMConstraintSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\src\SofaConstraint\LMConstraintDirectSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaConstraint\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{BD92AB85-B826-365A-809A-B253B05BE617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{F5CC8CFF-A111-3DF9-92ED-ECAC98939358}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

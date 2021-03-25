@@ -1,0 +1,40 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"SofaKernel/modules/SofaBaseMechanics/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaBaseMechanics::@2ef2cc1f17c5a115174f"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@2ef2cc1f17c5a115174f",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "SofaKernel/SofaBase/SofaBaseMechanics",
+		"source" : "SofaKernel/modules/SofaBaseMechanics"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

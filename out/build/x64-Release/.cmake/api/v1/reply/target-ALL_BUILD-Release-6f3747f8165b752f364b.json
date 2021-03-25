@@ -1,0 +1,46 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaMiscForceField/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaMiscForceField::@15d42a9734717130a432"
+		},
+		{
+			"id" : "SofaMiscForceField_relocatable_install::@15d42a9734717130a432"
+		},
+		{
+			"id" : "SofaMiscForceField_test::@fc8107e1c36d749dd430"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@15d42a9734717130a432",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaMiscForceField",
+		"source" : "modules/SofaMiscForceField"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

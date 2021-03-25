@@ -1,0 +1,5 @@
+# CMake generation dependency list for this directory.
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/applications/plugins/CImgPlugin/extlibs/CImg/CImgConfig.cmake.in
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/applications/plugins/CImgPlugin/extlibs/CImg/CMakeLists.txt
+C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.19/Modules/CMakePackageConfigHelpers.cmake
+C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.19/Modules/WriteBasicConfigVersionFile.cmake

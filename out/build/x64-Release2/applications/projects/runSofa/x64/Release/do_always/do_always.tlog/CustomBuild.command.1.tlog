@@ -1,0 +1,20 @@
+^C:\FILES\SHEAMUS\SCHOOL\SENIOR\SENIORPROJECT\SOFA_1906_TIPS\SRC\OUT\BUILD\X64-RELEASE2\CMAKEFILES\CBB7EED3DEBB914A4EFD12BBB0A9EC0C\DO_ALWAYS.RULE
+setlocal
+if exist C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/bin/Release/ "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -E copy C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/bin/plugin_list.conf.default C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/bin/Release/
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\FILES\SHEAMUS\SCHOOL\SENIOR\SENIORPROJECT\SOFA_1906_TIPS\SRC\APPLICATIONS\PROJECTS\RUNSOFA\CMAKELISTS.TXT
+setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src -BC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2 --check-stamp-file C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/applications/projects/runSofa/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

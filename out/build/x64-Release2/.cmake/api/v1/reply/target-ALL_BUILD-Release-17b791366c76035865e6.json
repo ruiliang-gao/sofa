@@ -1,0 +1,43 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaGeneralMeshCollision/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaGeneralMeshCollision::@3417de8432af1bf4e4eb"
+		},
+		{
+			"id" : "SofaGeneralMeshCollision_relocatable_install::@3417de8432af1bf4e4eb"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@3417de8432af1bf4e4eb",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaGeneralMeshCollision",
+		"source" : "modules/SofaGeneralMeshCollision"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

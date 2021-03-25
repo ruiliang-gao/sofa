@@ -1,0 +1,40 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"SofaKernel/modules/SofaSimpleFem/SofaSimpleFem_test/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaSimpleFem_test::@78272ec5bfc42796777e"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@78272ec5bfc42796777e",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "SofaKernel/modules/SofaSimpleFem/SofaSimpleFem_test",
+		"source" : "SofaKernel/modules/SofaSimpleFem/SofaSimpleFem_test"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

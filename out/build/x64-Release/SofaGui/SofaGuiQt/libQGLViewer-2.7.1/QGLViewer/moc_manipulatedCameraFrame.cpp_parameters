@@ -1,0 +1,6 @@
+-D_USE_MATH_DEFINES
+-DWIN32
+--compiler-flavor=msvc
+-o
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/moc_manipulatedCameraFrame.cpp
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/manipulatedCameraFrame.h

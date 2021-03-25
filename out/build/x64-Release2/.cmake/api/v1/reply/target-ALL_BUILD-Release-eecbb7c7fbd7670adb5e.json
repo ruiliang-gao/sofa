@@ -1,0 +1,70 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"SofaKernel/SofaBase/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaBaseLinearSolver_test::@52d3fbd0cabcedb08c3e"
+		},
+		{
+			"id" : "SofaBaseTopology::@823c3eadcf25d4d93c78"
+		},
+		{
+			"id" : "SofaBaseLinearSolver::@1f0abf65d224a37bc025"
+		},
+		{
+			"id" : "SofaBase::@12babb72e6d24740dab1"
+		},
+		{
+			"id" : "SofaEigen2Solver::@8c32f7e42cb2615b3d91"
+		},
+		{
+			"id" : "SofaBaseCollision_test::@a835a76b4531815b496b"
+		},
+		{
+			"id" : "SofaBaseTopology_test::@a596957ae1561fc6d670"
+		},
+		{
+			"id" : "SofaBaseMechanics::@2ef2cc1f17c5a115174f"
+		},
+		{
+			"id" : "SofaBaseVisual::@abf9eac13781073d27f6"
+		},
+		{
+			"id" : "SofaBaseCollision::@7e47d0fc2e6200299097"
+		},
+		{
+			"id" : "SofaBaseUtils::@7c696c1053a48d2e3325"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@12babb72e6d24740dab1",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "SofaKernel/SofaBase",
+		"source" : "SofaKernel/SofaBase"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

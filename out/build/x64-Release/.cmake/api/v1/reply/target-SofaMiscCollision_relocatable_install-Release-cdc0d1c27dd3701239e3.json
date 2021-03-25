@@ -1,0 +1,98 @@
+{
+	"backtrace" : 4,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"sofa_set_project_install_relocatable",
+			"sofa_create_package",
+			"sofa_create_package_with_targets"
+		],
+		"files" : 
+		[
+			"SofaKernel/SofaFramework/SofaMacrosInstall.cmake",
+			"applications/plugins/SofaMiscCollision/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 73,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 49,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 208,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 718,
+				"parent" : 3
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "relocatable_install"
+	},
+	"id" : "SofaMiscCollision_relocatable_install::@329a4358afc271b2af4d",
+	"name" : "SofaMiscCollision_relocatable_install",
+	"paths" : 
+	{
+		"build" : "applications/plugins/SofaMiscCollision",
+		"source" : "applications/plugins/SofaMiscCollision"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 4,
+			"isGenerated" : true,
+			"path" : "out/build/x64-Release/applications/plugins/SofaMiscCollision/CMakeFiles/SofaMiscCollision_relocatable_install",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "out/build/x64-Release/CMakeFiles/3b50e2559b080031694e4f648e0fb677/SofaMiscCollision_relocatable_install.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

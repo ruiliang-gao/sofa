@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\initSofaBaseTopology.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\EdgeSetGeometryAlgorithms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\EdgeSetTopologyContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\EdgeSetTopologyModifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\GridTopology.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\HexahedronSetGeometryAlgorithms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\HexahedronSetTopologyContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\HexahedronSetTopologyModifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\MeshTopology.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\NumericalIntegrationDescriptor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\PointSetGeometryAlgorithms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\PointSetTopologyContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\PointSetTopologyModifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\QuadSetGeometryAlgorithms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\QuadSetTopologyContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\QuadSetTopologyModifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\RegularGridTopology.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\SparseGridTopology.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TetrahedronSetGeometryAlgorithms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TetrahedronSetTopologyContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TetrahedronSetTopologyModifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TriangleSetGeometryAlgorithms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TriangleSetTopologyContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TriangleSetTopologyModifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\config.h.in">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\initSofaBaseTopology.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\CommonAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\EdgeSetGeometryAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\EdgeSetGeometryAlgorithms.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\EdgeSetTopologyAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\EdgeSetTopologyContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\EdgeSetTopologyModifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\GridTopology.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\HexahedronSetGeometryAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\HexahedronSetGeometryAlgorithms.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\HexahedronSetTopologyAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\HexahedronSetTopologyContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\HexahedronSetTopologyModifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\MeshTopology.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\NumericalIntegrationDescriptor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\NumericalIntegrationDescriptor.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\PointSetGeometryAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\PointSetGeometryAlgorithms.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\PointSetTopologyAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\PointSetTopologyContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\PointSetTopologyModifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\QuadSetGeometryAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\QuadSetGeometryAlgorithms.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\QuadSetTopologyAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\QuadSetTopologyContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\QuadSetTopologyModifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\RegularGridTopology.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\SparseGridTopology.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TetrahedronSetGeometryAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TetrahedronSetGeometryAlgorithms.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TetrahedronSetTopologyAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TetrahedronSetTopologyContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TetrahedronSetTopologyModifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologyData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologyData.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologyDataHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologyDataHandler.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologyEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologyEngine.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologySparseData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologySparseData.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologySparseDataHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologySparseDataHandler.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologySubsetData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologySubsetData.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologySubsetDataHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TopologySubsetDataHandler.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TriangleSetGeometryAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TriangleSetGeometryAlgorithms.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TriangleSetTopologyAlgorithms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TriangleSetTopologyContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src\SofaBaseTopology\TriangleSetTopologyModifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{BD92AB85-B826-365A-809A-B253B05BE617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{F5CC8CFF-A111-3DF9-92ED-ECAC98939358}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

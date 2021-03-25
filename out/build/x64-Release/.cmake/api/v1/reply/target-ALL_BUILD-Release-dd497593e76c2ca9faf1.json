@@ -1,0 +1,46 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaMiscMapping/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaMiscMapping_test::@d28277a334dae2073cc9"
+		},
+		{
+			"id" : "SofaMiscMapping::@77ee3235d86d86e7dc5f"
+		},
+		{
+			"id" : "SofaMiscMapping_relocatable_install::@77ee3235d86d86e7dc5f"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@77ee3235d86d86e7dc5f",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaMiscMapping",
+		"source" : "modules/SofaMiscMapping"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

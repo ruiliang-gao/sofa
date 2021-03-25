@@ -1,0 +1,5594 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						5,
+						15,
+						19,
+						20,
+						31,
+						49,
+						101,
+						106,
+						108,
+						109,
+						110,
+						111,
+						112,
+						114,
+						117,
+						118,
+						130,
+						138,
+						141
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "extlibs/gtest",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "extlibs/gtest",
+					"targetIndexes" : 
+					[
+						172
+					]
+				},
+				{
+					"build" : "extlibs",
+					"childIndexes" : 
+					[
+						3,
+						4
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "extlibs"
+				},
+				{
+					"build" : "extlibs/newmat",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 2,
+					"source" : "SofaKernel/extlibs/newmat",
+					"targetIndexes" : 
+					[
+						175
+					]
+				},
+				{
+					"build" : "extlibs/tinyxml",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 3,
+					"source" : "SofaKernel/extlibs/tinyxml",
+					"targetIndexes" : 
+					[
+						179
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework",
+					"childIndexes" : 
+					[
+						6,
+						8,
+						10,
+						13
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 4,
+					"source" : "SofaKernel/SofaFramework",
+					"targetIndexes" : 
+					[
+						51
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaCore",
+					"childIndexes" : 
+					[
+						7
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 5,
+					"source" : "SofaKernel/modules/SofaCore",
+					"targetIndexes" : 
+					[
+						30
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaCore/SofaCore_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 6,
+					"projectIndex" : 6,
+					"source" : "SofaKernel/modules/SofaCore/SofaCore_test",
+					"targetIndexes" : 
+					[
+						32
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaDefaultType",
+					"childIndexes" : 
+					[
+						9
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 7,
+					"source" : "SofaKernel/modules/SofaDefaultType",
+					"targetIndexes" : 
+					[
+						33
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaDefaultType/SofaDefaultType_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 8,
+					"projectIndex" : 8,
+					"source" : "SofaKernel/modules/SofaDefaultType/SofaDefaultType_test",
+					"targetIndexes" : 
+					[
+						35
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaHelper",
+					"childIndexes" : 
+					[
+						11
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 9,
+					"source" : "SofaKernel/modules/SofaHelper",
+					"targetIndexes" : 
+					[
+						95
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaHelper/SofaHelper_test",
+					"childIndexes" : 
+					[
+						12
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 10,
+					"projectIndex" : 10,
+					"source" : "SofaKernel/modules/SofaHelper/SofaHelper_test",
+					"targetIndexes" : 
+					[
+						97
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaHelper/SofaHelper_test/system/TestPlugin",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 11,
+					"source" : "SofaKernel/modules/SofaHelper/SofaHelper_test/system/TestPlugin",
+					"targetIndexes" : 
+					[
+						169
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaSimulationCore",
+					"childIndexes" : 
+					[
+						14
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 12,
+					"source" : "SofaKernel/modules/SofaSimulationCore",
+					"targetIndexes" : 
+					[
+						147
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaSimulationCore/SofaSimulationCore_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 13,
+					"projectIndex" : 13,
+					"source" : "SofaKernel/modules/SofaSimulationCore/SofaSimulationCore_test",
+					"targetIndexes" : 
+					[
+						149
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaSimulation",
+					"childIndexes" : 
+					[
+						16,
+						17,
+						18
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 14,
+					"source" : "SofaKernel/SofaSimulation",
+					"targetIndexes" : 
+					[
+						145
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaSimulation/SofaSimulationCommon",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 15,
+					"projectIndex" : 15,
+					"source" : "SofaKernel/modules/SofaSimulationCommon",
+					"targetIndexes" : 
+					[
+						146
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaSimulation/SofaSimulationGraph",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 15,
+					"projectIndex" : 16,
+					"source" : "SofaKernel/modules/SofaSimulationGraph",
+					"targetIndexes" : 
+					[
+						150
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaSimulation/SofaSimulationTree",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 15,
+					"projectIndex" : 17,
+					"source" : "SofaKernel/modules/SofaSimulationTree",
+					"targetIndexes" : 
+					[
+						152
+					]
+				},
+				{
+					"build" : "tools/SofaGTestMain",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 18,
+					"source" : "tools/SofaGTestMain",
+					"targetIndexes" : 
+					[
+						52
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase",
+					"childIndexes" : 
+					[
+						21,
+						23,
+						24,
+						26,
+						28,
+						29,
+						30
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 19,
+					"source" : "SofaKernel/SofaBase",
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaBaseLinearSolver",
+					"childIndexes" : 
+					[
+						22
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 20,
+					"projectIndex" : 20,
+					"source" : "SofaKernel/modules/SofaBaseLinearSolver",
+					"targetIndexes" : 
+					[
+						14
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaBaseLinearSolver/SofaBaseLinearSolver_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 21,
+					"projectIndex" : 21,
+					"source" : "SofaKernel/modules/SofaBaseLinearSolver/SofaBaseLinearSolver_test",
+					"targetIndexes" : 
+					[
+						15
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaEigen2Solver",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 20,
+					"projectIndex" : 22,
+					"source" : "SofaKernel/modules/SofaEigen2Solver",
+					"targetIndexes" : 
+					[
+						41
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaBaseTopology",
+					"childIndexes" : 
+					[
+						25
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 20,
+					"projectIndex" : 23,
+					"source" : "SofaKernel/modules/SofaBaseTopology",
+					"targetIndexes" : 
+					[
+						17
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaBaseTopology/SofaBaseTopology_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 24,
+					"projectIndex" : 24,
+					"source" : "SofaKernel/modules/SofaBaseTopology/SofaBaseTopology_test",
+					"targetIndexes" : 
+					[
+						18
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaBaseCollision",
+					"childIndexes" : 
+					[
+						27
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 20,
+					"projectIndex" : 25,
+					"source" : "SofaKernel/modules/SofaBaseCollision",
+					"targetIndexes" : 
+					[
+						12
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaBaseCollision/SofaBaseCollision_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 26,
+					"projectIndex" : 26,
+					"source" : "SofaKernel/modules/SofaBaseCollision/SofaBaseCollision_test",
+					"targetIndexes" : 
+					[
+						13
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaBaseMechanics",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 20,
+					"projectIndex" : 27,
+					"source" : "SofaKernel/modules/SofaBaseMechanics",
+					"targetIndexes" : 
+					[
+						16
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaBaseVisual",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 20,
+					"projectIndex" : 28,
+					"source" : "SofaKernel/modules/SofaBaseVisual",
+					"targetIndexes" : 
+					[
+						21
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaBaseUtils",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 20,
+					"projectIndex" : 29,
+					"source" : "SofaKernel/modules/SofaBaseUtils",
+					"targetIndexes" : 
+					[
+						19
+					]
+				},
+				{
+					"build" : "SofaKernel/modules",
+					"childIndexes" : 
+					[
+						32,
+						34,
+						36,
+						38,
+						39,
+						41,
+						43,
+						45,
+						47
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "SofaKernel/modules"
+				},
+				{
+					"build" : "SofaKernel/modules/SofaSimpleFem",
+					"childIndexes" : 
+					[
+						33
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 31,
+					"projectIndex" : 30,
+					"source" : "SofaKernel/modules/SofaSimpleFem",
+					"targetIndexes" : 
+					[
+						142,
+						143
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaSimpleFem/SofaSimpleFem_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 32,
+					"projectIndex" : 31,
+					"source" : "SofaKernel/modules/SofaSimpleFem/SofaSimpleFem_test",
+					"targetIndexes" : 
+					[
+						144
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaRigid",
+					"childIndexes" : 
+					[
+						35
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 31,
+					"projectIndex" : 32,
+					"source" : "SofaKernel/modules/SofaRigid",
+					"targetIndexes" : 
+					[
+						139,
+						140
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaRigid/SofaRigid_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 34,
+					"projectIndex" : 33,
+					"source" : "SofaKernel/modules/SofaRigid/SofaRigid_test",
+					"targetIndexes" : 
+					[
+						141
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaDeformable",
+					"childIndexes" : 
+					[
+						37
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 31,
+					"projectIndex" : 34,
+					"source" : "SofaKernel/modules/SofaDeformable",
+					"targetIndexes" : 
+					[
+						36,
+						37
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaDeformable/SofaDeformable_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 36,
+					"projectIndex" : 35,
+					"source" : "SofaKernel/modules/SofaDeformable/SofaDeformable_test",
+					"targetIndexes" : 
+					[
+						38
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaObjectInteraction",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 31,
+					"projectIndex" : 36,
+					"source" : "SofaKernel/modules/SofaObjectInteraction",
+					"targetIndexes" : 
+					[
+						132,
+						133
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaMeshCollision",
+					"childIndexes" : 
+					[
+						40
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 31,
+					"projectIndex" : 37,
+					"source" : "SofaKernel/modules/SofaMeshCollision",
+					"targetIndexes" : 
+					[
+						104,
+						105
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaMeshCollision/SofaMeshCollision_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 39,
+					"projectIndex" : 38,
+					"source" : "SofaKernel/modules/SofaMeshCollision/SofaMeshCollision_test",
+					"targetIndexes" : 
+					[
+						106
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaEngine",
+					"childIndexes" : 
+					[
+						42
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 31,
+					"projectIndex" : 39,
+					"source" : "SofaKernel/modules/SofaEngine",
+					"targetIndexes" : 
+					[
+						42,
+						43
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaEngine/SofaEngine_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 41,
+					"projectIndex" : 40,
+					"source" : "SofaKernel/modules/SofaEngine/SofaEngine_test",
+					"targetIndexes" : 
+					[
+						44
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaExplicitOdeSolver",
+					"childIndexes" : 
+					[
+						44
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 31,
+					"projectIndex" : 41,
+					"source" : "SofaKernel/modules/SofaExplicitOdeSolver",
+					"targetIndexes" : 
+					[
+						45,
+						46
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaExplicitOdeSolver/SofaExplicitOdeSolver_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 43,
+					"projectIndex" : 42,
+					"source" : "SofaKernel/modules/SofaExplicitOdeSolver/SofaExplicitOdeSolver_test",
+					"targetIndexes" : 
+					[
+						47
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaImplicitOdeSolver",
+					"childIndexes" : 
+					[
+						46
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 31,
+					"projectIndex" : 43,
+					"source" : "SofaKernel/modules/SofaImplicitOdeSolver",
+					"targetIndexes" : 
+					[
+						98,
+						99
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaImplicitOdeSolver/SofaImplicitOdeSolver_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 45,
+					"projectIndex" : 44,
+					"source" : "SofaKernel/modules/SofaImplicitOdeSolver/SofaImplicitOdeSolver_test",
+					"targetIndexes" : 
+					[
+						100
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaLoader",
+					"childIndexes" : 
+					[
+						48
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 31,
+					"projectIndex" : 45,
+					"source" : "SofaKernel/modules/SofaLoader",
+					"targetIndexes" : 
+					[
+						101,
+						102
+					]
+				},
+				{
+					"build" : "SofaKernel/modules/SofaLoader/SofaLoader_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 47,
+					"projectIndex" : 46,
+					"source" : "SofaKernel/modules/SofaLoader/SofaLoader_test",
+					"targetIndexes" : 
+					[
+						103
+					]
+				},
+				{
+					"build" : "modules",
+					"childIndexes" : 
+					[
+						50,
+						51,
+						53,
+						54,
+						56,
+						57,
+						58,
+						60,
+						62,
+						64,
+						65,
+						66,
+						67,
+						68,
+						70,
+						71,
+						72,
+						74,
+						76,
+						79,
+						80,
+						82,
+						84,
+						85,
+						86,
+						88,
+						90,
+						92,
+						94,
+						95,
+						97,
+						99
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "modules"
+				},
+				{
+					"build" : "modules/SofaGeneralVisual",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 47,
+					"source" : "modules/SofaGeneralVisual",
+					"targetIndexes" : 
+					[
+						83,
+						84
+					]
+				},
+				{
+					"build" : "modules/SofaGraphComponent",
+					"childIndexes" : 
+					[
+						52
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 48,
+					"source" : "modules/SofaGraphComponent",
+					"targetIndexes" : 
+					[
+						85,
+						86
+					]
+				},
+				{
+					"build" : "modules/SofaGraphComponent/SofaGraphComponent_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 51,
+					"projectIndex" : 49,
+					"source" : "modules/SofaGraphComponent/SofaGraphComponent_test",
+					"targetIndexes" : 
+					[
+						87
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralMeshCollision",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 50,
+					"source" : "modules/SofaGeneralMeshCollision",
+					"targetIndexes" : 
+					[
+						72,
+						73
+					]
+				},
+				{
+					"build" : "modules/SofaBoundaryCondition",
+					"childIndexes" : 
+					[
+						55
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 51,
+					"source" : "modules/SofaBoundaryCondition",
+					"targetIndexes" : 
+					[
+						22,
+						23
+					]
+				},
+				{
+					"build" : "modules/SofaBoundaryCondition/SofaBoundaryCondition_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 54,
+					"projectIndex" : 52,
+					"source" : "modules/SofaBoundaryCondition/SofaBoundaryCondition_test",
+					"targetIndexes" : 
+					[
+						24
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralAnimationLoop",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 53,
+					"source" : "modules/SofaGeneralAnimationLoop",
+					"targetIndexes" : 
+					[
+						54,
+						55
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralDeformable",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 54,
+					"source" : "modules/SofaGeneralDeformable",
+					"targetIndexes" : 
+					[
+						56,
+						57
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralEngine",
+					"childIndexes" : 
+					[
+						59
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 55,
+					"source" : "modules/SofaGeneralEngine",
+					"targetIndexes" : 
+					[
+						58,
+						59
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralEngine/SofaGeneralEngine_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 58,
+					"projectIndex" : 56,
+					"source" : "modules/SofaGeneralEngine/SofaGeneralEngine_test",
+					"targetIndexes" : 
+					[
+						60
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralExplicitOdeSolver",
+					"childIndexes" : 
+					[
+						61
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 57,
+					"source" : "modules/SofaGeneralExplicitOdeSolver",
+					"targetIndexes" : 
+					[
+						61,
+						62
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralExplicitOdeSolver/SofaGeneralExplicitOdeSolver_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 60,
+					"projectIndex" : 58,
+					"source" : "modules/SofaGeneralExplicitOdeSolver/SofaGeneralExplicitOdeSolver_test",
+					"targetIndexes" : 
+					[
+						63
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralImplicitOdeSolver",
+					"childIndexes" : 
+					[
+						63
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 59,
+					"source" : "modules/SofaGeneralImplicitOdeSolver",
+					"targetIndexes" : 
+					[
+						64,
+						65
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralImplicitOdeSolver/SofaGeneralImplicitOdeSolver_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 62,
+					"projectIndex" : 60,
+					"source" : "modules/SofaGeneralImplicitOdeSolver/SofaGeneralImplicitOdeSolver_test",
+					"targetIndexes" : 
+					[
+						66
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralLinearSolver",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 61,
+					"source" : "modules/SofaGeneralLinearSolver",
+					"targetIndexes" : 
+					[
+						67,
+						68
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralRigid",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 62,
+					"source" : "modules/SofaGeneralRigid",
+					"targetIndexes" : 
+					[
+						76,
+						77
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralObjectInteraction",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 63,
+					"source" : "modules/SofaGeneralObjectInteraction",
+					"targetIndexes" : 
+					[
+						74,
+						75
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralSimpleFem",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 64,
+					"source" : "modules/SofaGeneralSimpleFem",
+					"targetIndexes" : 
+					[
+						78,
+						79
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralTopology",
+					"childIndexes" : 
+					[
+						69
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 65,
+					"source" : "modules/SofaGeneralTopology",
+					"targetIndexes" : 
+					[
+						80,
+						81
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralTopology/SofaGeneralTopology_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 68,
+					"projectIndex" : 66,
+					"source" : "modules/SofaGeneralTopology/SofaGeneralTopology_test",
+					"targetIndexes" : 
+					[
+						82
+					]
+				},
+				{
+					"build" : "modules/SofaTopologyMapping",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 67,
+					"source" : "modules/SofaTopologyMapping",
+					"targetIndexes" : 
+					[
+						158,
+						159
+					]
+				},
+				{
+					"build" : "modules/SofaUserInteraction",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 68,
+					"source" : "modules/SofaUserInteraction",
+					"targetIndexes" : 
+					[
+						160,
+						161
+					]
+				},
+				{
+					"build" : "modules/SofaConstraint",
+					"childIndexes" : 
+					[
+						73
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 69,
+					"source" : "modules/SofaConstraint",
+					"targetIndexes" : 
+					[
+						27,
+						28
+					]
+				},
+				{
+					"build" : "modules/SofaConstraint/SofaConstraint_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 72,
+					"projectIndex" : 70,
+					"source" : "modules/SofaConstraint/SofaConstraint_test",
+					"targetIndexes" : 
+					[
+						29
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralLoader",
+					"childIndexes" : 
+					[
+						75
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 71,
+					"source" : "modules/SofaGeneralLoader",
+					"targetIndexes" : 
+					[
+						69,
+						70
+					]
+				},
+				{
+					"build" : "modules/SofaGeneralLoader/SofaGeneralLoader_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 74,
+					"projectIndex" : 72,
+					"source" : "modules/SofaGeneralLoader/SofaGeneralLoader_test",
+					"targetIndexes" : 
+					[
+						71
+					]
+				},
+				{
+					"build" : "modules/SofaSparseSolver",
+					"childIndexes" : 
+					[
+						77,
+						78
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 73,
+					"source" : "modules/SofaSparseSolver",
+					"targetIndexes" : 
+					[
+						154,
+						155
+					]
+				},
+				{
+					"build" : "modules/SofaSparseSolver/extlibs/csparse",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 76,
+					"projectIndex" : 74,
+					"source" : "modules/SofaSparseSolver/extlibs/csparse",
+					"targetIndexes" : 
+					[
+						170
+					]
+				},
+				{
+					"build" : "modules/SofaSparseSolver/extlibs/metis-5.1.0",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 76,
+					"projectIndex" : 75,
+					"source" : "modules/SofaSparseSolver/extlibs/metis-5.1.0",
+					"targetIndexes" : 
+					[
+						174
+					]
+				},
+				{
+					"build" : "modules/SofaPreconditioner",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 76,
+					"source" : "modules/SofaPreconditioner",
+					"targetIndexes" : 
+					[
+						137,
+						138
+					]
+				},
+				{
+					"build" : "modules/SofaHaptics",
+					"childIndexes" : 
+					[
+						81
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 77,
+					"source" : "modules/SofaHaptics",
+					"targetIndexes" : 
+					[
+						92,
+						93
+					]
+				},
+				{
+					"build" : "modules/SofaHaptics/SofaHaptics_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 80,
+					"projectIndex" : 78,
+					"source" : "modules/SofaHaptics/SofaHaptics_test",
+					"targetIndexes" : 
+					[
+						94
+					]
+				},
+				{
+					"build" : "modules/SofaValidation",
+					"childIndexes" : 
+					[
+						83
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 79,
+					"source" : "modules/SofaValidation",
+					"targetIndexes" : 
+					[
+						162,
+						163
+					]
+				},
+				{
+					"build" : "modules/SofaValidation/SofaValidation_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 82,
+					"projectIndex" : 80,
+					"source" : "modules/SofaValidation/SofaValidation_test",
+					"targetIndexes" : 
+					[
+						164
+					]
+				},
+				{
+					"build" : "modules/SofaDenseSolver",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 81,
+					"source" : "modules/SofaDenseSolver",
+					"targetIndexes" : 
+					[
+						39,
+						40
+					]
+				},
+				{
+					"build" : "modules/SofaNonUniformFem",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 82,
+					"source" : "modules/SofaNonUniformFem",
+					"targetIndexes" : 
+					[
+						130,
+						131
+					]
+				},
+				{
+					"build" : "modules/SofaOpenglVisual",
+					"childIndexes" : 
+					[
+						87
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 83,
+					"source" : "modules/SofaOpenglVisual",
+					"targetIndexes" : 
+					[
+						134,
+						135
+					]
+				},
+				{
+					"build" : "modules/SofaOpenglVisual/SofaOpenglVisual_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 86,
+					"projectIndex" : 84,
+					"source" : "modules/SofaOpenglVisual/SofaOpenglVisual_test",
+					"targetIndexes" : 
+					[
+						136
+					]
+				},
+				{
+					"build" : "modules/SofaMiscTopology",
+					"childIndexes" : 
+					[
+						89
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 85,
+					"source" : "modules/SofaMiscTopology",
+					"targetIndexes" : 
+					[
+						127,
+						128
+					]
+				},
+				{
+					"build" : "modules/SofaMiscTopology/SofaMiscTopology_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 88,
+					"projectIndex" : 86,
+					"source" : "modules/SofaMiscTopology/SofaMiscTopology_test",
+					"targetIndexes" : 
+					[
+						129
+					]
+				},
+				{
+					"build" : "modules/SofaMiscExtra",
+					"childIndexes" : 
+					[
+						91
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 87,
+					"source" : "modules/SofaMiscExtra",
+					"targetIndexes" : 
+					[
+						112,
+						113
+					]
+				},
+				{
+					"build" : "modules/SofaMiscExtra/SofaMiscExtra_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 90,
+					"projectIndex" : 88,
+					"source" : "modules/SofaMiscExtra/SofaMiscExtra_test",
+					"targetIndexes" : 
+					[
+						114
+					]
+				},
+				{
+					"build" : "modules/SofaMiscForceField",
+					"childIndexes" : 
+					[
+						93
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 89,
+					"source" : "modules/SofaMiscForceField",
+					"targetIndexes" : 
+					[
+						118,
+						119
+					]
+				},
+				{
+					"build" : "modules/SofaMiscForceField/SofaMiscForceField_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 92,
+					"projectIndex" : 90,
+					"source" : "modules/SofaMiscForceField/SofaMiscForceField_test",
+					"targetIndexes" : 
+					[
+						120
+					]
+				},
+				{
+					"build" : "modules/SofaMiscEngine",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 91,
+					"source" : "modules/SofaMiscEngine",
+					"targetIndexes" : 
+					[
+						110,
+						111
+					]
+				},
+				{
+					"build" : "modules/SofaMiscSolver",
+					"childIndexes" : 
+					[
+						96
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 92,
+					"source" : "modules/SofaMiscSolver",
+					"targetIndexes" : 
+					[
+						124,
+						125
+					]
+				},
+				{
+					"build" : "modules/SofaMiscSolver/SofaMiscSolver_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 95,
+					"projectIndex" : 93,
+					"source" : "modules/SofaMiscSolver/SofaMiscSolver_test",
+					"targetIndexes" : 
+					[
+						126
+					]
+				},
+				{
+					"build" : "modules/SofaMiscFem",
+					"childIndexes" : 
+					[
+						98
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 94,
+					"source" : "modules/SofaMiscFem",
+					"targetIndexes" : 
+					[
+						115,
+						116
+					]
+				},
+				{
+					"build" : "modules/SofaMiscFem/SofaMiscFem_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 97,
+					"projectIndex" : 95,
+					"source" : "modules/SofaMiscFem/SofaMiscFem_test",
+					"targetIndexes" : 
+					[
+						117
+					]
+				},
+				{
+					"build" : "modules/SofaMiscMapping",
+					"childIndexes" : 
+					[
+						100
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 49,
+					"projectIndex" : 96,
+					"source" : "modules/SofaMiscMapping",
+					"targetIndexes" : 
+					[
+						121,
+						122
+					]
+				},
+				{
+					"build" : "modules/SofaMiscMapping/SofaMiscMapping_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 99,
+					"projectIndex" : 97,
+					"source" : "modules/SofaMiscMapping/SofaMiscMapping_test",
+					"targetIndexes" : 
+					[
+						123
+					]
+				},
+				{
+					"build" : "SofaGui",
+					"childIndexes" : 
+					[
+						102,
+						103,
+						105
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 98,
+					"source" : "SofaGui",
+					"targetIndexes" : 
+					[
+						88
+					]
+				},
+				{
+					"build" : "SofaGui/SofaGuiCommon",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 101,
+					"projectIndex" : 99,
+					"source" : "modules/SofaGuiCommon",
+					"targetIndexes" : 
+					[
+						89
+					]
+				},
+				{
+					"build" : "SofaGui/SofaGuiQt",
+					"childIndexes" : 
+					[
+						104
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 101,
+					"projectIndex" : 100,
+					"source" : "modules/SofaGuiQt",
+					"targetIndexes" : 
+					[
+						91
+					]
+				},
+				{
+					"build" : "SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 103,
+					"projectIndex" : 101,
+					"source" : "modules/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "SofaGui/SofaGuiMain",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 101,
+					"projectIndex" : 102,
+					"source" : "modules/SofaGuiMain",
+					"targetIndexes" : 
+					[
+						90
+					]
+				},
+				{
+					"build" : "modules/SofaExporter",
+					"childIndexes" : 
+					[
+						107
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 103,
+					"source" : "modules/SofaExporter",
+					"targetIndexes" : 
+					[
+						48,
+						49
+					]
+				},
+				{
+					"build" : "modules/SofaExporter/SofaExporter_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 106,
+					"projectIndex" : 104,
+					"source" : "modules/SofaExporter/SofaExporter_test",
+					"targetIndexes" : 
+					[
+						50
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaCommon",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 105,
+					"source" : "SofaKernel/SofaCommon",
+					"targetIndexes" : 
+					[
+						25
+					]
+				},
+				{
+					"build" : "SofaGeneral",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 106,
+					"source" : "SofaGeneral",
+					"targetIndexes" : 
+					[
+						53
+					]
+				},
+				{
+					"build" : "SofaAdvanced",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 107,
+					"source" : "SofaAdvanced",
+					"targetIndexes" : 
+					[
+						10
+					]
+				},
+				{
+					"build" : "SofaMisc",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 108,
+					"source" : "SofaMisc",
+					"targetIndexes" : 
+					[
+						107
+					]
+				},
+				{
+					"build" : "applications/collections",
+					"childIndexes" : 
+					[
+						113
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "applications/collections"
+				},
+				{
+					"build" : "applications/collections/SofaComponentAll",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 112,
+					"projectIndex" : 109,
+					"source" : "applications/collections/SofaComponentAll",
+					"targetIndexes" : 
+					[
+						26
+					]
+				},
+				{
+					"build" : "applications/plugins/SceneCreator",
+					"childIndexes" : 
+					[
+						115,
+						116
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 110,
+					"source" : "applications/plugins/SceneCreator",
+					"targetIndexes" : 
+					[
+						5,
+						6
+					]
+				},
+				{
+					"build" : "applications/plugins/SceneCreator/sceneCreatorExamples",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 114,
+					"projectIndex" : 111,
+					"source" : "applications/plugins/SceneCreator/sceneCreatorExamples",
+					"targetIndexes" : 
+					[
+						178
+					]
+				},
+				{
+					"build" : "applications/plugins/SceneCreator/SceneCreator_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 114,
+					"projectIndex" : 112,
+					"source" : "applications/plugins/SceneCreator/SceneCreator_test",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"build" : "applications/plugins/SofaTest",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 113,
+					"source" : "applications/plugins/SofaTest",
+					"targetIndexes" : 
+					[
+						156,
+						157
+					]
+				},
+				{
+					"build" : "applications/plugins",
+					"childIndexes" : 
+					[
+						119,
+						122,
+						123,
+						124,
+						125,
+						126,
+						127,
+						128,
+						129
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "applications/plugins"
+				},
+				{
+					"build" : "applications/plugins/CImgPlugin",
+					"childIndexes" : 
+					[
+						120,
+						121
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 118,
+					"projectIndex" : 114,
+					"source" : "applications/plugins/CImgPlugin",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				},
+				{
+					"build" : "applications/plugins/CImgPlugin/extlibs/CImg",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 119,
+					"projectIndex" : 115,
+					"source" : "applications/plugins/CImgPlugin/extlibs/CImg"
+				},
+				{
+					"build" : "applications/plugins/CImgPlugin/CImgPlugin_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 119,
+					"projectIndex" : 116,
+					"source" : "applications/plugins/CImgPlugin/CImgPlugin_test",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "applications/plugins/SofaMiscCollision",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 118,
+					"projectIndex" : 117,
+					"source" : "applications/plugins/SofaMiscCollision",
+					"targetIndexes" : 
+					[
+						108,
+						109
+					]
+				},
+				{
+					"build" : "applications/plugins/Sensable",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 118,
+					"projectIndex" : 118,
+					"source" : "applications/plugins/Sensable",
+					"targetIndexes" : 
+					[
+						8
+					]
+				},
+				{
+					"build" : "applications/plugins/SensableEmulation",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 118,
+					"projectIndex" : 119,
+					"source" : "applications/plugins/SensableEmulation",
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"build" : "applications/plugins/SurfLabHaptic",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 118,
+					"projectIndex" : 120,
+					"source" : "applications/plugins/SurfLabHaptic",
+					"targetIndexes" : 
+					[
+						166
+					]
+				},
+				{
+					"build" : "applications/plugins/SurfLabHapticDevice",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 118,
+					"projectIndex" : 121,
+					"source" : "applications/plugins/SurfLabHapticDevice",
+					"targetIndexes" : 
+					[
+						167
+					]
+				},
+				{
+					"build" : "applications/plugins/SaLua",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 118,
+					"projectIndex" : 122,
+					"source" : "applications/plugins/SaLua",
+					"targetIndexes" : 
+					[
+						4,
+						173
+					]
+				},
+				{
+					"build" : "applications/plugins/SurfLabConnectingTissue",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 118,
+					"projectIndex" : 123,
+					"source" : "applications/plugins/SurfLabConnectingTissue",
+					"targetIndexes" : 
+					[
+						165
+					]
+				},
+				{
+					"build" : "applications/plugins/SurfLabSpeechRecognition",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 118,
+					"projectIndex" : 124,
+					"source" : "applications/plugins/SurfLabSpeechRecognition",
+					"targetIndexes" : 
+					[
+						168
+					]
+				},
+				{
+					"build" : "tests",
+					"childIndexes" : 
+					[
+						131,
+						132,
+						133,
+						134,
+						135,
+						136,
+						137
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "tests"
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaHelper/SofaHelper_simutest",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 130,
+					"projectIndex" : 125,
+					"source" : "SofaKernel/modules/SofaHelper/SofaHelper_simutest",
+					"targetIndexes" : 
+					[
+						96
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaDefaultType/SofaDefaultType_simutest",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 130,
+					"projectIndex" : 126,
+					"source" : "SofaKernel/modules/SofaDefaultType/SofaDefaultType_simutest",
+					"targetIndexes" : 
+					[
+						34
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaCore/SofaCore_simutest",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 130,
+					"projectIndex" : 127,
+					"source" : "SofaKernel/modules/SofaCore/SofaCore_simutest",
+					"targetIndexes" : 
+					[
+						31
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaFramework/SofaSimulationCore/SofaSimulationCore_simutest",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 130,
+					"projectIndex" : 128,
+					"source" : "SofaKernel/modules/SofaSimulationCore/SofaSimulationCore_simutest",
+					"targetIndexes" : 
+					[
+						148
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaSimulation/SofaSimulationGraph/SofaSimulationGraph_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 130,
+					"projectIndex" : 129,
+					"source" : "SofaKernel/modules/SofaSimulationGraph/SofaSimulationGraph_test",
+					"targetIndexes" : 
+					[
+						151
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaSimulation/SofaSimulationTree/SofaSimulationTree_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 130,
+					"projectIndex" : 130,
+					"source" : "SofaKernel/modules/SofaSimulationTree/SofaSimulationTree_test",
+					"targetIndexes" : 
+					[
+						153
+					]
+				},
+				{
+					"build" : "SofaKernel/SofaBase/SofaBaseVisual/SofaBaseUtils_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 130,
+					"projectIndex" : 131,
+					"source" : "SofaKernel/modules/SofaBaseUtils/SofaBaseUtils_test",
+					"targetIndexes" : 
+					[
+						20
+					]
+				},
+				{
+					"build" : "applications/projects",
+					"childIndexes" : 
+					[
+						139
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "applications/projects"
+				},
+				{
+					"build" : "applications/projects/runSofa",
+					"childIndexes" : 
+					[
+						140
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 138,
+					"projectIndex" : 132,
+					"source" : "applications/projects/runSofa",
+					"targetIndexes" : 
+					[
+						171,
+						176
+					]
+				},
+				{
+					"build" : "applications/projects/runSofa/runSofa_test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 139,
+					"projectIndex" : 133,
+					"source" : "applications/projects/runSofa/runSofa_test",
+					"targetIndexes" : 
+					[
+						177
+					]
+				},
+				{
+					"build" : "tools/postinstall-fixup",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "tools/postinstall-fixup"
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						14,
+						18,
+						19,
+						30,
+						32,
+						34,
+						36,
+						37,
+						39,
+						41,
+						43,
+						45,
+						47,
+						48,
+						50,
+						51,
+						53,
+						54,
+						55,
+						57,
+						59,
+						61,
+						62,
+						63,
+						64,
+						65,
+						67,
+						68,
+						69,
+						71,
+						73,
+						76,
+						77,
+						79,
+						81,
+						82,
+						83,
+						85,
+						87,
+						89,
+						91,
+						92,
+						94,
+						96,
+						98,
+						103,
+						105,
+						106,
+						107,
+						108,
+						109,
+						110,
+						113,
+						114,
+						117,
+						118,
+						119,
+						120,
+						121,
+						122,
+						123,
+						124,
+						125,
+						126,
+						127,
+						128,
+						129,
+						130,
+						131,
+						132
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						2,
+						31,
+						49,
+						112,
+						118,
+						130,
+						138,
+						141
+					],
+					"name" : "Sofa"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "gtest",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						172
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "newmat",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						175
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						4
+					],
+					"name" : "tinyxml",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						179
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						5,
+						7,
+						9,
+						12
+					],
+					"directoryIndexes" : 
+					[
+						5
+					],
+					"name" : "SofaFramework",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						51
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						6
+					],
+					"directoryIndexes" : 
+					[
+						6
+					],
+					"name" : "SofaCore",
+					"parentIndex" : 4,
+					"targetIndexes" : 
+					[
+						30
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						7
+					],
+					"name" : "SofaCore_test",
+					"parentIndex" : 5,
+					"targetIndexes" : 
+					[
+						32
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						8
+					],
+					"directoryIndexes" : 
+					[
+						8
+					],
+					"name" : "SofaDefaultType",
+					"parentIndex" : 4,
+					"targetIndexes" : 
+					[
+						33
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						9
+					],
+					"name" : "SofaDefaultType_test",
+					"parentIndex" : 7,
+					"targetIndexes" : 
+					[
+						35
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						10
+					],
+					"directoryIndexes" : 
+					[
+						10
+					],
+					"name" : "SofaHelper",
+					"parentIndex" : 4,
+					"targetIndexes" : 
+					[
+						95
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						11
+					],
+					"directoryIndexes" : 
+					[
+						11
+					],
+					"name" : "SofaHelper_test",
+					"parentIndex" : 9,
+					"targetIndexes" : 
+					[
+						97
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						12
+					],
+					"name" : "TestPlugin",
+					"parentIndex" : 10,
+					"targetIndexes" : 
+					[
+						169
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						13
+					],
+					"directoryIndexes" : 
+					[
+						13
+					],
+					"name" : "SofaSimulationCore",
+					"parentIndex" : 4,
+					"targetIndexes" : 
+					[
+						147
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						14
+					],
+					"name" : "SofaSimulationCore_test",
+					"parentIndex" : 12,
+					"targetIndexes" : 
+					[
+						149
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						15,
+						16,
+						17
+					],
+					"directoryIndexes" : 
+					[
+						15
+					],
+					"name" : "SofaSimulation",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						145
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						16
+					],
+					"name" : "SofaSimulationCommon",
+					"parentIndex" : 14,
+					"targetIndexes" : 
+					[
+						146
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						17
+					],
+					"name" : "SofaSimulationGraph",
+					"parentIndex" : 14,
+					"targetIndexes" : 
+					[
+						150
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						18
+					],
+					"name" : "SofaSimulationTree",
+					"parentIndex" : 14,
+					"targetIndexes" : 
+					[
+						152
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						19
+					],
+					"name" : "SofaGTestMain",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						52
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						20,
+						22,
+						23,
+						25,
+						27,
+						28,
+						29
+					],
+					"directoryIndexes" : 
+					[
+						20
+					],
+					"name" : "SofaBase",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						21
+					],
+					"directoryIndexes" : 
+					[
+						21
+					],
+					"name" : "SofaBaseLinearSolver",
+					"parentIndex" : 19,
+					"targetIndexes" : 
+					[
+						14
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						22
+					],
+					"name" : "SofaBaseLinearSolver_test",
+					"parentIndex" : 20,
+					"targetIndexes" : 
+					[
+						15
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						23
+					],
+					"name" : "SofaEigen2Solver",
+					"parentIndex" : 19,
+					"targetIndexes" : 
+					[
+						41
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						24
+					],
+					"directoryIndexes" : 
+					[
+						24
+					],
+					"name" : "SofaBaseTopology",
+					"parentIndex" : 19,
+					"targetIndexes" : 
+					[
+						17
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						25
+					],
+					"name" : "SofaBaseTopology_test",
+					"parentIndex" : 23,
+					"targetIndexes" : 
+					[
+						18
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						26
+					],
+					"directoryIndexes" : 
+					[
+						26
+					],
+					"name" : "SofaBaseCollision",
+					"parentIndex" : 19,
+					"targetIndexes" : 
+					[
+						12
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						27
+					],
+					"name" : "SofaBaseCollision_test",
+					"parentIndex" : 25,
+					"targetIndexes" : 
+					[
+						13
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						28
+					],
+					"name" : "SofaBaseMechanics",
+					"parentIndex" : 19,
+					"targetIndexes" : 
+					[
+						16
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						29
+					],
+					"name" : "SofaBaseVisual",
+					"parentIndex" : 19,
+					"targetIndexes" : 
+					[
+						21
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						30
+					],
+					"name" : "SofaBaseUtils",
+					"parentIndex" : 19,
+					"targetIndexes" : 
+					[
+						19
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						31
+					],
+					"directoryIndexes" : 
+					[
+						32
+					],
+					"name" : "SofaSimpleFem",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						142,
+						143
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						33
+					],
+					"name" : "SofaSimpleFem_test",
+					"parentIndex" : 30,
+					"targetIndexes" : 
+					[
+						144
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						33
+					],
+					"directoryIndexes" : 
+					[
+						34
+					],
+					"name" : "SofaRigid",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						139,
+						140
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						35
+					],
+					"name" : "SofaRigid_test",
+					"parentIndex" : 32,
+					"targetIndexes" : 
+					[
+						141
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						35
+					],
+					"directoryIndexes" : 
+					[
+						36
+					],
+					"name" : "SofaDeformable",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						36,
+						37
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						37
+					],
+					"name" : "SofaDeformable_test",
+					"parentIndex" : 34,
+					"targetIndexes" : 
+					[
+						38
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						38
+					],
+					"name" : "SofaObjectInteraction",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						132,
+						133
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						38
+					],
+					"directoryIndexes" : 
+					[
+						39
+					],
+					"name" : "SofaMeshCollision",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						104,
+						105
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						40
+					],
+					"name" : "SofaMeshCollision_test",
+					"parentIndex" : 37,
+					"targetIndexes" : 
+					[
+						106
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						40
+					],
+					"directoryIndexes" : 
+					[
+						41
+					],
+					"name" : "SofaEngine",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						42,
+						43
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						42
+					],
+					"name" : "SofaEngine_test",
+					"parentIndex" : 39,
+					"targetIndexes" : 
+					[
+						44
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						42
+					],
+					"directoryIndexes" : 
+					[
+						43
+					],
+					"name" : "SofaExplicitOdeSolver",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						45,
+						46
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						44
+					],
+					"name" : "SofaExplicitOdeSolver_test",
+					"parentIndex" : 41,
+					"targetIndexes" : 
+					[
+						47
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						44
+					],
+					"directoryIndexes" : 
+					[
+						45
+					],
+					"name" : "SofaImplicitOdeSolver",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						98,
+						99
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						46
+					],
+					"name" : "SofaImplicitOdeSolver_test",
+					"parentIndex" : 43,
+					"targetIndexes" : 
+					[
+						100
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						46
+					],
+					"directoryIndexes" : 
+					[
+						47
+					],
+					"name" : "SofaLoader",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						101,
+						102
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						48
+					],
+					"name" : "SofaLoader_test",
+					"parentIndex" : 45,
+					"targetIndexes" : 
+					[
+						103
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						50
+					],
+					"name" : "SofaGeneralVisual",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						83,
+						84
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						49
+					],
+					"directoryIndexes" : 
+					[
+						51
+					],
+					"name" : "SofaGraphComponent",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						85,
+						86
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						52
+					],
+					"name" : "SofaGraphComponent_test",
+					"parentIndex" : 48,
+					"targetIndexes" : 
+					[
+						87
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						53
+					],
+					"name" : "SofaGeneralMeshCollision",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						72,
+						73
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						52
+					],
+					"directoryIndexes" : 
+					[
+						54
+					],
+					"name" : "SofaBoundaryCondition",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						22,
+						23
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						55
+					],
+					"name" : "SofaBoundaryCondition_test",
+					"parentIndex" : 51,
+					"targetIndexes" : 
+					[
+						24
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						56
+					],
+					"name" : "SofaGeneralAnimationLoop",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						54,
+						55
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						57
+					],
+					"name" : "SofaGeneralDeformable",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						56,
+						57
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						56
+					],
+					"directoryIndexes" : 
+					[
+						58
+					],
+					"name" : "SofaGeneralEngine",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						58,
+						59
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						59
+					],
+					"name" : "SofaGeneralEngine_test",
+					"parentIndex" : 55,
+					"targetIndexes" : 
+					[
+						60
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						58
+					],
+					"directoryIndexes" : 
+					[
+						60
+					],
+					"name" : "SofaGeneralExplicitOdeSolver",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						61,
+						62
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						61
+					],
+					"name" : "SofaGeneralExplicitOdeSolver_test",
+					"parentIndex" : 57,
+					"targetIndexes" : 
+					[
+						63
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						60
+					],
+					"directoryIndexes" : 
+					[
+						62
+					],
+					"name" : "SofaGeneralImplicitOdeSolver",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						64,
+						65
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						63
+					],
+					"name" : "SofaGeneralImplicitOdeSolver_test",
+					"parentIndex" : 59,
+					"targetIndexes" : 
+					[
+						66
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						64
+					],
+					"name" : "SofaGeneralLinearSolver",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						67,
+						68
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						65
+					],
+					"name" : "SofaGeneralRigid",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						76,
+						77
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						66
+					],
+					"name" : "SofaGeneralObjectInteraction",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						74,
+						75
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						67
+					],
+					"name" : "SofaGeneralSimpleFem",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						78,
+						79
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						66
+					],
+					"directoryIndexes" : 
+					[
+						68
+					],
+					"name" : "SofaGeneralTopology",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						80,
+						81
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						69
+					],
+					"name" : "SofaGeneralTopology_test",
+					"parentIndex" : 65,
+					"targetIndexes" : 
+					[
+						82
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						70
+					],
+					"name" : "SofaTopologyMapping",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						158,
+						159
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						71
+					],
+					"name" : "SofaUserInteraction",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						160,
+						161
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						70
+					],
+					"directoryIndexes" : 
+					[
+						72
+					],
+					"name" : "SofaConstraint",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						27,
+						28
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						73
+					],
+					"name" : "SofaConstraint_test",
+					"parentIndex" : 69,
+					"targetIndexes" : 
+					[
+						29
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						72
+					],
+					"directoryIndexes" : 
+					[
+						74
+					],
+					"name" : "SofaGeneralLoader",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						69,
+						70
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						75
+					],
+					"name" : "SofaGeneralLoader_test",
+					"parentIndex" : 71,
+					"targetIndexes" : 
+					[
+						71
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						74,
+						75
+					],
+					"directoryIndexes" : 
+					[
+						76
+					],
+					"name" : "SofaSparseSolver",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						154,
+						155
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						77
+					],
+					"name" : "csparse",
+					"parentIndex" : 73,
+					"targetIndexes" : 
+					[
+						170
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						78
+					],
+					"name" : "metis",
+					"parentIndex" : 73,
+					"targetIndexes" : 
+					[
+						174
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						79
+					],
+					"name" : "SofaPreconditioner",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						137,
+						138
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						78
+					],
+					"directoryIndexes" : 
+					[
+						80
+					],
+					"name" : "SofaHaptics",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						92,
+						93
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						81
+					],
+					"name" : "SofaHaptics_test",
+					"parentIndex" : 77,
+					"targetIndexes" : 
+					[
+						94
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						80
+					],
+					"directoryIndexes" : 
+					[
+						82
+					],
+					"name" : "SofaValidation",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						162,
+						163
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						83
+					],
+					"name" : "SofaValidation_test",
+					"parentIndex" : 79,
+					"targetIndexes" : 
+					[
+						164
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						84
+					],
+					"name" : "SofaDenseSolver",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						39,
+						40
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						85
+					],
+					"name" : "SofaNonUniformFem",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						130,
+						131
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						84
+					],
+					"directoryIndexes" : 
+					[
+						86
+					],
+					"name" : "SofaOpenglVisual",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						134,
+						135
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						87
+					],
+					"name" : "SofaOpenglVisual_test",
+					"parentIndex" : 83,
+					"targetIndexes" : 
+					[
+						136
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						86
+					],
+					"directoryIndexes" : 
+					[
+						88
+					],
+					"name" : "SofaMiscTopology",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						127,
+						128
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						89
+					],
+					"name" : "SofaMiscTopology_test",
+					"parentIndex" : 85,
+					"targetIndexes" : 
+					[
+						129
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						88
+					],
+					"directoryIndexes" : 
+					[
+						90
+					],
+					"name" : "SofaMiscExtra",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						112,
+						113
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						91
+					],
+					"name" : "SofaMiscExtra_test",
+					"parentIndex" : 87,
+					"targetIndexes" : 
+					[
+						114
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						90
+					],
+					"directoryIndexes" : 
+					[
+						92
+					],
+					"name" : "SofaMiscForceField",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						118,
+						119
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						93
+					],
+					"name" : "SofaMiscForceField_test",
+					"parentIndex" : 89,
+					"targetIndexes" : 
+					[
+						120
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						94
+					],
+					"name" : "SofaMiscEngine",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						110,
+						111
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						93
+					],
+					"directoryIndexes" : 
+					[
+						95
+					],
+					"name" : "SofaMiscSolver",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						124,
+						125
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						96
+					],
+					"name" : "SofaMiscSolver_test",
+					"parentIndex" : 92,
+					"targetIndexes" : 
+					[
+						126
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						95
+					],
+					"directoryIndexes" : 
+					[
+						97
+					],
+					"name" : "SofaMiscFem",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						115,
+						116
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						98
+					],
+					"name" : "SofaMiscFem_test",
+					"parentIndex" : 94,
+					"targetIndexes" : 
+					[
+						117
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						97
+					],
+					"directoryIndexes" : 
+					[
+						99
+					],
+					"name" : "SofaMiscMapping",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						121,
+						122
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						100
+					],
+					"name" : "SofaMiscMapping_test",
+					"parentIndex" : 96,
+					"targetIndexes" : 
+					[
+						123
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						99,
+						100,
+						102
+					],
+					"directoryIndexes" : 
+					[
+						101
+					],
+					"name" : "SofaGui",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						88
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						102
+					],
+					"name" : "SofaGuiCommon",
+					"parentIndex" : 98,
+					"targetIndexes" : 
+					[
+						89
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						101
+					],
+					"directoryIndexes" : 
+					[
+						103
+					],
+					"name" : "SofaGuiQt",
+					"parentIndex" : 98,
+					"targetIndexes" : 
+					[
+						91
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						104
+					],
+					"name" : "QGLViewer",
+					"parentIndex" : 100,
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						105
+					],
+					"name" : "SofaGuiMain",
+					"parentIndex" : 98,
+					"targetIndexes" : 
+					[
+						90
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						104
+					],
+					"directoryIndexes" : 
+					[
+						106
+					],
+					"name" : "SofaExporter",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						48,
+						49
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						107
+					],
+					"name" : "SofaExporter_test",
+					"parentIndex" : 103,
+					"targetIndexes" : 
+					[
+						50
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						108
+					],
+					"name" : "SofaCommon",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						25
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						109
+					],
+					"name" : "SofaGeneral",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						53
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						110
+					],
+					"name" : "SofaAdvanced",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						10
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						111
+					],
+					"name" : "SofaMisc",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						107
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						113
+					],
+					"name" : "SofaComponentAll",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						26
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						111,
+						112
+					],
+					"directoryIndexes" : 
+					[
+						114
+					],
+					"name" : "SceneCreator",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						5,
+						6
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						115
+					],
+					"name" : "sceneCreatorExamples",
+					"parentIndex" : 110,
+					"targetIndexes" : 
+					[
+						178
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						116
+					],
+					"name" : "SceneCreator_test",
+					"parentIndex" : 110,
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						117
+					],
+					"name" : "SofaTest",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						156,
+						157
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						115,
+						116
+					],
+					"directoryIndexes" : 
+					[
+						119
+					],
+					"name" : "CImgPlugin",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						120
+					],
+					"name" : "CImg",
+					"parentIndex" : 114
+				},
+				{
+					"directoryIndexes" : 
+					[
+						121
+					],
+					"name" : "CImgPlugin_test",
+					"parentIndex" : 114,
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						122
+					],
+					"name" : "SofaMiscCollision",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						108,
+						109
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						123
+					],
+					"name" : "Sensable",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						8
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						124
+					],
+					"name" : "SensableEmulation",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						125
+					],
+					"name" : "SurfLabHaptic",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						166
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						126
+					],
+					"name" : "SurfLabHapticDevice",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						167
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						127
+					],
+					"name" : "SaLua",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4,
+						173
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						128
+					],
+					"name" : "SurfLabConnectingTissue",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						165
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						129
+					],
+					"name" : "SurfLabSpeechRecognition",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						168
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						131
+					],
+					"name" : "SofaHelper_simutest",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						96
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						132
+					],
+					"name" : "SofaDefaultType_simutest",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						34
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						133
+					],
+					"name" : "SofaCore_simutest",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						31
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						134
+					],
+					"name" : "SofaSimulationCore_simutest",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						148
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						135
+					],
+					"name" : "SofaSimulationGraph_test",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						151
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						136
+					],
+					"name" : "SofaSimulationTree_test",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						153
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						137
+					],
+					"name" : "SofaBaseUtils_test",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						20
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						133
+					],
+					"directoryIndexes" : 
+					[
+						139
+					],
+					"name" : "runSofa",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						171,
+						176
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						140
+					],
+					"name" : "runSofa_test",
+					"parentIndex" : 132,
+					"targetIndexes" : 
+					[
+						177
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 119,
+					"id" : "CImgPlugin::@c426f8923f74a1eaaac1",
+					"jsonFile" : "target-CImgPlugin-Debug-72808fdede9026ec1235.json",
+					"name" : "CImgPlugin",
+					"projectIndex" : 114
+				},
+				{
+					"directoryIndex" : 119,
+					"id" : "CImgPlugin_relocatable_install::@c426f8923f74a1eaaac1",
+					"jsonFile" : "target-CImgPlugin_relocatable_install-Debug-db88c69f945d8ac16d7d.json",
+					"name" : "CImgPlugin_relocatable_install",
+					"projectIndex" : 114
+				},
+				{
+					"directoryIndex" : 121,
+					"id" : "CImgPlugin_test::@a741fbce5922b3080e38",
+					"jsonFile" : "target-CImgPlugin_test-Debug-c9ec82f2465e91c7cc8e.json",
+					"name" : "CImgPlugin_test",
+					"projectIndex" : 116
+				},
+				{
+					"directoryIndex" : 104,
+					"id" : "QGLViewer::@0985fac717316932eda4",
+					"jsonFile" : "target-QGLViewer-Debug-ecb4b8c84f9e59231626.json",
+					"name" : "QGLViewer",
+					"projectIndex" : 101
+				},
+				{
+					"directoryIndex" : 127,
+					"id" : "SaLua::@d20508c0893be2e42e25",
+					"jsonFile" : "target-SaLua-Debug-bde4d805695d86c49edd.json",
+					"name" : "SaLua",
+					"projectIndex" : 122
+				},
+				{
+					"directoryIndex" : 114,
+					"id" : "SceneCreator::@8d5acda4fd255485b8e0",
+					"jsonFile" : "target-SceneCreator-Debug-bc83f82b928c79b30134.json",
+					"name" : "SceneCreator",
+					"projectIndex" : 110
+				},
+				{
+					"directoryIndex" : 114,
+					"id" : "SceneCreator_relocatable_install::@8d5acda4fd255485b8e0",
+					"jsonFile" : "target-SceneCreator_relocatable_install-Debug-6a1ead284edcba9c3cc5.json",
+					"name" : "SceneCreator_relocatable_install",
+					"projectIndex" : 110
+				},
+				{
+					"directoryIndex" : 116,
+					"id" : "SceneCreator_test::@2bbacce6ad78a47fec8d",
+					"jsonFile" : "target-SceneCreator_test-Debug-363b68b137c452e9137a.json",
+					"name" : "SceneCreator_test",
+					"projectIndex" : 112
+				},
+				{
+					"directoryIndex" : 123,
+					"id" : "Sensable::@3fb5594212e35fdc9cbd",
+					"jsonFile" : "target-Sensable-Debug-48e64cc7a035bca4221b.json",
+					"name" : "Sensable",
+					"projectIndex" : 118
+				},
+				{
+					"directoryIndex" : 124,
+					"id" : "SensableEmulation::@64c31970e32bb4974984",
+					"jsonFile" : "target-SensableEmulation-Debug-61f61602742e9fac701d.json",
+					"name" : "SensableEmulation",
+					"projectIndex" : 119
+				},
+				{
+					"directoryIndex" : 110,
+					"id" : "SofaAdvanced::@a55c866cdb2f22f0e2a4",
+					"jsonFile" : "target-SofaAdvanced-Debug-664b32803fa62a343225.json",
+					"name" : "SofaAdvanced",
+					"projectIndex" : 107
+				},
+				{
+					"directoryIndex" : 20,
+					"id" : "SofaBase::@12babb72e6d24740dab1",
+					"jsonFile" : "target-SofaBase-Debug-4fe1a50e7a0f34d1916b.json",
+					"name" : "SofaBase",
+					"projectIndex" : 19
+				},
+				{
+					"directoryIndex" : 26,
+					"id" : "SofaBaseCollision::@7e47d0fc2e6200299097",
+					"jsonFile" : "target-SofaBaseCollision-Debug-ba04a2acbff3492040c2.json",
+					"name" : "SofaBaseCollision",
+					"projectIndex" : 25
+				},
+				{
+					"directoryIndex" : 27,
+					"id" : "SofaBaseCollision_test::@a835a76b4531815b496b",
+					"jsonFile" : "target-SofaBaseCollision_test-Debug-c8a2047040336589df83.json",
+					"name" : "SofaBaseCollision_test",
+					"projectIndex" : 26
+				},
+				{
+					"directoryIndex" : 21,
+					"id" : "SofaBaseLinearSolver::@1f0abf65d224a37bc025",
+					"jsonFile" : "target-SofaBaseLinearSolver-Debug-c466f0363e3014d88dbb.json",
+					"name" : "SofaBaseLinearSolver",
+					"projectIndex" : 20
+				},
+				{
+					"directoryIndex" : 22,
+					"id" : "SofaBaseLinearSolver_test::@52d3fbd0cabcedb08c3e",
+					"jsonFile" : "target-SofaBaseLinearSolver_test-Debug-b0981ff9c68efda83896.json",
+					"name" : "SofaBaseLinearSolver_test",
+					"projectIndex" : 21
+				},
+				{
+					"directoryIndex" : 28,
+					"id" : "SofaBaseMechanics::@2ef2cc1f17c5a115174f",
+					"jsonFile" : "target-SofaBaseMechanics-Debug-e188de04846b52209f0d.json",
+					"name" : "SofaBaseMechanics",
+					"projectIndex" : 27
+				},
+				{
+					"directoryIndex" : 24,
+					"id" : "SofaBaseTopology::@823c3eadcf25d4d93c78",
+					"jsonFile" : "target-SofaBaseTopology-Debug-2929977c7d271a5cccea.json",
+					"name" : "SofaBaseTopology",
+					"projectIndex" : 23
+				},
+				{
+					"directoryIndex" : 25,
+					"id" : "SofaBaseTopology_test::@a596957ae1561fc6d670",
+					"jsonFile" : "target-SofaBaseTopology_test-Debug-f9747049058d558f3734.json",
+					"name" : "SofaBaseTopology_test",
+					"projectIndex" : 24
+				},
+				{
+					"directoryIndex" : 30,
+					"id" : "SofaBaseUtils::@7c696c1053a48d2e3325",
+					"jsonFile" : "target-SofaBaseUtils-Debug-259acd1c7e774561dfe7.json",
+					"name" : "SofaBaseUtils",
+					"projectIndex" : 29
+				},
+				{
+					"directoryIndex" : 137,
+					"id" : "SofaBaseUtils_test::@233ee23741a441276787",
+					"jsonFile" : "target-SofaBaseUtils_test-Debug-83a577fa1f09faf5f0ce.json",
+					"name" : "SofaBaseUtils_test",
+					"projectIndex" : 131
+				},
+				{
+					"directoryIndex" : 29,
+					"id" : "SofaBaseVisual::@abf9eac13781073d27f6",
+					"jsonFile" : "target-SofaBaseVisual-Debug-e25bd7b74bd2348215fb.json",
+					"name" : "SofaBaseVisual",
+					"projectIndex" : 28
+				},
+				{
+					"directoryIndex" : 54,
+					"id" : "SofaBoundaryCondition::@92e4742d3ec4569fbade",
+					"jsonFile" : "target-SofaBoundaryCondition-Debug-d1825e6012b8a8130680.json",
+					"name" : "SofaBoundaryCondition",
+					"projectIndex" : 51
+				},
+				{
+					"directoryIndex" : 54,
+					"id" : "SofaBoundaryCondition_relocatable_install::@92e4742d3ec4569fbade",
+					"jsonFile" : "target-SofaBoundaryCondition_relocatable_install-Debug-db68f1598095130b0df6.json",
+					"name" : "SofaBoundaryCondition_relocatable_install",
+					"projectIndex" : 51
+				},
+				{
+					"directoryIndex" : 55,
+					"id" : "SofaBoundaryCondition_test::@c9c4bc7567a113ad48f1",
+					"jsonFile" : "target-SofaBoundaryCondition_test-Debug-bb0817c2980356e79b8d.json",
+					"name" : "SofaBoundaryCondition_test",
+					"projectIndex" : 52
+				},
+				{
+					"directoryIndex" : 108,
+					"id" : "SofaCommon::@a013f80d9a92cbe9886d",
+					"jsonFile" : "target-SofaCommon-Debug-3d3f2eb2df82b229be8b.json",
+					"name" : "SofaCommon",
+					"projectIndex" : 105
+				},
+				{
+					"directoryIndex" : 113,
+					"id" : "SofaComponentAll::@92f106ea242be3e59205",
+					"jsonFile" : "target-SofaComponentAll-Debug-66b86980628f4ea5d792.json",
+					"name" : "SofaComponentAll",
+					"projectIndex" : 109
+				},
+				{
+					"directoryIndex" : 72,
+					"id" : "SofaConstraint::@327da2a14c5c1de04113",
+					"jsonFile" : "target-SofaConstraint-Debug-b2958ad168916b8c94d6.json",
+					"name" : "SofaConstraint",
+					"projectIndex" : 69
+				},
+				{
+					"directoryIndex" : 72,
+					"id" : "SofaConstraint_relocatable_install::@327da2a14c5c1de04113",
+					"jsonFile" : "target-SofaConstraint_relocatable_install-Debug-d05bb216bc17fbba7137.json",
+					"name" : "SofaConstraint_relocatable_install",
+					"projectIndex" : 69
+				},
+				{
+					"directoryIndex" : 73,
+					"id" : "SofaConstraint_test::@96544a81bfcd4974fd9e",
+					"jsonFile" : "target-SofaConstraint_test-Debug-1f1eb8e9c9710763a86c.json",
+					"name" : "SofaConstraint_test",
+					"projectIndex" : 70
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "SofaCore::@a34c98dda7edb9352447",
+					"jsonFile" : "target-SofaCore-Debug-392b693942509e77e94a.json",
+					"name" : "SofaCore",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 133,
+					"id" : "SofaCore_simutest::@fb35c70ac76391a282ec",
+					"jsonFile" : "target-SofaCore_simutest-Debug-d869865463efa42383f1.json",
+					"name" : "SofaCore_simutest",
+					"projectIndex" : 127
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "SofaCore_test::@a6306998130d6f0cfaed",
+					"jsonFile" : "target-SofaCore_test-Debug-34e070d1f2ea50362801.json",
+					"name" : "SofaCore_test",
+					"projectIndex" : 6
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "SofaDefaultType::@1318efe8fa84f2296a09",
+					"jsonFile" : "target-SofaDefaultType-Debug-f94cae9c40ccee7aea31.json",
+					"name" : "SofaDefaultType",
+					"projectIndex" : 7
+				},
+				{
+					"directoryIndex" : 132,
+					"id" : "SofaDefaultType_simutest::@d9c17357fcb3cc80e1b6",
+					"jsonFile" : "target-SofaDefaultType_simutest-Debug-79faebe033579d303278.json",
+					"name" : "SofaDefaultType_simutest",
+					"projectIndex" : 126
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "SofaDefaultType_test::@44cfb363caf9e5466bee",
+					"jsonFile" : "target-SofaDefaultType_test-Debug-0d33a2355c98298ff865.json",
+					"name" : "SofaDefaultType_test",
+					"projectIndex" : 8
+				},
+				{
+					"directoryIndex" : 36,
+					"id" : "SofaDeformable::@51fdd638c4546f2831de",
+					"jsonFile" : "target-SofaDeformable-Debug-979448ed81528c44c0e0.json",
+					"name" : "SofaDeformable",
+					"projectIndex" : 34
+				},
+				{
+					"directoryIndex" : 36,
+					"id" : "SofaDeformable_relocatable_install::@51fdd638c4546f2831de",
+					"jsonFile" : "target-SofaDeformable_relocatable_install-Debug-0a0b9bfa09642e486114.json",
+					"name" : "SofaDeformable_relocatable_install",
+					"projectIndex" : 34
+				},
+				{
+					"directoryIndex" : 37,
+					"id" : "SofaDeformable_test::@e668c1a07ecb545f82ba",
+					"jsonFile" : "target-SofaDeformable_test-Debug-d1218711e5741ceeaa4b.json",
+					"name" : "SofaDeformable_test",
+					"projectIndex" : 35
+				},
+				{
+					"directoryIndex" : 84,
+					"id" : "SofaDenseSolver::@33bb04decfe9c9ae0963",
+					"jsonFile" : "target-SofaDenseSolver-Debug-f33ae63ef1c9e48a851e.json",
+					"name" : "SofaDenseSolver",
+					"projectIndex" : 81
+				},
+				{
+					"directoryIndex" : 84,
+					"id" : "SofaDenseSolver_relocatable_install::@33bb04decfe9c9ae0963",
+					"jsonFile" : "target-SofaDenseSolver_relocatable_install-Debug-6ab93859c8336bc897f7.json",
+					"name" : "SofaDenseSolver_relocatable_install",
+					"projectIndex" : 81
+				},
+				{
+					"directoryIndex" : 23,
+					"id" : "SofaEigen2Solver::@8c32f7e42cb2615b3d91",
+					"jsonFile" : "target-SofaEigen2Solver-Debug-fc4fcb1c147ea5195495.json",
+					"name" : "SofaEigen2Solver",
+					"projectIndex" : 22
+				},
+				{
+					"directoryIndex" : 41,
+					"id" : "SofaEngine::@1288d1dc2d106d0920ab",
+					"jsonFile" : "target-SofaEngine-Debug-bc9de1be9a95f08f5d53.json",
+					"name" : "SofaEngine",
+					"projectIndex" : 39
+				},
+				{
+					"directoryIndex" : 41,
+					"id" : "SofaEngine_relocatable_install::@1288d1dc2d106d0920ab",
+					"jsonFile" : "target-SofaEngine_relocatable_install-Debug-4bdd51211e6e3b7bc8c1.json",
+					"name" : "SofaEngine_relocatable_install",
+					"projectIndex" : 39
+				},
+				{
+					"directoryIndex" : 42,
+					"id" : "SofaEngine_test::@fcf81b0a2f8307519ce0",
+					"jsonFile" : "target-SofaEngine_test-Debug-0c05140f215664d2ed06.json",
+					"name" : "SofaEngine_test",
+					"projectIndex" : 40
+				},
+				{
+					"directoryIndex" : 43,
+					"id" : "SofaExplicitOdeSolver::@bfa321bed5e32e7c9ad2",
+					"jsonFile" : "target-SofaExplicitOdeSolver-Debug-4626fc6377fa36b6b9e5.json",
+					"name" : "SofaExplicitOdeSolver",
+					"projectIndex" : 41
+				},
+				{
+					"directoryIndex" : 43,
+					"id" : "SofaExplicitOdeSolver_relocatable_install::@bfa321bed5e32e7c9ad2",
+					"jsonFile" : "target-SofaExplicitOdeSolver_relocatable_install-Debug-874dd136e79831509fab.json",
+					"name" : "SofaExplicitOdeSolver_relocatable_install",
+					"projectIndex" : 41
+				},
+				{
+					"directoryIndex" : 44,
+					"id" : "SofaExplicitOdeSolver_test::@f06e05e74049cd295e8f",
+					"jsonFile" : "target-SofaExplicitOdeSolver_test-Debug-0e4ddc21249baaf20761.json",
+					"name" : "SofaExplicitOdeSolver_test",
+					"projectIndex" : 42
+				},
+				{
+					"directoryIndex" : 106,
+					"id" : "SofaExporter::@0619b6e144f16cfebb1c",
+					"jsonFile" : "target-SofaExporter-Debug-acce634f1c024a9d8547.json",
+					"name" : "SofaExporter",
+					"projectIndex" : 103
+				},
+				{
+					"directoryIndex" : 106,
+					"id" : "SofaExporter_relocatable_install::@0619b6e144f16cfebb1c",
+					"jsonFile" : "target-SofaExporter_relocatable_install-Debug-16e5b2a8955b553becf8.json",
+					"name" : "SofaExporter_relocatable_install",
+					"projectIndex" : 103
+				},
+				{
+					"directoryIndex" : 107,
+					"id" : "SofaExporter_test::@d103905ceaaa32104d6e",
+					"jsonFile" : "target-SofaExporter_test-Debug-97267abe877bec9da9a4.json",
+					"name" : "SofaExporter_test",
+					"projectIndex" : 104
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "SofaFramework::@8af56089c963d9b58ddc",
+					"jsonFile" : "target-SofaFramework-Debug-37bf2119ab42de20af9f.json",
+					"name" : "SofaFramework",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 19,
+					"id" : "SofaGTestMain::@548d463294399b247428",
+					"jsonFile" : "target-SofaGTestMain-Debug-1b1a36f007cc010c5631.json",
+					"name" : "SofaGTestMain",
+					"projectIndex" : 18
+				},
+				{
+					"directoryIndex" : 109,
+					"id" : "SofaGeneral::@73e53c3917b6de000403",
+					"jsonFile" : "target-SofaGeneral-Debug-5e23a78556c953b9d00a.json",
+					"name" : "SofaGeneral",
+					"projectIndex" : 106
+				},
+				{
+					"directoryIndex" : 56,
+					"id" : "SofaGeneralAnimationLoop::@75b7d224c22e88fe8203",
+					"jsonFile" : "target-SofaGeneralAnimationLoop-Debug-3aee29103e9ab19e2925.json",
+					"name" : "SofaGeneralAnimationLoop",
+					"projectIndex" : 53
+				},
+				{
+					"directoryIndex" : 56,
+					"id" : "SofaGeneralAnimationLoop_relocatable_install::@75b7d224c22e88fe8203",
+					"jsonFile" : "target-SofaGeneralAnimationLoop_relocatable_install-Debug-bb0b48421985514aefbd.json",
+					"name" : "SofaGeneralAnimationLoop_relocatable_install",
+					"projectIndex" : 53
+				},
+				{
+					"directoryIndex" : 57,
+					"id" : "SofaGeneralDeformable::@b92729bffbfba253ae2d",
+					"jsonFile" : "target-SofaGeneralDeformable-Debug-5a9e3fe2f83dc816ac3f.json",
+					"name" : "SofaGeneralDeformable",
+					"projectIndex" : 54
+				},
+				{
+					"directoryIndex" : 57,
+					"id" : "SofaGeneralDeformable_relocatable_install::@b92729bffbfba253ae2d",
+					"jsonFile" : "target-SofaGeneralDeformable_relocatable_install-Debug-98fbe81c1766f406ac92.json",
+					"name" : "SofaGeneralDeformable_relocatable_install",
+					"projectIndex" : 54
+				},
+				{
+					"directoryIndex" : 58,
+					"id" : "SofaGeneralEngine::@d8a188982b1d378c2412",
+					"jsonFile" : "target-SofaGeneralEngine-Debug-a578db40f9ccb218515a.json",
+					"name" : "SofaGeneralEngine",
+					"projectIndex" : 55
+				},
+				{
+					"directoryIndex" : 58,
+					"id" : "SofaGeneralEngine_relocatable_install::@d8a188982b1d378c2412",
+					"jsonFile" : "target-SofaGeneralEngine_relocatable_install-Debug-48063c8f340be2fe447c.json",
+					"name" : "SofaGeneralEngine_relocatable_install",
+					"projectIndex" : 55
+				},
+				{
+					"directoryIndex" : 59,
+					"id" : "SofaGeneralEngine_test::@03e5b40b6a387c7954bd",
+					"jsonFile" : "target-SofaGeneralEngine_test-Debug-37b17dadc121f79264e1.json",
+					"name" : "SofaGeneralEngine_test",
+					"projectIndex" : 56
+				},
+				{
+					"directoryIndex" : 60,
+					"id" : "SofaGeneralExplicitOdeSolver::@737864429e758e57778c",
+					"jsonFile" : "target-SofaGeneralExplicitOdeSolver-Debug-ca1b640e5cf1c725fcb4.json",
+					"name" : "SofaGeneralExplicitOdeSolver",
+					"projectIndex" : 57
+				},
+				{
+					"directoryIndex" : 60,
+					"id" : "SofaGeneralExplicitOdeSolver_relocatable_install::@737864429e758e57778c",
+					"jsonFile" : "target-SofaGeneralExplicitOdeSolver_relocatable_install-Debug-25d9a846031a4ae9185f.json",
+					"name" : "SofaGeneralExplicitOdeSolver_relocatable_install",
+					"projectIndex" : 57
+				},
+				{
+					"directoryIndex" : 61,
+					"id" : "SofaGeneralExplicitOdeSolver_test::@f41c7ee444f4f5db9660",
+					"jsonFile" : "target-SofaGeneralExplicitOdeSolver_test-Debug-56cba6b6ffcfe0117086.json",
+					"name" : "SofaGeneralExplicitOdeSolver_test",
+					"projectIndex" : 58
+				},
+				{
+					"directoryIndex" : 62,
+					"id" : "SofaGeneralImplicitOdeSolver::@3df268247a0ecd53051a",
+					"jsonFile" : "target-SofaGeneralImplicitOdeSolver-Debug-7edc7e255233d14384a9.json",
+					"name" : "SofaGeneralImplicitOdeSolver",
+					"projectIndex" : 59
+				},
+				{
+					"directoryIndex" : 62,
+					"id" : "SofaGeneralImplicitOdeSolver_relocatable_install::@3df268247a0ecd53051a",
+					"jsonFile" : "target-SofaGeneralImplicitOdeSolver_relocatable_install-Debug-f36fdb8687d102eb2d1a.json",
+					"name" : "SofaGeneralImplicitOdeSolver_relocatable_install",
+					"projectIndex" : 59
+				},
+				{
+					"directoryIndex" : 63,
+					"id" : "SofaGeneralImplicitOdeSolver_test::@c1f2a68e7aa867fb3abf",
+					"jsonFile" : "target-SofaGeneralImplicitOdeSolver_test-Debug-321f8da0b0588ced62c6.json",
+					"name" : "SofaGeneralImplicitOdeSolver_test",
+					"projectIndex" : 60
+				},
+				{
+					"directoryIndex" : 64,
+					"id" : "SofaGeneralLinearSolver::@99ac029279a50b8dc5da",
+					"jsonFile" : "target-SofaGeneralLinearSolver-Debug-aeb2489f3258a025d1da.json",
+					"name" : "SofaGeneralLinearSolver",
+					"projectIndex" : 61
+				},
+				{
+					"directoryIndex" : 64,
+					"id" : "SofaGeneralLinearSolver_relocatable_install::@99ac029279a50b8dc5da",
+					"jsonFile" : "target-SofaGeneralLinearSolver_relocatable_install-Debug-b99bc8f197f0ac1f7f3b.json",
+					"name" : "SofaGeneralLinearSolver_relocatable_install",
+					"projectIndex" : 61
+				},
+				{
+					"directoryIndex" : 74,
+					"id" : "SofaGeneralLoader::@00feded9715cdd62aa6b",
+					"jsonFile" : "target-SofaGeneralLoader-Debug-0b2071527993718d7df6.json",
+					"name" : "SofaGeneralLoader",
+					"projectIndex" : 71
+				},
+				{
+					"directoryIndex" : 74,
+					"id" : "SofaGeneralLoader_relocatable_install::@00feded9715cdd62aa6b",
+					"jsonFile" : "target-SofaGeneralLoader_relocatable_install-Debug-473ef8bbe5d9a4dc209e.json",
+					"name" : "SofaGeneralLoader_relocatable_install",
+					"projectIndex" : 71
+				},
+				{
+					"directoryIndex" : 75,
+					"id" : "SofaGeneralLoader_test::@3b11eb501c4b58612ad9",
+					"jsonFile" : "target-SofaGeneralLoader_test-Debug-ed7f7d05e42a5a0edf3d.json",
+					"name" : "SofaGeneralLoader_test",
+					"projectIndex" : 72
+				},
+				{
+					"directoryIndex" : 53,
+					"id" : "SofaGeneralMeshCollision::@3417de8432af1bf4e4eb",
+					"jsonFile" : "target-SofaGeneralMeshCollision-Debug-7d9e45d972a693eccda7.json",
+					"name" : "SofaGeneralMeshCollision",
+					"projectIndex" : 50
+				},
+				{
+					"directoryIndex" : 53,
+					"id" : "SofaGeneralMeshCollision_relocatable_install::@3417de8432af1bf4e4eb",
+					"jsonFile" : "target-SofaGeneralMeshCollision_relocatable_install-Debug-c97201a3fae8111e2767.json",
+					"name" : "SofaGeneralMeshCollision_relocatable_install",
+					"projectIndex" : 50
+				},
+				{
+					"directoryIndex" : 66,
+					"id" : "SofaGeneralObjectInteraction::@e753c62e81504e36cf75",
+					"jsonFile" : "target-SofaGeneralObjectInteraction-Debug-b93d05ec2dff333abd7c.json",
+					"name" : "SofaGeneralObjectInteraction",
+					"projectIndex" : 63
+				},
+				{
+					"directoryIndex" : 66,
+					"id" : "SofaGeneralObjectInteraction_relocatable_install::@e753c62e81504e36cf75",
+					"jsonFile" : "target-SofaGeneralObjectInteraction_relocatable_install-Debug-f32655f174559b4ac053.json",
+					"name" : "SofaGeneralObjectInteraction_relocatable_install",
+					"projectIndex" : 63
+				},
+				{
+					"directoryIndex" : 65,
+					"id" : "SofaGeneralRigid::@d0e1b28b33b7f3ea1f64",
+					"jsonFile" : "target-SofaGeneralRigid-Debug-93a59c38e2b128756042.json",
+					"name" : "SofaGeneralRigid",
+					"projectIndex" : 62
+				},
+				{
+					"directoryIndex" : 65,
+					"id" : "SofaGeneralRigid_relocatable_install::@d0e1b28b33b7f3ea1f64",
+					"jsonFile" : "target-SofaGeneralRigid_relocatable_install-Debug-ecc4ff278c7995220368.json",
+					"name" : "SofaGeneralRigid_relocatable_install",
+					"projectIndex" : 62
+				},
+				{
+					"directoryIndex" : 67,
+					"id" : "SofaGeneralSimpleFem::@723ed9dfac015cd76867",
+					"jsonFile" : "target-SofaGeneralSimpleFem-Debug-2bb87486e39875e95a5c.json",
+					"name" : "SofaGeneralSimpleFem",
+					"projectIndex" : 64
+				},
+				{
+					"directoryIndex" : 67,
+					"id" : "SofaGeneralSimpleFem_relocatable_install::@723ed9dfac015cd76867",
+					"jsonFile" : "target-SofaGeneralSimpleFem_relocatable_install-Debug-2046d70bed5872e1be4b.json",
+					"name" : "SofaGeneralSimpleFem_relocatable_install",
+					"projectIndex" : 64
+				},
+				{
+					"directoryIndex" : 68,
+					"id" : "SofaGeneralTopology::@4fcd474a5625389b4a95",
+					"jsonFile" : "target-SofaGeneralTopology-Debug-62a3923725d8a387607c.json",
+					"name" : "SofaGeneralTopology",
+					"projectIndex" : 65
+				},
+				{
+					"directoryIndex" : 68,
+					"id" : "SofaGeneralTopology_relocatable_install::@4fcd474a5625389b4a95",
+					"jsonFile" : "target-SofaGeneralTopology_relocatable_install-Debug-9dc22968e6572a27155e.json",
+					"name" : "SofaGeneralTopology_relocatable_install",
+					"projectIndex" : 65
+				},
+				{
+					"directoryIndex" : 69,
+					"id" : "SofaGeneralTopology_test::@71ec553ba29ddf5edfd3",
+					"jsonFile" : "target-SofaGeneralTopology_test-Debug-cd5ce982cdbb92eef515.json",
+					"name" : "SofaGeneralTopology_test",
+					"projectIndex" : 66
+				},
+				{
+					"directoryIndex" : 50,
+					"id" : "SofaGeneralVisual::@9370a5764c6665804346",
+					"jsonFile" : "target-SofaGeneralVisual-Debug-a2cd4bb293b2532c42c7.json",
+					"name" : "SofaGeneralVisual",
+					"projectIndex" : 47
+				},
+				{
+					"directoryIndex" : 50,
+					"id" : "SofaGeneralVisual_relocatable_install::@9370a5764c6665804346",
+					"jsonFile" : "target-SofaGeneralVisual_relocatable_install-Debug-0108fadae90c2f17d8e9.json",
+					"name" : "SofaGeneralVisual_relocatable_install",
+					"projectIndex" : 47
+				},
+				{
+					"directoryIndex" : 51,
+					"id" : "SofaGraphComponent::@42174085b9feb03f8532",
+					"jsonFile" : "target-SofaGraphComponent-Debug-28a8fd6a8cdc2067fcea.json",
+					"name" : "SofaGraphComponent",
+					"projectIndex" : 48
+				},
+				{
+					"directoryIndex" : 51,
+					"id" : "SofaGraphComponent_relocatable_install::@42174085b9feb03f8532",
+					"jsonFile" : "target-SofaGraphComponent_relocatable_install-Debug-9e95418c6f25370225a3.json",
+					"name" : "SofaGraphComponent_relocatable_install",
+					"projectIndex" : 48
+				},
+				{
+					"directoryIndex" : 52,
+					"id" : "SofaGraphComponent_test::@ff19666c2073146f8499",
+					"jsonFile" : "target-SofaGraphComponent_test-Debug-1c5345fc7126b6387f44.json",
+					"name" : "SofaGraphComponent_test",
+					"projectIndex" : 49
+				},
+				{
+					"directoryIndex" : 101,
+					"id" : "SofaGui::@ff6ef0f6521d2d601833",
+					"jsonFile" : "target-SofaGui-Debug-520fcd688a366f09d760.json",
+					"name" : "SofaGui",
+					"projectIndex" : 98
+				},
+				{
+					"directoryIndex" : 102,
+					"id" : "SofaGuiCommon::@728d6063091a43fbf4bd",
+					"jsonFile" : "target-SofaGuiCommon-Debug-8111c47aebb00a916287.json",
+					"name" : "SofaGuiCommon",
+					"projectIndex" : 99
+				},
+				{
+					"directoryIndex" : 105,
+					"id" : "SofaGuiMain::@355a116801ddb471e01f",
+					"jsonFile" : "target-SofaGuiMain-Debug-10ceab60f3af0d1d8a86.json",
+					"name" : "SofaGuiMain",
+					"projectIndex" : 102
+				},
+				{
+					"directoryIndex" : 103,
+					"id" : "SofaGuiQt::@20bd09e53c0d4fcd71b8",
+					"jsonFile" : "target-SofaGuiQt-Debug-ad63a6388c646fd1f27e.json",
+					"name" : "SofaGuiQt",
+					"projectIndex" : 100
+				},
+				{
+					"directoryIndex" : 80,
+					"id" : "SofaHaptics::@88425cdbf02d1ed14057",
+					"jsonFile" : "target-SofaHaptics-Debug-4a8acfb1d62325537521.json",
+					"name" : "SofaHaptics",
+					"projectIndex" : 77
+				},
+				{
+					"directoryIndex" : 80,
+					"id" : "SofaHaptics_relocatable_install::@88425cdbf02d1ed14057",
+					"jsonFile" : "target-SofaHaptics_relocatable_install-Debug-2aa9695843987b429ec4.json",
+					"name" : "SofaHaptics_relocatable_install",
+					"projectIndex" : 77
+				},
+				{
+					"directoryIndex" : 81,
+					"id" : "SofaHaptics_test::@5e88831634810cb00547",
+					"jsonFile" : "target-SofaHaptics_test-Debug-10c6a61988059212ce3c.json",
+					"name" : "SofaHaptics_test",
+					"projectIndex" : 78
+				},
+				{
+					"directoryIndex" : 10,
+					"id" : "SofaHelper::@6b0a012b96bc28259d9c",
+					"jsonFile" : "target-SofaHelper-Debug-34b62e5d295f6dee5ce6.json",
+					"name" : "SofaHelper",
+					"projectIndex" : 9
+				},
+				{
+					"directoryIndex" : 131,
+					"id" : "SofaHelper_simutest::@b1934b8a0bfe0ff74cc3",
+					"jsonFile" : "target-SofaHelper_simutest-Debug-f61df738ba46ff6d5aa3.json",
+					"name" : "SofaHelper_simutest",
+					"projectIndex" : 125
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "SofaHelper_test::@fe92dcfdb62c75963f2c",
+					"jsonFile" : "target-SofaHelper_test-Debug-f5936b98748c73870319.json",
+					"name" : "SofaHelper_test",
+					"projectIndex" : 10
+				},
+				{
+					"directoryIndex" : 45,
+					"id" : "SofaImplicitOdeSolver::@82602392c0ceee414df1",
+					"jsonFile" : "target-SofaImplicitOdeSolver-Debug-d10eeb2760f90641e016.json",
+					"name" : "SofaImplicitOdeSolver",
+					"projectIndex" : 43
+				},
+				{
+					"directoryIndex" : 45,
+					"id" : "SofaImplicitOdeSolver_relocatable_install::@82602392c0ceee414df1",
+					"jsonFile" : "target-SofaImplicitOdeSolver_relocatable_install-Debug-46cf7aed6ecc04cde305.json",
+					"name" : "SofaImplicitOdeSolver_relocatable_install",
+					"projectIndex" : 43
+				},
+				{
+					"directoryIndex" : 46,
+					"id" : "SofaImplicitOdeSolver_test::@cb2a4fcbc0e4ad448d29",
+					"jsonFile" : "target-SofaImplicitOdeSolver_test-Debug-f61633b274667a0f886a.json",
+					"name" : "SofaImplicitOdeSolver_test",
+					"projectIndex" : 44
+				},
+				{
+					"directoryIndex" : 47,
+					"id" : "SofaLoader::@c736cd2e6fa36087012f",
+					"jsonFile" : "target-SofaLoader-Debug-f8e0374433b43efa0de8.json",
+					"name" : "SofaLoader",
+					"projectIndex" : 45
+				},
+				{
+					"directoryIndex" : 47,
+					"id" : "SofaLoader_relocatable_install::@c736cd2e6fa36087012f",
+					"jsonFile" : "target-SofaLoader_relocatable_install-Debug-d0b604cc7977dca8207a.json",
+					"name" : "SofaLoader_relocatable_install",
+					"projectIndex" : 45
+				},
+				{
+					"directoryIndex" : 48,
+					"id" : "SofaLoader_test::@598b161ef9935fc1c24b",
+					"jsonFile" : "target-SofaLoader_test-Debug-d8f6d1bb65cced1faa5c.json",
+					"name" : "SofaLoader_test",
+					"projectIndex" : 46
+				},
+				{
+					"directoryIndex" : 39,
+					"id" : "SofaMeshCollision::@53505d36abd0f9974ad0",
+					"jsonFile" : "target-SofaMeshCollision-Debug-6c6185a4028d396538d7.json",
+					"name" : "SofaMeshCollision",
+					"projectIndex" : 37
+				},
+				{
+					"directoryIndex" : 39,
+					"id" : "SofaMeshCollision_relocatable_install::@53505d36abd0f9974ad0",
+					"jsonFile" : "target-SofaMeshCollision_relocatable_install-Debug-87b9199d385110c19480.json",
+					"name" : "SofaMeshCollision_relocatable_install",
+					"projectIndex" : 37
+				},
+				{
+					"directoryIndex" : 40,
+					"id" : "SofaMeshCollision_test::@a26bad33d92242015ccb",
+					"jsonFile" : "target-SofaMeshCollision_test-Debug-221a4abade83b2b3c6a3.json",
+					"name" : "SofaMeshCollision_test",
+					"projectIndex" : 38
+				},
+				{
+					"directoryIndex" : 111,
+					"id" : "SofaMisc::@80d899f628176dde786d",
+					"jsonFile" : "target-SofaMisc-Debug-f268a93875177ea0ead4.json",
+					"name" : "SofaMisc",
+					"projectIndex" : 108
+				},
+				{
+					"directoryIndex" : 122,
+					"id" : "SofaMiscCollision::@329a4358afc271b2af4d",
+					"jsonFile" : "target-SofaMiscCollision-Debug-76367fc06583810ef615.json",
+					"name" : "SofaMiscCollision",
+					"projectIndex" : 117
+				},
+				{
+					"directoryIndex" : 122,
+					"id" : "SofaMiscCollision_relocatable_install::@329a4358afc271b2af4d",
+					"jsonFile" : "target-SofaMiscCollision_relocatable_install-Debug-f9906383396e60dfab6d.json",
+					"name" : "SofaMiscCollision_relocatable_install",
+					"projectIndex" : 117
+				},
+				{
+					"directoryIndex" : 94,
+					"id" : "SofaMiscEngine::@72b22cf1b8c9eeb457ab",
+					"jsonFile" : "target-SofaMiscEngine-Debug-d7e1454e067381029df5.json",
+					"name" : "SofaMiscEngine",
+					"projectIndex" : 91
+				},
+				{
+					"directoryIndex" : 94,
+					"id" : "SofaMiscEngine_relocatable_install::@72b22cf1b8c9eeb457ab",
+					"jsonFile" : "target-SofaMiscEngine_relocatable_install-Debug-45444f37391e9b99d136.json",
+					"name" : "SofaMiscEngine_relocatable_install",
+					"projectIndex" : 91
+				},
+				{
+					"directoryIndex" : 90,
+					"id" : "SofaMiscExtra::@8112291a58293fd3a442",
+					"jsonFile" : "target-SofaMiscExtra-Debug-f765355c85b024c8d9e4.json",
+					"name" : "SofaMiscExtra",
+					"projectIndex" : 87
+				},
+				{
+					"directoryIndex" : 90,
+					"id" : "SofaMiscExtra_relocatable_install::@8112291a58293fd3a442",
+					"jsonFile" : "target-SofaMiscExtra_relocatable_install-Debug-f0a1780d5c9277da6ea7.json",
+					"name" : "SofaMiscExtra_relocatable_install",
+					"projectIndex" : 87
+				},
+				{
+					"directoryIndex" : 91,
+					"id" : "SofaMiscExtra_test::@f7fa7e7003b416f7b048",
+					"jsonFile" : "target-SofaMiscExtra_test-Debug-30c79c4d81ec13c62fc3.json",
+					"name" : "SofaMiscExtra_test",
+					"projectIndex" : 88
+				},
+				{
+					"directoryIndex" : 97,
+					"id" : "SofaMiscFem::@8001ed0b5ddb6d56c6ff",
+					"jsonFile" : "target-SofaMiscFem-Debug-f46b1331090b4dbc3a75.json",
+					"name" : "SofaMiscFem",
+					"projectIndex" : 94
+				},
+				{
+					"directoryIndex" : 97,
+					"id" : "SofaMiscFem_relocatable_install::@8001ed0b5ddb6d56c6ff",
+					"jsonFile" : "target-SofaMiscFem_relocatable_install-Debug-3fc70d6dd77f06d6b038.json",
+					"name" : "SofaMiscFem_relocatable_install",
+					"projectIndex" : 94
+				},
+				{
+					"directoryIndex" : 98,
+					"id" : "SofaMiscFem_test::@e8c70294b108ed75532e",
+					"jsonFile" : "target-SofaMiscFem_test-Debug-79102f10e36a3b3b5122.json",
+					"name" : "SofaMiscFem_test",
+					"projectIndex" : 95
+				},
+				{
+					"directoryIndex" : 92,
+					"id" : "SofaMiscForceField::@15d42a9734717130a432",
+					"jsonFile" : "target-SofaMiscForceField-Debug-826b81d4afa5829371ea.json",
+					"name" : "SofaMiscForceField",
+					"projectIndex" : 89
+				},
+				{
+					"directoryIndex" : 92,
+					"id" : "SofaMiscForceField_relocatable_install::@15d42a9734717130a432",
+					"jsonFile" : "target-SofaMiscForceField_relocatable_install-Debug-08c8b110816526783141.json",
+					"name" : "SofaMiscForceField_relocatable_install",
+					"projectIndex" : 89
+				},
+				{
+					"directoryIndex" : 93,
+					"id" : "SofaMiscForceField_test::@fc8107e1c36d749dd430",
+					"jsonFile" : "target-SofaMiscForceField_test-Debug-93309cc38370964fbe88.json",
+					"name" : "SofaMiscForceField_test",
+					"projectIndex" : 90
+				},
+				{
+					"directoryIndex" : 99,
+					"id" : "SofaMiscMapping::@77ee3235d86d86e7dc5f",
+					"jsonFile" : "target-SofaMiscMapping-Debug-dbaa77ce8da5f59ae96a.json",
+					"name" : "SofaMiscMapping",
+					"projectIndex" : 96
+				},
+				{
+					"directoryIndex" : 99,
+					"id" : "SofaMiscMapping_relocatable_install::@77ee3235d86d86e7dc5f",
+					"jsonFile" : "target-SofaMiscMapping_relocatable_install-Debug-974e953c7233fefc578f.json",
+					"name" : "SofaMiscMapping_relocatable_install",
+					"projectIndex" : 96
+				},
+				{
+					"directoryIndex" : 100,
+					"id" : "SofaMiscMapping_test::@d28277a334dae2073cc9",
+					"jsonFile" : "target-SofaMiscMapping_test-Debug-baea1518a0071485ecd8.json",
+					"name" : "SofaMiscMapping_test",
+					"projectIndex" : 97
+				},
+				{
+					"directoryIndex" : 95,
+					"id" : "SofaMiscSolver::@cd62e74b47a2e23751ef",
+					"jsonFile" : "target-SofaMiscSolver-Debug-6a5e6bfba0efa3313f89.json",
+					"name" : "SofaMiscSolver",
+					"projectIndex" : 92
+				},
+				{
+					"directoryIndex" : 95,
+					"id" : "SofaMiscSolver_relocatable_install::@cd62e74b47a2e23751ef",
+					"jsonFile" : "target-SofaMiscSolver_relocatable_install-Debug-98300b7e1f2c4e87a3db.json",
+					"name" : "SofaMiscSolver_relocatable_install",
+					"projectIndex" : 92
+				},
+				{
+					"directoryIndex" : 96,
+					"id" : "SofaMiscSolver_test::@84935c6bd8770eedd870",
+					"jsonFile" : "target-SofaMiscSolver_test-Debug-cea8c0d617495590d986.json",
+					"name" : "SofaMiscSolver_test",
+					"projectIndex" : 93
+				},
+				{
+					"directoryIndex" : 88,
+					"id" : "SofaMiscTopology::@27345b2662caa2070da4",
+					"jsonFile" : "target-SofaMiscTopology-Debug-87d1375e909c95845255.json",
+					"name" : "SofaMiscTopology",
+					"projectIndex" : 85
+				},
+				{
+					"directoryIndex" : 88,
+					"id" : "SofaMiscTopology_relocatable_install::@27345b2662caa2070da4",
+					"jsonFile" : "target-SofaMiscTopology_relocatable_install-Debug-efc19e64b59f5a435cfe.json",
+					"name" : "SofaMiscTopology_relocatable_install",
+					"projectIndex" : 85
+				},
+				{
+					"directoryIndex" : 89,
+					"id" : "SofaMiscTopology_test::@3d7acb5e14010a944aa4",
+					"jsonFile" : "target-SofaMiscTopology_test-Debug-a15b62cf301705dffeea.json",
+					"name" : "SofaMiscTopology_test",
+					"projectIndex" : 86
+				},
+				{
+					"directoryIndex" : 85,
+					"id" : "SofaNonUniformFem::@39161691d3027e681703",
+					"jsonFile" : "target-SofaNonUniformFem-Debug-8fb03d41f5d87f299852.json",
+					"name" : "SofaNonUniformFem",
+					"projectIndex" : 82
+				},
+				{
+					"directoryIndex" : 85,
+					"id" : "SofaNonUniformFem_relocatable_install::@39161691d3027e681703",
+					"jsonFile" : "target-SofaNonUniformFem_relocatable_install-Debug-49dfb18488708afb287f.json",
+					"name" : "SofaNonUniformFem_relocatable_install",
+					"projectIndex" : 82
+				},
+				{
+					"directoryIndex" : 38,
+					"id" : "SofaObjectInteraction::@ad135ed89d8fc99af1d4",
+					"jsonFile" : "target-SofaObjectInteraction-Debug-cfc30b73ab6758b1c768.json",
+					"name" : "SofaObjectInteraction",
+					"projectIndex" : 36
+				},
+				{
+					"directoryIndex" : 38,
+					"id" : "SofaObjectInteraction_relocatable_install::@ad135ed89d8fc99af1d4",
+					"jsonFile" : "target-SofaObjectInteraction_relocatable_install-Debug-7ab8ccc35de76a3d162a.json",
+					"name" : "SofaObjectInteraction_relocatable_install",
+					"projectIndex" : 36
+				},
+				{
+					"directoryIndex" : 86,
+					"id" : "SofaOpenglVisual::@568b07ead85b89128f59",
+					"jsonFile" : "target-SofaOpenglVisual-Debug-7ce8e8a75f8d908bde82.json",
+					"name" : "SofaOpenglVisual",
+					"projectIndex" : 83
+				},
+				{
+					"directoryIndex" : 86,
+					"id" : "SofaOpenglVisual_relocatable_install::@568b07ead85b89128f59",
+					"jsonFile" : "target-SofaOpenglVisual_relocatable_install-Debug-269818467247eab7ad9b.json",
+					"name" : "SofaOpenglVisual_relocatable_install",
+					"projectIndex" : 83
+				},
+				{
+					"directoryIndex" : 87,
+					"id" : "SofaOpenglVisual_test::@48c3d3d95774da53182d",
+					"jsonFile" : "target-SofaOpenglVisual_test-Debug-4a0a151807e77183a4b3.json",
+					"name" : "SofaOpenglVisual_test",
+					"projectIndex" : 84
+				},
+				{
+					"directoryIndex" : 79,
+					"id" : "SofaPreconditioner::@868666170372b950ac2a",
+					"jsonFile" : "target-SofaPreconditioner-Debug-41d069ea3e2227a1e506.json",
+					"name" : "SofaPreconditioner",
+					"projectIndex" : 76
+				},
+				{
+					"directoryIndex" : 79,
+					"id" : "SofaPreconditioner_relocatable_install::@868666170372b950ac2a",
+					"jsonFile" : "target-SofaPreconditioner_relocatable_install-Debug-fcde4e79e78444521038.json",
+					"name" : "SofaPreconditioner_relocatable_install",
+					"projectIndex" : 76
+				},
+				{
+					"directoryIndex" : 34,
+					"id" : "SofaRigid::@1a68571e9a984c5e0cf7",
+					"jsonFile" : "target-SofaRigid-Debug-7126c017013391c2fb45.json",
+					"name" : "SofaRigid",
+					"projectIndex" : 32
+				},
+				{
+					"directoryIndex" : 34,
+					"id" : "SofaRigid_relocatable_install::@1a68571e9a984c5e0cf7",
+					"jsonFile" : "target-SofaRigid_relocatable_install-Debug-acbc1bdecb8472e16c2c.json",
+					"name" : "SofaRigid_relocatable_install",
+					"projectIndex" : 32
+				},
+				{
+					"directoryIndex" : 35,
+					"id" : "SofaRigid_test::@521de550a3f9ae7e666a",
+					"jsonFile" : "target-SofaRigid_test-Debug-3f7dcdc4e9336c15b7c7.json",
+					"name" : "SofaRigid_test",
+					"projectIndex" : 33
+				},
+				{
+					"directoryIndex" : 32,
+					"id" : "SofaSimpleFem::@f521b8ef8e4456e73325",
+					"jsonFile" : "target-SofaSimpleFem-Debug-127146cbb3232a29a8a5.json",
+					"name" : "SofaSimpleFem",
+					"projectIndex" : 30
+				},
+				{
+					"directoryIndex" : 32,
+					"id" : "SofaSimpleFem_relocatable_install::@f521b8ef8e4456e73325",
+					"jsonFile" : "target-SofaSimpleFem_relocatable_install-Debug-a257d95ec9c7a1be315c.json",
+					"name" : "SofaSimpleFem_relocatable_install",
+					"projectIndex" : 30
+				},
+				{
+					"directoryIndex" : 33,
+					"id" : "SofaSimpleFem_test::@78272ec5bfc42796777e",
+					"jsonFile" : "target-SofaSimpleFem_test-Debug-8cf35938c8b01d81d6ed.json",
+					"name" : "SofaSimpleFem_test",
+					"projectIndex" : 31
+				},
+				{
+					"directoryIndex" : 15,
+					"id" : "SofaSimulation::@b582c756ef3b3ae15e90",
+					"jsonFile" : "target-SofaSimulation-Debug-c749735a65a4fa521d49.json",
+					"name" : "SofaSimulation",
+					"projectIndex" : 14
+				},
+				{
+					"directoryIndex" : 16,
+					"id" : "SofaSimulationCommon::@26b5a397515e74861880",
+					"jsonFile" : "target-SofaSimulationCommon-Debug-f9fc96f64f699f2d1a19.json",
+					"name" : "SofaSimulationCommon",
+					"projectIndex" : 15
+				},
+				{
+					"directoryIndex" : 13,
+					"id" : "SofaSimulationCore::@d5f763c13f082b031681",
+					"jsonFile" : "target-SofaSimulationCore-Debug-d820f790a2d1a65ff8c9.json",
+					"name" : "SofaSimulationCore",
+					"projectIndex" : 12
+				},
+				{
+					"directoryIndex" : 134,
+					"id" : "SofaSimulationCore_simutest::@5a8ca9013959c8fce8f3",
+					"jsonFile" : "target-SofaSimulationCore_simutest-Debug-02dc1c9fb7258d4bf7ed.json",
+					"name" : "SofaSimulationCore_simutest",
+					"projectIndex" : 128
+				},
+				{
+					"directoryIndex" : 14,
+					"id" : "SofaSimulationCore_test::@639c3aad0eef102ea35e",
+					"jsonFile" : "target-SofaSimulationCore_test-Debug-01865f440f4892c09649.json",
+					"name" : "SofaSimulationCore_test",
+					"projectIndex" : 13
+				},
+				{
+					"directoryIndex" : 17,
+					"id" : "SofaSimulationGraph::@d933afc82698d202530f",
+					"jsonFile" : "target-SofaSimulationGraph-Debug-71e00309067d1980fb33.json",
+					"name" : "SofaSimulationGraph",
+					"projectIndex" : 16
+				},
+				{
+					"directoryIndex" : 135,
+					"id" : "SofaSimulationGraph_test::@3910d01eb71de8e45b6a",
+					"jsonFile" : "target-SofaSimulationGraph_test-Debug-812df95704f7cdef9a08.json",
+					"name" : "SofaSimulationGraph_test",
+					"projectIndex" : 129
+				},
+				{
+					"directoryIndex" : 18,
+					"id" : "SofaSimulationTree::@9e4e4cc7fad47dedf752",
+					"jsonFile" : "target-SofaSimulationTree-Debug-e1b4e2c16fbf0aa235a8.json",
+					"name" : "SofaSimulationTree",
+					"projectIndex" : 17
+				},
+				{
+					"directoryIndex" : 136,
+					"id" : "SofaSimulationTree_test::@5079f6bf72737e4fa028",
+					"jsonFile" : "target-SofaSimulationTree_test-Debug-823b1857c3a505ec4379.json",
+					"name" : "SofaSimulationTree_test",
+					"projectIndex" : 130
+				},
+				{
+					"directoryIndex" : 76,
+					"id" : "SofaSparseSolver::@e037bfeaa97e837af334",
+					"jsonFile" : "target-SofaSparseSolver-Debug-c1567c31ed5ecf50b981.json",
+					"name" : "SofaSparseSolver",
+					"projectIndex" : 73
+				},
+				{
+					"directoryIndex" : 76,
+					"id" : "SofaSparseSolver_relocatable_install::@e037bfeaa97e837af334",
+					"jsonFile" : "target-SofaSparseSolver_relocatable_install-Debug-c6ae0927b71f87c1b49e.json",
+					"name" : "SofaSparseSolver_relocatable_install",
+					"projectIndex" : 73
+				},
+				{
+					"directoryIndex" : 117,
+					"id" : "SofaTest::@2890372529b8537b6242",
+					"jsonFile" : "target-SofaTest-Debug-3181340cc3eff79f7d3d.json",
+					"name" : "SofaTest",
+					"projectIndex" : 113
+				},
+				{
+					"directoryIndex" : 117,
+					"id" : "SofaTest_relocatable_install::@2890372529b8537b6242",
+					"jsonFile" : "target-SofaTest_relocatable_install-Debug-ddc89a8e35a081b3e1c7.json",
+					"name" : "SofaTest_relocatable_install",
+					"projectIndex" : 113
+				},
+				{
+					"directoryIndex" : 70,
+					"id" : "SofaTopologyMapping::@3aec65fd9e278d00c8f3",
+					"jsonFile" : "target-SofaTopologyMapping-Debug-67a28b04f805762bf60f.json",
+					"name" : "SofaTopologyMapping",
+					"projectIndex" : 67
+				},
+				{
+					"directoryIndex" : 70,
+					"id" : "SofaTopologyMapping_relocatable_install::@3aec65fd9e278d00c8f3",
+					"jsonFile" : "target-SofaTopologyMapping_relocatable_install-Debug-d2bf211d5636d1341b24.json",
+					"name" : "SofaTopologyMapping_relocatable_install",
+					"projectIndex" : 67
+				},
+				{
+					"directoryIndex" : 71,
+					"id" : "SofaUserInteraction::@337060b30510ab42b941",
+					"jsonFile" : "target-SofaUserInteraction-Debug-7ef71ae60e4a0b4c2a6f.json",
+					"name" : "SofaUserInteraction",
+					"projectIndex" : 68
+				},
+				{
+					"directoryIndex" : 71,
+					"id" : "SofaUserInteraction_relocatable_install::@337060b30510ab42b941",
+					"jsonFile" : "target-SofaUserInteraction_relocatable_install-Debug-f872bb0ff298655056eb.json",
+					"name" : "SofaUserInteraction_relocatable_install",
+					"projectIndex" : 68
+				},
+				{
+					"directoryIndex" : 82,
+					"id" : "SofaValidation::@afc146e9e9c160e0e0a8",
+					"jsonFile" : "target-SofaValidation-Debug-f0f6df5caf22376e8d63.json",
+					"name" : "SofaValidation",
+					"projectIndex" : 79
+				},
+				{
+					"directoryIndex" : 82,
+					"id" : "SofaValidation_relocatable_install::@afc146e9e9c160e0e0a8",
+					"jsonFile" : "target-SofaValidation_relocatable_install-Debug-50e9a0e156078f41dfe2.json",
+					"name" : "SofaValidation_relocatable_install",
+					"projectIndex" : 79
+				},
+				{
+					"directoryIndex" : 83,
+					"id" : "SofaValidation_test::@9b4eb2c8f08319d75969",
+					"jsonFile" : "target-SofaValidation_test-Debug-807d32bb9834b3f12d1d.json",
+					"name" : "SofaValidation_test",
+					"projectIndex" : 80
+				},
+				{
+					"directoryIndex" : 128,
+					"id" : "SurfLabConnectingTissue::@1134aff71f60ed891068",
+					"jsonFile" : "target-SurfLabConnectingTissue-Debug-ef5016ebd5ed0c6db759.json",
+					"name" : "SurfLabConnectingTissue",
+					"projectIndex" : 123
+				},
+				{
+					"directoryIndex" : 125,
+					"id" : "SurfLabHaptic::@56760510b44a06fdef5b",
+					"jsonFile" : "target-SurfLabHaptic-Debug-e9fbf58464a69259b669.json",
+					"name" : "SurfLabHaptic",
+					"projectIndex" : 120
+				},
+				{
+					"directoryIndex" : 126,
+					"id" : "SurfLabHapticDevice::@7e3d8c4b96b6ba5c47f7",
+					"jsonFile" : "target-SurfLabHapticDevice-Debug-abb5fac2fe55d74b8e7f.json",
+					"name" : "SurfLabHapticDevice",
+					"projectIndex" : 121
+				},
+				{
+					"directoryIndex" : 129,
+					"id" : "SurfLabSpeechRecognition::@4e803877e0ff83e6a3e2",
+					"jsonFile" : "target-SurfLabSpeechRecognition-Debug-c25afb2d59307be34887.json",
+					"name" : "SurfLabSpeechRecognition",
+					"projectIndex" : 124
+				},
+				{
+					"directoryIndex" : 12,
+					"id" : "TestPlugin::@dee5a03ba81f4a47d652",
+					"jsonFile" : "target-TestPlugin-Debug-1b1e5952e6e771f3af44.json",
+					"name" : "TestPlugin",
+					"projectIndex" : 11
+				},
+				{
+					"directoryIndex" : 77,
+					"id" : "csparse::@d4826d7f542028a85ff5",
+					"jsonFile" : "target-csparse-Debug-de1a4b41faff11bb1972.json",
+					"name" : "csparse",
+					"projectIndex" : 74
+				},
+				{
+					"directoryIndex" : 139,
+					"id" : "do_always::@71900397976064325d08",
+					"jsonFile" : "target-do_always-Debug-2714f5813f98f5db4a11.json",
+					"name" : "do_always",
+					"projectIndex" : 132
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "gtest::@ef9a098a0028635bb168",
+					"jsonFile" : "target-gtest-Debug-9ddf0f4e7c3183a8feaa.json",
+					"name" : "gtest",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 127,
+					"id" : "lua::@d20508c0893be2e42e25",
+					"jsonFile" : "target-lua-Debug-6c6921634d9e926f96a2.json",
+					"name" : "lua",
+					"projectIndex" : 122
+				},
+				{
+					"directoryIndex" : 78,
+					"id" : "metis::@d8bc976349b8eebb4e47",
+					"jsonFile" : "target-metis-Debug-a418b9c2d26cc624d98f.json",
+					"name" : "metis",
+					"projectIndex" : 75
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "newmat::@f8bb682a7ce39865f180",
+					"jsonFile" : "target-newmat-Debug-da6a97fd5cf49ff55e14.json",
+					"name" : "newmat",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 139,
+					"id" : "runSofa::@71900397976064325d08",
+					"jsonFile" : "target-runSofa-Debug-d8130680adef558b888c.json",
+					"name" : "runSofa",
+					"projectIndex" : 132
+				},
+				{
+					"directoryIndex" : 140,
+					"id" : "runSofa_test::@867cf1faf024110ea4dd",
+					"jsonFile" : "target-runSofa_test-Debug-933de7bfc6cfc2d8b1b7.json",
+					"name" : "runSofa_test",
+					"projectIndex" : 133
+				},
+				{
+					"directoryIndex" : 115,
+					"id" : "sceneCreatorExamples::@5526d74a0ec9b37965de",
+					"jsonFile" : "target-sceneCreatorExamples-Debug-4e0c2cb06e9b33bf1bf0.json",
+					"name" : "sceneCreatorExamples",
+					"projectIndex" : 111
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "tinyxml::@03a5b5034ba1f8bc754a",
+					"jsonFile" : "target-tinyxml-Debug-9c4dc6eb4e9dd48ef950.json",
+					"name" : "tinyxml",
+					"projectIndex" : 3
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug",
+		"source" : "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}

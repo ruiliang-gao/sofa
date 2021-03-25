@@ -1,0 +1,43 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"SofaKernel/modules/SofaBaseLinearSolver/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaBaseLinearSolver_test::@52d3fbd0cabcedb08c3e"
+		},
+		{
+			"id" : "SofaBaseLinearSolver::@1f0abf65d224a37bc025"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@1f0abf65d224a37bc025",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "SofaKernel/SofaBase/SofaBaseLinearSolver",
+		"source" : "SofaKernel/modules/SofaBaseLinearSolver"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

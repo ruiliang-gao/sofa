@@ -1,0 +1,46 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaBoundaryCondition/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaBoundaryCondition::@92e4742d3ec4569fbade"
+		},
+		{
+			"id" : "SofaBoundaryCondition_relocatable_install::@92e4742d3ec4569fbade"
+		},
+		{
+			"id" : "SofaBoundaryCondition_test::@c9c4bc7567a113ad48f1"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@92e4742d3ec4569fbade",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaBoundaryCondition",
+		"source" : "modules/SofaBoundaryCondition"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

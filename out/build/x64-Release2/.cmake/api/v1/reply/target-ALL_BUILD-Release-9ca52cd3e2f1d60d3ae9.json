@@ -1,0 +1,43 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaDenseSolver/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaDenseSolver::@33bb04decfe9c9ae0963"
+		},
+		{
+			"id" : "SofaDenseSolver_relocatable_install::@33bb04decfe9c9ae0963"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@33bb04decfe9c9ae0963",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaDenseSolver",
+		"source" : "modules/SofaDenseSolver"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

@@ -1,0 +1,20 @@
+^C:\FILES\SHEAMUS\SCHOOL\SENIOR\SENIORPROJECT\SOFA_1906_TIPS\SRC\OUT\BUILD\X64-RELEASE2\CMAKEFILES\51FB55D7BDFF391488EECA68730D1696\SOFAUSERINTERACTION_RELOCATABLE_INSTALL.RULE
+setlocal
+if not exist "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaUserInteraction/cmake_install.cmakepatch" echo set ( CMAKE_INSTALL_PREFIX_BACK_SofaUserInteraction_SofaUserInteraction "${CMAKE_INSTALL_PREFIX}" ) > "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaUserInteraction/cmake_install.cmakepatch" && echo set ( CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/plugins/SofaUserInteraction" ) >> "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaUserInteraction/cmake_install.cmakepatch" && type "C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaUserInteraction\cmake_install.cmake" >> "C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaUserInteraction\cmake_install.cmakepatch" && echo set ( CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX_BACK_SofaUserInteraction_SofaUserInteraction}" ) >> "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaUserInteraction/cmake_install.cmakepatch" && "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -E copy "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaUserInteraction/cmake_install.cmakepatch" "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaUserInteraction/cmake_install.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\FILES\SHEAMUS\SCHOOL\SENIOR\SENIORPROJECT\SOFA_1906_TIPS\SRC\MODULES\SOFAUSERINTERACTION\CMAKELISTS.TXT
+setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src -BC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2 --check-stamp-file C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaUserInteraction/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

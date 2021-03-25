@@ -1,0 +1,6 @@
+-D_USE_MATH_DEFINES
+-DWIN32
+--compiler-flavor=msvc
+-o
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Debug/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/moc_frame.cpp
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/frame.h

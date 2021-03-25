@@ -1,0 +1,46 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"SofaKernel/modules/SofaImplicitOdeSolver/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaImplicitOdeSolver_relocatable_install::@82602392c0ceee414df1"
+		},
+		{
+			"id" : "SofaImplicitOdeSolver::@82602392c0ceee414df1"
+		},
+		{
+			"id" : "SofaImplicitOdeSolver_test::@cb2a4fcbc0e4ad448d29"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@82602392c0ceee414df1",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "SofaKernel/modules/SofaImplicitOdeSolver",
+		"source" : "SofaKernel/modules/SofaImplicitOdeSolver"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

@@ -1,0 +1,1 @@
+This folder will be automatically scanned by the Plugin Manager.

@@ -1,0 +1,46 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"SofaKernel/modules/SofaRigid/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaRigid::@1a68571e9a984c5e0cf7"
+		},
+		{
+			"id" : "SofaRigid_test::@521de550a3f9ae7e666a"
+		},
+		{
+			"id" : "SofaRigid_relocatable_install::@1a68571e9a984c5e0cf7"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@1a68571e9a984c5e0cf7",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "SofaKernel/modules/SofaRigid",
+		"source" : "SofaKernel/modules/SofaRigid"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

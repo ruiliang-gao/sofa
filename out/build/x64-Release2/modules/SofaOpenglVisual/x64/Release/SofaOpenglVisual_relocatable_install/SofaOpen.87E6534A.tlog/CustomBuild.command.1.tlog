@@ -1,0 +1,20 @@
+^C:\FILES\SHEAMUS\SCHOOL\SENIOR\SENIORPROJECT\SOFA_1906_TIPS\SRC\OUT\BUILD\X64-RELEASE2\CMAKEFILES\745D4A94915BFEEA589A6AA8F39E0186\SOFAOPENGLVISUAL_RELOCATABLE_INSTALL.RULE
+setlocal
+if not exist "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaOpenglVisual/cmake_install.cmakepatch" echo set ( CMAKE_INSTALL_PREFIX_BACK_SofaOpenglVisual_SofaOpenglVisual "${CMAKE_INSTALL_PREFIX}" ) > "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaOpenglVisual/cmake_install.cmakepatch" && echo set ( CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/plugins/SofaOpenglVisual" ) >> "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaOpenglVisual/cmake_install.cmakepatch" && type "C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaOpenglVisual\cmake_install.cmake" >> "C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\modules\SofaOpenglVisual\cmake_install.cmakepatch" && echo set ( CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX_BACK_SofaOpenglVisual_SofaOpenglVisual}" ) >> "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaOpenglVisual/cmake_install.cmakepatch" && "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -E copy "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaOpenglVisual/cmake_install.cmakepatch" "C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaOpenglVisual/cmake_install.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\FILES\SHEAMUS\SCHOOL\SENIOR\SENIORPROJECT\SOFA_1906_TIPS\SRC\MODULES\SOFAOPENGLVISUAL\CMAKELISTS.TXT
+setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src -BC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2 --check-stamp-file C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/modules/SofaOpenglVisual/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

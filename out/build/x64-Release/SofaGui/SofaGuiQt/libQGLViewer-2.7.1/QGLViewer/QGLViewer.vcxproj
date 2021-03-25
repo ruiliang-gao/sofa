@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{46EBE79A-C4A1-3632-B248-353EC401E4A0}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>QGLViewer</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\bin\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">QGLViewer.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">QGLViewer</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\..;C:\Qt\5.15.2\msvc2019_64\include;C:\Qt\5.15.2\msvc2019_64\include\QtCore;C:\Qt\5.15.2\msvc2019_64\.\mkspecs\win32-msvc;C:\Qt\5.15.2\msvc2019_64\include\QtGui;C:\Qt\5.15.2\msvc2019_64\include\QtANGLE;C:\Qt\5.15.2\msvc2019_64\include\QtXml;C:\Qt\5.15.2\msvc2019_64\include\QtOpenGL;C:\Qt\5.15.2\msvc2019_64\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DisableSpecificWarnings>4250;4251;4275;4675;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CREATE_QGLVIEWER_DLL;_USE_MATH_DEFINES;QT_CORE_LIB;QT_NO_DEBUG;QT_GUI_LIB;QT_XML_LIB;QT_OPENGL_LIB;QT_WIDGETS_LIB;CMAKE_INTDIR="Release";QGLViewer_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CREATE_QGLVIEWER_DLL;_USE_MATH_DEFINES;QT_CORE_LIB;QT_NO_DEBUG;QT_GUI_LIB;QT_XML_LIB;QT_OPENGL_LIB;QT_WIDGETS_LIB;CMAKE_INTDIR=\"Release\";QGLViewer_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\..;C:\Qt\5.15.2\msvc2019_64\include;C:\Qt\5.15.2\msvc2019_64\include\QtCore;C:\Qt\5.15.2\msvc2019_64\.\mkspecs\win32-msvc;C:\Qt\5.15.2\msvc2019_64\include\QtGui;C:\Qt\5.15.2\msvc2019_64\include\QtANGLE;C:\Qt\5.15.2\msvc2019_64\include\QtXml;C:\Qt\5.15.2\msvc2019_64\include\QtOpenGL;C:\Qt\5.15.2\msvc2019_64\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\..;C:\Qt\5.15.2\msvc2019_64\include;C:\Qt\5.15.2\msvc2019_64\include\QtCore;C:\Qt\5.15.2\msvc2019_64\.\mkspecs\win32-msvc;C:\Qt\5.15.2\msvc2019_64\include\QtGui;C:\Qt\5.15.2\msvc2019_64\include\QtANGLE;C:\Qt\5.15.2\msvc2019_64\include\QtXml;C:\Qt\5.15.2\msvc2019_64\include\QtOpenGL;C:\Qt\5.15.2\msvc2019_64\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message></Message>
+      <Command>setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E remove_directory C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/windeployqt
+if %errorlevel% neq 0 goto :cmEnd
+set PATH="C:/Qt/5.15.2/msvc2019_64/bin"
+if %errorlevel% neq 0 goto :cmEnd
+C:\Qt\5.15.2\msvc2019_64\bin\windeployqt.exe --dir C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/windeployqt --verbose 0 --no-compiler-runtime --no-translations --no-angle --release --no-opengl-sw C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/bin/Release/QGLViewer.dll
+if %errorlevel% neq 0 goto :cmEnd
+if exist C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/bin/Release/ ( "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -E copy_directory C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/windeployqt C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/bin/Release ) else ( "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -E copy_directory C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/windeployqt C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/bin )
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>C:\Qt\5.15.2\msvc2019_64\lib\Qt5Xml.lib;C:\Qt\5.15.2\msvc2019_64\lib\Qt5OpenGL.lib;C:\Qt\5.15.2\msvc2019_64\lib\Qt5Widgets.lib;opengl32.lib;glu32.lib;C:\Qt\5.15.2\msvc2019_64\lib\Qt5Gui.lib;C:\Qt\5.15.2\msvc2019_64\lib\Qt5Core.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/lib/Release/QGLViewer.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/bin/Release/QGLViewer.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\CMakeFiles\846718ef41226c1db08090c9275c9c92\moc_camera.cpp.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_camera.cpp</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+cd C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Qt\5.15.2\msvc2019_64\bin\moc.exe @C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/moc_camera.cpp_parameters
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\camera.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_camera.cpp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\CMakeFiles\846718ef41226c1db08090c9275c9c92\moc_frame.cpp.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_frame.cpp</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+cd C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Qt\5.15.2\msvc2019_64\bin\moc.exe @C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/moc_frame.cpp_parameters
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\frame.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_frame.cpp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\CMakeFiles\846718ef41226c1db08090c9275c9c92\moc_keyFrameInterpolator.cpp.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_keyFrameInterpolator.cpp</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+cd C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Qt\5.15.2\msvc2019_64\bin\moc.exe @C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/moc_keyFrameInterpolator.cpp_parameters
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\keyFrameInterpolator.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_keyFrameInterpolator.cpp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\CMakeFiles\846718ef41226c1db08090c9275c9c92\moc_manipulatedCameraFrame.cpp.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_manipulatedCameraFrame.cpp</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+cd C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Qt\5.15.2\msvc2019_64\bin\moc.exe @C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/moc_manipulatedCameraFrame.cpp_parameters
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\manipulatedCameraFrame.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_manipulatedCameraFrame.cpp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\CMakeFiles\846718ef41226c1db08090c9275c9c92\moc_manipulatedFrame.cpp.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_manipulatedFrame.cpp</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+cd C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Qt\5.15.2\msvc2019_64\bin\moc.exe @C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/moc_manipulatedFrame.cpp_parameters
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\manipulatedFrame.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_manipulatedFrame.cpp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\CMakeFiles\846718ef41226c1db08090c9275c9c92\moc_qglviewer.cpp.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating moc_qglviewer.cpp</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+cd C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\Qt\5.15.2\msvc2019_64\bin\moc.exe @C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/moc_qglviewer.cpp_parameters
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\qglviewer.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_qglviewer.cpp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\ImageInterface.ui">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating ui_ImageInterface.h</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+C:\Qt\5.15.2\msvc2019_64\bin\uic.exe -o C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/ui_ImageInterface.h C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/ImageInterface.ui
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\ui_ImageInterface.h</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRenderInterface.ui">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating ui_VRenderInterface.h</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+C:\Qt\5.15.2\msvc2019_64\bin\uic.exe -o C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/ui_VRenderInterface.h C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/VRenderInterface.ui
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\ui_VRenderInterface.h</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\CMakeLists.txt">
+      <StdOutEncoding>UTF-8</StdOutEncoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src -BC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release --check-stamp-file C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/libQGLViewer-2.7.1/QGLViewer/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\cmake\Modules\windeployqt.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\QGLViewerConfig.cmake.in;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\QGLViewerConfigVersion.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\BasicConfigVersion-ExactVersion.cmake.in;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\FindOpenGL.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-3.19\Modules\InstallRequiredSystemLibraries.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5\Qt5Config.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5\Qt5ConfigVersion.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5\Qt5ModuleLocation.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5Core\Qt5CoreConfig.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5Core\Qt5CoreConfigVersion.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5Gui\Qt5GuiConfig.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5Gui\Qt5GuiConfigVersion.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5OpenGL\Qt5OpenGLConfig.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5OpenGL\Qt5OpenGLConfigVersion.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5Widgets\Qt5WidgetsConfig.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5Widgets\Qt5WidgetsConfigVersion.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5Xml\Qt5XmlConfig.cmake;C:\Qt\5.15.2\msvc2019_64\lib\cmake\Qt5Xml\Qt5XmlConfigVersion.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\AxisAlignedBox.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\Exporter.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\NVector3.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\Optimizer.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\ParserGL.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\Primitive.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\PrimitivePositioning.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\SortMethod.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\Types.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\VRender.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\Vector2.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\Vector3.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\gpc.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\config.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\constraint.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\domUtils.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\mouseGrabber.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\quaternion.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\vec.h" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_camera.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_frame.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_keyFrameInterpolator.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_manipulatedCameraFrame.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_manipulatedFrame.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\moc_qglviewer.cpp" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\ui_ImageInterface.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaGui\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\ui_VRenderInterface.h" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\BSPSortMethod.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\BackFaceCullingOptimizer.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\EPSExporter.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\Exporter.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\FIGExporter.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\NVector3.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\ParserGL.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\Primitive.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\PrimitivePositioning.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\TopologicalSortMethod.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\VRender.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\Vector2.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\Vector3.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\VisibilityOptimizer.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\VRender\gpc.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\camera.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\constraint.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\frame.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\keyFrameInterpolator.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\manipulatedCameraFrame.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\manipulatedFrame.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\mouseGrabber.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\qglviewer.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\quaternion.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\saveSnapshot.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaGuiQt\libQGLViewer-2.7.1\QGLViewer\vec.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\ZERO_CHECK.vcxproj">
+      <Project>{6DBF90BA-9A5A-3B1F-BAAC-69857A83D94A}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

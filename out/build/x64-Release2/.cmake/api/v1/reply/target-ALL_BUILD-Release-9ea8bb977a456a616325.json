@@ -1,0 +1,46 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaGeneralEngine/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaGeneralEngine::@d8a188982b1d378c2412"
+		},
+		{
+			"id" : "SofaGeneralEngine_relocatable_install::@d8a188982b1d378c2412"
+		},
+		{
+			"id" : "SofaGeneralEngine_test::@03e5b40b6a387c7954bd"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@d8a188982b1d378c2412",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaGeneralEngine",
+		"source" : "modules/SofaGeneralEngine"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

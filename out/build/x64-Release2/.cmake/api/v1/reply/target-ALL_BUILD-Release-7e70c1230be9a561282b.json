@@ -1,0 +1,40 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"SofaKernel/modules/SofaSimulationTree/SofaSimulationTree_test/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaSimulationTree_test::@5079f6bf72737e4fa028"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@5079f6bf72737e4fa028",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "SofaKernel/SofaSimulation/SofaSimulationTree/SofaSimulationTree_test",
+		"source" : "SofaKernel/modules/SofaSimulationTree/SofaSimulationTree_test"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

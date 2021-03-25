@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{87CF597A-6841-3368-BED4-B46598B8BB25}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>SofaOpenglVisual_test</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\bin\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SofaOpenglVisual_test.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SofaOpenglVisual_test</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\tools\SofaGTestMain\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaGTestMain;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaFramework;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\GTest;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationTree\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaSimulation;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCommon\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationGraph\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaOpenglVisual\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaOpenglVisual;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseVisual\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseVisual;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseTopology;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseMechanics\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseMechanics;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaEigen2Solver\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaEigen2Solver;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseLinearSolver\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseLinearSolver;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\extlibs\json;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\include;C:\local\boost_1_75_0;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\extlibs\gtest\include;C:\Files\Sheamus\School\Senior\SeniorProject\Eigenfiles\eigen-3.3.9;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DisableSpecificWarnings>4250;4251;4275;4675;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FRAMEWORK_TEST_RESOURCES_DIR="C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/SofaFramework/resources/tests";GTEST_LINKED_AS_SHARED_LIBRARY=1;_VARIADIC_MAX=10;_USE_MATH_DEFINES;BOOST_ALL_DYN_LINK;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FRAMEWORK_TEST_RESOURCES_DIR=\"C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/SofaFramework/resources/tests\";GTEST_LINKED_AS_SHARED_LIBRARY=1;_VARIADIC_MAX=10;_USE_MATH_DEFINES;BOOST_ALL_DYN_LINK;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\tools\SofaGTestMain\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaGTestMain;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaFramework;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\GTest;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationTree\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaSimulation;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCommon\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationGraph\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaOpenglVisual\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaOpenglVisual;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseVisual\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseVisual;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseTopology;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseMechanics\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseMechanics;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaEigen2Solver\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaEigen2Solver;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseLinearSolver\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseLinearSolver;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\extlibs\json;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\include;C:\local\boost_1_75_0;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\extlibs\gtest\include;C:\Files\Sheamus\School\Senior\SeniorProject\Eigenfiles\eigen-3.3.9;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\tools\SofaGTestMain\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaGTestMain;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaFramework;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\GTest;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationTree\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaSimulation;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCommon\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationGraph\..;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaOpenglVisual\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaOpenglVisual;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseVisual\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseVisual;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseTopology\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseTopology;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseMechanics\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseMechanics;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaEigen2Solver\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaEigen2Solver;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaBaseLinearSolver\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\include\SofaBaseLinearSolver;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\extlibs\json;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\include;C:\local\boost_1_75_0;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\extlibs\gtest\include;C:\Files\Sheamus\School\Senior\SeniorProject\Eigenfiles\eigen-3.3.9;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\..\..\lib\Release\SofaGTestMain.lib;..\..\..\lib\Release\SofaOpenglVisual.lib;..\..\..\lib\Release\SofaBaseMechanics.lib;..\..\..\lib\Release\SofaSimulationTree.lib;..\..\..\lib\Release\SofaSimulationGraph.lib;..\..\..\lib\Release\SofaBaseVisual.lib;..\..\..\lib\Release\SofaBaseTopology.lib;..\..\..\lib\Release\SofaSimulationCommon.lib;..\..\..\lib\Release\SofaEigen2Solver.lib;..\..\..\lib\Release\SofaBaseLinearSolver.lib;..\..\..\lib\Release\SofaSimulationCore.lib;..\..\..\lib\Release\SofaCore.lib;..\..\..\lib\Release\SofaDefaultType.lib;..\..\..\lib\Release\SofaHelper.lib;..\..\..\lib\Release\gtest.lib;glu32.lib;opengl32.lib;..\..\..\..\..\..\lib\win64\glew32.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_system-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_filesystem-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_program_options-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_thread-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_chrono-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_date_time-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_atomic-vc142-mt-x64-1_75.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/lib/Release/SofaOpenglVisual_test.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/bin/Release/SofaOpenglVisual_test.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaOpenglVisual\SofaOpenglVisual_test\CMakeLists.txt">
+      <StdOutEncoding>UTF-8</StdOutEncoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaOpenglVisual/SofaOpenglVisual_test/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src -BC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release --check-stamp-file C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/modules/SofaOpenglVisual/SofaOpenglVisual_test/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\cmake\SofaBaseConfig.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\cmake\SofaBaseConfigVersion.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\cmake\SofaBaseMechanicsConfig.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\cmake\SofaBaseMechanicsConfigVersion.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\cmake\SofaOpenglVisualConfig.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\cmake\SofaOpenglVisualConfigVersion.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\cmake\SofaSimulationConfig.cmake;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\cmake\SofaSimulationConfigVersion.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\modules\SofaOpenglVisual\SofaOpenglVisual_test\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaOpenglVisual\SofaOpenglVisual_test\OglLabel_test.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaOpenglVisual\SofaOpenglVisual_test\Light_test.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaOpenglVisual\SofaOpenglVisual_test\LightManager_test.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\modules\SofaOpenglVisual\SofaOpenglVisual_test\ClipPlane_test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\ZERO_CHECK.vcxproj">
+      <Project>{6DBF90BA-9A5A-3B1F-BAAC-69857A83D94A}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaBase\SofaBaseLinearSolver\SofaBaseLinearSolver.vcxproj">
+      <Project>{DA61449B-DF62-3144-A935-277B7BC3E5C5}</Project>
+      <Name>SofaBaseLinearSolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaBase\SofaBaseMechanics\SofaBaseMechanics.vcxproj">
+      <Project>{F98E838E-34EA-341C-8139-5AB3253FCB90}</Project>
+      <Name>SofaBaseMechanics</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaBase\SofaBaseTopology\SofaBaseTopology.vcxproj">
+      <Project>{678916BA-81EF-34ED-8727-DC7096F12AFE}</Project>
+      <Name>SofaBaseTopology</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaBase\SofaBaseVisual\SofaBaseVisual.vcxproj">
+      <Project>{43DEDC1B-A143-32FC-9113-48EE7CACE193}</Project>
+      <Name>SofaBaseVisual</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaFramework\SofaCore\SofaCore.vcxproj">
+      <Project>{E5826A0D-B449-366C-AAC5-53D7D5658FD9}</Project>
+      <Name>SofaCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaFramework\SofaDefaultType\SofaDefaultType.vcxproj">
+      <Project>{366CE347-DD3F-3355-B5BE-C9D8DF59E889}</Project>
+      <Name>SofaDefaultType</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaBase\SofaEigen2Solver\SofaEigen2Solver.vcxproj">
+      <Project>{9C9A8460-401A-3958-887B-A720AA81CAE3}</Project>
+      <Name>SofaEigen2Solver</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\tools\SofaGTestMain\SofaGTestMain.vcxproj">
+      <Project>{4D2C486A-7862-39E2-BBEA-05C07DE83FAB}</Project>
+      <Name>SofaGTestMain</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaFramework\SofaHelper\SofaHelper.vcxproj">
+      <Project>{13D75DB2-463D-31DD-BAD3-048ABAEA83A2}</Project>
+      <Name>SofaHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\modules\SofaOpenglVisual\SofaOpenglVisual.vcxproj">
+      <Project>{899B7E2F-4A20-3827-A1CC-71EB2601C50B}</Project>
+      <Name>SofaOpenglVisual</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaSimulation\SofaSimulationCommon\SofaSimulationCommon.vcxproj">
+      <Project>{55FF3B06-EA39-383F-A6CC-A03F9F320406}</Project>
+      <Name>SofaSimulationCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaFramework\SofaSimulationCore\SofaSimulationCore.vcxproj">
+      <Project>{DB91D3AD-FB96-30C5-A93D-492FCEECAA7E}</Project>
+      <Name>SofaSimulationCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaSimulation\SofaSimulationGraph\SofaSimulationGraph.vcxproj">
+      <Project>{E6B1235B-1890-31FC-95A2-4184B52B3A53}</Project>
+      <Name>SofaSimulationGraph</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\SofaKernel\SofaSimulation\SofaSimulationTree\SofaSimulationTree.vcxproj">
+      <Project>{B094532E-D0A2-38E8-AFCB-B60775E92B5C}</Project>
+      <Name>SofaSimulationTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release\extlibs\gtest\gtest.vcxproj">
+      <Project>{6518AD7D-E7F5-3EBD-AB9C-9C66FDD4E30A}</Project>
+      <Name>gtest</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

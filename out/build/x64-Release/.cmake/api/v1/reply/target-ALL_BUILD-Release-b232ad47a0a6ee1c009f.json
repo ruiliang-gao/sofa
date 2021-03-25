@@ -1,0 +1,46 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"SofaKernel/modules/SofaDeformable/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "SofaDeformable::@51fdd638c4546f2831de"
+		},
+		{
+			"id" : "SofaDeformable_relocatable_install::@51fdd638c4546f2831de"
+		},
+		{
+			"id" : "SofaDeformable_test::@e668c1a07ecb545f82ba"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@51fdd638c4546f2831de",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "SofaKernel/modules/SofaDeformable",
+		"source" : "SofaKernel/modules/SofaDeformable"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

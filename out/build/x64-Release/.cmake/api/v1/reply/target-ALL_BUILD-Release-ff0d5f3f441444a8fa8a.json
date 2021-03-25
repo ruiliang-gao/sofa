@@ -1,0 +1,49 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"modules/SofaSparseSolver/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "csparse::@d4826d7f542028a85ff5"
+		},
+		{
+			"id" : "SofaSparseSolver::@e037bfeaa97e837af334"
+		},
+		{
+			"id" : "SofaSparseSolver_relocatable_install::@e037bfeaa97e837af334"
+		},
+		{
+			"id" : "metis::@d8bc976349b8eebb4e47"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@e037bfeaa97e837af334",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "modules/SofaSparseSolver",
+		"source" : "modules/SofaSparseSolver"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

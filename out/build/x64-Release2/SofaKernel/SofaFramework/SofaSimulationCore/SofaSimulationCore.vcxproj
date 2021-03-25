@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{69100EE6-8FCF-3D67-B302-F42E5ACABBA7}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>SofaSimulationCore</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\bin\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SofaSimulationCore.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SofaSimulationCore</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\include\SofaFramework;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\include\GTest;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\extlibs\json;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\include;C:\local\boost_1_75_0;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\extlibs\gtest\include;C:\Files\Sheamus\School\Senior\SeniorProject\Eigenfiles\eigen-3.3.9;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /Zc:__cplusplus /bigobj</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DisableSpecificWarnings>4250;4251;4275;4675;4996</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FRAMEWORK_TEST_RESOURCES_DIR="C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/SofaFramework/resources/tests";GTEST_LINKED_AS_SHARED_LIBRARY=1;_VARIADIC_MAX=10;SOFA_BUILD_SIMULATION_CORE;SOFA_BUILD_SOFASIMULATIONCORE;_USE_MATH_DEFINES;BOOST_ALL_DYN_LINK;CMAKE_INTDIR="Release";SofaSimulationCore_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;FRAMEWORK_TEST_RESOURCES_DIR=\"C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/SofaFramework/resources/tests\";GTEST_LINKED_AS_SHARED_LIBRARY=1;_VARIADIC_MAX=10;SOFA_BUILD_SIMULATION_CORE;SOFA_BUILD_SOFASIMULATIONCORE;_USE_MATH_DEFINES;BOOST_ALL_DYN_LINK;CMAKE_INTDIR=\"Release\";SofaSimulationCore_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\include\SofaFramework;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\include\GTest;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\extlibs\json;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\include;C:\local\boost_1_75_0;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\extlibs\gtest\include;C:\Files\Sheamus\School\Senior\SeniorProject\Eigenfiles\eigen-3.3.9;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\include\SofaFramework;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaSimulationCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaHelper\..\SofaCore\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\include\GTest;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaDefaultType\src;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\extlibs\json;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\include;C:\local\boost_1_75_0;C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\extlibs\gtest\include;C:\Files\Sheamus\School\Senior\SeniorProject\Eigenfiles\eigen-3.3.9;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\..\..\lib\Release\SofaCore.lib;..\..\..\lib\Release\SofaDefaultType.lib;..\..\..\lib\Release\SofaHelper.lib;glu32.lib;opengl32.lib;..\..\..\..\..\..\lib\win64\glew32.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_system-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_filesystem-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_program_options-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_thread-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_chrono-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_date_time-vc142-mt-x64-1_75.lib;C:\local\boost_1_75_0\lib64-msvc-14.2\boost_atomic-vc142-mt-x64-1_75.lib;..\..\..\lib\Release\gtest.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/lib/Release/SofaSimulationCore.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/bin/Release/SofaSimulationCore.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\CMakeLists.txt">
+      <StdOutEncoding>UTF-8</StdOutEncoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/SofaKernel/modules/SofaSimulationCore/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src -BC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2 --check-stamp-file C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/SofaKernel/SofaFramework/SofaSimulationCore/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\config.h.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaSimulationCore\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\config.h.in" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\simulationcore.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\AnimateBeginEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\AnimateEndEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\AnimateVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\BehaviorUpdatePositionVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CactusStackStorage.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\ClassSystem.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CleanupVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CollisionAnimationLoop.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CollisionBeginEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CollisionEndEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CollisionVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Colors.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\DeactivatedNodeVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\DefaultAnimationLoop.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\DefaultVisualManagerLoop.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\DeleteVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\ExportGnuplotVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\ExportOBJVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\InitVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\IntegrateBeginEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\IntegrateEndEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\LocalStorage.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalComputeEnergyVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalMatrixVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalOperations.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalVPrintVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MutationListener.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Node.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Node.inl" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\ParallelVisitorScheduler.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\PauseEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\PipelineImpl.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\PositionEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\PrintVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\PropagateEventVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\ResetVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\SceneLoaderFactory.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Simulation.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\SolveVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\StateChangeVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\TopologyChangeVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateBoundingBoxVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateContextVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateInternalDataVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateLinksVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateMappingEndEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateMappingVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\VectorOperations.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\VelocityThresholdVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Visitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\VisitorExecuteFunc.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\VisitorScheduler.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\VisualVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\WriteStateVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\XMLPrintVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\init.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalGetMomentumVisitor.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\BaseSimulationExporter.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\TaskScheduler.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\DefaultTaskScheduler.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Task.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\InitTasks.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Locks.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\VisitorAsync.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\events\SimulationInitDoneEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\events\SimulationInitStartEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\events\SimulationStartEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\events\SimulationStopEvent.h" />
+    <ClInclude Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\testing\Node_test.h" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\AnimateBeginEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\AnimateEndEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\AnimateVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\BehaviorUpdatePositionVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CactusStackStorage.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CleanupVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CollisionAnimationLoop.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CollisionBeginEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CollisionEndEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\CollisionVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\DeactivatedNodeVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\DefaultAnimationLoop.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\DefaultVisualManagerLoop.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\DeleteVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\ExportGnuplotVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\ExportOBJVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\InitVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\IntegrateBeginEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\IntegrateEndEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalMatrixVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalOperations.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalVPrintVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MutationListener.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Node.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\ParallelVisitorScheduler.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\PauseEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\PipelineImpl.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\PositionEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\PrintVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\PropagateEventVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\ResetVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\SceneLoaderFactory.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Simulation.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\SolveVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\StateChangeVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\TopologyChangeVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateBoundingBoxVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateContextVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateInternalDataVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateLinksVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateMappingEndEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\UpdateMappingVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\VectorOperations.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\VelocityThresholdVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Visitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\VisitorScheduler.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\VisualVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\WriteStateVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\XMLPrintVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\init.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\MechanicalComputeEnergyVisitor.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\BaseSimulationExporter.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\TaskScheduler.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\DefaultTaskScheduler.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\Task.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\InitTasks.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\events\SimulationInitDoneEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\events\SimulationInitStartEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\events\SimulationStartEvent.cpp" />
+    <ClCompile Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\SofaKernel\modules\SofaSimulationCore\src\sofa\simulation\events\SimulationStopEvent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\ZERO_CHECK.vcxproj">
+      <Project>{6F5DEC64-695A-3411-A7D1-219B0B22CF74}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaCore\SofaCore.vcxproj">
+      <Project>{D69FDEB6-3A69-3B07-B453-B0C4FDAA2124}</Project>
+      <Name>SofaCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaDefaultType\SofaDefaultType.vcxproj">
+      <Project>{EB43E268-5A0D-3889-BED3-9B1249608A76}</Project>
+      <Name>SofaDefaultType</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\SofaKernel\SofaFramework\SofaHelper\SofaHelper.vcxproj">
+      <Project>{AC65F615-7138-37E5-BFBF-B610DEB2EFD8}</Project>
+      <Name>SofaHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Files\Sheamus\School\Senior\SeniorProject\sofa_1906_tips\src\out\build\x64-Release2\extlibs\gtest\gtest.vcxproj">
+      <Project>{10F9ABDC-0DB2-3363-9C0D-B5A287D07947}</Project>
+      <Name>gtest</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/applications/plugins/SofaMiscCollision/CMakeLists.txt
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/applications/plugins/SofaMiscCollision/SofaMiscCollisionConfig.cmake.in
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/applications/plugins/SofaMiscCollision/src/SofaMiscCollision/config.h.in
+C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/applications/plugins/SofaMiscCollision/SofaMiscCollisionConfigVersion.cmake
+C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.19/Modules/BasicConfigVersion-ExactVersion.cmake.in

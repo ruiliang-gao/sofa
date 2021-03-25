@@ -1,0 +1,10 @@
+^C:\FILES\SHEAMUS\SCHOOL\SENIOR\SENIORPROJECT\SOFA_1906_TIPS\SRC\OUT\BUILD\X64-RELEASE2\EXTERNAL_DIRECTORIES\FETCHED\EIGEN3\CMAKEFILES\7E67236A5B0F5B683E6793496D3F577A\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/external_directories/fetched/eigen3 -BC:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/external_directories/fetched/eigen3 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release2/external_directories/fetched/eigen3/Project.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

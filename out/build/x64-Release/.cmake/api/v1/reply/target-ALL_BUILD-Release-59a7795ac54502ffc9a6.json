@@ -1,0 +1,40 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"SofaKernel/modules/SofaHelper/SofaHelper_test/system/TestPlugin/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "TestPlugin::@dee5a03ba81f4a47d652"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "CMakePredefinedTargets"
+	},
+	"id" : "ALL_BUILD::@dee5a03ba81f4a47d652",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "SofaKernel/SofaFramework/SofaHelper/SofaHelper_test/system/TestPlugin",
+		"source" : "SofaKernel/modules/SofaHelper/SofaHelper_test/system/TestPlugin"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}
