@@ -25,6 +25,9 @@ target_link_libraries(${PROJECT_NAME} SofaComponentGeneral ${CMAKE_CURRENT_SOURC
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.." 
 	${CMAKE_CURRENT_SOURCE_DIR}/sphinxlib 
 	${CMAKE_CURRENT_SOURCE_DIR}/sphinxlib/sphinxbase
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaHelper/src
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaCore/src
+
 	)
 
 install(TARGETS ${PROJECT_NAME}
