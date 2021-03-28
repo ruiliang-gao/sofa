@@ -31,7 +31,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 
 include_directories(${OPENHAPTICS_INCLUDE_DIR})
 include_directories(${OPENHAPTICS_UTIL_INCLUDE_DIR})
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/..")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.."
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaGeneralDeformable/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaLoader/src
+)
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILES} )
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_SURFLABHAPTICDEVICE")

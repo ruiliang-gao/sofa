@@ -26,12 +26,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_SUR
 target_link_libraries(${PROJECT_NAME} SofaComponentGeneral)
 target_link_libraries(${PROJECT_NAME} SofaComponentGeneral ${OPENHAPTICS_LIBRARIES} Sensable SofaGuiCommon SofaGuiQt)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.."
-${CMAKE_CURRENT_SOURCE_DIR}/../../sofa/gui
-${CMAKE_CURRENT_SOURCE_DIR}/../../sofa/gui/qt
 
+${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaGuiQt/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaGuiCommon/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaHaptics/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaGeneralDeformable/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaLoader/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaConstraint/src
 )
 
 install(TARGETS ${PROJECT_NAME}

@@ -31,7 +31,7 @@
 #include <sofa/core/topology/TopologicalMapping.h>
 #include <sofa/helper/gl/template.h>
 #include <SofaUserInteraction/TopologicalChangeManager.h>
-#include <SofaBaseTopology/TriangleSetTopologyAlgorithms.h>
+#include <SofaBaseTopology/TriangleSetGeometryAlgorithms.h>
 #include <SofaBaseTopology/EdgeSetTopologyModifier.h>
 #include <sofa/helper/AdvancedTimer.h>
 #include <SofaLoader/MeshObjLoader.h>

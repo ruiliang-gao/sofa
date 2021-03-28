@@ -30,7 +30,7 @@
 #include <SofaSimulationTree/GNode.h>
 #include <sofa/simulation/Simulation.h>
 #include <SofaSimulationTree/TreeSimulation.h>
-#include <sofa/component/typedef/Sofa_typedef.h>
+//#include <sofa/component/typedef/Sofa_typedef.h>
 
 namespace sofa
 {

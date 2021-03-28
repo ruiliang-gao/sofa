@@ -46,13 +46,13 @@
 #include <sofa/simulation/Simulation.h>
 #include <SofaSimulationTree/TreeSimulation.h>
 #include <SofaBaseCollision/BaseContactMapper.h>
-#include <sofa/component/typedef/Sofa_typedef.h>
+//#include <sofa/component/typedef/Sofa_typedef.h>
 #include <SofaConstraint/StickContactConstraint.h>
 
 #include <sofa/core/topology/TopologicalMapping.h>
 #include <sofa/helper/gl/template.h>
 #include <SofaUserInteraction/TopologicalChangeManager.h>
-#include <SofaBaseTopology/TriangleSetTopologyAlgorithms.h>
+#include <SofaBaseTopology/TriangleSetGeometryAlgorithms.h>
 #include <SofaBaseTopology/EdgeSetTopologyModifier.h>
 #include <sofa/helper/AdvancedTimer.h>
 #include <SofaLoader/MeshObjLoader.h>

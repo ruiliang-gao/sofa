@@ -23,9 +23,9 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 #include "HapticManager.h"
-#include "GUIManager.h"
-#include "BaseGUI.h"
-#include "RealGUI.h"
+#include <sofa/gui/GUIManager.h>
+#include <sofa/gui/BaseGUI.h>
+#include <sofa/gui/qt/RealGUI.h>
 using sofa::gui::GUIManager;
 using sofa::gui::BaseGui;
 using sofa::gui::qt::RealGui;
