@@ -140,7 +140,7 @@ namespace SurfLab
 		{
 			simulation::Node::SPtr node;
 			sofa::component::visualmodel::OglModel::SPtr visu;
-			sofa::component::mapping::RigidMapping< Rigid3dTypes, ExtVec3Types  >::SPtr mapping;
+			sofa::component::mapping::RigidMapping< Rigid3dTypes, Vec3Types  >::SPtr mapping;
 		};
 
 		Data<double> forceScale;

@@ -417,6 +417,7 @@ public slots:
     virtual void showVideoRecorderManager();
     virtual void showWindowDataGraph();
     virtual void toolsDockMoved();
+    virtual void showReport();
 
 protected slots:
     /// Allow to dynamicly change viewer. Called when click on another viewer in GUI Qt viewer list (see viewerMap).
