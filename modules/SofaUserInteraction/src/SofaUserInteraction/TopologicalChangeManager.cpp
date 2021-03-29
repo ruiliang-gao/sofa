@@ -60,7 +60,7 @@ TopologicalChangeManager::~TopologicalChangeManager()
 {
 }
 
-Index TopologicalChangeManager::removeItemsFromTriangleModel(sofa::component::collision::TriangleCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<Index>& indices) const
+int TopologicalChangeManager::removeItemsFromTriangleModel(sofa::component::collision::TriangleCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<int>& indices) const
 {
     sofa::core::topology::BaseMeshTopology* topo_curr;
     topo_curr = model->getCollisionTopology();
@@ -168,7 +168,7 @@ Index TopologicalChangeManager::removeItemsFromTriangleModel(sofa::component::co
 }
 
 
-Index TopologicalChangeManager::removeItemsFromPointModel(sofa::component::collision::PointCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<Index>& indices) const
+int TopologicalChangeManager::removeItemsFromPointModel(sofa::component::collision::PointCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<int>& indices) const
 {
     sofa::core::topology::BaseMeshTopology* topo_curr;
     topo_curr = model->getCollisionTopology();
@@ -292,7 +292,7 @@ Index TopologicalChangeManager::removeItemsFromPointModel(sofa::component::colli
 }
 
 
-Index TopologicalChangeManager::removeItemsFromSphereModel(sofa::component::collision::SphereCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<Index>& indices) const
+int TopologicalChangeManager::removeItemsFromSphereModel(sofa::component::collision::SphereCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<int>& indices) const
 {
     sofa::core::topology::BaseMeshTopology* topo_curr;
     topo_curr = model->getCollisionTopology();
@@ -371,22 +371,22 @@ Index TopologicalChangeManager::removeItemsFromSphereModel(sofa::component::coll
 }
 
 // Handle Removing of topological element (from any type of topology)
-Index TopologicalChangeManager::removeItemsFromCollisionModel(sofa::core::CollisionElementIterator elem2) const
+int TopologicalChangeManager::removeItemsFromCollisionModel(sofa::core::CollisionElementIterator elem2) const
 {
-    helper::vector<Index> id;
+    helper::vector<int> id;
     id.push_back(elem2.getIndex());
     return removeItemsFromCollisionModel(elem2.getCollisionModel(), id);
 }
 
-Index TopologicalChangeManager::removeItemsFromCollisionModel(sofa::core::CollisionModel* model, const Index& indices) const
+int TopologicalChangeManager::removeItemsFromCollisionModel(sofa::core::CollisionModel* model, const int& indices) const
 {
-    helper::vector<Index> id;
+    helper::vector<int> id;
     id.push_back(indices);
     return removeItemsFromCollisionModel(model, id);
 }
 
 
-Index TopologicalChangeManager::removeItemsFromCollisionModel(sofa::core::CollisionModel* model, const helper::vector<Index>& indices) const
+int TopologicalChangeManager::removeItemsFromCollisionModel(sofa::core::CollisionModel* model, const helper::vector<int>& indices) const
 {
     if(dynamic_cast<TriangleCollisionModel<sofa::defaulttype::Vec3Types>*>(model)!= nullptr)
     {

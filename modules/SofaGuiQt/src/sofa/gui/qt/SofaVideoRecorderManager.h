@@ -23,7 +23,7 @@
 #ifndef SOFA_GUI_QT_VIDEORECORDERMANAGER_H
 #define SOFA_GUI_QT_VIDEORECORDERMANAGER_H
 
-#include "VideoRecorderManager.ui"
+#include "Ui_VideoRecorderManager.h"
 #include <sofa/gui/qt/config.h>
 
 #include <vector>

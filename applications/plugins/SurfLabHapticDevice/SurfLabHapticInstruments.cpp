@@ -21,6 +21,8 @@
 
 #include <sofa/helper/system/FileRepository.h>
 
+using namespace std;
+
 namespace SurfLab
 {
 

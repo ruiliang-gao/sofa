@@ -50,9 +50,9 @@ public:
     ~TopologicalChangeManager();
 
     /// Handles Removing of topological element (from any type of topology)
-    Index removeItemsFromCollisionModel(sofa::core::CollisionElementIterator) const;
-    Index removeItemsFromCollisionModel(sofa::core::CollisionModel* model, const Index& index) const;
-    Index removeItemsFromCollisionModel(sofa::core::CollisionModel* model, const helper::vector<Index>& indices) const;
+    int removeItemsFromCollisionModel(sofa::core::CollisionElementIterator) const;
+    int removeItemsFromCollisionModel(sofa::core::CollisionModel* model, const int& index) const;
+    int removeItemsFromCollisionModel(sofa::core::CollisionModel* model, const helper::vector<int>& indices) const;
 
 
     /** Handles Cutting (activated only for a triangular topology)
@@ -137,9 +137,9 @@ private:
                                int snapingBorderValue = 0);
 
 
-    Index removeItemsFromTriangleModel(sofa::component::collision::TriangleCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<Index>& indices) const;
-    Index removeItemsFromPointModel(sofa::component::collision::PointCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<Index>& indices) const;
-    Index removeItemsFromSphereModel(sofa::component::collision::SphereCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<Index>& indices) const;
+    int removeItemsFromTriangleModel(sofa::component::collision::TriangleCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<int>& indices) const;
+    int removeItemsFromPointModel(sofa::component::collision::PointCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<int>& indices) const;
+    int removeItemsFromSphereModel(sofa::component::collision::SphereCollisionModel<sofa::defaulttype::Vec3Types>* model, const helper::vector<int>& indices) const;
 
 
 private:

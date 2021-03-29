@@ -33,6 +33,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaHaptics/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaGeneralDeformable/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaLoader/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaConstraint/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaOpenglVisual/src
 )
 
 install(TARGETS ${PROJECT_NAME}
