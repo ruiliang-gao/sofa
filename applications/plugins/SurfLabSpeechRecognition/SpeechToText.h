@@ -10,56 +10,70 @@
 
 #include <SofaBaseVisual/BaseCamera.h>
 
+//test linking haptic
+#include <sofa/core/objectmodel/HapticDeviceEvent.h>
+#include <sofa/simulation/Node.h>
+#include <sofa/simulation/Simulation.h>
+#include <ctime>
+
 namespace sofa
 {
 
-namespace simulation { class Node; }
+	namespace simulation { class Node; }
 
-namespace component
-{
-namespace visualModel { class OglModel; }
+	namespace component
+	{
+		namespace visualModel { class OglModel; }
 
-namespace controller{
+		namespace controller {
 
-using namespace sofa::defaulttype;
-using core::objectmodel::Data;
+			using namespace sofa::defaulttype;
+			using core::objectmodel::Data;
 
-class SOFA_SURFLABSPEECHRECOGNITION_API SpeechToText : public Controller
-{
-public:
-	SOFA_CLASS(SpeechToText, Controller);
+			class SOFA_SURFLABSPEECHRECOGNITION_API SpeechToText : public Controller
+			{
+			public:
+				SOFA_CLASS(SpeechToText, Controller);
 
-	SpeechToText();
-	~SpeechToText();
+				SpeechToText();
+				~SpeechToText();
 
-	void recognize_speech();
-	virtual void init();
-	virtual void bwdInit();
-	void handleEvent(core::objectmodel::Event *);
+				void recognize_speech();
+				virtual void init();
+				virtual void bwdInit();
+				void handleEvent(core::objectmodel::Event*);
 
-	void setSTTThreadCreated(bool b) { STTThreadCreated = b; }
-	void setMoveMode(int m) { moveMode = m; }
-	void setMoveCount(int m) { moveCount = m; }
-	
-	int confidence;
-	helper::system::thread::CTime *thTimer;
-	sofa::component::visualmodel::BaseCamera::SPtr currentCamera;
-	int pos_x, pos_y, wheelDelta;
-	int moveCount = 0;
-	std::string base_path = "";
-	sofa::simulation::Node::SPtr groot;
-	bool stopCameraMotion = false;
+				void setSTTThreadCreated(bool b) { STTThreadCreated = b; }
+				void setMoveMode(int m) { moveMode = m; }
+				void setMoveCount(int m) { moveCount = m; }
 
-	enum Mode { LEFT, RIGHT, UP, DOWN, SLIGHTLY_LEFT, SLIGHTLY_RIGHT, SLIGHTLY_UP, SLIGHTLY_DOWN, ZOOM_IN, ZOOM_OUT, UNRECOGNIZED = 9999 };
+				int confidence;
+				helper::system::thread::CTime* thTimer;
+				sofa::component::visualmodel::BaseCamera::SPtr currentCamera;
+				int pos_x, pos_y, wheelDelta;
+				int moveCount = 0;
+				std::string base_path = "";
+				sofa::simulation::Node::SPtr groot;
+				bool stopCameraMotion = false;
+				bool enableSpeechRec = true;
+				time_t last_command_time;
 
-private:
-	bool STTThreadCreated;
-	int moveMode = -1;
-};
+				enum Mode {
+					LEFT, RIGHT, UP, DOWN, SLIGHTLY_LEFT, SLIGHTLY_RIGHT, SLIGHTLY_UP, SLIGHTLY_DOWN,
+					ROTATE_LEFT, ROTATE_RIGHT, ROTATE_UP, ROTATE_DOWN, ZOOM_IN, ZOOM_OUT,
+					SWITCH_TO_CAUTERIZER, SWITCH_TO_GRASPER, SWITCH_TO_SCISSOR, SWITCH_TO_DISSECTOR,
+					SWITCH_TO_BAG, SWITCH_TO_SCALPEL, SWITCH_TO_STAPLER, SWITCH_TO_CLAMP, SWITCH_TO_RETRACTOR,
+					UNRECOGNIZED = 9999
+				};
 
-} // namespace controller
+			private:
+				bool STTThreadCreated;
+				int moveMode = -1;
+			};
 
-} // namespace component
+		} // namespace controller
+
+	} // namespace component
 
 } // namespace sofa
 #endif

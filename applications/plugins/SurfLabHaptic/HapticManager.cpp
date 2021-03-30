@@ -23,6 +23,9 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 #include "HapticManager.h"
+#include "GUIManager.h"
+#include "BaseGUI.h"
+#include "RealGUI.h"
 #include <sofa/gui/qt/report.h>
 #include <sofa/gui/qt/surflablogin.h>
 #include <sofa/core/visual/DrawToolGL.h>
@@ -31,6 +34,9 @@
 
 using sofa::gui::qt::SofaProcedureReport;
 using sofa::gui::qt::SurfLabLogin;
+using sofa::gui::GUIManager;
+using sofa::gui::BaseGUI;
+using sofa::gui::RealGui;
 bool usingAA = false;
 #define int2string(a) std::to_string(a)
 using namespace std;
@@ -76,6 +82,15 @@ namespace sofa
 				, clampMesh(initData(&clampMesh, "mesh/cube.obj", "clampMesh", " Path to the clipper model (not being used currently)"))
 			{
 				this->f_listening.setValue(true);
+				//string test = GUIManager::GetCurrentGUIName();
+								//std::cout << "GUIManager::GetCurrentGUIName()" << test << std::endl;
+									/*BaseGUI* thing = GUIManager::getGUI();
+									RealGUI* testreal = dynamic_cast<RealGUI*>(GUIManager::getGUI());
+									testreal->populateReport(programStartDate);
+									testreal->showReport();*/
+									/*RealGUI * t = thing;
+									thing->populateReport(programStartDate);
+									thing->showReport();*/
 				//std::cout << "haptic manager construction" << std::endl;
 				//login = new SurfLabLogin(NULL);
 				//login->show();
@@ -294,7 +309,12 @@ namespace sofa
 							last_update_time = this->getContext()->getTime();
 							hasPutInBag = true;
 						}
-
+						string test = GUIManager::GetCurrentGUIName();
+						std::cout << "GUIManager::GetCurrentGUIName()" << test << std::endl;
+						BaseGUI * thing = GUIManager::getGUI();
+						RealGUI * testreal = dynamic_cast<RealGUI*>(GUIManager::getGUI());
+						testreal->populateReport(programStartDate);
+						testreal->showReport();
 						//finish the simulation and report
 						std::cout << "programCompletionTime: " << last_update_time << std::endl;
 						std::cout << "numOfElementsCutonVeins: " << numOfElementsCutonVeins << std::endl;

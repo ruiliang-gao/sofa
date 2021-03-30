@@ -34,6 +34,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaGeneralDeformable/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaLoader/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaConstraint/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaOpenglVisual/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaGuiQt/src/sof/gui/qt
 )
 
 install(TARGETS ${PROJECT_NAME}

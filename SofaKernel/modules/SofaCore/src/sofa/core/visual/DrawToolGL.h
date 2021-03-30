@@ -28,6 +28,7 @@
 
 #include <sofa/helper/types/RGBAColor.h>
 #include <sofa/helper/gl/BasicShapesGL.h>
+#include <sofa/helper/gl/Texture.h>
 
 namespace sofa
 {
@@ -194,13 +195,20 @@ public:
     void enableDepthTest() override;
     void disableDepthTest() override;
 
+    //UF - DS
+    virtual void enableStencilTest() override;
+    virtual void disableStencilTest() override;
+
     void saveLastState() override;
     void restoreLastState() override;
 
     void readPixels(int x, int y, int w, int h, float* rgb, float* z = nullptr) override;
 
-    void internalDrawSpheres(const helper::vector<Vector3>& centers, const float& radius, const unsigned int rings, const unsigned int sectors);
-    void internalDrawSphere(const Vector3& center, const float& radius, const unsigned int rings, const unsigned int sectors);
+    //void internalDrawSpheres(const helper::vector<Vector3>& centers, const float& radius, const unsigned int rings, const unsigned int sectors);
+    //void internalDrawSphere(const Vector3& center, const float& radius, const unsigned int rings, const unsigned int sectors);
+
+    //UF - DS
+    void DrawTextureQuad(int x, int y, int width, int height, sofa::helper::gl::Texture* InTexture, bool bFromRightCorner = false);
 
 protected:
 

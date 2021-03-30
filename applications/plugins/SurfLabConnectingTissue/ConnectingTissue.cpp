@@ -25,6 +25,7 @@
 #include "ConnectingTissue.h"
 
 #include <sofa/defaulttype/Mat.h>
+#include <SofaBaseMechanics/BarycentricMappers/BarycentricMapperMeshTopology.h>
 namespace sofa
 {
 	namespace component

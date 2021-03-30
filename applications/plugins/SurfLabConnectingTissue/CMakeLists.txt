@@ -23,8 +23,14 @@ add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILE
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_CONNECTINGTISSUE")
 target_link_libraries(${PROJECT_NAME} SofaComponentGeneral)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.."
-${CMAKE_CURRENT_SOURCE_DIR}../../src/SofaKernel/modules/SofaCore/src
+${CMAKE_CURRENT_SOURCE_DIR}../../..//SofaKernel/modules/SofaCore/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaHelper/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaSimulationTree/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaSimulationCore/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaBaseMechanics/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaOpenglVisual/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaUserInteraction/src
+
 	)
 
 install(TARGETS ${PROJECT_NAME}

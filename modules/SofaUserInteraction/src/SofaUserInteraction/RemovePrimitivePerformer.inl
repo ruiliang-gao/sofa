@@ -101,7 +101,7 @@ void RemovePrimitivePerformer<DataTypes>::execute()
             picked.body->getContext()->get(topologyModifier);
 
             // Problem of type takeng by functions called: Converting selectedElem <unsigned int> in <int>
-            helper::vector<Index> ElemList_int;
+            helper::vector<int> ElemList_int;
             ElemList_int.resize(selectedElem.size());
             for (unsigned int i = 0; i<selectedElem.size(); ++i)
                 ElemList_int[i] = selectedElem[i];

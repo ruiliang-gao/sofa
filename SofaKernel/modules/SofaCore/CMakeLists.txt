@@ -262,6 +262,9 @@ endif()
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaHelper SofaDefaultType)
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.."
+       ${CMAKE_CURRENT_SOURCE_DIR}/../SofaDefaultType/src
+)
 
 sofa_add_targets_to_package(
     PACKAGE_NAME SofaFramework

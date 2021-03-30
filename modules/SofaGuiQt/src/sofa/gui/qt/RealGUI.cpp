@@ -144,7 +144,7 @@ using sofa::gui::qt::DocBrowser;
 using sofa::core::ExecParams;
 
 #include <boost/program_options.hpp>
-
+#include <windows.h>
 
 namespace sofa
 {
@@ -159,6 +159,7 @@ namespace gui
 namespace qt
 {
 
+   
 
 using sofa::core::objectmodel::BaseObject;
 using namespace sofa::helper::system::thread;

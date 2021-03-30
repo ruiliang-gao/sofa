@@ -207,6 +207,12 @@ public:
     virtual void enableDepthTest() = 0;
     virtual void disableDepthTest() = 0;
 
+
+    //UF - DS
+    virtual void enableStencilTest() = 0;
+    virtual void disableStencilTest() = 0;
+
+
     /// @name States (save/restore)
     virtual void saveLastState() = 0;
     virtual void restoreLastState() = 0;

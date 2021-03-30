@@ -1357,6 +1357,97 @@ void DrawToolGL::writeOverlayText( int x, int y, unsigned fontSize, const RGBACo
 
 }
 
+//UF - DS
+typedef sofa::helper::fixed_array<float, 3> Float3;
+typedef sofa::helper::fixed_array<float, 2> Float2;
+
+void DrawToolGL::DrawTextureQuad(int x, int y, int width, int height, sofa::helper::gl::Texture* InTexture, bool bFromRightCorner)
+{
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
+    glDepthMask(GL_FALSE);
+    glDisable(GL_DEPTH_TEST);
+
+    glPushAttrib(GL_LIGHTING_BIT);
+    glEnable(GL_COLOR_MATERIAL);
+
+    glPushAttrib(GL_ENABLE_BIT);
+
+    glDisable(GL_CULL_FACE);
+
+    glColor4f(1, 1, 1, 1);
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, viewport[2], 0, viewport[3]);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    if (bFromRightCorner)
+    {
+        glTranslated(viewport[2] - x - width, y, 0);
+        glScalef(width, height, 1.0f);
+    }
+    else
+    {
+        glTranslated(x, y, 0);
+        glScalef(width, height, 1.0f);
+    }
+
+    {
+        glPushAttrib(GL_TEXTURE_BIT);
+        glEnable(GL_TEXTURE_2D);
+
+        InTexture->bind();
+
+        Float3 Quad[4];
+        Quad[0] = Float3(0, 0, 0);
+        Quad[1] = Float3(0, 1, 0);
+        Quad[2] = Float3(1, 1, 0);
+        Quad[3] = Float3(1, 0, 0);
+
+        Float2 UVs[4];
+        UVs[0] = Float2(0, 0);
+        UVs[1] = Float2(0, 1);
+        UVs[2] = Float2(1, 1);
+        UVs[3] = Float2(1, 0);
+
+        glEnable(GL_ALPHA_TEST);
+        glAlphaFunc(GL_GREATER, 0.0);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glBegin(GL_QUADS);
+        for (int j = 0; j < 4; j++)
+        {
+            glTexCoord2fv(UVs[j].data());
+            glVertex3fv(Quad[j].data());
+        }
+        glEnd();
+
+        glDisable(GL_ALPHA_TEST);
+
+        InTexture->unbind();
+        glPopAttrib();
+    }
+
+    glPopAttrib(); // GL_ENABLE_BIT
+    glPopAttrib(); // GL_LIGHTING_BIT
+
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+
+}
+
+
 void DrawToolGL::enableBlending()
 {
     glEnable(GL_BLEND);
@@ -1396,6 +1487,16 @@ void DrawToolGL::disableDepthTest()
     glDisable(GL_DEPTH_TEST);
 }
 
+
+//UF - DS
+void DrawToolGL::enableStencilTest()
+{
+    glEnable(GL_STENCIL_TEST);
+}
+void DrawToolGL::disableStencilTest()
+{
+    glDisable(GL_STENCIL_TEST);
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DrawToolGL::draw3DText(const Vector3 &p, float scale, const RGBAColor &color, const char* text)
 {

@@ -27,7 +27,11 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.."
 	${CMAKE_CURRENT_SOURCE_DIR}/sphinxlib/sphinxbase
 	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaHelper/src
 	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaCore/src
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaBaseVisual/src
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaSimulationCore/src
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaUserInteraction/src
 
+	
 	)
 
 install(TARGETS ${PROJECT_NAME}
