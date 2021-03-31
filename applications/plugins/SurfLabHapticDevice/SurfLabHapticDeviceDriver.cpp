@@ -27,6 +27,7 @@
 #  include <boost/date_time/posix_time/posix_time.hpp> 
 #endif
 
+#pragma comment(lib, "Ws2_32.lib")
 //sensable namespace
 
 using std::cout;

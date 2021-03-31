@@ -21,15 +21,20 @@ find_package(SofaGeneral REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_CONNECTINGTISSUE")
-target_link_libraries(${PROJECT_NAME} SofaComponentGeneral)
+target_link_libraries(${PROJECT_NAME}  SofaHelper SofaDefaultType SofaBaseVisual SofaUserInteraction)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.."
-${CMAKE_CURRENT_SOURCE_DIR}../../..//SofaKernel/modules/SofaCore/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaCore/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaHelper/src
-${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaSimulationTree/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules
+${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaDefaultType/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaSimulationCore/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaBaseMechanics/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaOpenglVisual/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaUserInteraction/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaConstraint/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaGeneralDeformable/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaFramework/src
+${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaHelper/src
 
 	)
 

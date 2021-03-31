@@ -21,15 +21,20 @@ find_package(SofaGeneral REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_SURFLABSPEECHRECOGNITION")
-target_link_libraries(${PROJECT_NAME} SofaComponentGeneral ${CMAKE_CURRENT_SOURCE_DIR}/sphinxlib/SphinxLib.lib)
+target_link_libraries(${PROJECT_NAME} SofaHelper SofaCore SofaUserInteraction {CMAKE_CURRENT_SOURCE_DIR}/sphinxlib/SphinxLib.lib)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.." 
 	${CMAKE_CURRENT_SOURCE_DIR}/sphinxlib 
 	${CMAKE_CURRENT_SOURCE_DIR}/sphinxlib/sphinxbase
 	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaHelper/src
 	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaCore/src
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaFramework/src
 	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaBaseVisual/src
 	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaSimulationCore/src
-	${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaUserInteraction/src
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaUserInteraction/src
+	${CMAKE_CURRENT_SOURCE_DIR}/../../SofaKernel/modules/SofaHelper/src
+	${CMAKE_CURRENT_SOURCE_DIR}/../SofaKernel/modules/SofaHelper/src
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../../SofaKernel/modules/SofaHelper/src
+	
 
 	
 	)

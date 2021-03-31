@@ -123,7 +123,6 @@ set(HEADER_FILES
     ${SRC_ROOT}/viewer/EngineBackend.h
     ${SRC_ROOT}/viewer/VisualModelPolicy.h
     ${SRC_ROOT}/GenericWidget.h
-    ${SRC_ROOT}/ui_report_score.h
     )
 set(SOURCE_FILES
     ${SRC_ROOT}/AddObject.cpp

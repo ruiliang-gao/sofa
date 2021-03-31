@@ -3,6 +3,7 @@
 ******************************************************************************/
 #pragma once 
 
+
 #define SURFLAB_DRIVER_NAME_S "SurfLabHapticDevice"
 
 
@@ -44,6 +45,8 @@
 #include <math.h>
 
 #include "SurfLabHapticInstruments.h"
+
+#pragma comment(lib, "winsock.lib")
 //TODO add UDP server
 //#include <winsock2.h>
 namespace SurfLab
