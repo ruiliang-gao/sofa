@@ -101,8 +101,8 @@ typedef sofa::component::controller::NewOmniDriver HAPTIC_DRIVER;
 #include <windows.h>
 #include <MMSystem.h>
 //#include <chrono>
-#include <sofa/gui/qt/report.h>
-#include <sofa/gui/qt/surflablogin.h>
+//#include <sofa/gui/qt/report.h>
+//#include <sofa/gui/qt/surflablogin.h>
 
 namespace sofa
 {
@@ -221,8 +221,8 @@ namespace sofa
 				static int numOfElementsCutonVeins;
 				static int numOfElementsCutonFat;
 
-				sofa::gui::qt::SofaProcedureReport* scoring = sofa::gui::qt::SofaProcedureReport::getInstance();
-				sofa::gui::qt::SurfLabLogin* login = sofa::gui::qt::SurfLabLogin::getInstance();
+				//sofa::gui::qt::SofaProcedureReport* scoring = sofa::gui::qt::SofaProcedureReport::getInstance();
+				//sofa::gui::qt::SurfLabLogin* login = sofa::gui::qt::SurfLabLogin::getInstance();
 
 			private:
 				void updateTool();

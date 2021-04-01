@@ -38,7 +38,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.."
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILES} )
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_SURFLABHAPTICDEVICE")
-target_link_libraries(${PROJECT_NAME} SofaCore SofaSimulation SofaHelper SofaHaptics SofaOpenglVisual Sensable ${OPENHAPTICS_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} SofaCore SofaSimulation SofaHelper SofaHaptics SofaOpenglVisual ${OPENHAPTICS_LIBRARIES} ${Boost_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME}
         COMPONENT SurfLabHapticDevice_libraries

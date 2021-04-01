@@ -741,13 +741,13 @@ void MarchingCubeUtility::run ( unsigned char *data, const float isolevel,
     vector<Vector3> &vertices                 = m.getVertices();
     auto &facets = m.getFacets();
 
-    vector< PointID >       triangles;
+    vector< uint32_t >       triangles;
 
     //Do the Marching Cube
     run ( data, isolevel, triangles, vertices );
 
     const auto numTriangles = triangles.size() /3;
-    facets.resize ( numTriangles, vector< vector < PointID > > ( 3, vector<PointID> ( 3, 0 ) ) );
+    facets.resize ( numTriangles, vector< vector < uint32_t > > ( 3, vector<uint32_t> ( 3, 0 ) ) );
     for ( size_t i=0; i<triangles.size(); /*i+=3*/ )
     {
         auto &vertNormTexIndices = facets[i/3];

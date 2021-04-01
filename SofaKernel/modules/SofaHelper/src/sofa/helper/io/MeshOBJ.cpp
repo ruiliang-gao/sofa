@@ -60,8 +60,8 @@ void MeshOBJ::init (std::string filename)
 
 void MeshOBJ::readOBJ (std::istream &stream, const std::string &filename)
 {
-    vector< vector<PointID> > vertNormTexIndices;
-    vector<PointID>vIndices, nIndices, tIndices;
+    vector< vector<uint32_t> > vertNormTexIndices;
+    vector<uint32_t>vIndices, nIndices, tIndices;
     int vtn[3];
     Vec3d result;
     Vec3d texCoord;

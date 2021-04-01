@@ -23,20 +23,20 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 #include "HapticManager.h"
-#include "GUIManager.h"
-#include "BaseGUI.h"
-#include "RealGUI.h"
-#include <sofa/gui/qt/report.h>
-#include <sofa/gui/qt/surflablogin.h>
+#include <sofa/gui/GUIManager.h>
+#include <sofa/gui/BaseGUI.h>
+#include <sofa/gui/qt/RealGUI.h>
+//#include <sofa/gui/qt/report.h>
+//#include <sofa/gui/qt/surflablogin.h>
 #include <sofa/core/visual/DrawToolGL.h>
 #include <sofa/core/objectmodel/GUIEvent.h>
 
 
-using sofa::gui::qt::SofaProcedureReport;
-using sofa::gui::qt::SurfLabLogin;
+//using sofa::gui::qt::SofaProcedureReport;
+//using sofa::gui::qt::SurfLabLogin;
 using sofa::gui::GUIManager;
 using sofa::gui::BaseGUI;
-using sofa::gui::RealGui;
+using sofa::gui::qt::RealGUI;
 bool usingAA = false;
 #define int2string(a) std::to_string(a)
 using namespace std;
@@ -268,7 +268,7 @@ namespace sofa
 					programStartDate = std::string(buffer);
 					//login = new SurfLabLogin(NULL);
 					//login = SurfLabLogin(NULL);
-					login->show();
+					//login->show();
 					//scoring = new SofaProcedureReport(NULL);
 					//scoring->hide();
 				}
@@ -321,9 +321,9 @@ namespace sofa
 						std::cout << "numOfElementsCutonFat: " << numOfElementsCutonFat - numOfElementsCutonVeins << std::endl;
 
 						//score report
-						scoring->populate(login->studentName, programStartDate);
-						scoring->show();
-						scoring->emailReport(login->studentEmail.toStdString(), login->destinationEmail.toStdString());
+						//scoring->populate(login->studentName, programStartDate);
+						//scoring->show();
+						//scoring->emailReport(login->studentEmail.toStdString(), login->destinationEmail.toStdString());
 					}
 				}
 			}
@@ -531,7 +531,7 @@ namespace sofa
 
 					const helper::vector< Vector3 >& vertices = clipperMesh->getVertices(); // get model of clip  triangulated
 					const helper::vector< Vector3 >& normals = clipperMesh->getNormals();
-					const helper::vector< helper::vector < helper::vector <int> > >& facets = clipperMesh->getFacets();
+					const helper::vector< helper::vector < helper::vector <uint32_t> > >& facets = clipperMesh->getFacets();
 					vector< Vector3 > vv(vertices.size()); // modifiable vertex array
 					vector< Vector3 > nn(normals.size());
 
@@ -1383,7 +1383,7 @@ namespace sofa
 							wchar_t wfile[100];
 							std::mbstowcs(wfile, filestr.c_str(), filestr.length());
 							LPCWSTR filename = wfile;
-							PlaySound(filename, NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT);
+							//PlaySound(filename, NULL, SND_LOOP | SND_ASYNC | SND_NODEFAULT);
 						}
 						if (toolState.buttonPressedCount >= 30) //check time duration of pressing down, TODO: adapt to framerates
 						{
@@ -1397,7 +1397,7 @@ namespace sofa
 						if (burnEffectNode != nullptr && burnEffectNode->isActive())
 						{
 							burnEffectNode->setActive(false);
-							PlaySound(NULL, NULL, 0);
+							//PlaySound(NULL, NULL, 0);
 						}
 					}
 

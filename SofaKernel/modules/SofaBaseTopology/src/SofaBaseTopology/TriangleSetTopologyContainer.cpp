@@ -508,7 +508,7 @@ const sofa::helper::vector<TriangleSetTopologyContainer::EdgesInTriangle> &Trian
     return m_edgesInTriangle;
 }
 
-const TriangleSetTopologyContainer::TrianglesAroundVertex& TriangleSetTopologyContainer::getTrianglesAroundVertex(PointID id)
+const TriangleSetTopologyContainer::TrianglesAroundVertex& TriangleSetTopologyContainer::getTrianglesAroundVertex(uint32_t id)
 {
     if (id < m_trianglesAroundVertex.size())
         return m_trianglesAroundVertex[id];

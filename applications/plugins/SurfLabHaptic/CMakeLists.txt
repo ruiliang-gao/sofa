@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(SurfLabHaptic)
 
+
 if((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang"))
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
@@ -18,13 +19,16 @@ set(SOURCE_FILES
 	)
 
 set(README_FILES SurfLabHaptic.txt)
-
+find_package(OpenHaptics)
 find_package(SofaGeneral REQUIRED)
+
+include_directories(${OPENHAPTICS_INCLUDE_DIR})
+include_directories(${OPENHAPTICS_UTIL_INCLUDE_DIR})
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_SURFLABHAPTIC")
 
-target_link_libraries(${PROJECT_NAME}  ${OPENHAPTICS_LIBRARIES} Sensable SofaGuiCommon SofaGuiQt)
+target_link_libraries(${PROJECT_NAME} SofaOpenglVisual SofaGeneralDeformable SofaConstraint SofaHaptics SofaCore SofaGuiCommon SofaGuiQt ${OPENHAPTICS_LIBRARIES} ${Boost_LIBRARIES})
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.."
 
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaGuiQt/src
