@@ -86,6 +86,6 @@ namespace sofa {
 			return rootNode;
 		}
 
-		static SceneLoader* defaultLuaSceneLoader = SceneLoaderFactory::getInstance()->addEntry(new LuaSceneLoader());
+		//static SceneLoader* defaultLuaSceneLoader = SceneLoaderFactory::getInstance()->addEntry(new LuaSceneLoader());
 	}
 }

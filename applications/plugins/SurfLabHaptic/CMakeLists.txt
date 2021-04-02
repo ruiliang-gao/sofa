@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(SurfLabHaptic)
 
-
+find_package(OpenHaptics)
+find_package(SofaGeneral REQUIRED)
 if((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU") OR (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang"))
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
@@ -19,8 +20,7 @@ set(SOURCE_FILES
 	)
 
 set(README_FILES SurfLabHaptic.txt)
-find_package(OpenHaptics)
-find_package(SofaGeneral REQUIRED)
+
 
 include_directories(${OPENHAPTICS_INCLUDE_DIR})
 include_directories(${OPENHAPTICS_UTIL_INCLUDE_DIR})

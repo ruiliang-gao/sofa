@@ -49,9 +49,10 @@ sofa_add_plugin(LeapMotion LeapMotion)
 sofa_add_plugin(Geomagic Geomagic)
 sofa_add_plugin(SofaAssimp SofaAssimp) # ColladaSceneLoader Depends on Flexible and image
 sofa_add_plugin(SurfLabConnectingTissue SurfLabConnectingTissue)
-sofa_add_plugin(SurfLabSpeechRecognition SurflabSpeechRecognition)
+sofa_add_plugin(SurfLabSpeechRecognition SurfLabSpeechRecognition)
 sofa_add_plugin(SurfLabHaptic SurfLabHaptic)
 sofa_add_plugin(SurfLabHapticDevice SurfLabHapticDevice)
+sofa_add_plugin(SaLua SaLua)
 sofa_add_plugin_experimental(PSL PSL)
 
 if((${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU") AND (${CMAKE_SYSTEM_NAME} MATCHES "Linux"))

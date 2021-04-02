@@ -72,7 +72,7 @@ set(README_FILES salua.txt)
 include_directories(${LUA_SRC_DIR})
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_SALUA")
-target_link_libraries(${PROJECT_NAME} lua SofaCore SofaComponentGeneral SofaSimulationCommon)
+target_link_libraries(${PROJECT_NAME} lua SofaCore SofaUserInteraction SofaHelper SofaSimulationCommon SofaSimulation SofaSimulationCore)
 
 install(TARGETS ${PROJECT_NAME} lua
         RUNTIME DESTINATION bin

@@ -4,11 +4,13 @@ project(Sensable)
 find_package(SofaHaptics REQUIRED)
 find_package(SofaOpenglVisual REQUIRED)
 find_package(SofaGeneral REQUIRED)
+find_package(OpenHaptics)
 
 set(HEADER_FILES
     EnslavementForceFeedback.h
     NewOmniDriver.h
     OmniDriver.h
+    initSensable.h
 )
 
 set(SOURCE_FILES
@@ -27,7 +29,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/..")
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_SENSABLEPLUGIN")
-target_link_libraries(${PROJECT_NAME} SofaHaptics SofaOpenglVisual ${OPENHAPTICS_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} SofaHaptics SofaOpenglVisual SofaGuiQt ${OPENHAPTICS_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME}
         COMPONENT Sensable_libraries

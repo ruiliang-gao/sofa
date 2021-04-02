@@ -34,6 +34,7 @@
 #include <sofa/core/objectmodel/MouseEvent.h>
 
 #include <sofa/helper/system/thread/CTime.h>
+#include <sofa/helper/system/atomic.h>
 #ifdef SOFA_HAVE_BOOST
 #include <boost/thread.hpp>
 #endif
