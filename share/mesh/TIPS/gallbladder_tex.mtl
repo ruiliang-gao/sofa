@@ -1,0 +1,13 @@
+# Blender MTL File: 'cross_cholecystectomy - Objs.blend'
+# Material Count: 1
+
+newmtl Material::Mat.001
+Ns 37.254902
+Ka 0.086486 0.086486 0.086486
+Kd 0.309309 0.241668 0.052044
+Ks 0.673848 0.673848 0.673848
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\Ruiliang\\Documents\\TIPS\\sofa1216tips\\src\\share\\textures\\gallbladder_tex2d.png

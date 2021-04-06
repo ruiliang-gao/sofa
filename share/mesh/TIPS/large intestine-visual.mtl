@@ -1,0 +1,13 @@
+# Blender MTL File: 'ONE_TIPS.blend'
+# Material Count: 1
+
+newmtl colon.012
+Ns 66.666667
+Ka 0.300000 0.300000 0.300000
+Kd 0.689999 0.301215 0.211694
+Ks 1.000000 0.975160 0.902816
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\Ruiliang\Google Drive\appendec\bcolono.jpg

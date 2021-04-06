@@ -1,0 +1,23 @@
+#
+# Wavefront material file
+# Converted by Meshlab Group
+#
+
+newmtl material_0
+Ka 0.200000 0.200000 0.200000
+Kd 0.262745 0.207843 0.043137
+Ks 1.000000 1.000000 1.000000
+Tr 1.000000
+illum 2
+Ns 0.000000
+map_Kd C:\Users\Ruiliang\Documents\TIPS\sofa1216tips\src\share\textures\gallbladder_tex2d.png
+
+newmtl material_1
+Ka 0.200000 0.200000 0.200000
+Kd 0.262745 0.207843 0.043137
+Ks 1.000000 1.000000 1.000000
+Tr 1.000000
+illum 2
+Ns 0.000000
+map_Kd C:\\Users\\Ruiliang\\Documents\\TIPS\\sofa1216tips\\src\\share\\textures\\gallbladder_tex2d.png
+

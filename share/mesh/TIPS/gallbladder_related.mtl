@@ -1,0 +1,23 @@
+# Blender MTL File: 'ONE_TIPS.blend'
+# Material Count: 2
+
+newmtl gall.001
+Ns 45.098039
+Ka 0.051020 0.051020 0.051020
+Kd 0.390076 0.304914 0.065945
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\Users\Documents\TIPS\sofa1216tips\src\share\textures\gallbladder_tex2d.png
+
+newmtl gall.001_NONE
+Ns 45.098039
+Ka 0.051020 0.051020 0.051020
+Kd 0.390076 0.304914 0.065945
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1

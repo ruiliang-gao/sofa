@@ -1,0 +1,24 @@
+# Blender MTL File: 'ONE_TIPS.blend'
+# Material Count: 2
+
+newmtl Stomach.002
+Ns 76.470588
+Ka 0.108108 0.108108 0.108108
+Kd 0.605406 0.301852 0.313610
+Ks 0.503826 0.355287 0.405777
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd E:\cise\homes\jberger\Downloads\chole\stom.jpg
+
+newmtl Stomach.002_stom.jpg.005
+Ns 76.470588
+Ka 0.108108 0.108108 0.108108
+Kd 0.605406 0.301852 0.313610
+Ks 0.503826 0.355287 0.405777
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd E:\cise\homes\jberger\Downloads\chole\stom.jpg
