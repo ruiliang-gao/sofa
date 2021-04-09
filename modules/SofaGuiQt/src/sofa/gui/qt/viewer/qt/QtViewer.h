@@ -138,6 +138,8 @@ private:
     double lastProjectionMatrix[16];
     double lastModelviewMatrix[16];
 
+    bool circularview; // TIPS circular camera view
+
 public:
 
     static const std::string VIEW_FILE_EXTENSION;
@@ -279,7 +281,7 @@ private:
     void	DisplayMenu(void);
     virtual void	drawScene() override ;
     void  MakeStencilMask();
-
+    void  MakeCircularStencilMask();//For tips Laproscopic surgical simulation
     void	ApplySceneTransformation(int x, int y);
     //int		handle(int event);	// required by FLTK
 
