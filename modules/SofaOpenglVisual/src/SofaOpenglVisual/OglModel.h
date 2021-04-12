@@ -84,6 +84,8 @@ protected:
     GLenum blendEq, sfactor, dfactor;
 
     helper::gl::Texture *tex; //this texture is used only if a texture name is specified in the scn
+    bool is Tex3d; //true while using 3d texture
+    GLuint target; //tex2d or tex3d
     GLuint vbo, iboEdges, iboTriangles, iboQuads;
     bool VBOGenDone, initDone, useEdges, useTriangles, useQuads, canUsePatches;
     size_t oldVerticesSize, oldNormalsSize, oldTexCoordsSize, oldTangentsSize, oldBitangentsSize, oldEdgesSize, oldTrianglesSize, oldQuadsSize;

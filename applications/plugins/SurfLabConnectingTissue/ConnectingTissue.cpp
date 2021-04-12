@@ -50,7 +50,8 @@ namespace sofa
 				, object2(initLink("object2", "Second object to connect to"))
 				, useConstraint(initData(&useConstraint,true,"useConstraint", "Second object to connect to"))
 				, connectingStiffness(initData(&connectingStiffness, 3000.0, "connectingStiffness", "stiffness of springs if useConstraint is false"))
-        , naturalLength(initData(&naturalLength, 0.5, "naturalLength", "natural length of springs as a percentage of the 2-node-distance"))
+				, naturalLength(initData(&naturalLength, 0.5, "naturalLength", "natural length of springs as a ratio of the 2-node-distance"))
+				, thresTearing(initData(&thresTearing, 0.0, "thresholdTearing", "threshold of the deform ratio for tearing the spring "))
         
 			{
 				this->f_listening.setValue(true);
@@ -95,8 +96,8 @@ namespace sofa
 					MMapping::SPtr mapping = sofa::core::objectmodel::New<MMapping>(mstate2, mstate.get(), mapper);
 					child->addObject(mapping);
 
-					TConstraint::SPtr constraints;
-					TSpringFF::SPtr ff;
+					/*TConstraint::SPtr constraints;
+					TSpringFF::SPtr ff;*/
 					if (useConstraint.getValue())
 						constraints = sofa::core::objectmodel::New<TConstraint>(mstate1, mstate.get());
 					else
@@ -188,9 +189,13 @@ namespace sofa
 							if (useConstraint.getValue())
 								constraints->addContact(-normal, P, Q, dist, index1, mapIdx, P, Q);
 							else
-              {
-                ff->addSpring(index1, mapIdx, connectingStiffness.getValue(), 0.0, (Q - P)*naturalLength.getValue());
-              }	
+							{
+								if (thresTearing.getValue() > 1)
+									 ff->addSpring(index1, mapIdx, connectingStiffness.getValue(), 0.0, (Q - P) * naturalLength.getValue(), thresTearing.getValue());
+								else
+									 ff->addSpring(index1, mapIdx, connectingStiffness.getValue(), 0.0, (Q - P) * naturalLength.getValue());
+								
+							}
 
 							projPnts.push_back(Q);
 						}
@@ -213,7 +218,7 @@ namespace sofa
 						}
 					}
 					
-					
+					// add to SolverNode
 					if (useConstraint.getValue())
 						this->getContext()->addObject(constraints);
 					else

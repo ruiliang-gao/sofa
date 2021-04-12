@@ -1505,7 +1505,7 @@ namespace sofa
 						sofa::simulation::Node* surfNode = dynamic_cast<simulation::Node*>(surf->getContext());
 						if (surf->hasTag(core::objectmodel::Tag("HapticSurfaceVein"))) {
 							std::string veinName = surfNode->getFirstParent()->getFirstParent()->getName();
-							double safetyForceThreshold = 10.0;//default value is high enough
+							double safetyForceThreshold = 100;//default value is high enough
 							std::string keywordThreshold = "SafetyForceThreshold_";
 							sofa::core::objectmodel::TagSet tagSet = surf->getTags();
 							std::set<sofa::core::objectmodel::Tag>::iterator it;

@@ -21,7 +21,8 @@ find_package(SofaGeneral REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_CONNECTINGTISSUE")
-target_link_libraries(${PROJECT_NAME} SofaCore SofaGeneralDeformable SofaConstraint SofaHelper SofaDefaultType SofaBaseVisual SofaUserInteraction)
+target_link_libraries(${PROJECT_NAME} SofaCore SofaOpenglVisual SofaGeneralDeformable SofaConstraint
+SofaHelper SofaDefaultType SofaBaseVisual SofaUserInteraction SofaBaseMechanics SofaSimulationTree)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.."
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaCore/src
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../SofaKernel/modules/SofaHelper/src

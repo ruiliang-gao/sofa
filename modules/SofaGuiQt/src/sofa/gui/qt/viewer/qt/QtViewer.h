@@ -138,7 +138,7 @@ private:
     double lastProjectionMatrix[16];
     double lastModelviewMatrix[16];
 
-    bool circularview; // TIPS circular camera view
+    bool circularView; // TIPS circular camera view
 
 public:
 

@@ -812,7 +812,7 @@ void QtViewer::drawScene(void)
 
     //TIPS stencil test
    
-    if (circularview) {
+    if (circularView) {
         glEnable(GL_STENCIL_TEST);
         MakeCircularStencilMask();
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);

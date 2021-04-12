@@ -30,6 +30,8 @@
 
 #include <SofaBaseTopology/HexahedronSetTopologyContainer.h>
 #include <SofaBaseTopology/TopologyData.h>
+#include <SofaBaseTopology/HexahedronSetTopologyModifier.h>
+#include <SofaBoundaryCondition/FixedConstraint.h>
 
 namespace sofa::component::forcefield
 {
@@ -115,8 +117,18 @@ protected:
         // large displacement method
         helper::fixed_array<Coord,8> rotatedInitialElements;
 
-        Transformation rotation;
+        Transformation rotation; // element rotation at the deformed space
         ElementStiffness stiffness;
+
+        // UF TIPS - SC
+         /// Plasticity Deformation
+        Real plasticYieldThreshold;
+        Real plasticMaxThreshold;
+        Real restVolume; //inital rest element volume
+        Transformation F_C; //Cell center deformation gradient
+        Transformation materialDeformationInverse; ///inverse of (J of reference X over rest x')
+        helper::fixed_array<Coord, 8> elementPlasticOffset;/// element plastic offset per vertex at current timestep
+        bool needsToUpdateRestMesh;
 
         HexahedronInformation() {}
 
@@ -186,6 +198,37 @@ public:
     Data<std::string> f_method; ///< the computation method of the displacements
     Data<Real> f_poissonRatio;
     Data<Real> f_youngModulus;
+
+    /*********************Plasticity Method Reference************************
+   Author    Bargteil, Adam W., et al.
+   Title     "A finite element method for animating large viscoplastic flow."
+   Journal   ACM transactions on graphics(TOG) 26.3 (2007) : 16 - es.
+    ******************Ruiliang(rgao15@ufl.edu)******************************/
+    /// Plasticity Material Parameters
+    Data<Real> f_plasticMaxThreshold;
+    Data<Real> f_plasticYieldThreshold; ///< Plastic Yield Threshold (on the deformation gradient)
+    Data<Real> f_plasticCreep; ///< plastic flow rate
+    Data<Real> f_hardeningParam;/// work hardening params (refer to K.alpha in the paper)
+    Data<bool> f_useVertexPlasticity; //if true, using vertex+center F for plasticity 
+    Data<bool> f_preserveElementVolume; //if true: preserve element volume under plasticity deformation
+    Data<bool> f_updateElementStiffness; //if true, element stiffness matrix will be updated when necessary
+    helper::vector< Transformation > F_V; //Vertex Deformation
+    helper::vector< Coord > restStateOffsets;//restState plastic offsets for the current time step
+    Data<sofa::helper::vector<Real> > debugData; ///< debugData
+    ///Plasticity Related Methods
+    Mat33 computeCenterJacobian(const helper::fixed_array<Coord, 8>& coords); ///< Compute the center value jacobian from the input hexahedral element
+    Mat33 computeJacobian(const helper::fixed_array<Coord, 8>& coords, Real x, Real y, Real z); ///< Compute the exact jacobian located at the reference coords (x,y,z) \in [-1,1]^3
+    Real computeElementVolume(const helper::fixed_array<Coord, 8>& coords); //compute the exact hex element volume
+    Real totalVolume;
+    Real d_currentVolume; //For Debugging : compute total volume at current timestep
+    Data<int> f_debugPlasticMethod; //for debugging
+    bool d_UpdateRestStatePerElement = true;
+    bool needsToUpdateRestMesh = false;
+    void computeF_C(RDataRefVecCoord& p, int i); //compute and store F_C for hex element i
+    void computeAllF_V(); //compute and store F_V (vertex deformation gradient) for hex element i
+    void updateRestStateLarge();//update the rest state plastic offsets per vertex for the current time step using large method
+    void updateRestStatePolar();//update the rest state plastic offsets per vertex, using Polar method
+
     /// container that stotes all requires information for each hexahedron
     topology::HexahedronData<sofa::helper::vector<HexahedronInformation> > hexahedronInfo;
 
@@ -211,8 +254,9 @@ public:
 protected:
     HFFHexahedronHandler* hexahedronHandler;
 
-    topology::HexahedronSetTopologyContainer* _topology;
-
+    //topology::HexahedronSetTopologyContainer* _topology;
+    sofa::core::topology::BaseMeshTopology* _topology;
+    helper::vector<unsigned int> _fixedIndices;
     defaulttype::Mat<8,3,int> _coef; ///< coef of each vertices to compute the strain stress matrix
 };
 
