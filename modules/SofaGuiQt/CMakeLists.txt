@@ -107,7 +107,8 @@ set(MOC_HEADER_FILES
     ${SRC_ROOT}/SofaVideoRecorderManager.h
     ${SRC_ROOT}/SofaPluginManager.h
     ${SRC_ROOT}/WDoubleLineEdit.h    
-    ${SRC_ROOT}/report_score.h
+    ${SRC_ROOT}/report.h
+    ${SRC_ROOT}/surflablogin.h
     )
 set(HEADER_FILES
     ${SRC_ROOT}/config.h.in
@@ -132,7 +133,6 @@ set(SOURCE_FILES
     ${SRC_ROOT}/FileManagement.cpp
     ${SRC_ROOT}/GenGraphForm.cpp
     ${SRC_ROOT}/GraphListenerQListView.cpp
-    ${SRC_ROOT}/report_score.cpp
     ${SRC_ROOT}/LinkWidget.cpp
     ${SRC_ROOT}/MaterialDataWidget.cpp
     ${SRC_ROOT}/RGBAColorDataWidget.cpp
@@ -161,6 +161,9 @@ set(SOURCE_FILES
     ${SRC_ROOT}/WDoubleLineEdit.cpp
     ${SRC_ROOT}/viewer/SofaViewer.cpp
     ${SRC_ROOT}/viewer/VisualModelPolicy.cpp    
+    ${SRC_ROOT}/surflablogin.cpp
+    ${SRC_ROOT}/report.cpp
+    
 )
 set(UI_FILES
     ${SRC_ROOT}/BaseGenGraphForm.ui
@@ -169,7 +172,8 @@ set(UI_FILES
     ${SRC_ROOT}/MouseManager.ui
     ${SRC_ROOT}/PluginManager.ui
     ${SRC_ROOT}/VideoRecorderManager.ui    
-    ${SRC_ROOT}/report_score.ui
+    ${SRC_ROOT}/report.ui
+    ${SRC_ROOT}/surflablogin.ui
 )
 
 if(SOFA_DUMP_VISITOR_INFO)

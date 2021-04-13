@@ -9,8 +9,8 @@
 #include <windows.h>
 #include <sofa/helper/AdvancedTimer.h>
 #include <sofa/helper/system/FileRepository.h>
-#include "SofaGUIQt.h"
-//#include <sofa/gui/qt/report.ui>
+#include "SofaGuiQt.h"
+#include <ui_report.h>
 
 class Ui_Report;
 

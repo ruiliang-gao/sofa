@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QString>
 #include <windows.h>
-#include "SofaGUIQt.h"
+#include "SofaGuiQt.h"
 #include <ui_surflablogin.h>
 
 class Ui_SurfLabLogin;

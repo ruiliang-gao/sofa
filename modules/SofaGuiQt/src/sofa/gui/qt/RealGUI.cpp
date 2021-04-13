@@ -58,7 +58,7 @@
 #include "QSofaStatWidget.h"
 #include "viewer/SofaViewer.h"
 
-#include "report_score.h"
+
 
 #include <sofa/gui/BaseViewer.h>
 #include <SofaSimulationCommon/xml/XML.h>
@@ -353,7 +353,6 @@ RealGUI::RealGUI ( const char* viewername)
       timerStep(nullptr),
       backgroundImage(nullptr),
       pluginManager_dialog(nullptr),
-      report(NULL),
       recentlyOpenedFilesManager(sofa::gui::BaseGUI::getConfigDirectoryPath() + "/runSofa.ini"),
       saveReloadFile(false),
       displayFlag(nullptr),
@@ -370,7 +369,7 @@ RealGUI::RealGUI ( const char* viewername)
 
     createPluginManager();
 
-    createReport();
+    
 
 
     createRecentFilesMenu(); // configure Recently Opened Menu
@@ -1192,10 +1191,6 @@ void RealGUI::showPluginManager()
     pluginManager_dialog->show();
 }
 
-void RealGUI::showReport()
-{
-    this->report->show();
-}
 
 
 //------------------------------------
@@ -1663,6 +1658,8 @@ void RealGUI::keyPressEvent ( QKeyEvent * e )
     case Qt::Key_Space:
     {
         playpauseGUI(!startButton->isChecked());
+        if (!isFullScreen() && !isMaximized())
+            showMaximized();
         break;
     }
     case Qt::Key_Backspace:
@@ -1822,17 +1819,7 @@ void RealGUI::createSofaWindowDataGraph()
 #endif
 }
 
-void RealGUI::createReport()
-{
-    report = new report_score();
-    report->hide();
-}
 
-void RealGUI::populateReport(std::string date)
-{
-    report = new report_score(date);
-    report->hide();
-}
 
 //------------------------------------
 

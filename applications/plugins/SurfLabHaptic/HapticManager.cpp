@@ -313,8 +313,7 @@ namespace sofa
 						std::cout << "GUIManager::GetCurrentGUIName()" << test << std::endl;
 						BaseGUI * thing = GUIManager::getGUI();
 						RealGUI * testreal = dynamic_cast<RealGUI*>(GUIManager::getGUI());
-						testreal->populateReport(programStartDate);
-						testreal->showReport();
+						
 						//finish the simulation and report
 						std::cout << "programCompletionTime: " << last_update_time << std::endl;
 						std::cout << "numOfElementsCutonVeins: " << numOfElementsCutonVeins << std::endl;

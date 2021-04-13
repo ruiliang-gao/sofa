@@ -32,7 +32,7 @@
 #include "QMenuFilesRecentlyOpened.h"
 #include "PickHandlerCallBacks.h"
 
-#include <ui_report_score.h>
+
 #include <sofa/gui/BaseGUI.h>
 #include <sofa/gui/ViewerFactory.h>
 
@@ -92,7 +92,7 @@ class QSofaStatWidget;
 class GraphListenerQListView;
 class DisplayFlagsDataWidget;
 class SofaPluginManager;
-class report_score;
+
 #ifdef SOFA_DUMP_VISITOR_INFO
 class WindowVisitor;
 class GraphVisitor;
@@ -222,7 +222,7 @@ protected:
     SofaPluginManager* pluginManager_dialog;
     QMenuFilesRecentlyOpened recentlyOpenedFilesManager;
 
-    report_score* report;
+    
     std::string simulation_name;
     std::string gnuplot_directory;
     std::string pathDumpVisitor;
@@ -305,7 +305,7 @@ public:
 
     void dropEvent(QDropEvent* event) override;
 
-    void populateReport(std::string date);
+    
 
 protected:
     /// init data member from RealGUI for the viewer initialisation in the GUI
@@ -351,7 +351,7 @@ private:
     void createPluginManager();
     void createSofaWindowDataGraph();
 
-    void createReport();
+    
     /// configure Recently Opened Menu
     void createRecentFilesMenu();
 
@@ -417,7 +417,7 @@ public slots:
     virtual void showVideoRecorderManager();
     virtual void showWindowDataGraph();
     virtual void toolsDockMoved();
-    virtual void showReport();
+    
 
 protected slots:
     /// Allow to dynamicly change viewer. Called when click on another viewer in GUI Qt viewer list (see viewerMap).

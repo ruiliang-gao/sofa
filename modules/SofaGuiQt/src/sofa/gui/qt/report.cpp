@@ -1,4 +1,3 @@
-#include "ui_report.h"
 #include "report.h"
 #include <fstream>
 
