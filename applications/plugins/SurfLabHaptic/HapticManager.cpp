@@ -26,14 +26,14 @@
 #include <sofa/gui/GUIManager.h>
 #include <sofa/gui/BaseGUI.h>
 #include <sofa/gui/qt/RealGUI.h>
-//#include <sofa/gui/qt/report.h>
-//#include <sofa/gui/qt/surflablogin.h>
+#include <sofa/gui/qt/report.h>
+#include <sofa/gui/qt/surflablogin.h>
 #include <sofa/core/visual/DrawToolGL.h>
 #include <sofa/core/objectmodel/GUIEvent.h>
 
 
-//using sofa::gui::qt::SofaProcedureReport;
-//using sofa::gui::qt::SurfLabLogin;
+using sofa::gui::qt::SofaProcedureReport;
+using sofa::gui::qt::SurfLabLogin;
 using sofa::gui::GUIManager;
 using sofa::gui::BaseGUI;
 using sofa::gui::qt::RealGUI;
@@ -268,7 +268,7 @@ namespace sofa
 					programStartDate = std::string(buffer);
 					//login = new SurfLabLogin(NULL);
 					//login = SurfLabLogin(NULL);
-					//login->show();
+					login->show();
 					//scoring = new SofaProcedureReport(NULL);
 					//scoring->hide();
 				}
@@ -321,9 +321,9 @@ namespace sofa
 						std::cout << "numOfElementsCutonFat: " << numOfElementsCutonFat - numOfElementsCutonVeins << std::endl;
 
 						//score report
-						//scoring->populate(login->studentName, programStartDate);
-						//scoring->show();
-						//scoring->emailReport(login->studentEmail.toStdString(), login->destinationEmail.toStdString());
+						scoring->populate(login->studentName, programStartDate);
+						scoring->show();
+						scoring->emailReport(login->studentEmail.toStdString(), login->destinationEmail.toStdString());
 					}
 				}
 			}

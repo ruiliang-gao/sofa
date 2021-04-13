@@ -54,7 +54,7 @@ namespace sofa
 				, thresTearing(initData(&thresTearing, 0.0, "thresholdTearing", "threshold of the deform ratio for tearing the spring "))
         
 			{
-				this->f_listening.setValue(true);
+				BaseObject::f_listening.setValue(true);
 			}
 
 			ConnectingTissue::~ConnectingTissue()
@@ -220,9 +220,9 @@ namespace sofa
 					
 					// add to SolverNode
 					if (useConstraint.getValue())
-						this->getContext()->addObject(constraints);
+						BaseObject::getContext()->addObject(constraints);
 					else
-						this->getContext()->addObject(ff);
+						BaseObject::getContext()->addObject(ff);
 				}
 
 			}

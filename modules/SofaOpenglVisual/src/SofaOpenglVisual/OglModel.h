@@ -32,6 +32,8 @@
 #include <sofa/defaulttype/Vec.h>
 #include <sofa/defaulttype/VecTypes.h>
 #include <SofaBaseVisual/VisualModelImpl.h>
+#include <sofa/helper/gl/FrameBufferObject.h>
+#include <SofaOpenglVisual/LightManager.h>
 
 #define   NB_MAX_TEXTURES 16
 
@@ -84,7 +86,7 @@ protected:
     GLenum blendEq, sfactor, dfactor;
 
     helper::gl::Texture *tex; //this texture is used only if a texture name is specified in the scn
-    bool is Tex3d; //true while using 3d texture
+    bool isTex3d; //true while using 3d texture
     GLuint target; //tex2d or tex3d
     GLuint vbo, iboEdges, iboTriangles, iboQuads;
     bool VBOGenDone, initDone, useEdges, useTriangles, useQuads, canUsePatches;

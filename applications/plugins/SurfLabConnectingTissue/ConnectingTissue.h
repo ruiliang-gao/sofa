@@ -39,6 +39,10 @@
 #include <sofa/core/ObjectFactory.h>
 #include <SofaGeneralDeformable/VectorSpringForceField.h>
 #include <SofaConstraint/BilateralInteractionConstraint.h>
+
+#include <SofaBaseMechanics/BarycentricMappers/BarycentricMapperMeshTopology.h>
+#include <SofaBaseTopology/TriangleSetTopologyContainer.h>
+
 namespace sofa
 {
 
