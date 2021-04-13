@@ -1411,10 +1411,10 @@ void DrawToolGL::DrawTextureQuad(int x, int y, int width, int height, sofa::help
         Quad[3] = Float3(1, 0, 0);
 
         Float2 UVs[4];
-        UVs[0] = Float2(0, 0);
-        UVs[1] = Float2(0, 1);
-        UVs[2] = Float2(1, 1);
-        UVs[3] = Float2(1, 0);
+        UVs[0] = Float2(0, 1);
+        UVs[1] = Float2(0, 0);
+        UVs[2] = Float2(1, 0);
+        UVs[3] = Float2(1, 1);
 
         glEnable(GL_ALPHA_TEST);
         glAlphaFunc(GL_GREATER, 0.0);

@@ -79,6 +79,8 @@ public:
 
     typedef sofa::defaulttype::Vec<2, float> TexCoord;
     typedef helper::vector<TexCoord> VecTexCoord;
+    typedef sofa::defaulttype::Vec<3, float> TexCoord3;
+    typedef helper::vector<TexCoord3> VecTexCoord3;
 
     using Index = sofa::Index;
     
@@ -114,9 +116,11 @@ public:
     Data<bool> m_handleDynamicTopology; ///< True if topological changes should be handled
     Data<bool> m_fixMergedUVSeams; ///< True if UV seams should be handled even when duplicate UVs are merged
     Data<bool> m_keepLines; ///< keep and draw lines (false by default)
+    Data<bool> m_genTex3d; ///< True if using 3d texture
 
     Data< VecCoord > m_vertices2; ///< vertices of the model (only if vertices have multiple normals/texcoords, otherwise positions are used)
     topology::PointData< VecTexCoord > m_vtexcoords; ///< coordinates of the texture
+    topology::PointData< VecTexCoord3 > m_vtexcoords3; ///< coordinates of the 3d texture
     topology::PointData< VecCoord > m_vtangents; ///< tangents for normal mapping
     topology::PointData< VecCoord > m_vbitangents; ///< tangents for normal mapping
     Data< VecVisualEdge > m_edges; ///< edges of the model
@@ -153,6 +157,9 @@ public:
     Data< TexCoord > m_scaleTex; ///< Scale of the texture
     Data< TexCoord > m_translationTex; ///< Translation of the texture
 
+    Data< TexCoord3 > m_scaleTex3;
+    Data< TexCoord3 > m_translationTex3;
+
     void applyTranslation(const SReal dx, const SReal dy, const SReal dz) override;
 
     /// Apply Rotation from Euler angles (in degree!)
@@ -165,6 +172,8 @@ public:
     virtual void applyUVTransformation();
 
     void applyUVTranslation(const Real dU, const Real dV);
+
+    void applyUVWTransformation();
 
     void applyUVScale(const Real su, const Real sv);
 
@@ -314,6 +323,16 @@ public:
         return m_vtangents.getValue();
     }
 
+    const VecTexCoord3& getVtexcoords3() const
+    {
+        return m_vtexcoords3.getValue();
+    }
+
+    void setVtexcoords3(VecTexCoord3* vt)
+    {
+        m_vtexcoords3.setValue(*vt);
+    }
+
     const VecCoord& getVbitangents() const
     {
         return m_vbitangents.getValue();
@@ -380,6 +399,7 @@ public:
     virtual void computeTangents();
     void computeBBox(const core::ExecParams* params, bool=false) override;
     virtual void computeUVSphereProjection();
+    virtual void computeTextureCoords3();
 
     virtual void updateBuffers() {}
 
