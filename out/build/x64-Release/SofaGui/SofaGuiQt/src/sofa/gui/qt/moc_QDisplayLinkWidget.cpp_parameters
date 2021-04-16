@@ -1,6 +1,0 @@
--D_USE_MATH_DEFINES
--DWIN32
---compiler-flavor=msvc
--o
-C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/out/build/x64-Release/SofaGui/SofaGuiQt/src/sofa/gui/qt/moc_QDisplayLinkWidget.cpp
-C:/Files/Sheamus/School/Senior/SeniorProject/sofa_1906_tips/src/modules/SofaGuiQt/src/sofa/gui/qt/QDisplayLinkWidget.h
