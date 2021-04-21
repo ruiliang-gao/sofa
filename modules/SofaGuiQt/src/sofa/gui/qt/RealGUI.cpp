@@ -1673,6 +1673,13 @@ void RealGUI::keyPressEvent ( QKeyEvent * e )
         setFullScreen(!m_fullScreen);
         break;
     }
+    case Qt::Key_F12:
+        // --- show/hide dockWdiget
+    {
+        dockWidget->setVisible(true);
+        dockWidget->setFloating(false);
+        break;
+    }
     case Qt::Key_Escape:
     {
         emit(quit());
