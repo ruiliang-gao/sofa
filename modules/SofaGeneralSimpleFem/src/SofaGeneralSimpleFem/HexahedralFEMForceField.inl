@@ -1284,9 +1284,9 @@ else if (hexahedronInf[i].plasticYieldThreshold > 0) //constant cell center plas
         if (plastic_ratio > 0 && !hexahedronInf[i].needsToUpdateRestMesh)
             hexahedronInf[i].needsToUpdateRestMesh = true;
         if (!needsToUpdateRestMesh) needsToUpdateRestMesh = true;
-        hexahedronInf[i].plasticYieldThreshold += f_hardeningParam.getValue() * 0.005; //work hardening
+        hexahedronInf[i].plasticYieldThreshold += f_hardeningParam.getValue() * 0.01; //work hardening
         //Update rest state
-        //std::cout << "plas r" << plastic_ratio;
+        std::cout << "plas r" << plastic_ratio;
         for (int k = 0; k < 8; ++k)
         {
             //hexahedronInf[i].rotatedInitialElements[k] += 0.02 * plastic_ratio * (deformed[k] - hexahedronInf[i].rotatedInitialElements[k]);
