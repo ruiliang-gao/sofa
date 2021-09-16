@@ -17,6 +17,8 @@ list(APPEND HEADER_FILES
     ${SOFAGENERALSIMPLEFEM_SRC}/BeamFEMForceField.inl
     ${SOFAGENERALSIMPLEFEM_SRC}/HexahedralFEMForceField.h
     ${SOFAGENERALSIMPLEFEM_SRC}/HexahedralFEMForceField.inl
+    ${SOFAGENERALSIMPLEFEM_SRC}/HexahedralElastoplasticFEMForceField.h
+    ${SOFAGENERALSIMPLEFEM_SRC}/HexahedralElastoplasticFEMForceField.inl
     ${SOFAGENERALSIMPLEFEM_SRC}/HexahedralFEMForceFieldAndMass.h
     ${SOFAGENERALSIMPLEFEM_SRC}/HexahedralFEMForceFieldAndMass.inl
     ${SOFAGENERALSIMPLEFEM_SRC}/HexahedronFEMForceFieldAndMass.h
@@ -29,6 +31,7 @@ list(APPEND HEADER_FILES
 list(APPEND SOURCE_FILES
     ${SOFAGENERALSIMPLEFEM_SRC}/BeamFEMForceField.cpp
     ${SOFAGENERALSIMPLEFEM_SRC}/HexahedralFEMForceField.cpp
+    ${SOFAGENERALSIMPLEFEM_SRC}/HexahedralElastoplasticFEMForceField.cpp
     ${SOFAGENERALSIMPLEFEM_SRC}/HexahedralFEMForceFieldAndMass.cpp
     ${SOFAGENERALSIMPLEFEM_SRC}/HexahedronFEMForceFieldAndMass.cpp
     ${SOFAGENERALSIMPLEFEM_SRC}/TetrahedralCorotationalFEMForceField.cpp
