@@ -32,8 +32,7 @@
 #include <SofaBaseTopology/HexahedronSetTopologyContainer.h>
 #include <SofaBaseTopology/TopologyData.h>
 #include <SofaBaseTopology/HexahedronSetTopologyModifier.h>
-//#include <FixedConstraint.h> //TODO how to get constraint vertices now?
-//#include "../../SofaBoundaryCondition/src/SofaBoundaryCondition/FixedConstraint.h" 
+#include <SofaBoundaryCondition/FixedConstraint.h>
 
 namespace sofa::component::forcefield
 {
@@ -266,7 +265,7 @@ public:
 
 protected:
     sofa::core::topology::BaseMeshTopology* _topology; ///Use BaseMeshTopology to take care of grid topology as well
-    type::vector<unsigned int> _fixedIndices; ///TODO needs to have a better way of checking constrainted nodes
+    type::vector<unsigned int> _fixedIndices; ///needs to exclude the constrainted nodes from plasticity updates
     HexHandler* hexahedronHandler;
 
 //    type::Mat<8,3,int> _coef; ///< coef of each vertices to compute the strain stress matrix

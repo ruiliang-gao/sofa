@@ -147,12 +147,12 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::reinit()
 
 
     hexahedronInf.resize(_topology->getNbHexahedra());
-    //TODO get fixed indices
-    //sofa::component::projectiveconstraintset::FixedConstraint<DataTypes>* _fixedConstraint;
+    // get fixed indices
+    sofa::component::projectiveconstraintset::FixedConstraint<DataTypes>* _fixedConstraint;
     //sofa::component::projectiveconstraintset::LinearMovementConstraint<DataTypes>* _movingConstraint;
-    //this->getContext()->get(_fixedConstraint);
+    this->getContext()->get(_fixedConstraint);
     //this->getContext()->get(_movingConstraint);
-    //if (_fixedConstraint) _fixedIndices = _fixedConstraint->d_indices.getValue();
+    if (_fixedConstraint) _fixedIndices = _fixedConstraint->d_indices.getValue();
 
     for (size_t i = 0; i < _topology->getNbHexahedra(); ++i)
     {
@@ -527,13 +527,13 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForceLarge( WDat
         for (int w = 0; w < 8; ++w)
         {
             unsigned int id = _topology->getHexahedron(i)[w]; //vert id global
-            unsigned int NNeighbors = _topology->getHexahedraAroundVertex(id).size();
-            debugInfPoint[id] += volumeRatio / NNeighbors;
-
             //ignore fixed indices
             if (std::find(_fixedIndices.begin(), _fixedIndices.end(), id) != _fixedIndices.end()) {
                 continue;
             }
+            unsigned int NNeighbors = _topology->getHexahedraAroundVertex(id).size();
+            debugInfPoint[id] += volumeRatio / NNeighbors;
+         
 
             //Compute vertex deformation
             Mat33 U, V;
@@ -841,13 +841,13 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
         for (int w = 0; w < 8; ++w)
         {
             unsigned int id = _topology->getHexahedron(i)[w];
-            unsigned int NNeighbors = _topology->getHexahedraAroundVertex(id).size();
-            if (d_debugRendering) debugInfPoint[id] += volumeRatio / NNeighbors;
-
             //ignore fixed indices	
             if (std::find(_fixedIndices.begin(), _fixedIndices.end(), id) != _fixedIndices.end()) {
                 continue;
             }
+            unsigned int NNeighbors = _topology->getHexahedraAroundVertex(id).size();
+            if (d_debugRendering) debugInfPoint[id] += volumeRatio / NNeighbors;
+         
 
             Mat33 U, V;
             type::Vec<3, Real> Diag;
@@ -1103,11 +1103,11 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::updateRestStatePlasticity(
         }
     }
 
-    //ignore all fixed points TODO TBA
+    //ignore all fixed points by setting zero
     for (int i = 0; i < _fixedIndices.size(); i++)
         restStateOffsets[_fixedIndices[i]] = Coord(0, 0, 0);
 
-    //Do the actual updates
+    //Do the actual updates on rest state mesh (need mutex lock?)
     for (int i = 0; i < _topology->getNbPoints(); i++)
     {
         X0w[i] = X0w[i] + restStateOffsets[i];
