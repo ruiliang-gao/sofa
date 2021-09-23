@@ -63,6 +63,7 @@ sofa_add_plugin(SofaAssimp SofaAssimp) # ColladaSceneLoader Depends on Flexible 
 
 # TIPS Plugins list
 sofa_add_plugin(SurfLabConnectingTissue SurfLabConnectingTissue)
+sofa_add_plugin(SurfLabSpeechRecognition SurfLabSpeechRecognition)
 
 sofa_add_plugin_experimental(PSL PSL)
 
