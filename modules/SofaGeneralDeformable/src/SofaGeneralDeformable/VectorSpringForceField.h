@@ -62,9 +62,11 @@ public:
         Real  ks;          ///< spring stiffness
         Real  kd;          ///< damping factor
         Deriv restVector;  ///< rest vector of the spring
+        float restLength2; /// square of rest length	
 
         Spring(Real _ks, Real _kd, Deriv _rl) : ks(_ks), kd(_kd), restVector(_rl)
         {
+            restLength2 = _rl[0] * _rl[0] + _rl[1] * _rl[1] + _rl[2] * _rl[2];
         }
         Spring() : ks(1.0), kd(1.0)
         {
@@ -91,6 +93,7 @@ protected:
     /// indices in case we don't use the topology
     sofa::type::vector<core::topology::BaseMeshTopology::Edge> edgeArray;
 
+    float m_thresTearing2 = 0; // squared threshold of the deform ratio for tearing the spring, init=0
 
     void resizeArray(std::size_t n);
 
@@ -189,6 +192,7 @@ public:
     }
 
     void addSpring(int m1, int m2, SReal ks, SReal kd, Coord restVector);
+    void addSpring(int m1, int m2, SReal ks, SReal kd, Coord restVector, float thresTearing);
 
     /// forward declaration of the loader class used to read spring information from file
     class Loader;

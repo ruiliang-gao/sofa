@@ -123,6 +123,13 @@ void VectorSpringForceField<DataTypes>::addSpring(int m1, int m2, SReal ks, SRea
 }
 
 template <class DataTypes>
+void VectorSpringForceField<DataTypes>::addSpring(int m1, int m2, SReal ks, SReal kd, Coord restVector, float thresTearing)
+{
+    this->addSpring(m1, m2, ks, kd, restVector);
+    m_thresTearing2 = thresTearing * thresTearing;
+}
+
+template <class DataTypes>
 VectorSpringForceField<DataTypes>::VectorSpringForceField()
     : VectorSpringForceField(nullptr, nullptr)
 {
@@ -300,12 +307,25 @@ void VectorSpringForceField<DataTypes>::addForce(const core::MechanicalParams* /
         for (size_t i=0; i<edgeArray.size(); i++)
         {
             const core::topology::BaseMeshTopology::Edge &e=edgeArray[i];
-            const Spring &s=springArrayData[i];
+            Spring &s=springArrayData[i];
             // paul---------------------------------------------------------------
             Deriv current_direction = x2[e[1]]-x1[e[0]];
             Deriv squash_vector = current_direction - s.restVector;
             Deriv relativeVelocity = v2[e[1]]-v1[e[0]];
             force = (squash_vector * s.ks) + (relativeVelocity * s.kd);
+            ////Check fracture here
+            if (m_thresTearing2 > 0)
+            {
+                //squared length ratio
+                float deform2 = (current_direction[0] * current_direction[0] +
+                    current_direction[1] * current_direction[1] + current_direction[2] * current_direction[2]) / s.restLength2;
+                if (deform2 > m_thresTearing2 && s.ks != 0) // tear the spring	
+                {
+                    s.ks = 0;
+                    s.kd = 0;
+                    //std::cout << "spring tore with deformRatio2 " << deform2 << std::endl;	
+                }
+            }       
 
             f1[e[0]]+=force;
             f2[e[1]]-=force;

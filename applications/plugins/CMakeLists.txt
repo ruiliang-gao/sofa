@@ -61,6 +61,8 @@ sofa_add_plugin(LeapMotion LeapMotion)
 sofa_add_plugin(Geomagic Geomagic)
 sofa_add_plugin(SofaAssimp SofaAssimp) # ColladaSceneLoader Depends on Flexible and image
 
+# TIPS Plugins list
+sofa_add_plugin(SurfLabConnectingTissue SurfLabConnectingTissue)
 
 sofa_add_plugin_experimental(PSL PSL)
 

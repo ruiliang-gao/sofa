@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<Node 	 name="root"  gravity="0 -9.8 0"   dt="0.01"  >
+	<VisualStyle displayFlags="showVisualModels" />
+    <FreeMotionAnimationLoop/>
+    <!-- <LCPConstraintSolver tolerance="1e-3" maxIt="1000" mu = "1e-6"/> -->
+	<GenericConstraintSolver tolerance="0.001" maxIterations="1000"/>
+    <CollisionPipeline depth="6" verbose="0" draw="0"/>
+    <BruteForceDetection name="N2"/>
+    <LocalMinDistance name="Proximity" alarmDistance=".5" contactDistance=".1" angleCone="0.0"/>
+    <CollisionResponse name="Response" response="FrictionContact"/>
+    <CollisionGroup />
+    <DefaultVisualManagerLoop />
+    <RequiredPlugin name="SofaBoundaryCondition"/> <!-- Needed to use components [FixedConstraint] -->
+	<RequiredPlugin name="SofaConstraint"/> <!-- Needed to use components [FreeMotionAnimationLoop, GenericConstraintSolver, LocalMinDistance, UncoupledConstraintCorrection] -->
+	<RequiredPlugin name="SofaGeneralDeformable"/> <!-- Needed to use components [TriangularBendingSprings] -->
+	<RequiredPlugin name="SofaGeneralSimpleFem"/> <!-- Needed to use components [HexahedralFEMForceField] -->
+	<RequiredPlugin name="SofaImplicitOdeSolver"/> <!-- Needed to use components [EulerImplicitSolver] -->
+	<RequiredPlugin name="SofaMiscCollision"/> <!-- Needed to use components [DefaultCollisionGroupManager] -->
+	<RequiredPlugin name="SofaMiscFem"/> <!-- Needed to use components [TriangularFEMForceField] -->
+	<RequiredPlugin name="SofaOpenglVisual"/> <!-- Needed to use components [OglModel] -->
+	<RequiredPlugin name="SofaTopologyMapping"/> <!-- Needed to use components [Hexa2QuadTopologicalMapping, Quad2TriangleTopologicalMapping] -->
+	<RequiredPlugin name="SurfLabConnectingTissue" />
+
+	
+	<!-- Connecting Tissue tag should be in the same level with the two objects
+	and two objects should share one LinearSolver -->
+	<Node name = "Sim">
+		<EulerImplicit name="cg_odesolver" printLog="false" />
+		<CGLinearSolver iterations="50" name="linear solver" tolerance="1.0e-9" threshold="1.0e-9" />
+		<Node name="H">
+			<MeshGmshLoader name="loader" filename="mesh/nine_hexa.msh" />
+			<MechanicalObject src="@loader" name="Hexa" showIndices = "1" showIndicesScale = "0.01"/>
+			<include href="Objects/HexahedronSetTopology.xml" src="@loader" />
+			<HexahedralFEMForceField name="FEM" youngModulus="10000" poissonRatio="0.3" method="large" />
+			<DiagonalMass massDensity="0.2" />
+			<FixedConstraint indices="12 15 28 31" />
+			<Node name="Q">
+				<include href="Objects/QuadSetTopology.xml" src="@" />
+				<Hexa2QuadTopologicalMapping input="@../Container" output="@Container" />
+				<Node name="Visu">
+					<OglModel name="Visual" color="yellow" />
+					<IdentityMapping input="@../../Hexa" output="@Visual" />
+				</Node>
+				<Node name="T">
+					<include href="Objects/TriangleSetTopology.xml" src="@" />
+					<Quad2TriangleTopologicalMapping input="@../Container" output="@Container" />
+				</Node>
+			</Node>
+			<UncoupledConstraintCorrection compliance="0.001   0.00003 0 0   0.00003 0   0.00003" />       
+		</Node>
+		<Node name="SquareGravity">
+			<MeshGmshLoader name="meshLoader" filename="mesh/square3.msh" scale="10" createSubelements="true" translation = "0 0.2 -0.1" flipNormals = "1"/>
+			<include href="Objects/TriangleSetTopology.xml" src="@meshLoader" />
+			<MechanicalObject name = "MO"/>
+			<DiagonalMass massDensity="0.15" />
+			<FixedConstraint indices="0 1" />
+			<TriangularFEMForceField name="FEM" youngModulus="600" poissonRatio="0.3" method="large" />
+			<!-- For cloth model, the stiffness of bending force should be small to be stable -->
+			<TriangularBendingSprings name="FEM-Bend" stiffness="30" damping="1.0" />
+			<OglModel name="Visual" color="red" />
+			<IdentityMapping input="@MO" output="@Visual" />
+			<UncoupledConstraintCorrection compliance="0.001   0.00003 0 0   0.00003 0   0.00003" />       
+		</Node>
+		<ConnectingTissue connectingStiffness="1000.0" naturalLength="0.800000011920929" object2 = "@H" object1 = "@SquareGravity" threshold="0.10000000149011612" thresholdTearing="2.799999952316284" useConstraint="0"/>	
+	</Node>
+</Node>
