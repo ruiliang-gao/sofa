@@ -1528,6 +1528,8 @@ void RealGUI::init()
     m_exportGnuplot = false;
     gnuplot_directory = "";
     m_fullScreen = false;
+    dockWidget->setFloating(true);
+    dockWidget->setVisible(false); //hide the side panels
 }
 
 //------------------------------------
@@ -1672,6 +1674,9 @@ void RealGUI::keyPressEvent ( QKeyEvent * e )
     case Qt::Key_Space:
     {
         playpauseGUI(!startButton->isChecked());
+        //press spacebar to start simulation and maximize the window
+        if (!isFullScreen() && !isMaximized())
+            showMaximized();
         break;
     }
     case Qt::Key_Backspace:
@@ -1683,6 +1688,13 @@ void RealGUI::keyPressEvent ( QKeyEvent * e )
         // --- fullscreen mode
     {
         setFullScreen(!m_fullScreen);
+        break;
+    }
+    case Qt::Key_F12:
+        // --- show/hide dockWidget as a developer option
+    {
+        dockWidget->setVisible(true);
+        dockWidget->setFloating(false);
         break;
     }
     case Qt::Key_Escape:

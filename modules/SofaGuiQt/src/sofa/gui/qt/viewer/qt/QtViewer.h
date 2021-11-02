@@ -123,6 +123,7 @@ private:
 
     double lastProjectionMatrix[16];
     double lastModelviewMatrix[16];
+    bool circularView; // the circular view for TIPS laproscopic simulation
 
 public:
 
@@ -235,6 +236,17 @@ public:
     Trackball _mouseInteractorTrackball;
     void ApplyMouseInteractorTransformation(int x, int y);
 
+    /// TIPS mouse tool : serve as camera/grasper and switch between grasping/holding/moving
+    bool _pickModeEnabled; //TIPS mouse picking mode	
+    bool _isMouseHolding; //TIPS mouse is holding	
+    int _mouseHoldX, _mouseHoldY; //TIPS mouse holding pos	
+    bool _spacebarPressed; //render the spacebar press event -> simulation on/off	
+    bool _shiftModifierSet; //shift modifier applied	
+    bool _isPicking; //mouse is grasping	
+    QImage _cameraIcon; //TIPS camera-tool icon	
+    QImage _mouseIconOpen; //TIPS mouse-tool icon	
+    QImage _mouseIconClosed; //TIPS mouse-tool icon
+
     static Quat<SReal> _mouseInteractorNewQuat;
     static bool _mouseTrans;
     static bool _mouseRotate;
@@ -265,6 +277,7 @@ private:
     void	DisplayMenu(void);
     virtual void	drawScene() override ;
     void  MakeStencilMask();
+    void MakeCircularStencilMask(); ///TIPS circular Stencil
 
     void	ApplySceneTransformation(int x, int y);
     //int		handle(int event);	// required by FLTK

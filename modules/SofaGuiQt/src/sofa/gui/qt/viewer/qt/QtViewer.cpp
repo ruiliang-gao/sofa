@@ -178,6 +178,27 @@ QtViewer::QtViewer(QWidget* parent, const char* name, const unsigned int nbMSAAS
     _mouseInteractorRotationMode = false;
     _mouseInteractorSavedPosX = 0;
     _mouseInteractorSavedPosY = 0;
+
+    /// TIPS mouse tool initialization
+    _pickModeEnabled = true;
+    _isMouseHolding = false;
+    _spacebarPressed = false;
+    _isPicking = false;
+    ///load camera icon image	
+    std::string cameraImagePath = std::string("tool_camera.png");
+    sofa::core::objectmodel::DataFileName cameraImagePath_DFN(cameraImagePath, "", true, false);
+    std::string fullCameraFileName = cameraImagePath_DFN.getFullPath();
+    _cameraIcon.load(fullCameraFileName.c_str());
+    ///load the grasper open image	
+    std::string toolImagePath = std::string("grasper-trans-open.png");
+    sofa::core::objectmodel::DataFileName toolImagePath_DFN(toolImagePath, "", true, false);
+    std::string fullToolOpenFileName = toolImagePath_DFN.getFullPath();
+    ///load the grasper closed image	
+    std::string toolClosedImagePath = std::string("grasper-trans-closed.png");
+    sofa::core::objectmodel::DataFileName toolClosedImagePath_DFN(toolClosedImagePath, "", true, false);
+    std::string fullToolClosedFileName = toolClosedImagePath_DFN.getFullPath();
+    _mouseIconClosed.load(fullToolClosedFileName.c_str());
+    _mouseIconOpen.load(fullToolOpenFileName.c_str());
 #ifdef TRACKING
     savedX = 0;
     savedY = 0;
@@ -226,6 +247,7 @@ void QtViewer::initializeGL(void)
     static GLfloat lmodel_local[] =
     { GL_FALSE };
     bool initialized = false;
+    circularView = true;
 
     if (!initialized)
     {
@@ -741,6 +763,35 @@ void QtViewer::MakeStencilMask()
 
 }
 
+/// TIPS MakeCircularStencilMask
+void QtViewer::MakeCircularStencilMask()
+{
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, _W, 0, _H);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glClear(GL_STENCIL_BUFFER_BIT);
+    glStencilFunc(GL_ALWAYS, 0x1, 0x1);
+    glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+    glColor4f(0, 0, 0, 0);
+    float r = std::min(_W, _H) / 2;//radius	
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(_W / 2, _H / 2);
+    for (int n = 0; n <= 100; ++n)
+    {
+        float t = 2 * M_PI * (float)n / (float)100;
+        glVertex2f(_W / 2 + sin(t) * r, _H / 2 + cos(t) * r);
+    }
+    glEnd();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+}
+
 // ---------------------------------------------------------
 // ---
 // ---------------------------------------------------------
@@ -762,6 +813,19 @@ void QtViewer::drawScene(void)
     sofa::component::visualmodel::BaseCamera::StereoStrategy sStrat = currentCamera->getStereoStrategy();
     double sShift = currentCamera->getStereoShift();
     bool stencil = false;
+
+    //TIPS circular stencil test	
+    if (circularView) {
+        glEnable(GL_STENCIL_TEST);
+        MakeCircularStencilMask();
+        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        glStencilFunc(GL_EQUAL, 1, 0xFF);// draw only where stencil's value is 1	
+    }
+    else
+    {
+        glDisable(GL_STENCIL_TEST);
+    }
+
     bool viewport = false;
     bool supportStereo = currentCamera->isStereo();
     sofa::core::visual::VisualParams::Viewport vpleft, vpright;
@@ -1060,6 +1124,10 @@ void QtViewer::paintEvent(QPaintEvent* qpe)
     painter.setRenderHint(QPainter::HighQualityAntialiasing, true);
     painter.setRenderHint(QPainter::TextAntialiasing, false);
 */
+
+    /// TIPS on-screen instuction + mouse tool icon rendering
+    ///QPainter painter(this);TODO...
+
 }
 
 // ---------------------------------------------------------
@@ -1164,7 +1232,27 @@ void QtViewer::keyPressEvent(QKeyEvent * e)
         // control the GUI
         switch (e->key())
         {
-
+        case Qt::Key_P:
+        {
+            std::cout << "QtViewer Key_P: circularView \n";
+            circularView = !circularView;
+            break;
+        }
+        /*case Qt::Key_Shift:
+        {
+            _pickModeEnabled = !_pickModeEnabled;
+            if (_pickModeEnabled)
+                ShowCursor(false);
+            else
+                ShowCursor(true);
+            break;
+        }*/
+        case Qt::Key_Space:
+        {
+            _spacebarPressed = !_spacebarPressed;
+            SofaViewer::keyPressEvent(e);
+            break;
+        }
 #ifdef TRACKING
         case Qt::Key_X:
         {
@@ -1204,7 +1292,8 @@ void QtViewer::keyReleaseEvent(QKeyEvent * e)
 
 void QtViewer::wheelEvent(QWheelEvent* e)
 {
-    SofaViewer::wheelEvent(e);
+    if (!this->_pickModeEnabled) /// disable using the mousewheel when mouse in Tool Mode
+        SofaViewer::wheelEvent(e);
 }
 
 void QtViewer::mousePressEvent(QMouseEvent * e)
@@ -1224,7 +1313,9 @@ void QtViewer::mouseReleaseEvent(QMouseEvent * e)
 
 void QtViewer::mouseMoveEvent(QMouseEvent * e)
 {
-
+    // TIPS mouse move tracking	
+    _mouseX = e->x();
+    _mouseY = e->y();
 #ifdef TRACKING
     if (tracking)
     {
@@ -1336,7 +1427,7 @@ bool QtViewer::mouseEvent(QMouseEvent * e)
 
         ApplyMouseInteractorTransformation(eventX, eventY);
     }
-    else if (e->modifiers() & Qt::ShiftModifier)
+    else if (e->modifiers() & Qt::ShiftModifier) ///TODO TIPS mouse control...
     {
         isInteractive = true;
         SofaViewer::mouseEvent(e);

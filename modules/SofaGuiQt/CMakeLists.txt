@@ -146,6 +146,8 @@ set(MOC_HEADER_FILES
     ${SRC_ROOT}/QTabulationModifyObject.h
     ${SRC_ROOT}/QTransformationWidget.h
     ${SRC_ROOT}/RealGUI.h
+    ${SRC_ROOT}/report.h
+    ${SRC_ROOT}/surflablogin.h
     ${SRC_ROOT}/SimpleDataWidget.h
     ${SRC_ROOT}/SofaMouseManager.h    
     ${SRC_ROOT}/SofaVideoRecorderManager.h
@@ -195,6 +197,8 @@ set(SOURCE_FILES
     ${SRC_ROOT}/QTabulationModifyObject.cpp
     ${SRC_ROOT}/QTransformationWidget.cpp
     ${SRC_ROOT}/RealGUI.cpp
+    ${SRC_ROOT}/surflablogin.cpp
+    ${SRC_ROOT}/report.cpp
     ${SRC_ROOT}/SimpleDataWidget.cpp
     ${SRC_ROOT}/SofaMouseManager.cpp
     ${SRC_ROOT}/SofaPluginManager.cpp
@@ -212,7 +216,10 @@ set(UI_FILES
     ${SRC_ROOT}/GUI.ui
     ${SRC_ROOT}/MouseManager.ui
     ${SRC_ROOT}/PluginManager.ui
-    ${SRC_ROOT}/VideoRecorderManager.ui    
+    ${SRC_ROOT}/VideoRecorderManager.ui
+    ${SRC_ROOT}/report.ui
+    ${SRC_ROOT}/surflablogin.ui
+        
 )
 
 if(SOFA_DUMP_VISITOR_INFO)
