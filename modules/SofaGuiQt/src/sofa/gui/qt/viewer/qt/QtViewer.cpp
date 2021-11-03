@@ -1125,11 +1125,16 @@ void QtViewer::paintEvent(QPaintEvent* qpe)
     painter.setRenderHint(QPainter::TextAntialiasing, false);
 */
 
-    /// TIPS on-screen instuction + mouse tool icon rendering + Welcome Message
+    /// TIPS on-screen instuction + mouse tool icon rendering
     QPainter painter(this);
     QFont font = painter.font();
+
+    //Start Message
+
     font.setPixelSize(18);
     painter.setFont(font);
+    
+    //Mouse tool in picking mode
     if (this->_pickModeEnabled && !this->_mouseInteractorTranslationMode) {	
         painter.setPen(Qt::yellow);
         painter.drawText(20, 20, tr(" SPACEBAR :"));
@@ -1173,8 +1178,8 @@ void QtViewer::paintEvent(QPaintEvent* qpe)
                 painter.drawImage(target, _mouseIconClosed, source);
         }
     }
-
-    else {//Camera Mode	
+    //Else Mouse tool in Camera Mode	
+    else {
         painter.setPen(Qt::yellow);
         painter.drawText(20, 20, tr(" SPACEBAR :"));
         painter.drawText(20, 45, tr(" C :"));
@@ -1342,12 +1347,16 @@ void QtViewer::keyPressEvent(QKeyEvent * e)
                 std::cout << "Interaction Mode ON\n";
                 _mouseInteractorTranslationMode = true;
                 _mouseInteractorRotationMode = false;
+                _pickModeEnabled = false;
+                std::cout << "Mouse Mode: Camera\n";
             }
             else
             {
                 std::cout << "Interaction Mode OFF\n";
                 _mouseInteractorTranslationMode = false;
                 _mouseInteractorRotationMode = false;
+                _pickModeEnabled = true;
+                std::cout << "Mouse Mode: Grasper\n";
             }
             break;
         }

@@ -63,4 +63,5 @@
 		</Node>
 		<ConnectingTissue connectingStiffness="1000.0" naturalLength="0.800000011920929" object2 = "@H" object1 = "@SquareGravity" threshold="0.10000000149011612" thresholdTearing="2.799999952316284" useConstraint="0"/>	
 	</Node>
+	<InteractiveCamera distance="20" fieldOfView="34.40363640013896" listening="false" name="InteractiveCamera" orientation="0 0 0 1 " position="4.73 4.3 14.2"/>
 </Node>
