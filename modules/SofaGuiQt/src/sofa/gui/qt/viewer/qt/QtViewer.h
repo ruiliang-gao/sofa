@@ -24,6 +24,7 @@
 
 #include <sofa/gl/gl.h>
 #include <sofa/gl/glu.h>
+#include <qgl.h>
 #include <qtimer.h>
 #include <cmath>
 #include <cstdlib>

@@ -184,16 +184,16 @@ QtViewer::QtViewer(QWidget* parent, const char* name, const unsigned int nbMSAAS
     _isMouseHolding = false;
     _spacebarPressed = false;
     _isPicking = false;
-    ///load camera icon image	
+    ///load camera icon image
     std::string cameraImagePath = std::string("tool_camera.png");
     sofa::core::objectmodel::DataFileName cameraImagePath_DFN(cameraImagePath, "", true, false);
     std::string fullCameraFileName = cameraImagePath_DFN.getFullPath();
     _cameraIcon.load(fullCameraFileName.c_str());
-    ///load the grasper open image	
+    ///load the grasper open image
     std::string toolImagePath = std::string("grasper-trans-open.png");
     sofa::core::objectmodel::DataFileName toolImagePath_DFN(toolImagePath, "", true, false);
     std::string fullToolOpenFileName = toolImagePath_DFN.getFullPath();
-    ///load the grasper closed image	
+    ///load the grasper closed image
     std::string toolClosedImagePath = std::string("grasper-trans-closed.png");
     sofa::core::objectmodel::DataFileName toolClosedImagePath_DFN(toolClosedImagePath, "", true, false);
     std::string fullToolClosedFileName = toolClosedImagePath_DFN.getFullPath();
@@ -637,7 +637,7 @@ void QtViewer::DisplayOBJs()
 {
 
     if (_background == 0 || _background == 1)
-        DrawLogo();
+        //DrawLogo(); 
 
     if (!groot)
         return;
@@ -1125,8 +1125,82 @@ void QtViewer::paintEvent(QPaintEvent* qpe)
     painter.setRenderHint(QPainter::TextAntialiasing, false);
 */
 
-    /// TIPS on-screen instuction + mouse tool icon rendering
-    ///QPainter painter(this);TODO...
+    /// TIPS on-screen instuction + mouse tool icon rendering + Welcome Message
+    QPainter painter(this);
+    QFont font = painter.font();
+    font.setPixelSize(18);
+    painter.setFont(font);
+    if (this->_pickModeEnabled && !this->_mouseInteractorTranslationMode) {	
+        painter.setPen(Qt::yellow);
+        painter.drawText(20, 20, tr(" SPACEBAR :"));
+        painter.drawText(20, 45, tr(" C :"));
+        painter.drawText(20, 70, tr(" CTRL + C/X :"));
+
+        //mouse grasper instruction	
+        painter.setPen(Qt::green);
+        if (_isMouseHolding) painter.drawText(20, 95, tr(" Mouse Tool : holding"));
+        else if (_isPicking) painter.drawText(20, 95, tr(" Mouse Tool : grasping"));
+        else painter.drawText(20, 95, tr(" Mouse Tool : moving"));
+        painter.setPen(Qt::cyan);
+        if (this->_spacebarPressed)
+            painter.drawText(130, 20, tr(" Pause simulation\n"));
+        else
+            painter.drawText(130, 20, tr(" start simulation\n"));
+        painter.drawText(130, 45, tr(" toggle MouseMode: \n"));
+        painter.drawText(135, 70, tr(" switch instrument\n"));
+        painter.setPen(Qt::gray);
+        painter.drawText(290, 45, tr(" CAMERA /"));
+        painter.setPen(Qt::green);
+        painter.drawText(370, 45, tr(" TOOL"));
+        //Draw Mouse Cursor	
+        if (!_mouseIconOpen.isNull()) {
+            if (!this->_isMouseHolding)
+                painter.translate(_mouseX, _mouseY);  // this will set the point of origin	
+            //QRectF target(0, 0, 100, 100);	
+            else
+                painter.translate(_mouseHoldX, _mouseHoldY);
+            /*QRectF target0(0, 0, 40, 40);
+            QRectF source0(0, 0, 40, 40);*/
+            QRectF target(-340, -180, 400, 400);
+            QRectF source(0, 0, 700, 700);
+            //QRectF target(_mouseX - 50, _mouseY - 50, 100, 100);	
+            //QRectF source(0, 0, 120, 120);	
+            //painter.drawImage(target0, _pivotIcon, source0);	
+            if (!_isMouseHolding) painter.rotate(60 * (_mouseY - 200) / 1000);
+            if (!_isPicking)
+                painter.drawImage(target, _mouseIconOpen, source);
+            else
+                painter.drawImage(target, _mouseIconClosed, source);
+        }
+    }
+
+    else {//Camera Mode	
+        painter.setPen(Qt::yellow);
+        painter.drawText(20, 20, tr(" SPACEBAR :"));
+        painter.drawText(20, 45, tr(" C :"));
+        painter.drawText(20, 70, tr(" CTRL + C/X :"));
+        painter.drawText(20, 95, tr(" Mouse Left / Right :"));
+        painter.setPen(Qt::cyan);
+        if (this->_spacebarPressed)
+            painter.drawText(130, 20, tr(" Pause simulation\n"));
+        else
+            painter.drawText(130, 20, tr(" Start simulation\n"));
+        painter.drawText(130, 45, tr(" toggle MouseMode: \n"));
+        painter.drawText(135, 70, tr(" switch instrument\n"));
+        painter.setPen(Qt::green);
+        painter.drawText(290, 45, tr(" CAMERA / "));
+        painter.drawText(180, 95, tr(" Rotate / Pan\n"));
+        painter.setPen(Qt::gray);
+        painter.drawText(370, 45, tr(" TOOL"));
+        //Draw Camera Icon Cursor	
+        if (!_cameraIcon.isNull()) {
+            painter.translate(_mouseX, _mouseY);  // this will set the point of origin	
+            QRectF target(-64, -64, 128, 128);
+            QRectF source(0, 0, 128, 128);
+            //painter.drawImage(target0, _pivotIcon, source0);	
+            painter.drawImage(target, _cameraIcon, source);
+        }
+    }
 
 }
 
@@ -1427,9 +1501,46 @@ bool QtViewer::mouseEvent(QMouseEvent * e)
 
         ApplyMouseInteractorTransformation(eventX, eventY);
     }
-    else if (e->modifiers() & Qt::ShiftModifier) ///TODO TIPS mouse control...
+    else if ((e->modifiers() & Qt::ShiftModifier) || this->_pickModeEnabled)
     {
+        switch (e->type())
+        {
+        case QEvent::MouseButtonPress:
+            // Mouse left button is pressed	
+            if (e->button() == Qt::LeftButton)
+            {
+                ///when mouse in tool mode and not holding	
+                if (this->_pickModeEnabled && !_isMouseHolding) _isPicking = true;
+                ///when mouse in tool mode and is holding, release it when click	
+                else if (this->_pickModeEnabled && this->_isMouseHolding)
+                {
+                    this->_isMouseHolding = false;
+                    _isPicking = false;
+                }
+            }
+            break;
+        case QEvent::MouseMove:
+            /// if mouse is holding, mouseMove should do nothing.	
+            if (this->_isMouseHolding) return isInteractive;
+            break;
+        case QEvent::MouseButtonRelease:
+            // Mouse left button is released	
+            if (e->button() == Qt::LeftButton)
+            {
+                /// if mouse is in Tool mode and picking, make it hold in current position	
+                if (this->_pickModeEnabled && _isPicking && !this->_isMouseHolding) {
+                    this->_isMouseHolding = true;
+                    _mouseHoldX = _mouseX;
+                    _mouseHoldY = _mouseY;
+                    return isInteractive;
+                }
+            }
+            break;
+        default:
+            break;
+        }
         isInteractive = true;
+        e->setModifiers(Qt::ShiftModifier);
         SofaViewer::mouseEvent(e);
     }
     else if (e->modifiers() & Qt::ControlModifier)
