@@ -1,0 +1,59 @@
+<!-- This is an example scene to test TIPS 3d texture features -->
+<Node dt="0.01" gravity="0 0 0 " name="root">
+    <RequiredPlugin name="SofaOpenglVisual"/>
+    <RequiredPlugin name="SofaBoundaryCondition"/> 
+    <RequiredPlugin name="SofaConstraint"/>
+    <RequiredPlugin name="SofaGeneralSimpleFem"/>
+    <RequiredPlugin name="SofaGraphComponent"/>
+    <RequiredPlugin name="SofaImplicitOdeSolver"/>
+    <RequiredPlugin name="SofaMiscCollision"/>
+    <RequiredPlugin name="SofaTopologyMapping"/> 
+    <GenericConstraintSolver maxIterations="10000" tolerance="1e-6"/>
+    <FreeMotionAnimationLoop/>
+    <CollisionPipeline depth="6" name="CollisionPipeline"/>
+    <BruteForceDetection name="N2"/>
+    <LocalMinDistance alarmDistance="0.10000000149011612" angleCone="0.0" contactDistance="0.009999999776482582"/>
+    <CollisionGroup/>
+    <CollisionResponse name="CollisionResponse" response="FrictionContact"/>
+    <LightManager/>
+    <Node name="SolverNode">
+        <Gravity gravity="0.0 0.0 0.0 "/>
+        <EulerImplicitSolver rayleighMass="0.05" rayleighStiffness="0.0"/>
+        <CGLinearSolver iterations="50" threshold="1.0e-6" tolerance="1.0e-10"/>
+        <Node name="Bar28_polar_001">
+            <HexahedronSetTopologyContainer hexahedra="0 9 12 3 1 10 13 4 1 10 13 4 2 11 14 5 3 12 15 6 4 13 16 7 4 13 16 7 5 14 17 8 9 18 21 12 10 19 22 13 10 19 22 13 11 20 23 14 12 21 24 15 13 22 25 16 13 22 25 16 14 23 26 17 18 27 30 21 19 28 31 22 19 28 31 22 20 29 32 23 21 30 33 24 22 31 34 25 22 31 34 25 23 32 35 26 27 36 39 30 28 37 40 31 28 37 40 31 29 38 41 32 30 39 42 33 31 40 43 34 31 40 43 34 32 41 44 35 36 45 48 39 37 46 49 40 37 46 49 40 38 47 50 41 39 48 51 42 40 49 52 43 40 49 52 43 41 50 53 44 45 54 57 48 46 55 58 49 46 55 58 49 47 56 59 50 48 57 60 51 49 58 61 52 49 58 61 52 50 59 62 53 54 63 66 57 55 64 67 58 55 64 67 58 56 65 68 59 57 66 69 60 58 67 70 61 58 67 70 61 59 68 71 62 " name="Bar28_polar_001-topology" points="-1.0 -1.0 -1.0 -1.0 -1.0 0.0 -1.0 -1.0 1.0 -1.0 0.0 -1.0 -1.0 0.0 0.0 -1.0 0.0 1.0 -1.0 1.0 -1.0 -1.0 1.0 0.0 -1.0 1.0 1.0 -0.714285731316 -1.0 -1.0 -0.714285731316 -1.0 0.0 -0.714285731316 -1.0 1.0 -0.714285731316 0.0 -1.0 -0.714285731316 0.0 0.0 -0.714285731316 0.0 1.0 -0.714285731316 1.0 -1.0 -0.714285731316 1.0 0.0 -0.714285731316 1.0 1.0 -0.428571403027 -1.0 -1.0 -0.428571403027 -1.0 0.0 -0.428571403027 -1.0 1.0 -0.428571403027 0.0 -1.0 -0.428571403027 0.0 0.0 -0.428571403027 0.0 1.0 -0.428571403027 1.0 -1.0 -0.428571403027 1.0 0.0 -0.428571403027 1.0 1.0 -0.142857134342 -1.0 -1.0 -0.142857134342 -1.0 0.0 -0.142857134342 -1.0 1.0 -0.142857134342 0.0 -1.0 -0.142857134342 0.0 0.0 -0.142857134342 0.0 1.0 -0.142857134342 1.0 -1.0 -0.142857134342 1.0 0.0 -0.142857134342 1.0 1.0 0.142857193947 -1.0 -1.0 0.142857193947 -1.0 0.0 0.142857193947 -1.0 1.0 0.142857193947 0.0 -1.0 0.142857193947 0.0 0.0 0.142857193947 0.0 1.0 0.142857193947 1.0 -1.0 0.142857193947 1.0 0.0 0.142857193947 1.0 1.0 0.428571462631 -1.0 -1.0 0.428571462631 -1.0 0.0 0.428571462631 -1.0 1.0 0.428571462631 0.0 -1.0 0.428571462631 0.0 0.0 0.428571462631 0.0 1.0 0.428571462631 1.0 -1.0 0.428571462631 1.0 0.0 0.428571462631 1.0 1.0 0.714285731316 -1.0 -1.0 0.714285731316 -1.0 0.0 0.714285731316 -1.0 1.0 0.714285731316 0.0 -1.0 0.714285731316 0.0 0.0 0.714285731316 0.0 1.0 0.714285731316 1.0 -1.0 0.714285731316 1.0 0.0 0.714285731316 1.0 1.0 1.0 -1.0 -1.0 1.0 -1.0 0.0 1.0 -1.0 1.0 1.0 0.0 -1.0 1.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 -1.0 1.0 1.0 0.0 1.0 1.0 1.0 "/>
+            <MechanicalObject name="MO" rotation="0.0 0.0 0.0 " scale3d="1.2 0.30000001192092896 0.30000001192092896 " template="Vec3d" translation="0.0 0.0 2.309999942779541 "/>
+            <HexahedronSetTopologyModifier removeIsolated="false"/>
+            <!-- <HexahedronSetTopologyAlgorithms template="Vec3d"/> -->
+            <HexahedronSetGeometryAlgorithms template="Vec3d"/>
+            <UniformMass handleTopoChange="true" vertexMass="0.05000000074505806"/>
+            <HexahedralFEMForceField damping="0.10000000149011612" debugPlasticMethod="2" method="polar" poissonRatio="0.44999998807907104" rayleighStiffness="0.0" youngModulus="6000.0"/>
+            <DiagonalVelocityDampingForceField dampingCoefficient="0.05 0.05 0.05 0.05 0.05 0.05" template="Vec3d"/>
+            <UncoupledConstraintCorrection/>
+            <PartialFixedConstraint fixedDirections="1 1 1" indices="27 28 29 30 31 32 33 34 35" name="partialFixedConstraint"/>
+
+            <Node name="quad-surface">
+                <QuadSetTopologyContainer name="Bar28_polar_001-quadSurf"/>
+                <QuadSetGeometryAlgorithms template="Vec3d"/>
+                <QuadSetTopologyModifier/>
+                <!-- <QuadSetTopologyAlgorithms template="Vec3d"/> -->
+                <Hexa2QuadTopologicalMapping input="@../Bar28_polar_001-topology" output="@Bar28_polar_001-quadSurf"/>
+                <OglShader fileFragmentShaders="['shaders/TIPSShaders/tessellationPNQuads_new.glsl']" fileTessellationControlShaders="['shaders/TIPSShaders/tessellationPNQuads_new.glsl']" fileTessellationEvaluationShaders="['shaders/TIPSShaders/tessellationPNQuads_new.glsl']" fileVertexShaders="['shaders/TIPSShaders/tessellationPNQuads_new.glsl']" printLog="1"/>
+                <OglFloatVariable name="TessellationLevel" value="8"/>
+                <OglModel genTex3d="1" material="Default Diffuse 1 0.3007350564002991 0.1799902766942978 0.020941469818353653  0.6642351627349854 Ambient 1 0.3911035656929016 0.23407594859600067 0.027234217151999474  1 Specular 1 0.7484009265899658 0.6099307537078857 0.32568684220314026  1 Emissive 1 0.0 0.0 0.0  1 Shininess 1 5 "  name="Bar28_polar_001-visual" primitiveType="PATCHES" texturename="textures/fat0001.dds"/>
+                <IdentityMapping input="@../MO" output="@Bar28_polar_001-visual"/>
+                <Node name="triangle-surface">
+                    <TriangleSetTopologyContainer name="Bar28_polar_001-triSurf"/>
+                    <TriangleSetTopologyModifier/>
+                    <!-- <TriangleSetTopologyAlgorithms template="Vec3d"/> -->
+                    <TriangleSetGeometryAlgorithms template="Vec3d"/>
+                    <Quad2TriangleTopologicalMapping input="@../Bar28_polar_001-quadSurf" output="@Bar28_polar_001-triSurf"/>
+                    <PointCollisionModel active="0" bothSide="0" contactFriction="500.0" contactStiffness="500.0" group="1" moving="1" selfCollision="0" simulated="1"/>
+                    <LineCollisionModel bothSide="0" contactFriction="500.0" contactStiffness="500.0" group="1" moving="1" selfCollision="0" simulated="1"/>
+                    <TriangleCollisionModel bothSide="0" contactFriction="500.0" contactStiffness="500.0" group="1" moving="1" name="TriangleModel" selfCollision="0" simulated="1" tags="HapticSurface HapticSurfaceVolume SafetyForceThreshold_4.0"/>
+                </Node>
+            </Node>
+        </Node>
+    </Node>
+    <InteractiveCamera distance="1" fieldOfView="34.40363640013896" listening="false" name="InteractiveCamera" orientation="0.5355478525161743 -0.00296520022675395 -0.004674187861382961 0.8444867730140686 " position="-0.18693247437477112 -6.212994575500488 5.011108875274658 "/>
+</Node>

@@ -97,6 +97,8 @@ OglModel::OglModel()
     primitiveTypeOptions->setNames(4, "DEFAULT", "LINES_ADJACENCY", "PATCHES", "POINTS");
     primitiveTypeOptions->setSelectedItem(0);
     primitiveType.endEdit();
+    isTex3d = false;
+    target = GL_TEXTURE_2D;
 }
 
 OglModel::~OglModel()
@@ -194,7 +196,11 @@ void OglModel::drawGroup(int ig, bool transparent)
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	    uintptr_t pt = (vertices.size()*sizeof(vertices[0]))
                     + (vnormals.size()*sizeof(vnormals[0]));
-        glTexCoordPointer(2, GL_FLOAT, 0, reinterpret_cast<void*>(pt));
+        if (!isTex3d)
+            glTexCoordPointer(2, GL_FLOAT, 0, reinterpret_cast<void*>(pt));
+        else
+            glTexCoordPointer(3, GL_FLOAT, 0, reinterpret_cast<void*>(pt));
+
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     }
@@ -314,7 +320,7 @@ void OglModel::drawGroup(int ig, bool transparent)
             textures[size_t(indexInTextureArray)]->unbind();
         }
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-        glDisable(GL_TEXTURE_2D);
+        glDisable(target);//glDisable(GL_TEXTURE_2D);
     }
 }
 
@@ -413,7 +419,10 @@ void OglModel::internalDraw(const core::visual::VisualParams* vparams, bool tran
 
         size_t textureArrayByteSize = vtexcoords.size()*sizeof(vtexcoords[0]);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glTexCoordPointer(2, GL_FLOAT, 0, reinterpret_cast<void*>(vertexArrayByteSize + normalArrayByteSize ));
+        if (!isTex3d)
+            glTexCoordPointer(2, GL_FLOAT, 0, reinterpret_cast<void*>(vertexArrayByteSize + normalArrayByteSize));
+        else
+            glTexCoordPointer(3, GL_FLOAT, 0, reinterpret_cast<void*>(vertexArrayByteSize + normalArrayByteSize));
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -551,7 +560,7 @@ void OglModel::internalDraw(const core::visual::VisualParams* vparams, bool tran
         if (tex)
         {
             tex->unbind();
-            glDisable(GL_TEXTURE_2D);
+            glDisable(target); //glDisable(GL_TEXTURE_2D);
         }
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         if (hasTangents)
@@ -726,6 +735,8 @@ void OglModel::initTextures()
     if (tex)
     {
         tex->init();
+        isTex3d = tex->getImage()->getDepth() > 1; //check if using 3d texture	
+        target = tex->getTarget();
     }
     else
     {
@@ -784,7 +795,10 @@ void OglModel::initVertexBuffer()
 
     if (tex || putOnlyTexCoords.getValue() || !textures.empty())
     {
-        textureCoordsBufferSize = vtexcoords.size() * sizeof(vtexcoords[0]);
+        if (!isTex3d)
+            textureCoordsBufferSize = vtexcoords.size() * sizeof(vtexcoords[0]);
+        else
+            textureCoordsBufferSize = m_vtexcoords3.getValue().size() * sizeof(m_vtexcoords3.getValue()[0]);
 
         if (hasTangents)
         {
@@ -872,7 +886,10 @@ void OglModel::updateVertexBuffer()
 
     if (tex || putOnlyTexCoords.getValue() || !textures.empty())
     {
-        textureCoordsBufferSize = (vtexcoords.size() * sizeof(vtexcoords[0]));
+        if (!isTex3d)
+            textureCoordsBufferSize = (vtexcoords.size() * sizeof(vtexcoords[0]));
+        else
+            textureCoordsBufferSize = m_vtexcoords3.getValue().size() * sizeof(m_vtexcoords3.getValue()[0]);
 
         if (hasTangents)
         {
@@ -897,10 +914,14 @@ void OglModel::updateVertexBuffer()
     //Texture coords
     if(tex || putOnlyTexCoords.getValue() ||!textures.empty())
     {
-        glBufferSubData(GL_ARRAY_BUFFER,
-                        positionsBufferSize + normalsBufferSize,
-                        textureCoordsBufferSize,
-                        getData(vtexcoords));
+        if (!isTex3d)
+            glBufferSubData(GL_ARRAY_BUFFER,
+                positionsBufferSize + normalsBufferSize,
+                textureCoordsBufferSize,
+                getData(vtexcoords));
+        else
+            glBufferSubDataARB(GL_ARRAY_BUFFER, positionsBufferSize + normalsBufferSize,
+                textureCoordsBufferSize, getData(m_vtexcoords3.getValue()));
 
         if (hasTangents)
         {

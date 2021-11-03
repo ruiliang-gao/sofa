@@ -79,6 +79,8 @@ public:
     typedef sofa::type::Vec<2, float> TexCoord;
     typedef type::vector<TexCoord> VecTexCoord;
 
+    typedef sofa::type::Vec<3, float> TexCoord3;
+
     using Index = sofa::Index;
     
     //Indices must be unsigned int for drawing
@@ -112,7 +114,7 @@ public:
     Data<bool> m_updateTangents; ///< True if tangents should be updated at each iteration
     Data<bool> m_handleDynamicTopology; ///< True if topological changes should be handled
     Data<bool> m_fixMergedUVSeams; ///< True if UV seams should be handled even when duplicate UVs are merged
-    Data<bool> m_keepLines; ///< keep and draw lines (false by default)
+    Data<bool> m_keepLines; ///< keep and draw lines (false by default)  
 
     Data< VecCoord > m_vertices2; ///< vertices of the model (only if vertices have multiple normals/texcoords, otherwise positions are used)
     topology::PointData< VecTexCoord > m_vtexcoords; ///< coordinates of the texture
@@ -136,6 +138,16 @@ public:
 
     template<class VecType>
     void addTopoHandler(topology::PointData<VecType>* data, int algo = 0);
+
+    /// TIPS tex3d data and methods
+    typedef sofa::type::vector<TexCoord3> VecTexCoord3;
+    Data<bool> m_genTex3d; ///< True if using 3d texture
+    topology::PointData< VecTexCoord3 > m_vtexcoords3; ///< coordinates of the 3d texture
+    Data< TexCoord3 > m_scaleTex3;
+    Data< TexCoord3 > m_translationTex3;
+
+    void applyUVWTransformation();
+    virtual void computeTextureCoords3();
 
 public:
 
@@ -379,7 +391,6 @@ public:
     virtual void computeTangents();
     void computeBBox(const core::ExecParams* params, bool=false) override;
     virtual void computeUVSphereProjection();
-
     virtual void updateBuffers() {}
 
     void updateVisual() override;
