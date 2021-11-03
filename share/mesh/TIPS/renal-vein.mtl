@@ -1,0 +1,12 @@
+# Blender MTL File: 'adrenalectomy - OBJ.blend'
+# Material Count: 1
+
+newmtl vein
+Ns 96.078431
+Ka 0.097087 0.097087 0.097087
+Kd 0.135530 0.145569 0.456785
+Ks 0.747619 0.747619 0.747619
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2

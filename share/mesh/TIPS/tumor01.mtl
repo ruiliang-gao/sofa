@@ -1,0 +1,12 @@
+# Blender MTL File: 'hexMesher.blend'
+# Material Count: 1
+
+newmtl tumor
+Ns 96.078431
+Ka 0.021739 0.021739 0.021739
+Kd 0.072134 0.026037 0.002558
+Ks 0.709153 0.709153 0.709153
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2

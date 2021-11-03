@@ -1,0 +1,11 @@
+From: "TIPS Reporter" <tips.surflab@gmail.com>
+To: "Trainee" <destination@example.com>
+Subject: TIPS training report
+Cc: "TIPS Supervisor" <surflab.mentor@gmail.com>
+
+Dear [userName],
+
+[dateEntry],
+we have collected [errorsCount] errors:
+[errorsEntry]
+Thanks for using our TIPS surgical simulator!

@@ -1,0 +1,23 @@
+# Blender MTL File: 'ONE_TIPS.blend'
+# Material Count: 2
+
+newmtl Material::Mat.35
+Ns 66.666667
+Ka 0.200000 0.200000 0.200000
+Kd 0.820660 0.654024 0.096418
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd E:\cise\homes\jberger\Downloads\chole\musclet.jpg
+
+newmtl Material::Mat.35_NONE
+Ns 66.666667
+Ka 0.200000 0.200000 0.200000
+Kd 0.820660 0.654024 0.096418
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
