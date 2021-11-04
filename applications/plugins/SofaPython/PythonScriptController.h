@@ -111,6 +111,8 @@ protected:
     /// Idle event is sent a regular interval from the host application
     void script_onIdleEvent(const sofa::core::objectmodel::IdleEvent* event) override;
 
+    //TIPS
+    virtual void script_onHapticDeviceEvent(const int deviceID, const int deviceState, const sofa::type::Vector3& pos) override;
     /// @}
 
 public:
@@ -148,6 +150,7 @@ protected:
     PyObject *m_Func_cleanup               {nullptr} ;
     PyObject *m_Func_draw                  {nullptr} ;
     PyObject *m_Func_onIdle                {nullptr} ;
+    PyObject* m_Func_onHaptic              {nullptr} ;
 };
 
 

@@ -182,6 +182,7 @@ void PythonScriptController::refreshBinding()
             BIND_OBJECT_METHOD(onScriptEvent)
             BIND_OBJECT_METHOD(draw)
             BIND_OBJECT_METHOD(onIdle)
+            BIND_OBJECT_METHOD(onHaptic)
 }
 
 bool PythonScriptController::isDerivedFrom(const std::string& name, const std::string& module)
@@ -408,6 +409,15 @@ void PythonScriptController::script_draw(const core::visual::VisualParams*)
                                                "PythonScriptController_draw", this);
     PythonEnvironment::gil lock(__func__);
     SP_CALL_MODULEFUNC_NOPARAM(m_Func_draw);
+}
+
+//TIPS
+void PythonScriptController::script_onHapticDeviceEvent(const int deviceID, const int deviceState, const sofa::type::Vector3& pos)
+{
+    ActivableScopedAdvancedTimer advancedTimer(m_timingEnabled.getValue(),
+        "PythonScriptController_onHapticDeviceEvent", this);
+    PythonEnvironment::gil lock(__func__);
+    SP_CALL_MODULEFUNC(m_Func_onHaptic, "(iifff)", deviceID, deviceState, pos.at(0), pos.at(1), pos.at(2))
 }
 
 void PythonScriptController::handleEvent(core::objectmodel::Event *event)
