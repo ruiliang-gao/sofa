@@ -1,6 +1,7 @@
 /******************************************************************************
 ******************************************************************************/
 #include <sofa/config.h>
+#include "SurfLabHapticDeviceDriver.h"
 
 
 #ifndef WIN32
@@ -51,7 +52,7 @@ namespace sofa
 
         const char* getModuleName()
         {
-            return "Plugin Sensable";
+            return "Plugin SurfLabHapticDevice";
         }
 
         const char* getModuleVersion()

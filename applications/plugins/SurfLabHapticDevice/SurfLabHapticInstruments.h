@@ -109,13 +109,15 @@ namespace SurfLab
 		virtual ~SurfLabHapticInstruments();
 
 		virtual void init();
-		//virtual void drawTransparent(const core::visual::VisualParams* vparams) override;
+		virtual void drawTransparent(const core::visual::VisualParams* vparams) override;
 
 		bool IsReadyToSwap();
 		void DoHoverSwap();
 		///
 		void DisableActiveTool();
 		void EnableActiveTool();
+		void SwitchToLastActiveTool(); /// switch the tool to the last active one
+        void SetLastActiveTool();/// set LastActiveTool as the current one
 		bool isActiveToolDisabled;
 		Real timeActiveToolDisabled;
 		sofa::simulation::Node::SPtr mActiveTool;
@@ -126,7 +128,7 @@ namespace SurfLab
 		Real HoverTime;
 		std::uint8_t SwapIDX;
 		SurfLabHapticDevice* HapticDevice;
-
+		int mLastActiveToolIDX;
 		sofa::type::vector<sofa::simulation::Node::SPtr> Instruments;
 		sofa::type::vector<HapticInstrument_Images> Instrument_TextureTypes;
 	};

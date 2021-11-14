@@ -20,6 +20,7 @@
 #include <sofa/core/objectmodel/GUIEvent.h>
 
 #include <sofa/helper/system/FileRepository.h>
+#include <sofa/core/visual/VisualParams.h>
 
 using namespace std;
 
@@ -59,6 +60,7 @@ namespace SurfLab
 		HoverTime = 0;
 		isActiveToolDisabled = false;
 		timeActiveToolDisabled = 0.0;
+		mLastActiveToolIDX = 0;
 	}
 
 	SurfLabHapticInstruments::~SurfLabHapticInstruments() { }
@@ -219,168 +221,168 @@ namespace SurfLab
 		return 1;
 	}
 
-	//void SurfLabHapticInstruments::drawTransparent(const core::visual::VisualParams* vparams)
-	//{
-	//	Vec4f textcolor(255.0f, 255.0f, 255.0f, 1.0f);
-	//	if (vparams && vparams->drawTool())
-	//	{
-	//		sofa::simulation::Node::SPtr ActiveTool;
-	//		for (int Iter = 0; Iter < Instruments.size(); Iter++)
-	//		{
-	//			if (Instruments[Iter]->isActive())
-	//			{
-	//				ActiveTool = Instruments[Iter];
-	//				mActiveTool = Instruments[Iter];
-	//				break;
-	//			}
-	//		}
+	void SurfLabHapticInstruments::drawTransparent(const core::visual::VisualParams* vparams)
+	{
+		Vec4f textcolor(255.0f, 255.0f, 255.0f, 1.0f);
+		if (vparams && vparams->drawTool())
+		{
+			sofa::simulation::Node::SPtr ActiveTool;
+			for (int Iter = 0; Iter < Instruments.size(); Iter++)
+			{
+				if (Instruments[Iter]->isActive())
+				{
+					ActiveTool = Instruments[Iter];
+					mActiveTool = Instruments[Iter];
+					break;
+				}
+			}
 
-	//		HapticInstrument_Images ActiveToolImage = HM_IMG_QUESTION_SELECTED;
+			HapticInstrument_Images ActiveToolImage = HM_IMG_QUESTION_SELECTED;
 
-	//		if (ActiveTool != nullptr)
-	//		{
-	//			std::map<std::string, HapticInstrument_Images>::iterator FindInstrument = INSTRUMENT_TOOL_TO_IMAGE_MAP.find(ActiveTool->getName());
-	//			if (FindInstrument != INSTRUMENT_TOOL_TO_IMAGE_MAP.end())
-	//			{
-	//				ActiveToolImage = FindInstrument->second;
-	//			}
-	//		}
+			if (ActiveTool != nullptr)
+			{
+				std::map<std::string, HapticInstrument_Images>::iterator FindInstrument = INSTRUMENT_TOOL_TO_IMAGE_MAP.find(ActiveTool->getName());
+				if (FindInstrument != INSTRUMENT_TOOL_TO_IMAGE_MAP.end())
+				{
+					ActiveToolImage = FindInstrument->second;
+				}
+			}
 
-	//		vparams->drawTool()->saveLastState();
-	//		vparams->drawTool()->disableStencilTest();
+			vparams->drawTool()->saveLastState();
+			vparams->drawTool()->disableStencilTest();
 
-	//		int viewport[4];
-	//		viewport[0] = vparams->viewport()[0];
-	//		viewport[1] = vparams->viewport()[1];
-	//		viewport[2] = vparams->viewport()[2];
-	//		viewport[3] = vparams->viewport()[3];
+			int viewport[4];
+			viewport[0] = vparams->viewport()[0];
+			viewport[1] = vparams->viewport()[1];
+			viewport[2] = vparams->viewport()[2];
+			viewport[3] = vparams->viewport()[3];
 
-	//		Vector3 CenterPosV(viewport[2] / 2, viewport[3] / 2, 0);
-	//		double CircleRadius = min(CenterPosV[0], CenterPosV[1]);
+			Vector3 CenterPosV(viewport[2] / 2, viewport[3] / 2, 0);
+			double CircleRadius = min(CenterPosV[0], CenterPosV[1]);
 
-	//		int IconSize = 80;
-	//		int HalfIconSize = IconSize / 2;
+			int IconSize = 80;
+			int HalfIconSize = IconSize / 2;
 
-	//		double DegreePerIter = ceil(asin(IconSize / CircleRadius) * 57.2958);
-	//		double CurrentAngle = (Instruments.size() * DegreePerIter / 2) / 2;
+			double DegreePerIter = ceil(asin(IconSize / CircleRadius) * 57.2958);
+			double CurrentAngle = (Instruments.size() * DegreePerIter / 2) / 2;
 
-	//		bool bValidOffScreenIcon = false;
-	//		Vector3 OffScreenDrawPos;
-	//		double OffScreenAngle;
+			bool bValidOffScreenIcon = false;
+			Vector3 OffScreenDrawPos;
+			double OffScreenAngle;
 
-	//		// draw off screen icon
-	//		if (ActiveTool != nullptr)
-	//		{
-	//			double screenpos[3];
-	//			double modelview[16];
-	//			double projection[16];
+			// draw off screen icon
+			if (ActiveTool != nullptr)
+			{
+				double screenpos[3];
+				double modelview[16];
+				double projection[16];
 
-	//			vparams->getModelViewMatrix(modelview);
-	//			vparams->getProjectionMatrix(projection);
+				vparams->getModelViewMatrix(modelview);
+				vparams->getProjectionMatrix(projection);
 
-	//			const sofa::component::container::MechanicalObject<sofa::defaulttype::Rigid3dTypes>::VecCoord& WorldPos = HapticDevice->toolDOF->read(core::ConstVecCoordId::position())->getValue();
-	//			const sofa::defaulttype::Vec<3, double>& TCenter = WorldPos[0].getCenter();
-	//			glhProjectf<double>(TCenter[0], TCenter[1], TCenter[2], modelview, projection, viewport, screenpos);
+				const sofa::component::container::MechanicalObject<sofa::defaulttype::Rigid3dTypes>::VecCoord& WorldPos = HapticDevice->toolDOF->read(core::ConstVecCoordId::position())->getValue();
+				const sofa::defaulttype::Vec<3, double>& TCenter = WorldPos[0].getCenter();
+				glhProjectf<double>(TCenter[0], TCenter[1], TCenter[2], modelview, projection, viewport, screenpos);
 
-	//			Vector3 ScreenPosV(screenpos[0], screenpos[1], 0);
+				Vector3 ScreenPosV(screenpos[0], screenpos[1], 0);
 
-	//			double DistanceToPoint = (ScreenPosV - CenterPosV).norm();
-	//			if (DistanceToPoint > CircleRadius)
-	//			{
-	//				OffScreenDrawPos = (ScreenPosV - CenterPosV).normalized() * CircleRadius - Vector3(HalfIconSize, HalfIconSize, 0);
-	//				OffScreenAngle = atan2(OffScreenDrawPos[1], OffScreenDrawPos[0]) * 57.2958;
-	//				while (OffScreenAngle < 180)
-	//				{
-	//					OffScreenAngle += 360;
-	//				}
-	//				while (OffScreenAngle > 180)
-	//				{
-	//					OffScreenAngle -= 360;
-	//				}
-	//				OffScreenDrawPos += CenterPosV;
+				double DistanceToPoint = (ScreenPosV - CenterPosV).norm();
+				if (DistanceToPoint > CircleRadius)
+				{
+					OffScreenDrawPos = (ScreenPosV - CenterPosV).normalized() * CircleRadius - Vector3(HalfIconSize, HalfIconSize, 0);
+					OffScreenAngle = atan2(OffScreenDrawPos[1], OffScreenDrawPos[0]) * 57.2958;
+					while (OffScreenAngle < 180)
+					{
+						OffScreenAngle += 360;
+					}
+					while (OffScreenAngle > 180)
+					{
+						OffScreenAngle -= 360;
+					}
+					OffScreenDrawPos += CenterPosV;
 
-	//				bValidOffScreenIcon = true;
-	//			}
-	//		}
+					bValidOffScreenIcon = true;
+				}
+			}
 
-	//		//x,y,width,height,texture,bIsRightSide
-	//		bool bAnySelected = false;
-	//		for (int Iter = 0; Iter < Instruments.size(); Iter++)
-	//		{
-	//			Vector3 RadialPos(cos((double)CurrentAngle * 0.0174533), sin((double)CurrentAngle * 0.0174533), 0);
+			//x,y,width,height,texture,bIsRightSide
+			bool bAnySelected = false;
+			for (int Iter = 0; Iter < Instruments.size(); Iter++)
+			{
+				Vector3 RadialPos(cos((double)CurrentAngle * 0.0174533), sin((double)CurrentAngle * 0.0174533), 0);
 
-	//			if (HapticDevice->isDominantHand.getValue() == false)
-	//			{
-	//				RadialPos[0] = -RadialPos[0];
-	//			}
+				if (HapticDevice->isDominantHand.getValue() == false)
+				{
+					RadialPos[0] = -RadialPos[0];
+				}
 
-	//			Vector3 DrawPos = CenterPosV + RadialPos * (CircleRadius + IconSize);
-	//			DrawPos[0] -= HalfIconSize;
-	//			DrawPos[1] -= HalfIconSize;
+				Vector3 DrawPos = CenterPosV + RadialPos * (CircleRadius + IconSize);
+				DrawPos[0] -= HalfIconSize;
+				DrawPos[1] -= HalfIconSize;
 
-	//			bool bDoHover = false;
+				bool bDoHover = false;
 
-	//			if (bValidOffScreenIcon)
-	//			{
-	//				int TestActiveAngle = HapticDevice->isDominantHand.getValue() ? CurrentAngle : 180 - CurrentAngle;
-	//				while (TestActiveAngle < 180)
-	//				{
-	//					TestActiveAngle += 360;
-	//				}
-	//				while (TestActiveAngle > 180)
-	//				{
-	//					TestActiveAngle -= 360;
-	//				}
-	//				if (abs(TestActiveAngle - OffScreenAngle) < DegreePerIter / 2)
-	//				{
-	//					bDoHover = true;
-	//				}
-	//			}
+				if (bValidOffScreenIcon)
+				{
+					int TestActiveAngle = HapticDevice->isDominantHand.getValue() ? CurrentAngle : 180 - CurrentAngle;
+					while (TestActiveAngle < 180)
+					{
+						TestActiveAngle += 360;
+					}
+					while (TestActiveAngle > 180)
+					{
+						TestActiveAngle -= 360;
+					}
+					if (abs(TestActiveAngle - OffScreenAngle) < DegreePerIter / 2)
+					{
+						bDoHover = true;
+					}
+				}
 
-	//			bAnySelected |= bDoHover;
+				bAnySelected |= bDoHover;
 
-	//			//selected
-	//			if (Instruments[Iter] == ActiveTool)
-	//			{
-	//				((core::visual::DrawToolGL*)vparams->drawTool())->DrawTextureQuad(DrawPos[0], DrawPos[1], IconSize, IconSize, glToolTextures[HM_IMG_BACKGROUND_SELECTED].get());
-	//			}
-	//			else if (bDoHover)
-	//			{
-	//				((core::visual::DrawToolGL*)vparams->drawTool())->DrawTextureQuad(DrawPos[0], DrawPos[1], IconSize, IconSize, glToolTextures[HM_IMG_BACKGROUND_HOVER].get());
+				//selected
+				if (Instruments[Iter] == ActiveTool)
+				{
+					((sofa::gl::DrawToolGL*)vparams->drawTool())->DrawTextureQuad(DrawPos[0], DrawPos[1], IconSize, IconSize, glToolTextures[HM_IMG_BACKGROUND_SELECTED].get());
+				}
+				else if (bDoHover)
+				{
+					((sofa::gl::DrawToolGL*)vparams->drawTool())->DrawTextureQuad(DrawPos[0], DrawPos[1], IconSize, IconSize, glToolTextures[HM_IMG_BACKGROUND_HOVER].get());
 
-	//				HoverTime += this->getContext()->getDt();
-	//				SwapIDX = Iter;
+					HoverTime += this->getContext()->getDt();
+					SwapIDX = Iter;
 
-	//				// done via device now
-	//				//if (IsReadyToSwap())
-	//				//{
-	//				//	DoHoverSwap();
-	//				//}
-	//			}
-	//			else
-	//			{
-	//				((core::visual::DrawToolGL*)vparams->drawTool())->DrawTextureQuad(DrawPos[0], DrawPos[1], IconSize, IconSize, glToolTextures[HM_IMG_BACKGROUND].get());
-	//			}
+					// done via device now
+					//if (IsReadyToSwap())
+					//{
+					//	DoHoverSwap();
+					//}
+				}
+				else
+				{
+					((sofa::gl::DrawToolGL*)vparams->drawTool())->DrawTextureQuad(DrawPos[0], DrawPos[1], IconSize, IconSize, glToolTextures[HM_IMG_BACKGROUND].get());
+				}
 
 
-	//			((core::visual::DrawToolGL*)vparams->drawTool())->DrawTextureQuad(DrawPos[0], DrawPos[1], IconSize, IconSize, glToolTextures[Instrument_TextureTypes[Iter]].get());
-	//			CurrentAngle -= DegreePerIter;
-	//		}
+				((sofa::gl::DrawToolGL*)vparams->drawTool())->DrawTextureQuad(DrawPos[0], DrawPos[1], IconSize, IconSize, glToolTextures[Instrument_TextureTypes[Iter]].get());
+				CurrentAngle -= DegreePerIter;
+			}
 
-	//		if (bAnySelected == false)
-	//		{
-	//			HoverTime = 0;
-	//		}
+			if (bAnySelected == false)
+			{
+				HoverTime = 0;
+			}
 
-	//		// draw off screen icon
-	//		if (bValidOffScreenIcon)
-	//		{
-	//			((core::visual::DrawToolGL*)vparams->drawTool())->DrawTextureQuad(OffScreenDrawPos[0], OffScreenDrawPos[1], 64, 64, glToolTextures[ActiveToolImage].get());
-	//		}
+			// draw off screen icon
+			if (bValidOffScreenIcon)
+			{
+				((sofa::gl::DrawToolGL*)vparams->drawTool())->DrawTextureQuad(OffScreenDrawPos[0], OffScreenDrawPos[1], 64, 64, glToolTextures[ActiveToolImage].get());
+			}
 
-	//		vparams->drawTool()->restoreLastState();
-	//	}
-	//}
+			vparams->drawTool()->restoreLastState();
+		}
+	}
 
 	bool SurfLabHapticInstruments::IsReadyToSwap()
 	{
@@ -401,7 +403,7 @@ namespace SurfLab
 	void SurfLabHapticInstruments::DisableActiveTool()
 	{
 		if (!isActiveToolDisabled && mActiveTool) {
-			std::cout << "diable ActiveTool: " << mActiveTool->getName() << std::endl;
+			std::cout << "disable ActiveTool: " << mActiveTool->getName() << std::endl;
 			isActiveToolDisabled = true;
 			mActiveTool->setActive(false);
 		}
@@ -415,5 +417,31 @@ namespace SurfLab
 			mActiveTool->setActive(true);
 		}
 	}
+
+    void SurfLabHapticInstruments::SetLastActiveTool()
+    {
+        for (int Iter = 0; Iter < Instruments.size(); Iter++)
+        {
+            if (Instruments[Iter]->isActive())
+            {
+                mLastActiveToolIDX = Iter;
+                break;
+            }
+        }
+    }
+
+    void SurfLabHapticInstruments::SwitchToLastActiveTool()
+    {
+        std::cout << "SwitchToLastActiveTool: " << mLastActiveToolIDX << std::endl;
+        if (mLastActiveToolIDX < Instruments.size())
+        {
+            sofa::simulation::Node::SPtr ActiveTool = Instruments[mLastActiveToolIDX];
+            if (ActiveTool != nullptr)
+            {
+                sofa::core::objectmodel::GUIEvent newGUIEvent(HapticDevice->getPathName().c_str(), "setTool", Instruments[mLastActiveToolIDX]->getPathName().c_str());
+                m_ScriptController->handleEvent(&newGUIEvent);
+            }
+        }
+    }
 
 } // namespace SurfLab

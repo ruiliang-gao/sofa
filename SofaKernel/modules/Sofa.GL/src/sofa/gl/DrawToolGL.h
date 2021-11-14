@@ -25,6 +25,7 @@
 
 #include <sofa/type/RGBAColor.h>
 #include <sofa/gl/BasicShapesGL.h>
+#include <sofa/gl/Texture.h>
 
 namespace sofa::gl
 {
@@ -184,6 +185,11 @@ public:
 
     void enableDepthTest() override;
     void disableDepthTest() override;
+
+	//TIPS - DS
+    virtual void enableStencilTest() override;
+	virtual void disableStencilTest() override;
+    void DrawTextureQuad(int x, int y, int width, int height, sofa::gl::Texture* InTexture, bool bFromRightCorner=false);
 
     void saveLastState() override;
     void restoreLastState() override;
