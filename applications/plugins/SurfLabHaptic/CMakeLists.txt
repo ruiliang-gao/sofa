@@ -28,7 +28,7 @@ include_directories(${OPENHAPTICS_UTIL_INCLUDE_DIR})
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_SURFLABHAPTIC")
 
-target_link_libraries(${PROJECT_NAME} SofaOpenglVisual SofaGeneralDeformable SofaConstraint SofaHaptics SofaCore SofaGuiCommon SofaSimulationGraph SofaPython SofaGuiQt ${OPENHAPTICS_LIBRARIES} ${Boost_LIBRARIES} winmm.lib)
+target_link_libraries(${PROJECT_NAME} SofaOpenglVisual SofaGeneralDeformable SofaConstraint SofaHaptics SofaCore SofaGuiCommon SofaSimulationGraph SofaPython SofaGuiQt SurfLabHapticDevice SofaGuiCommon SofaGuiQt SofaOpenglVisual ${OPENHAPTICS_LIBRARIES} ${Boost_LIBRARIES} winmm.lib)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/.."
 
 ${CMAKE_CURRENT_SOURCE_DIR}/../../../modules/SofaGuiQt/src

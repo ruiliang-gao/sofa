@@ -28,7 +28,9 @@
 #  include <boost/date_time/posix_time/posix_time.hpp> 
 #endif
 
+#if _WIN32
 #pragma comment(lib, "Ws2_32.lib")
+#endif
 //sensable namespace
 
 using std::cout;
@@ -37,26 +39,32 @@ using namespace sofa::defaulttype;
 using Quat = sofa::type::Quat<SReal>;
 bool frame;
 bool visuCreation;
-//declare the static variables of the TIPS UDP Controller
+//declare the static variables of the TIPSlite Controller
 float SurfLab::SurfLabHapticDevice::recvOriDataDev1[4] = { 0.0, 0.0, 0.0, 1.0 }; //received quat in xyzw for device 1
-float SurfLab::SurfLabHapticDevice::recvOriDataDev2[4] = { 0.0, 0.0, 0.0, 1.0 }; //received quat in xyzw for device 2
+	//float SurfLab::SurfLabHapticDevice::recvOriDataDev2[4] = { 0.0, 0.0, 0.0, 1.0 }; //received quat in xyzw for device 2
 int SurfLab::SurfLabHapticDevice::recvButtonStateDev1 = 0; //received button state of device 1 
-int SurfLab::SurfLabHapticDevice::recvButtonStateDev2 = 0; // received button state of device 2
+	//int SurfLab::SurfLabHapticDevice::recvButtonStateDev2 = 0; // received button state of device 2
 float SurfLab::SurfLabHapticDevice::recvMotionStateYDev1 = 0.0; // motion vector y for device 1
 float SurfLab::SurfLabHapticDevice::recvMotionStateXDev1 = 0.0; //motion vector x for device 1
-float SurfLab::SurfLabHapticDevice::recvMotionStateYDev2 = 0.0; // motion vector y for device 2
-float SurfLab::SurfLabHapticDevice::recvMotionStateXDev2 = 0.0; //motion vector x for device 2
-//Quat SurfLab::SurfLabHapticDevice::startCorrectionQuat = Quat(0.7071067, 0.0, 0.0, 0.7071067); //old
-Quat SurfLab::SurfLabHapticDevice::startCorrectionQuat = Quat(0.704, -0.062, -0.062, 0.704); //new test
+	//float SurfLab::SurfLabHapticDevice::recvMotionStateYDev2 = 0.0; // motion vector y for device 2
+	//float SurfLab::SurfLabHapticDevice::recvMotionStateXDev2 = 0.0; //motion vector x for device 2
+//Quat SurfLab::SurfLabHapticDevice::startCorrectionQuat = Quat(0.7071067, 0.0, 0.0, 0.7071067); //old quat, aligned	
+//Quat SurfLab::SurfLabHapticDevice::startCorrectionQuat = Quat(0.704, -0.062, -0.062, 0.704); //new quat -> (0,-10,90)XYZ degrees	
+//Quat SurfLab::SurfLabHapticDevice::startCorrectionQuat = Quat(0.707, -0.019, -0.019, 0.707); //new quat -> (0,-3,90)XYZ degrees	
+Quat SurfLab::SurfLabHapticDevice::startCorrectionQuat = Quat(0.704, 0.062, 0.062, 0.704); //new quat -> (0,10,90)XYZ degrees
 Quat SurfLab::SurfLabHapticDevice::startViewQuat = Quat(0.0, 0.0, 0.0, 1.0);
 bool SurfLab::SurfLabHapticDevice::streamActive = false;
 std::string SurfLab::SurfLabHapticDevice::messageToReplyDev1;
-std::string SurfLab::SurfLabHapticDevice::messageToReplyDev2;
-std::string SurfLab::SurfLabHapticDevice::serverIPAddr = "";
-int SurfLab::SurfLabHapticDevice::serverPortNum = 5555;
+	//std::string SurfLab::SurfLabHapticDevice::messageToReplyDev2;
+	//std::string SurfLab::SurfLabHapticDevice::serverIPAddr = "";
+	//int SurfLab::SurfLabHapticDevice::serverPortNum = 5555;
 bool SurfLab::SurfLabHapticDevice::needToRecalibrateTool1 = false;
-bool SurfLab::SurfLabHapticDevice::needToRecalibrateTool2 = false;
-
+	//bool SurfLab::SurfLabHapticDevice::needToRecalibrateTool2 = false;
+//declare the static variables of the TIPS IPC Controller	
+std::unique_ptr< IPCMappedMemory> SurfLab::SurfLabHapticDevice::_mappedSofaMem = NULL;	
+std::unique_ptr< SimpleIPCMessageQueue<SurfLab::SurfLabHapticDevice::IPCMotionState> > SurfLab::SurfLabHapticDevice::_msgQueue = NULL;	
+bool SurfLab::SurfLabHapticDevice::_bSendBuzz = false;//stores state: false = no collision, increments when in collision	
+int SurfLab::SurfLabHapticDevice::_buzzCounter = 0;
 namespace SurfLab
 {
 	const char* SurfLabHapticDevice::visualNodeNames[NVISUALNODE] =
@@ -327,7 +335,7 @@ namespace SurfLab
 			autreOmniDriver[i]->data.deviceData.quat.clear();
 			autreOmniDriver[i]->data.servoDeviceData.quat.clear();
 
-			if (!this->enableUDPServer.getValue() && hHDVector[i] == HD_INVALID_HANDLE)
+			if (!this->enableIPCServer.getValue() && hHDVector[i] == HD_INVALID_HANDLE)
 			{
 				hHDVector[i] = hdInitDevice(autreOmniDriver[i]->deviceName.getValue().c_str());
 
@@ -348,40 +356,49 @@ namespace SurfLab
 			}
 		}
 
-		if (!this->enableUDPServer.getValue()) // if using HD
-		{
-			doUpdate = 0;
-			//Start the servo loop scheduler.
-			hdStartScheduler();
-			if (HD_DEVICE_ERROR(error = hdGetError()))
-			{
-				std::cout << "[NewOmni] Failed to start the scheduler" << std::endl;
-			}
-		}
-		else  // using TIPS UDO controller
-		{
-			camera = this->getContext()->get<component::visualmodel::InteractiveCamera>(this->getTags(), sofa::core::objectmodel::BaseContext::SearchRoot);
-			if (!camera)
-				camera = this->getContext()->get<component::visualmodel::InteractiveCamera>();
-			if (camera) {
-				startViewQuat = camera->getOrientation();
-				startViewQuat.normalize();
-				std::cout << "startViewQuat: " << startViewQuat << std::endl;
-			}
-			else
-				std::cout << "could not find camera!\n";
-			//correct the orientationBase for android tools
-			Quat& orientB = (*orientationBase.beginEdit());
-			orientB = orientB * startCorrectionQuat.inverse();
-			orientationBase.endEdit();
-
-			std::cout << "adding UDP server...\n";
-			serverPortNum = this->inServerPortNum.getValue();
-			serverIPAddr = this->inServerIPAddr.getValue();
-			std::cout << "SurfLabHapticDevice UDP server initialized with: " << serverIPAddr << ", " << serverPortNum << std::endl;
-			//this->addUDPServerThread();
-			return 0;
-		}
+		if (!this->enableIPCServer.getValue()) // if using HD	
+        {	
+            doUpdate = 0;	
+            //Start the servo loop scheduler.	
+            hdStartScheduler();	
+            if (HD_DEVICE_ERROR(error = hdGetError()))	
+            {	
+                std::cout << "[NewOmni] Failed to start the scheduler" << std::endl;	
+            }	
+        }	
+        else  // TIPSlite: using TIPS IPC controller	
+        {	
+            camera = this->getContext()->get<component::visualmodel::InteractiveCamera>(this->getTags(), sofa::core::objectmodel::BaseContext::SearchRoot);	
+            if (!camera)	
+                camera = this->getContext()->get<component::visualmodel::InteractiveCamera>();	
+            if (camera) {	
+                startViewQuat = camera->getOrientation();	
+                startViewQuat.normalize();	
+                std::cout << "startViewQuat: "<< startViewQuat <<std::endl;	
+            }	
+            else	
+                std::cout << "could not find camera!\n";	
+            
+            //correct the orientationBase for cellphone tools	
+            Quat& orientB = (*orientationBase.beginEdit());	
+            orientB = orientB * startCorrectionQuat.inverse();	
+            orientationBase.endEdit();	
+            
+            if (this->enableIPCServer.getValue()) {	
+				MemShareID = GetMemoryShareID();	
+                std::cout << "initializaing IPC controller with MemShareID:" << MemShareID << std::endl;	
+				if (!MemShareID.empty())	
+				{	
+					_mappedSofaMem = std::make_unique<IPCMappedMemory>(MemShareID.c_str(), sizeof(IPCMotionState) * 200, false);	
+					_msgQueue = std::make_unique< SimpleIPCMessageQueue<IPCMotionState> >(*_mappedSofaMem, sizeof(uint32_t));	
+                    this->runIPCThread();	
+				}	
+                else	
+                    std::cout << "Warning: MemShareID is empty...\n";	
+            }	
+            	
+            return 0;	
+        }
 
 		for (unsigned int i = 0; i < autreOmniDriver.size(); i++)
 		{
@@ -436,9 +453,10 @@ namespace SurfLab
 		, setDesirePosition(initData(&setDesirePosition, true, "setDesirePosition", "True to move haptic tool to a desire position set in the next field"))
 		, isDominantHand(initData(&isDominantHand, false, "isDominantHand", "True means the device https://psnine.com/topic/34515?page=3on the dominant hand side"))
 		, desirePosition(initData(&desirePosition, Vec3d(0, 0, 0), "desirePosition", "desire initial position"))
-		, enableUDPServer(initData(&enableUDPServer, false, "enableUDPServer", "enable the UDPServer"))
-		, inServerIPAddr(initData(&inServerIPAddr, std::string("1.0.0.1"), "inServerIPAddr", "server ip address"))
-		, inServerPortNum(initData(&inServerPortNum, 5550, "inServerPortNum", "server port number"))
+		, enableIPCServer(initData(&enableIPCServer, true, "enableIPCServer", "enable the IPCServer"))
+		//, enableUDPServer(initData(&enableUDPServer, false, "enableUDPServer", "enable the UDPServer"))
+		//, inServerIPAddr(initData(&inServerIPAddr, std::string("1.0.0.1"), "inServerIPAddr", "server ip address"))
+		//, inServerPortNum(initData(&inServerPortNum, 5550, "inServerPortNum", "server port number"))
 		, motionScaleFactor(initData(&motionScaleFactor, 1.0, "motionScaleFactor", "Cellphone to SOFA motion scaling factor"))
 		//temp disable the following distToToggle feature by setting it to be 0.99 (from 0.24)
 		, distanceButtonTwoToggle(initData(&distanceButtonTwoToggle, 0.99, "distanceButtonTwoToggle", "stylus distance from base to start triggering button"))
@@ -456,9 +474,9 @@ namespace SurfLab
 		key_W_down = false;
 		CurrentTimeToToggle = 0.0;
 
-		/// TIPS UDP server
+		/// TIPSlite: initialize the message received from cellphone device 
 		messageFromHapticManagerDev1 = "";
-		messageFromHapticManagerDev2 = "";
+		//messageFromHapticManagerDev2 = "";
 
 	}
 
@@ -757,123 +775,54 @@ namespace SurfLab
 			changeScale = true;
 	}
 
-	//void SurfLabHapticDevice::addUDPServerThread() {
-	//	boost::thread thrd(&runServerLoop);
-	//	//thrd.join();
-
-	//	return;
-	//}
-
-	//void SurfLabHapticDevice::runServerLoop()
-	//{
-	//	WSADATA WSAData;
-	//	SOCKET server, client;
-	//	SOCKADDR_IN serverAddr, clientAddr;
-	//	unsigned short serverPort = serverPortNum;
-
-	//	WSAStartup(MAKEWORD(2, 0), &WSAData);
-	//	server = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	//	//serverAddr.sin_addr.s_addr = inet_addr("10.140.218.223");
-	//	//std::cout << "in UDP server thread... " << serverIPAddr << ", " << serverPortNum << std::endl;
-	//	serverAddr.sin_addr.s_addr = inet_addr(serverIPAddr.c_str());
-	//	//serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	//	serverAddr.sin_family = AF_INET;
-	//	serverAddr.sin_port = htons(serverPort);
-
-	//	if (::bind(server, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-	//	{
-	//		cout << "bind failed...";
-	//		WSACleanup();
-	//		return;
-	//	}
-	//	// listen(server, 0);
-	//	// cout << "Listening for incoming connections..." << endl;
-
-	//	char buffer[1024];
-	//	memset(buffer, 0, sizeof(buffer));
-	//	int iLen = sizeof(clientAddr);
-	//	int iRecv;
-	//	while (true) {
-	//		iRecv = recvfrom(server, buffer, 1024, 0, (SOCKADDR*)&clientAddr, &iLen);
-	//		if (iRecv == SOCKET_ERROR)
-	//		{
-	//			std::cout << "recvfrom() Failed \n" << WSAGetLastError();
-	//			break;
-	//		}
-	//		else if (iRecv == 0)
-	//		{
-	//			if (streamActive) streamActive = false;
-	//			break;
-	//		}
-	//		else
-	//		{
-	//			char* token;
-	//			token = strtok(buffer, ",");
-	//			int id = atoi(token);
-	//			token = strtok(NULL, ",");
-	//			if (id == 1) ///from device 1
-	//			{
-	//				///TODO recv message string format : { id, buttonState, motionY, motionX, orientationQuat }
-	//				for (int i = 0; i < 7; i++) {
-	//					if (i == 0)
-	//						recvButtonStateDev1 = atoi(token);
-	//					else if (i == 1) {
-	//						recvMotionStateYDev1 = atof(token);
-	//					}
-	//					else if (i == 2) {
-	//						recvMotionStateXDev1 = atof(token);
-	//					}
-	//					else {
-	//						recvOriDataDev1[i - 3] = atof(token);
-	//					}
-	//					token = strtok(NULL, ",");
-	//				}
-	//				if (recvButtonStateDev1 == 3)
-	//					needToRecalibrateTool1 = true;
-	//				//TODO send back forceFeedback to the corresponding client(1 or 2)
-	//				if (!messageToReplyDev1.empty())
-	//				{
-	//					if (sendto(server, messageToReplyDev1.c_str(), strlen(messageToReplyDev1.c_str()), 0, (struct sockaddr*)&clientAddr, iLen) == SOCKET_ERROR)
-	//					{
-	//						std::cout << "sendto() failed with error code : " << WSAGetLastError() << std::endl;
-	//						exit(EXIT_FAILURE);
-	//					}
-	//					//std::cout << "sent " << messageToReplyDev1.c_str() << " to device 1 client ip " << inet_ntoa(clientAddr.sin_addr) << std::endl;
-	//					messageToReplyDev1.clear();
-	//				}
-	//			}
-	//			else //handle data from device 2
-	//			{
-	//				for (int i = 0; i < 7; i++) {
-	//					if (i == 0)
-	//						recvButtonStateDev2 = atoi(token);
-	//					else if (i == 1) {
-	//						recvMotionStateYDev2 = atof(token);
-	//					}
-	//					else if (i == 2) {
-	//						recvMotionStateXDev2 = atof(token);
-	//					}
-	//					else {
-	//						recvOriDataDev2[i - 3] = atof(token);
-	//					}
-	//					token = strtok(NULL, ",");
-	//				}
-	//				if (!messageToReplyDev2.empty())
-	//				{
-	//					if (sendto(server, messageToReplyDev2.c_str(), strlen(messageToReplyDev2.c_str()), 0, (struct sockaddr*)&clientAddr, iLen) == SOCKET_ERROR)
-	//					{
-	//						std::cout << "sendto() failed with error code : " << WSAGetLastError() << std::endl;
-	//						exit(EXIT_FAILURE);
-	//					}
-	//					//std::cout << "sent " << messageToReplyDev2.c_str() << " to device 1 client ip " << inet_ntoa(clientAddr.sin_addr) << std::endl;
-	//					messageToReplyDev2.clear();
-	//				}
-	//			}
-
-	//			if (!streamActive) streamActive = true;
-	//		}
-	//	}
-	//}
+		    void SurfLabHapticDevice::runIPCThread()	
+    {	
+        boost::thread thrd_ipc(&runIPCLoop);	
+        //thrd_ipc.join(); 	
+        return;	
+    }	
+    void SurfLabHapticDevice::runIPCLoop()	
+    {	
+        std::cout << "in IPCloop...\n";	
+        if (!_msgQueue) std::cout << "_msgQueue is NULL...\n";	
+        while (_msgQueue) {	
+            auto newEvents = _msgQueue->GetMessages();	
+            //// message format as below:	
+            //// "%d, %d, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f", DeviceID(=1 by default), ButtonState, MotionStateY, MotionStateX, Quat.x1, Quat.x2, Quat.x3, Quat.x0	
+            if (!newEvents.empty())	
+            {	
+                if (!streamActive) streamActive = true;	
+                auto &curEvent = newEvents.back(); //the last message	
+                if (curEvent.buttonState[0] == 1) //device id = 1	
+                {	
+                    SurfLab::SurfLabHapticDevice::recvButtonStateDev1 = curEvent.buttonState[1];	
+                    SurfLab::SurfLabHapticDevice::recvMotionStateYDev1 = curEvent.motionXY[0];	
+                    SurfLab::SurfLabHapticDevice::recvMotionStateXDev1 = curEvent.motionXY[1];	
+                    SurfLab::SurfLabHapticDevice::recvOriDataDev1[0] = curEvent.orientationQuat[0];	
+                    SurfLab::SurfLabHapticDevice::recvOriDataDev1[1] = curEvent.orientationQuat[1];	
+                    SurfLab::SurfLabHapticDevice::recvOriDataDev1[2] = curEvent.orientationQuat[2];	
+                    SurfLab::SurfLabHapticDevice::recvOriDataDev1[3] = curEvent.orientationQuat[3];	
+                    /*std::cout << "recv dev1: " << recvButtonStateDev1<<" " << recvMotionStateYDev1 << " " 	
+                        << recvMotionStateXDev1 << recvOriDataDev1[0] << " " << recvOriDataDev1[1] << " "	
+                        << recvOriDataDev1[2] << " " << recvOriDataDev1[3] << " " << "\n";*/	
+                    if (recvButtonStateDev1 == 3)	
+                        needToRecalibrateTool1 = true;	
+                }	
+                else	
+                {	
+                    std::cout << "Error : should not use device (id=2) as cellphone...\n";
+                }	
+                if (_bSendBuzz)	
+                {	
+                    _mappedSofaMem->WriteMemory(&_buzzCounter, sizeof(uint32_t));	
+                    _buzzCounter++;	
+                    _bSendBuzz = false;	
+                    //std::cout << "[DEBUG] buz sent... " << _buzzCounter;	
+                }	
+            }	
+        }	
+        	
+    }
 
 	void SurfLabHapticDevice::draw(const core::visual::VisualParams* vparam) {
 		SOFA_UNUSED(vparam);
@@ -1133,51 +1082,29 @@ namespace SurfLab
 				// copy data->servoDeviceData to gDeviceData
 
 		if (!streamActive) hdScheduleSynchronous(copyDeviceDataCallback, (void*)&autreOmniDriver, HD_MAX_SCHEDULER_PRIORITY);
-		else { //  for device 1
-
-			if (needToRecalibrateTool1) {//reset position
-				m_Instruments->DisableActiveTool();
-				m_Instruments->timeActiveToolDisabled = 0.0;
-				std::cout << "recved recalibrate-event for device 1 \n";
-				needToRecalibrateTool1 = false;
-				return;
-			}
-			if (m_Instruments->isActiveToolDisabled) {
-				m_Instruments->timeActiveToolDisabled += this->getContext()->getDt();
-				if (m_Instruments->timeActiveToolDisabled > 0.2)
-					m_Instruments->EnableActiveTool();
-			}
-			data.deviceData.quat = helper::Quater< SReal >(recvOriDataDev1[0], recvOriDataDev1[1], recvOriDataDev1[2], recvOriDataDev1[3]);
-			data.deviceData.quat.normalize();
-			data.deviceData.m_buttonState = recvButtonStateDev1;
-			if (messageToReplyDev1 != messageFromHapticManagerDev1 && !messageFromHapticManagerDev1.empty())
-			{
-				messageToReplyDev1 = messageFromHapticManagerDev1;
-				messageFromHapticManagerDev1.clear();
-			}
-		}
-		//else // for device 2
-		//{
-		//	if (recvButtonStateDev2 == 3) {//reset position
-		//		//data.deviceData.pos = startTool2Pos;
-		//		m_Instruments->DisableActiveTool();
-		//		m_Instruments->timeActiveToolDisabled = 0.0;
-		//		return;
-		//	}
-		//	if (m_Instruments->isActiveToolDisabled) {
-		//		m_Instruments->timeActiveToolDisabled += this->getContext()->getDt();
-		//		if (m_Instruments->timeActiveToolDisabled > 0.2)
-		//			m_Instruments->EnableActiveTool();
-		//	}
-		//	data.deviceData.quat = helper::Quater< SReal >(recvOriDataDev2[0], recvOriDataDev2[1], recvOriDataDev2[2], recvOriDataDev2[3]);
-		//	data.deviceData.quat.normalize();
-		//	data.deviceData.m_buttonState = recvButtonStateDev2;
-		//	if (messageToReplyDev2 != messageFromHapticManagerDev2 && !messageFromHapticManagerDev2.empty())
-		//	{
-		//		messageToReplyDev2 = messageFromHapticManagerDev2;
-		//		messageFromHapticManagerDev2.clear();
-		//	}
-		//}
+		else // cellphone as bluetooth device, (cellphone -> device 1 by default)	
+        {	
+            if (needToRecalibrateTool1) {//reset position	
+                std::cout << "recalibrate event received...\n";	
+                m_Instruments->SetLastActiveTool();//remember current tool idx	
+                m_Instruments->DisableActiveTool();	
+                m_Instruments->timeActiveToolDisabled = 0.0;	
+                needToRecalibrateTool1 = false;	
+                return;	
+            }	
+            if (m_Instruments->isActiveToolDisabled) {	
+                m_Instruments->timeActiveToolDisabled += this->getContext()->getDt();	
+                if (m_Instruments->timeActiveToolDisabled > 0.2)	
+                {	
+                    m_Instruments->EnableActiveTool();	
+                    m_Instruments->SwitchToLastActiveTool();	
+                }	
+            }	
+            data.deviceData.quat = helper::Quater< SReal >(recvOriDataDev1[0], recvOriDataDev1[1], recvOriDataDev1[2], recvOriDataDev1[3]);	
+            data.deviceData.quat.normalize();	
+            data.deviceData.m_buttonState = recvButtonStateDev1;	
+        }
+		
 
 		if (data.deviceData.ready) ///TODO udp server should not check the boolean ready?
 		{
@@ -1196,20 +1123,19 @@ namespace SurfLab
 			}
 
 			if (data.stiffness < 2000 && data.move2Pos) data.stiffness = data.stiffness + 200;
-			data.deviceData.quat = data.deviceData.quat * startCorrectionQuat;
-			Vec3d toolPointingDirection = Vec3d(0, 0, -1);
-			Vec3d toolRightDirection = Vec3d(1, 0, 0);
-			Vec3d pointOrientation = data.deviceData.quat.rotate(toolPointingDirection);
-			Vec3d rightOrientation = data.deviceData.quat.rotate(toolRightDirection);
+			//Correct the quat to match cellphone tip to instrument tip 	
 
-			data.deviceData.pos -= data.deviceData.fulcrumOffset;
-			data.deviceData.fulcrumOffset = pointOrientation / 10.0;
-			if (streamActive) {
-				data.deviceData.fulcrumOffset *= recvMotionStateYDev1 * motionScaleFactor.getValue();
-			}
-			if (remoteDebug)
-				std::cout << " recvMotionStateYDev1 " << recvMotionStateYDev1 << " fulcrumOffset : " << data.deviceData.fulcrumOffset << "\n";
-			data.deviceData.pos += data.deviceData.fulcrumOffset;
+            if (streamActive) data.deviceData.quat = data.deviceData.quat * startCorrectionQuat;	
+            Vec3d toolPointingDirection = Vec3d(0, 0, -1);	
+            Vec3d toolRightDirection = Vec3d(1, 0, 0);	
+            Vec3d pointOrientation = data.deviceData.quat.rotate(toolPointingDirection);	
+            Vec3d rightOrientation = data.deviceData.quat.rotate(toolRightDirection);	
+            data.deviceData.pos -= data.deviceData.fulcrumOffset;	
+            data.deviceData.fulcrumOffset = pointOrientation / 10.0;	
+            if (streamActive) {//compute and scale the dist from tool to fulcrum
+                data.deviceData.fulcrumOffset *= recvMotionStateYDev1 * motionScaleFactor.getValue();   	
+            }	
+            data.deviceData.pos += data.deviceData.fulcrumOffset;
 
 			// COMPUTATION OF THE vituralTool 6D POSITION IN THE World COORDINATES
 			sofa::defaulttype::SolidTypes<double>::Transform baseOmni_H_endOmni(data.deviceData.pos * data.scale, data.deviceData.quat);
@@ -1220,9 +1146,12 @@ namespace SurfLab
 			if (alignOmniWithCamera.getValue())
 			{
 				Quat cameraRotation = camera->getOrientation();
-				if (enableUDPServer.getValue()) // A correction on the view makes the view align with the default android quaternion
+				if (enableIPCServer.getValue()) // A correction on the view makes the view align with the default android quaternion
 					cameraRotation = cameraRotation * startCorrectionQuat.inverse();
 				orientB = cameraRotation;
+				Quat& orientTool = (*orientationTool.beginEdit());
+				orientTool = cameraRotation;
+				orientationTool.endEdit();
 			}
 			orientB.normalize();
 			data.world_H_baseOmni.set(posB, orientB);

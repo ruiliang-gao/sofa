@@ -6,6 +6,18 @@
 
 #define SURFLAB_DRIVER_NAME_S "SurfLabHapticDevice"
 
+#ifndef WIN32	
+#define SOFA_EXPORT_DYNAMIC_LIBRARY	
+#define SOFA_IMPORT_DYNAMIC_LIBRARY	
+#define SURFLAB_HAPTICDEVICE_API	
+#else	
+#ifdef SOFA_BUILD_SURFLABHAPTICDEVICE	
+#define SURFLAB_HAPTICDEVICE_API SOFA_EXPORT_DYNAMIC_LIBRARY	
+#else	
+#define SURFLAB_HAPTICDEVICE_API SOFA_IMPORT_DYNAMIC_LIBRARY	
+#endif	
+#endif
+
 
 //Sensable include
 #include <HD/hd.h>
@@ -34,7 +46,6 @@
 #include <SofaHaptics/LCPForceFeedback.h>
 #include <SofaHaptics/NullForceFeedbackT.h>
 
-#include <sofa/simulation/Node.h>
 #include <cstring>
 
 #include <SofaOpenglVisual/OglModel.h>
@@ -47,7 +58,7 @@
 #include "SurfLabHapticInstruments.h"
 
 
-//TODO add UDP server
+#include "SPPMemory.h"
 //#include <winsock2.h>
 namespace SurfLab
 {
@@ -86,7 +97,7 @@ namespace SurfLab
 		}
 	};
 
-	struct NewOmniData
+	struct SURFLAB_HAPTICDEVICE_API NewOmniData
 	{
 		ForceFeedback::SPtr forceFeedback;
 		simulation::Node::SPtr* context;
@@ -118,7 +129,7 @@ namespace SurfLab
 		}*/
 	};
 
-	struct AllNewOmniData
+	struct SURFLAB_HAPTICDEVICE_API AllNewOmniData
 	{
 		std::vector<NewOmniData> omniData;
 	};
@@ -126,7 +137,7 @@ namespace SurfLab
 	/**
 	* Omni driver
 	*/
-	class SurfLabHapticDevice : public Controller
+	class SURFLAB_HAPTICDEVICE_API SurfLabHapticDevice : public Controller
 	{
 
 	public:
@@ -180,6 +191,7 @@ namespace SurfLab
 		sofa::component::container::MechanicalObject<sofa::defaulttype::Rigid3dTypes>::SPtr DOF;
 		sofa::component::container::MechanicalObject<sofa::defaulttype::Rigid3dTypes>::SPtr toolDOF;
 		sofa::component::visualmodel::BaseCamera::SPtr camera;
+		sofa::component::container::MechanicalObject<sofa::defaulttype::Rigid3dTypes>::SPtr rigidLayerMO;//node MO ToolRealPosition
 
 		bool initVisu;
 
@@ -213,36 +225,50 @@ namespace SurfLab
 
 		void setDataValue();
 
-		/////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////TIPS UDP phone controller//////////////////////////////
-		Data<bool> enableUDPServer;
-		Data<std::string> inServerIPAddr;
-		Data<int> inServerPortNum;
-		Data<double> motionScaleFactor;
-		static bool streamActive;
-		static std::string serverIPAddr;
-		static int serverPortNum;
-		void addUDPServerThread();
-		static void runServerLoop();
-		static float recvOriDataDev1[4];
-		static float recvOriDataDev2[4];
-		static int recvButtonStateDev1;
-		static int recvButtonStateDev2;
-		static std::string messageToReplyDev1; //message to reply to cell phone client, should be a queue actually
-		static std::string messageToReplyDev2; //message to reply to cell phone client, should be a queue actually
-		std::string messageFromHapticManagerDev1;
-		std::string messageFromHapticManagerDev2;
-		//void setMessageToReply(std::string s);
-		static float recvMotionStateYDev1;
-		static float recvMotionStateXDev1;
-		static float recvMotionStateYDev2;
-		static float recvMotionStateXDev2;
-		static Quat startCorrectionQuat; // for calibration
-		static Quat startViewQuat; // for calibration
-		Vec3d startTool1Pos; // for calibration -> reset position
-		Vec3d startTool2Pos; // for calibration -> reset position
-		static bool needToRecalibrateTool1;
-		static bool needToRecalibrateTool2;
+		////////////////////////////////////////TIPSlite/////////////////////////////////////////	
+        ///////////////////////////////TIPS IPC & Bluetooth controller///////////////////////////	
+        Data<bool> enableIPCServer;	
+        struct IPCMotionState	
+        {	
+            int32_t buttonState[2];	
+            float motionXY[2];	
+            float orientationQuat[4];	
+        };	
+        std::string MemShareID;	
+        static std::unique_ptr< IPCMappedMemory> _mappedSofaMem;	
+        static std::unique_ptr< SimpleIPCMessageQueue<IPCMotionState> > _msgQueue;	
+        static bool _bSendBuzz;//stores state: 0 = no collision, 1 = in collision	
+        static int _buzzCounter;	
+        static void runIPCLoop();	
+        void runIPCThread();	
+        //////////////////////////////////TIPS UDP phone controller//////////////////////////////	
+        //Data<bool> enableUDPServer;	
+        //Data<std::string> inServerIPAddr;	
+        //Data<int> inServerPortNum;	
+        Data<double> motionScaleFactor;	
+        static bool streamActive;	
+        //static std::string serverIPAddr;	
+        //static int serverPortNum;	
+        //void addUDPServerThread();	
+        //static void runServerLoop();	
+        static float recvOriDataDev1[4];	
+        static float recvOriDataDev2[4];	
+        static int recvButtonStateDev1;	
+        static int recvButtonStateDev2;	
+        static std::string messageToReplyDev1; //message to reply to cell phone client, should be a queue actually	
+        //static std::string messageToReplyDev2; //message to reply to cell phone client, should be a queue actually	
+        std::string messageFromHapticManagerDev1;	
+        //std::string messageFromHapticManagerDev2;	
+        static float recvMotionStateYDev1;	
+        static float recvMotionStateXDev1;	
+        //static float recvMotionStateYDev2;	
+        //static float recvMotionStateXDev2;	
+        static Quat startCorrectionQuat; // for calibration	
+        static Quat startViewQuat; // for calibration	
+        Vec3d startTool1Pos; // for calibration -> reset position	
+        //Vec3d startTool2Pos; // for calibration -> reset position	
+        static bool needToRecalibrateTool1;	
+        //static bool needToRecalibrateTool2;
 		//variable pour affichage graphique
 		simulation::Node* parent;
 		enum

@@ -14,13 +14,15 @@ endif()
 
 set(HEADER_FILES
     SurfLabHapticDeviceDriver.h    
-	SurfLabHapticInstruments.h
+    SurfLabHapticInstruments.h
+    SPPMemory.h
 )
 
 set(SOURCE_FILES
     SurfLabHapticDeviceDriver.cpp
     initSurfLabHapticDevice.cpp
-	SurfLabHapticInstruments.cpp
+    SurfLabHapticInstruments.cpp
+    SPPMemory.cpp
 )
 
 set(README_FILES PluginSurfLabHapticDevice.txt)

@@ -305,7 +305,14 @@ int main(int argc, char** argv)
         "argv",
         "forward extra args to the python interpreter"
     );
-
+    //TIPSlite    
+    std::string MemID;  
+    argParser->addArgument( 
+        boost::program_options::value<std::string>(&MemID)  
+        ->default_value(""),    
+        "MEMSHARE", 
+        "mem share id"  
+    );
     // example of an option using lambda function which ensure the value passed is > 0
     argParser->addArgument(
         boost::program_options::value<unsigned int>(&nbMSSASamples)

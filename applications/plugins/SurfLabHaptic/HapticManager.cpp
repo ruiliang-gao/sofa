@@ -1491,13 +1491,11 @@ namespace sofa
 				const ContactVector* contacts = getContacts();
 				if (contacts != NULL && newOmniDriver) {
 					resultantForce = std::pow(newOmniDriver->data.currentForce[0], 2) + std::pow(newOmniDriver->data.currentForce[1], 2) + std::pow(newOmniDriver->data.currentForce[2], 2);
-					//send 'contact' info to TIPS UDPdriver TODO should send only once per contact?
-					if (this->newOmniDriver->enableUDPServer.getValue()) {
-						if (this->newOmniDriver->deviceIndex.getValue() == 0)
-							this->newOmniDriver->messageFromHapticManagerDev1 = "contact";
-						else
-							this->newOmniDriver->messageFromHapticManagerDev2 = "contact";
-					}
+					//update 'collision buzz' status 
+					if (this->newOmniDriver->enableIPCServer.getValue())	
+                    {	
+                        this->newOmniDriver->_bSendBuzz = true;	
+                    }
 					ToolModel* tm = toolModel.get();
 					for (unsigned int j = 0; j < contacts->size(); ++j) {
 						const ContactVector::value_type& c = (*contacts)[j];
