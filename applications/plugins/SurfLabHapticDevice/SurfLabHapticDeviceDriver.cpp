@@ -1125,17 +1125,19 @@ namespace SurfLab
 			if (data.stiffness < 2000 && data.move2Pos) data.stiffness = data.stiffness + 200;
 			//Correct the quat to match cellphone tip to instrument tip 	
 
-            if (streamActive) data.deviceData.quat = data.deviceData.quat * startCorrectionQuat;	
-            Vec3d toolPointingDirection = Vec3d(0, 0, -1);	
-            Vec3d toolRightDirection = Vec3d(1, 0, 0);	
-            Vec3d pointOrientation = data.deviceData.quat.rotate(toolPointingDirection);	
-            Vec3d rightOrientation = data.deviceData.quat.rotate(toolRightDirection);	
-            data.deviceData.pos -= data.deviceData.fulcrumOffset;	
-            data.deviceData.fulcrumOffset = pointOrientation / 10.0;	
-            if (streamActive) {//compute and scale the dist from tool to fulcrum
-                data.deviceData.fulcrumOffset *= recvMotionStateYDev1 * motionScaleFactor.getValue();   	
+            if (streamActive) {
+				//correct the orientation quat by correctionquat
+				//compute and scale the dist from tool to fulcrum
+				data.deviceData.quat = data.deviceData.quat * startCorrectionQuat;
+				Vec3d toolPointingDirection = Vec3d(0, 0, -1);
+				Vec3d toolRightDirection = Vec3d(1, 0, 0);
+				Vec3d pointOrientation = data.deviceData.quat.rotate(toolPointingDirection);
+				Vec3d rightOrientation = data.deviceData.quat.rotate(toolRightDirection);
+				data.deviceData.pos -= data.deviceData.fulcrumOffset;
+				data.deviceData.fulcrumOffset = pointOrientation / 10.0;
+                data.deviceData.fulcrumOffset *= recvMotionStateYDev1 * motionScaleFactor.getValue();
+				data.deviceData.pos += data.deviceData.fulcrumOffset;
             }	
-            data.deviceData.pos += data.deviceData.fulcrumOffset;
 
 			// COMPUTATION OF THE vituralTool 6D POSITION IN THE World COORDINATES
 			sofa::defaulttype::SolidTypes<double>::Transform baseOmni_H_endOmni(data.deviceData.pos * data.scale, data.deviceData.quat);
