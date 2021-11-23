@@ -52,3 +52,4 @@ extlibs/
 include/
 lib/
 licenses/
+*.bak

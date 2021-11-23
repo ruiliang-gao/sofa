@@ -1,4 +1,4 @@
-# Blender MTL File: 'ONE_TIPS1.blend'
+# Blender MTL File: 'ONE_TIPS_Gas.blend'
 # Material Count: 2
 
 newmtl liver.004
@@ -21,4 +21,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd D:\\Documents\\TIPS\\sofa1216tips\\src\\share\\textures\\liver-texture-square.png
+map_Kd C:\\Documents\\TIPS\\sofa1216tips\\src\\share\\textures\\liver-texture-square.png
