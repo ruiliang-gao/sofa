@@ -198,8 +198,9 @@ void main() {
 in T2F tedata;
 uniform sampler3D colorTexture3;
 
-uniform gl_MaterialParameters gl_FrontMaterial;
-uniform gl_MaterialParameters gl_BackMaterial;
+// gl_FrontMaterial: built in variables. Do not declare these again
+//uniform gl_MaterialParameters gl_FrontMaterial;
+//uniform gl_MaterialParameters gl_BackMaterial;
 
 float basicNoise(vec2 co){
     return 0.5 + 0.5 * fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -279,9 +280,9 @@ void main() {
   float fresnel = exponential + F0 * (1.0 - exponential);
 
   // color below = ambient + specular
-	gl_FragColor.xyz = gl_FrontMaterial.ambient.xyz + 0.35 * gl_FrontMaterial.diffuse.xyz * clamp(dot(mylightDir, myN), -0.2, 1.0)
-                      + vec3(0.8, 0.8, 0.8) * pow(max(0.0, clamp(dot(CamDir,ReflectedRay),-0.2,1.0)), 200) * fresnel * basicNoise(in_texcoord3.xy) * 5
-                      + 0.5*color.xyz * clamp(dot(mylightDir, myN), -0.8,1.0);
+	gl_FragColor.xyz = gl_FrontMaterial.ambient.xyz + 0.2 * gl_FrontMaterial.diffuse.xyz * clamp(dot(mylightDir, myN), -0.2, 1.0)
+                      + vec3(0.5, 0.5, 0.5) * pow(max(0.0, clamp(dot(CamDir,ReflectedRay),-0.2,1.0)), 200) * fresnel * basicNoise(in_texcoord3.xy) * 5
+                      + 0.5 * color.xyz * clamp(dot(mylightDir, myN), -0.8,1.0);
   gl_FragColor.a = 0.9;
 	//gl_FragColor = vec4(color.rgb, 1.0);
 }

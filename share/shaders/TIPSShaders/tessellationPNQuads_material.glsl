@@ -166,8 +166,9 @@ void main() {
 
 #ifdef FragmentShader //------------------------------------
 in T2F tedata;
-uniform gl_MaterialParameters gl_FrontMaterial;
-uniform gl_MaterialParameters gl_BackMaterial;
+// gl_FrontMaterial: built in variables. Do not declare those. 
+//uniform gl_MaterialParameters gl_FrontMaterial;
+//uniform gl_MaterialParameters gl_BackMaterial;
 
 float basicNoise(vec2 co){
     return 0.5 + 0.5 * fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);

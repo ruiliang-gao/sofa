@@ -122,8 +122,9 @@ void main()
 in T2F tedata;
 
 const vec3 LIGHTPOS = vec3( -50., 10., 150. );
-uniform gl_MaterialParameters gl_FrontMaterial;
-uniform gl_MaterialParameters gl_BackMaterial;
+// gl_FrontMaterial: built in variables. Do not declare these again
+//uniform gl_MaterialParameters gl_FrontMaterial;
+//uniform gl_MaterialParameters gl_BackMaterial;
 
 float basicNoise(vec2 co){
     return 0.5 + 0.5 * fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
