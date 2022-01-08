@@ -29,8 +29,8 @@
 #include <sofa/type/Vec.h>
 #include <sofa/type/Mat.h>
 
-#include <SofaBaseTopology/HexahedronSetTopologyContainer.h>
-#include <SofaBaseTopology/TopologyData.h>
+//#include <SofaBaseTopology/HexahedronSetTopologyContainer.h>
+#include <sofa/core/topology/TopologyData.h>
 #include <SofaBaseTopology/HexahedronSetTopologyModifier.h>
 #include <SofaBoundaryCondition/FixedConstraint.h>
 
@@ -243,10 +243,15 @@ public:
     bool _enabledFracture;
 
     /// container that stotes all requires information for each hexahedron
-    topology::HexahedronData<sofa::type::vector<HexahedronInformation> > hexahedronInfo;
+    core::topology::HexahedronData<sofa::type::vector<HexahedronInformation> > hexahedronInfo;
 
+    /** Method to create @sa HexahedronInformation when a new hexahedron is created.
+    * Will be set as creation callback in the HexahedronData @sa hexahedronInfo
+    */
+    void createHexahedronInformation(Index, HexahedronInformation& t, const core::topology::BaseMeshTopology::Hexahedron&,
+        const sofa::type::vector<Index>&, const sofa::type::vector<double>&);
 
-    class HexHandler : public topology::TopologyDataHandler<core::topology::BaseMeshTopology::Hexahedron, sofa::type::vector<HexahedronInformation> >
+    /*class HexHandler : public topology::TopologyDataHandler<core::topology::BaseMeshTopology::Hexahedron, sofa::type::vector<HexahedronInformation> >
     {
     public:
         typedef typename HexahedralElastoplasticFEMForceField<DataTypes>::HexahedronInformation HexahedronInformation;
@@ -261,12 +266,12 @@ public:
             const sofa::type::vector<Index>&, const sofa::type::vector<double>&);
     protected:
         HexahedralElastoplasticFEMForceField<DataTypes>* ff;
-    };
+    };*/
 
 protected:
-    sofa::core::topology::BaseMeshTopology* _topology; ///Use BaseMeshTopology to take care of grid topology as well
+    core::topology::BaseMeshTopology* _topology; ///Use BaseMeshTopology to take care of grid topology as well
     type::vector<unsigned int> _fixedIndices; ///needs to exclude the constrainted nodes from plasticity updates
-    HexHandler* hexahedronHandler;
+    //HexHandler* hexahedronHandler;
 
 //    type::Mat<8,3,int> _coef; ///< coef of each vertices to compute the strain stress matrix
 };

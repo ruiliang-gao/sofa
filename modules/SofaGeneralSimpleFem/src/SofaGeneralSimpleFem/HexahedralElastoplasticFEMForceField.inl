@@ -29,34 +29,13 @@
 #include <iostream>
 #include <set>
 
-#include <SofaBaseTopology/TopologyData.inl>
+#include <sofa/core/topology/TopologyData.inl>
 
 
 
 namespace sofa::component::forcefield
 {
 
-template< class DataTypes>
-void HexahedralElastoplasticFEMForceField<DataTypes>::HexHandler::applyCreateFunction(Index hexahedronIndex,
-    HexahedronInformation&,
-        const core::topology::BaseMeshTopology::Hexahedron &,
-        const sofa::type::vector<Index> &,
-        const sofa::type::vector<double> &)
-{
-    if (ff)
-    {
-        switch(ff->method)
-        {
-        case LARGE :
-            ff->initLarge(hexahedronIndex);
-
-            break;
-        case POLAR :
-            ff->initPolar(hexahedronIndex);
-            break;
-        }
-    }
-}
 
 template <class DataTypes>
 HexahedralElastoplasticFEMForceField<DataTypes>::HexahedralElastoplasticFEMForceField()
@@ -76,7 +55,6 @@ HexahedralElastoplasticFEMForceField<DataTypes>::HexahedralElastoplasticFEMForce
     , hexahedronInfo(initData(&hexahedronInfo, "hexahedronInfo", "Internal hexahedron data"))
     /*for debugging*/, f_debugPlasticMethod(initData(&f_debugPlasticMethod, (int)2, "debugPlasticMethod", "debug methods"))
     , debugData(initData(&debugData, "debugData", "HexFEM debugData"))
-    , hexahedronHandler(nullptr)
 {
     // coef of each vertices <Mat 8x3, int> for a hexa
     // 	      7---------6
@@ -97,8 +75,6 @@ HexahedralElastoplasticFEMForceField<DataTypes>::HexahedralElastoplasticFEMForce
     _coef[6][0] = 1;		_coef[6][1] = 1;		_coef[6][2] = 1;
     _coef[7][0] = -1;		_coef[7][1] = 1;		_coef[7][2] = 1;*/
 
-    hexahedronHandler = new HexHandler(this, &hexahedronInfo);
-
     //f_poissonRatio.setRequired(true);
     //f_youngModulus.setRequired(true);
     d_totalVolume = 0;
@@ -109,7 +85,6 @@ HexahedralElastoplasticFEMForceField<DataTypes>::HexahedralElastoplasticFEMForce
 template <class DataTypes>
 HexahedralElastoplasticFEMForceField<DataTypes>::~HexahedralElastoplasticFEMForceField()
 {
-    if(hexahedronHandler) delete hexahedronHandler;
 }
 
 template <class DataTypes>
@@ -118,21 +93,43 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::init()
     this->core::behavior::ForceField<DataTypes>::init();
 
     this->getContext()->get(_topology);
-    if (_topology == nullptr)
+    if (_topology == nullptr) 
     {
         SingleLink<HexahedralElastoplasticFEMForceField<DataTypes>, sofa::core::topology::BaseMeshTopology, BaseLink::FLAG_STOREPATH | BaseLink::FLAG_STRONGLINK> l_topology;
         msg_info() << "(HexahedralElastoplasticFEMForceField) link to Topology container should be set to ensure right behavior. First Topology found in current context will be used.";
         l_topology.set(this->getContext()->getMeshTopologyLink());
         if (l_topology) _topology = l_topology.get();
-        if (_topology == nullptr || _topology->getNbHexahedra() <= 0)
-            serr << "ERROR(HexahedralElastoplasticFEMForceField): object must have hexahedron based topology." << sendl;
-        return;
 
     }
-    std::cout<<"HexahedralElastoplasticFEMForceField<DataTypes>::init() with "<< _topology->getNbHexahedra()<<" elements.\n";
+
+    if (_topology == nullptr || _topology->getHexahedra().empty())
+    {
+        msg_error() << "Object must have a Topology with hexahedra.";
+        sofa::core::objectmodel::BaseObject::d_componentState.setValue(sofa::core::objectmodel::ComponentState::Invalid);
+        return;
+    }
+
+    std::cout<<"HexahedralElastoplasticFEMForceField initialized with "<< _topology->getNbHexahedra()<<" elements.\n";
     this->reinit(); // compute per-element stiffness matrices and other precomputed values
 }
 
+template< class DataTypes>
+void HexahedralElastoplasticFEMForceField<DataTypes>::createHexahedronInformation(Index hexahedronIndex, HexahedronInformation&,
+    const core::topology::BaseMeshTopology::Hexahedron&,
+    const sofa::type::vector<Index>&,
+    const sofa::type::vector<double>&)
+{
+    switch (method)
+    {
+    case LARGE:
+        initLarge(hexahedronIndex);
+
+        break;
+    case POLAR:
+        initPolar(hexahedronIndex);
+        break;
+    }
+}
 
 template <class DataTypes>
 void HexahedralElastoplasticFEMForceField<DataTypes>::reinit()
@@ -145,23 +142,30 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::reinit()
 
     type::vector<typename HexahedralElastoplasticFEMForceField<DataTypes>::HexahedronInformation>& hexahedronInf = *(hexahedronInfo.beginEdit());
 
-
     hexahedronInf.resize(_topology->getNbHexahedra());
+
     // get fixed indices
     sofa::component::projectiveconstraintset::FixedConstraint<DataTypes>* _fixedConstraint;
     //sofa::component::projectiveconstraintset::LinearMovementConstraint<DataTypes>* _movingConstraint;
     this->getContext()->get(_fixedConstraint);
-    //this->getContext()->get(_movingConstraint);
+    
     if (_fixedConstraint) _fixedIndices = _fixedConstraint->d_indices.getValue();
 
     for (size_t i = 0; i < _topology->getNbHexahedra(); ++i)
     {
-        hexahedronHandler->applyCreateFunction(i, hexahedronInf[i],
+        createHexahedronInformation(i, hexahedronInf[i],
             _topology->getHexahedron(i), (const std::vector< Index >)0,
             (const std::vector< double >)0);
     }
-    hexahedronInfo.createTopologyHandler(_topology, hexahedronHandler);
-    hexahedronInfo.registerTopologicalData();
+    hexahedronInfo.createTopologyHandler(_topology);
+    hexahedronInfo.setCreationCallback([this](Index hexahedronIndex, HexahedronInformation& hexaInfo,
+        const core::topology::BaseMeshTopology::Hexahedron& hexa,
+        const sofa::type::vector< Index >& ancestors,
+        const sofa::type::vector< double >& coefs)
+    {
+        createHexahedronInformation(hexahedronIndex, hexaInfo, hexa, ancestors, coefs);
+    });
+
     hexahedronInfo.endEdit();
 
     //initialize the plasticity offsets
@@ -730,7 +734,7 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::initPolar(const int i)
         this->d_totalVolume += hexahedronInf[i].restVolume;
         hexahedronInf[i].materialDeformationInverse = J.inverted(); ///initialize the per element material deformation
 
-        hexahedronInfo[i].restRotation.transpose(R_0_1);
+        hexahedronInf[i].restRotation.transpose(R_0_1);
         hexahedronInf[i].lastRotation.transpose(R_0_1);
     }
 
@@ -1137,7 +1141,7 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::updateRestStatePlasticity(
             computeRotationLarge(R_0_1, horizontal, vertical);
         }
         
-        hexahedronInfo[i].restRotation.transpose(R_0_1);
+        hexahedronInf[i].restRotation.transpose(R_0_1);
         for (int j = 0; j < 8; ++j)
         {
             hexahedronInf[i].rotatedInitialElements[j] = R_0_1 * nodes[j];
