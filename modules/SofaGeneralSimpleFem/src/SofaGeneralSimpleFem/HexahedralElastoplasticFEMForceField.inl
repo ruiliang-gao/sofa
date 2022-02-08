@@ -316,7 +316,7 @@ typename HexahedralElastoplasticFEMForceField<DataTypes>::Real HexahedralElastop
 {
     //000->0, 100->1, 110->2, 010->3, 001->4, 101->5, 111->6, 011->7
     Real volume;
-    float t[336];
+    float t[337];
     t[1] = coords[0][2];
     t[2] = coords[4][0];
     t[3] = coords[0][0];
@@ -411,7 +411,7 @@ typename HexahedralElastoplasticFEMForceField<DataTypes>::Real HexahedralElastop
     t[336] = t[1] * t[24] / 0.18e2 + t[1] * t[32] / 0.18e2 + t[1] * t[38] / 0.36e2 + t[17] * t[14] / 0.18e2 + t[17] * t[32] / 0.36e2 + t[17] * t[38] / 0.18e2 + t[27] * t[14] / 0.18e2 + t[27] * t[24] / 0.36e2 + t[27] * t[38] / 0.18e2 + t[35] * t[14] / 0.36e2 + t[35] * t[24] / 0.18e2 + t[35] * t[32] / 0.18e2;
     volume = t[81] + t[124] + t[174] + t[217] + t[244] + t[285] + t[311] + t[336];
 
-    //The above code computes hex defined on [0,1]^3 with different vert ordering
+    //The above code computes hex defined on [0,1]^3 with different vertex ordering
     //scaled by *-0.125 to match the element definition in SOFA
     return volume * -0.125;
 }
@@ -596,14 +596,13 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForceLarge( WDat
                     hexahedronInf[i].elementPlasticOffset[w] = (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter).linearProduct(plasticDiag - Coord(1, 1, 1));
                     hexahedronInf[i].elementPlasticOffset[w] *= std::min(1.0, (deformed[w] - hexahedronInf[i].rotatedInitialElements[w]).norm()) * 0.02;
                 }
-
-                //Volume Constraint Projection
+                //Volume Constraint Projection on vertex[w] of hex[i]
                 if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.005 || volumeRatio <= 0.995))
                 {
-                    //std::cout << "prj Vol on "<<id<<"..   ";
-                    //hexahedronInf[i].elementPlasticOffset[w] += (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter)*(1 - volumeRatio)*0.02/*dt*/;
-                    hexahedronInf[i].rotatedInitialElements[w] += (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter) * (1 - volumeRatio) * 0.02 / NNeighbors;
-                }            
+                    if (!needsToUpdateRestMesh) needsToUpdateRestMesh = true;
+                    hexahedronInf[i].elementPlasticOffset[w] += (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter) * (1 - volumeRatio) * 0.02/*dt*/ / NNeighbors;
+                    if (!hexahedronInf[i].needsToUpdateRestMesh) hexahedronInf[i].needsToUpdateRestMesh = true;
+                }   
 
                 Mat33 J = computeCenterJacobian(hexahedronInf[i].rotatedInitialElements);//recompute element center deformation inverse based on rotated rest elements
                 hexahedronInf[i].materialDeformationInverse = J.inverted();
@@ -659,7 +658,7 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForceLarge( WDat
             //J = computeCenterJacobian(hexahedronInf[i].rotatedInitialElements);//recompute element center deformation inverse based on rotated rest elements
             //hexahedronInf[i].materialDeformationInverse = J.inverted();
         }
-        if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.001 || volumeRatio <= 0.999))
+        if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.01 || volumeRatio <= 0.99))
         {
             //std::cout << " r" << volumeRatio;
             if (!needsToUpdateRestMesh) needsToUpdateRestMesh = true;
@@ -791,25 +790,29 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
         helper::Decompose<Real>::SVD(JC, rU, rDiag, rV);
         RC = rU * rV.transposed();
 
-        //Compute maximal vertex distortion -- for the RBR plastic rotation approach
+        //Compute maximal vertex rotational distortion -- for the RBR plastic rotation approach
         Real ratioMaxDistortion = 0;//maximal vertex rotation distortion
-        
-        for (int w = 0; w < 8; ++w)
-        {
-            //unsigned int id = _topology->getHexahedron(i)[w];
-            //defaulttype::Vec<3, Real> Diag;
-            //Mat33 FV = 0.5 * hexahedronInf[i].F_C  + 0.5 * computeJacobian(deformed, _coef[w][0], _coef[w][1], _coef[w][2]) * hexahedronInf[i].materialDeformationInverse;
-            Mat33 JV = 0.5 * JC + 0.5 * computeJacobian(deformed, _coef[w][0], _coef[w][1], _coef[w][2]); //blended vert jacobian
-            helper::Decompose<Real>::SVD(JV, rU, rDiag, rV);
-            Mat33 RV = rU * rV.transposed();//vert Rotation
-            //ratioMaxDistortion = std::max(ratioMaxDistortion, rotDist(RV, RC));
-            //hexahedronInf[i].vertRotation[w] = RV;//Phong:Blended vertex
-            Mat33 vertRotDistort = RV * RC.transposed();
-            Real vertAngleChange = std::acos((type::trace(vertRotDistort) - 1) / 2); //TODO maintain this value <0.xx or >3.yy?
-            ratioMaxDistortion = std::max(ratioMaxDistortion, vertAngleChange);
-            //Mat33 axisM = (vertRotDistort - vertRotDistort.transposed()) / 2;
-            //Coord axis; axis[0] = axisM[2][1]; axis[1] = axisM[0][2]; axis[2] = axisM[1][0]; axis.normalize();                 
+        std::vector<Real> vertAngleChange(0);
+        if (hexahedronInf[i].plasticRotationYieldThreshold > 1e-6) {
+            for (int w = 0; w < 8; ++w)
+            {
+                //unsigned int id = _topology->getHexahedron(i)[w];
+                //defaulttype::Vec<3, Real> Diag;
+                //Mat33 FV = 0.5 * hexahedronInf[i].F_C  + 0.5 * computeJacobian(deformed, _coef[w][0], _coef[w][1], _coef[w][2]) * hexahedronInf[i].materialDeformationInverse;
+                Mat33 JV = 0.5 * JC + 0.5 * computeJacobian(deformed, _coef[w][0], _coef[w][1], _coef[w][2]); //blended vert jacobian
+                helper::Decompose<Real>::SVD(JV, rU, rDiag, rV);
+                Mat33 RV = rU * rV.transposed();//vert Rotation
+                //ratioMaxDistortion = std::max(ratioMaxDistortion, rotDist(RV, RC));
+                //hexahedronInf[i].vertRotation[w] = RV;//Phong:Blended vertex
+                Mat33 vertRotDistort = RV * RC.transposed();
+                //Real vertAngleChange = std::acos((type::trace(vertRotDistort) - 1) / 2); //TODO maintain this value <0.xx or >3.yy?
+                vertAngleChange.push_back(std::acos((type::trace(vertRotDistort) - 1) / 2));
+                ratioMaxDistortion = std::max(ratioMaxDistortion, vertAngleChange[w]);
+                //Mat33 axisM = (vertRotDistort - vertRotDistort.transposed()) / 2;
+                //Coord axis; axis[0] = axisM[2][1]; axis[1] = axisM[0][2]; axis[2] = axisM[1][0]; axis.normalize();                 
+            }
         }
+       
         //std::cout <<std::endl;
         //if(i==0) std::cout << ratioMaxDistortion << " ";
         Real volume = computeElementVolume(hexahedronInf[i].rotatedInitialElements);
@@ -819,8 +822,8 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
         if (volumeRatio < 0)//TODO handle inverted volume?
         {
             volumeRatio = 1; std::cout << "detected inverted elem " << i << "\n";
-            hexahedronInf[i].plasticRotationYieldThreshold = 0;
-            hexahedronInf[i].plasticYieldThreshold = 0;
+            hexahedronInf[i].plasticRotationYieldThreshold = -1;
+            hexahedronInf[i].plasticYieldThreshold = -1;
         }
 
         //check material stiffness updates hardening
@@ -913,52 +916,50 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
                 }
 
                 //1: Centered transform + vertex disp Offset, scaled with displacement per vertex approach:
-                if (f_debugPlasticMethod.getValue() == 1)
-                {
-                    Mat33 debugUDVt = V.multDiagonal(plasticDiag) * V.transposed();
-                    hexahedronInf[i].elementPlasticOffset[w] = 0.01 * plastic_ratio * debugUDVt * (deformed[w] - hexahedronInf[i].rotatedInitialElements[w]);
-                    hexahedronInf[i].plasticYieldThreshold += f_hardeningParam.getValue() * 0.01 * plastic_ratio * (deformed[w] - hexahedronInf[i].rotatedInitialElements[w]).norm2() / (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter).norm2();
-                }
-
-
-                //2 : adding dt to above
-                if (f_debugPlasticMethod.getValue() == 2)
+                if (f_debugPlasticMethod.getValue() >= 1)
                 {
                     Mat33 debugUDVt = V.multDiagonal(plasticDiag) * V.transposed();
                     hexahedronInf[i].elementPlasticOffset[w] = dt * plastic_ratio * debugUDVt * (deformed[w] - hexahedronInf[i].rotatedInitialElements[w]);
                     hexahedronInf[i].plasticYieldThreshold += f_hardeningParam.getValue() * dt * plastic_ratio * (deformed[w] - hexahedronInf[i].rotatedInitialElements[w]).norm2() / (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter).norm2();
+                }
+
+
+                //2 : not so different from 1 for now
+                if (f_debugPlasticMethod.getValue() == 2)
+                {
+                    Mat33 debugUDVt = V.multDiagonal(plasticDiag) * V.transposed();
+                    hexahedronInf[i].elementPlasticOffset[w] = dt * plastic_ratio * debugUDVt * (deformed[w] - hexahedronInf[i].rotatedInitialElements[w]);
+                    hexahedronInf[i].plasticYieldThreshold += f_hardeningParam.getValue() * dt * plastic_ratio;
 
                     /*helper::Decompose<Real>::SVD(hexahedronInf[i].F_C, U, Diag, V);
                     Mat33 debugVDVt = V.multDiagonal(plasticDiag)*V.transposed();
                     Mat33 debugUVt = U * V.transposed();*/
                     //std::cout << "debugUVt " << debugUVt << std::endl;
-                    //hexahedronInf[i].elementPlasticOffset[w] = 0.01*plastic_ratio*debugVDVt*(/*deformedCenter - restElementCenter +*/ deformed[w] - hexahedronInf[i].rotatedInitialElements[w]);
+                    //hexahedronInf[i].elementPlasticOffset[w] = 0.01 * plastic_ratio*debugVDVt*(/*deformedCenter - restElementCenter +*/ deformed[w] - hexahedronInf[i].rotatedInitialElements[w]);
                     //hexahedronInf[i].elementPlasticOffset[w] = 0.02 * (debugUVt-I3)*(hexahedronInf[i].rotatedInitialElements[w] - restElementCenter);     
                 }
 
                 if (!needsToUpdateRestMesh) needsToUpdateRestMesh = true;
                 //Mat33 J = computeCenterJacobian(hexahedronInf[i].rotatedInitialElements);//recompute element center deformation inverse based on rotated rest elements	
                 //hexahedronInf[i].materialDeformationInverse = J.inverted();
-
             }
             
             //Handle rotational plasticity
             if (hexahedronInf[i].plasticRotationYieldThreshold > 0) {
                 //Compute this vertex rotation distortion
-                Mat33 JV = 0.5 * JC + 0.5 * computeJacobian(deformed, _coef[w][0], _coef[w][1], _coef[w][2]); //vert jacobian
-                helper::Decompose<Real>::SVD(JV, rU, rDiag, rV);
-                Mat33 RV = rU * rV.transposed();//vert Rotation
+                //Mat33 JV = 0.5 * JC + 0.5 * computeJacobian(deformed, _coef[w][0], _coef[w][1], _coef[w][2]); //blended vert jacobian
+                //helper::Decompose<Real>::SVD(JV, rU, rDiag, rV);
+                //Mat33 RV = rU * rV.transposed();//vert Rotation
                 //hexahedronInf[i].vertRotation[w] = RV;//Phong:Blended vertex
-                Mat33 vertRotDistort = RV * RC.transposed();
-                Real vertAngleChange = std::acos((type::trace(vertRotDistort) - 1) / 2); //TODO maintain this value <0.xx or >3.yy?
+                //Mat33 vertRotDistort = RV * RC.transposed();
+                //Real vertAngleChange = std::acos((type::trace(vertRotDistort) - 1) / 2); //TODO maintain this value <0.xx or >3.yy?
                 //Mat33 axisM = (vertRotDistort - vertRotDistort.transposed()) / 2;
                 //Coord axis; axis[0] = axisM[2][1]; axis[1] = axisM[0][2]; axis[2] = axisM[1][0]; axis.normalize();
-                //if(i==300) std::cout << vertAngleChange << " ";
 
                 //Rotation plasticity update
-                if (f_debugPlasticMethod.getValue() == 2 && restAngleChange > 0.1 && vertAngleChange > hexahedronInf[i].plasticRotationYieldThreshold)
+                if (f_debugPlasticMethod.getValue() == 2 && restAngleChange > 0.1 && vertAngleChange[w] > hexahedronInf[i].plasticRotationYieldThreshold)
                 {
-                    Real vertRotPlasticRatio = (vertAngleChange - hexahedronInf[i].plasticRotationYieldThreshold) / (restAngleChange + vertAngleChange);
+                    Real vertRotPlasticRatio = (vertAngleChange[w] - hexahedronInf[i].plasticRotationYieldThreshold) / (restAngleChange + ratioMaxDistortion);
                     //hexahedronInf[i].rotation = (1 - 0.1*(ratioDistortion - 0.9)) * hexahedronInf[i].rotation + 0.1 * (ratioDistortion - 0.9)*I3;
                     //hexahedronInf[i].elementPlasticOffset[w] += 0.1*(ratioDistortion - 0.9)*(R_0_2-I3)*(hexahedronInf[i].rotatedInitialElements[w] - restElementCenter);
                     hexahedronInf[i].elementPlasticOffset[w] -= f_plasticRotationCreep.getValue() * 0.5 * vertRotPlasticRatio * (incrementalRotation - I3) * (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter);
@@ -968,25 +969,23 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
                     /* hexahedronInf[i].elementPlasticOffset[w] = 0.02 *(ratioDistortion-0.3) * ( hexahedronInf[i].vertRotation[w].transposed() * (R_0_2.transposed()*hexahedronInf[i].rotatedInitialElements[w])
                         - hexahedronInf[i].rotatedInitialElements[w]);*/
 
-                    hexahedronInf[i].plasticRotationYieldThreshold += f_hardeningParam.getValue() * 0.01/*dt*/ * vertRotPlasticRatio;
+                    hexahedronInf[i].plasticRotationYieldThreshold += f_hardeningParam.getValue() * dt * vertRotPlasticRatio;
                     if (!needsToUpdateRestMesh) needsToUpdateRestMesh = true;
                 }
-                else if (ratioMaxDistortion > hexahedronInf[i].plasticRotationYieldThreshold && f_debugPlasticMethod.getValue() == 1)
+                else if (f_debugPlasticMethod.getValue() == 1 && ratioMaxDistortion > hexahedronInf[i].plasticRotationYieldThreshold)
                 {
-                    Real maxRotPlasticRatio = (ratioMaxDistortion - hexahedronInf[i].plasticRotationYieldThreshold) / (restAngleChange + vertAngleChange);
+                    Real maxRotPlasticRatio = (ratioMaxDistortion - hexahedronInf[i].plasticRotationYieldThreshold) / (restAngleChange + ratioMaxDistortion);
                     hexahedronInf[i].elementPlasticOffset[w] -= f_plasticRotationCreep.getValue() * 0.5 * maxRotPlasticRatio * (incrementalRotation - I3) * (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter);
-                    hexahedronInf[i].plasticRotationYieldThreshold += f_hardeningParam.getValue() * 0.01/*dt*/ * maxRotPlasticRatio;
+                    hexahedronInf[i].plasticRotationYieldThreshold += f_hardeningParam.getValue() * dt * maxRotPlasticRatio;
                     if (!needsToUpdateRestMesh) needsToUpdateRestMesh = true;
                 }
             }
             
-            //Volume Constraint Projection
-            if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.005 || volumeRatio <= 0.995))
+            //Volume Constraint Projection on vertex[w] of hex[i]
+            if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.01 || volumeRatio <= 0.99))
             {
                 if (!needsToUpdateRestMesh) needsToUpdateRestMesh = true;
-                for (int w = 0; w < 8; ++w)
-                    hexahedronInf[i].elementPlasticOffset[w] += (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter) * (1 - volumeRatio) * 0.02/*dt*/ / NNeighbors;
-                //std::cout << "v";
+                hexahedronInf[i].elementPlasticOffset[w] += (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter) * (1 - volumeRatio) * dt ;
                 if (!hexahedronInf[i].needsToUpdateRestMesh) hexahedronInf[i].needsToUpdateRestMesh = true;
             }
         }
@@ -1035,7 +1034,6 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
 
             hexahedronInf[i].plasticYieldThreshold += f_hardeningParam.getValue() * 0.01; //work hardening
             //Update rest state
-            //std::cout << "plas r" << plastic_ratio;
             //Mat33 debugUVt = U * V.transposed();
             Mat33 VDVt = V.multDiagonal(plasticDiag) * V.transposed();
             for (int k = 0; k < 8; ++k)
@@ -1048,11 +1046,13 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
             //J = computeCenterJacobian(hexahedronInf[i].rotatedInitialElements);
             //hexahedronInf[i].materialDeformationInverse = J.inverted();
         }
-        if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.005 || volumeRatio <= 0.999))
+
+        //Volume Constraint Projection
+        if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.01 || volumeRatio <= 0.99))
         {
             if (!needsToUpdateRestMesh) needsToUpdateRestMesh = true;
-            for (int k = 0; k < 8; ++k)
-                hexahedronInf[i].elementPlasticOffset[k] += (hexahedronInf[i].rotatedInitialElements[k] - restElementCenter) * (1 - volumeRatio) * 0.02/*dt*/;
+            for (int w = 0; w < 8; ++w)
+                hexahedronInf[i].elementPlasticOffset[w] += (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter) * (1 - volumeRatio) * 0.01/*dt*/;
             if (!hexahedronInf[i].needsToUpdateRestMesh) hexahedronInf[i].needsToUpdateRestMesh = true;
         }
     }
@@ -1115,7 +1115,7 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::updateRestStatePlasticity(
 
     const VecCoord& X0 = this->mstate->read(core::ConstVecCoordId::restPosition())->getValue();
 
-    //update the rotated rest shape per element -- polar method    
+    //update the rotated rest shape per element   
     type::Vec<8, Coord> nodes; // coord of the 8 nodes for the ith hex
     for (size_t i = 0; i < _topology->getNbHexahedra(); ++i)
     {
@@ -1128,6 +1128,7 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::updateRestStatePlasticity(
         
         if(method==POLAR) //Polar Method
             computeRotationPolar(R_0_1, nodes);
+
         else//Large Method
         {
             //average of four horizontal sides
@@ -1145,7 +1146,7 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::updateRestStatePlasticity(
         Mat33 J = computeCenterJacobian(hexahedronInf[i].rotatedInitialElements);
         hexahedronInf[i].materialDeformationInverse = J.inverted();
 
-        //Update Element Stiffness
+        //Update Element Stiffness Matrix
         if (f_updateElementStiffness.getValue())
             computeElementStiffness(hexahedronInf[i].stiffness, hexahedronInf[i].materialMatrix, hexahedronInf[i].rotatedInitialElements);
         //std::cout << "up stiff on E" << i << " . ";
