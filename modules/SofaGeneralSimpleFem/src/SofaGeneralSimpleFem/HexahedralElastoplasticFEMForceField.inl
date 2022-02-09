@@ -861,36 +861,40 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
             //RV = U * V.transposed();
             //Diag = defaulttype::diagonal(DiagMat);
 
-            //Compute 2-norm of the first piola-kirch stress \sigma:
-            /*Real y = this->f_youngModulus.getValue();
+            //Compute SPK stress from lame's constants:
+            Real y = this->f_youngModulus.getValue();
             Real p = this->f_poissonRatio.getValue();
             Real lambda = y * p / (1 + p) / (1 - 2 * p);
             Real miu = y / 2 / (1 + p);
-            defaulttype::Vec<3, Real> DiagSigma;
-            DiagSigma[0] = 2 * miu*(Diag[0] - 1) + lambda * (Diag[0] + Diag[1] + Diag[2] - 3);
-            DiagSigma[1] = 2 * miu*(Diag[1] - 1) + lambda * (Diag[0] + Diag[1] + Diag[2] - 3);
-            DiagSigma[2] = 2 * miu*(Diag[2] - 1) + lambda * (Diag[0] + Diag[1] + Diag[2] - 3);
-            L2Norm = std::max(std::max(DiagSigma[0], DiagSigma[1]), DiagSigma[2]);
-            if(i==0) std::cout << "||sigma||=" << L2Norm;*/
+            type::Vec<3, Real> DiagE;
+            DiagE[0] = (Diag[0] * Diag[0] - 1) / 2; DiagE[1] = (Diag[1] * Diag[1] - 1) / 2; DiagE[1] = (Diag[1] * Diag[1] - 1) / 2;
+            type::Vec<3, Real> DiagSigma;
+            DiagSigma[0] = 2 * miu*(DiagE[0]) + lambda * (DiagE[0] + DiagE[1] + DiagE[2]);
+            DiagSigma[1] = 2 * miu * (DiagE[1]) + lambda * (DiagE[0] + DiagE[1] + DiagE[2]);
+            DiagSigma[2] = 2 * miu * (DiagE[2]) + lambda * (DiagE[0] + DiagE[1] + DiagE[2]);
+            //Real L2SPK = std::max(std::max(DiagSigma[0], DiagSigma[1]), DiagSigma[2]);
+            Real VonMiseStress = sqrt(0.5 * ( (DiagSigma[0]-DiagSigma[1]) * (DiagSigma[0] - DiagSigma[1]) +
+                (DiagSigma[1]-DiagSigma[2]) * (DiagSigma[1] - DiagSigma[2])+
+                (DiagSigma[2] - DiagSigma[0]) * (DiagSigma[2] - DiagSigma[0]) ) );
+            //if(i==88) std::cout << "VMS = " << L2Norm;
 
-            Real L2Norm = std::max(std::max(Diag[0] - 1, Diag[1] - 1), Diag[2] - 1); // max eigen value TODO use better criteria
+            //Real L2Norm = std::max(std::max(Diag[0] - 1, Diag[1] - 1), Diag[2] - 1); // max eigen value TODO use better criteria
             
             //Handle symmetrical plasticity
-            if (L2Norm > hexahedronInf[i].plasticYieldThreshold)
+            if (VonMiseStress > hexahedronInf[i].plasticYieldThreshold)
             {
                 type::Vec<3, Real> plasticDiag = Diag / std::cbrt(Diag[0] * Diag[1] * Diag[2]); //normalization
-                if (L2Norm > hexahedronInf[i].plasticMaxThreshold) {
-                    L2Norm = hexahedronInf[i].plasticMaxThreshold;
-                    //std::cout << "Ele " << i << "reached plasticMaxThreshold...";
+                if (VonMiseStress > hexahedronInf[i].plasticMaxThreshold) {
+                    VonMiseStress = hexahedronInf[i].plasticMaxThreshold;
                 }
 
-                plastic_ratio = f_plasticCreep.getValue() * (L2Norm - hexahedronInf[i].plasticYieldThreshold) / L2Norm;
+                plastic_ratio = f_plasticCreep.getValue() * (VonMiseStress - hexahedronInf[i].plasticYieldThreshold) / VonMiseStress;
                 if (plastic_ratio > 0 && !hexahedronInf[i].needsToUpdateRestMesh)
                     hexahedronInf[i].needsToUpdateRestMesh = true;
                 if (plastic_ratio < 0) plastic_ratio = 0;
                 if (hexahedronInf[i].plasticYieldThreshold >= hexahedronInf[i].plasticMaxThreshold) {
-                    std::cout << "Ele " << i << "reached max stretching...";
-                    //hexahedronInf[i].plasticYieldThreshold = 0;
+                    std::cout << "Elem " << i << " reached max hardening...";
+                    //hexahedronInf[i].plasticYieldThreshold = -1;//switch to pure elasticity
                     break;
                 }
                 plasticDiag[0] = std::pow(plasticDiag[0], plastic_ratio);
@@ -920,7 +924,7 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
                 {
                     Mat33 debugUDVt = V.multDiagonal(plasticDiag) * V.transposed();
                     hexahedronInf[i].elementPlasticOffset[w] = dt * plastic_ratio * debugUDVt * (deformed[w] - hexahedronInf[i].rotatedInitialElements[w]);
-                    hexahedronInf[i].plasticYieldThreshold += f_hardeningParam.getValue() * dt * plastic_ratio * (deformed[w] - hexahedronInf[i].rotatedInitialElements[w]).norm2() / (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter).norm2();
+                    hexahedronInf[i].plasticYieldThreshold += hexahedronInf[i].plasticYieldThreshold * f_hardeningParam.getValue() * dt * plastic_ratio * (deformed[w] - hexahedronInf[i].rotatedInitialElements[w]).norm2() / (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter).norm2();
                 }
 
 
@@ -929,7 +933,7 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
                 {
                     Mat33 debugUDVt = V.multDiagonal(plasticDiag) * V.transposed();
                     hexahedronInf[i].elementPlasticOffset[w] = dt * plastic_ratio * debugUDVt * (deformed[w] - hexahedronInf[i].rotatedInitialElements[w]);
-                    hexahedronInf[i].plasticYieldThreshold += f_hardeningParam.getValue() * dt * plastic_ratio;
+                    hexahedronInf[i].plasticYieldThreshold *= 1 + f_hardeningParam.getValue() * dt * plastic_ratio;
 
                     /*helper::Decompose<Real>::SVD(hexahedronInf[i].F_C, U, Diag, V);
                     Mat33 debugVDVt = V.multDiagonal(plasticDiag)*V.transposed();
