@@ -986,7 +986,7 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
             }
             
             //Volume Constraint Projection on vertex[w] of hex[i]
-            if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.01 || volumeRatio <= 0.99))
+            if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.02 || volumeRatio <= 0.98))
             {
                 if (!needsToUpdateRestMesh) needsToUpdateRestMesh = true;
                 hexahedronInf[i].elementPlasticOffset[w] += (hexahedronInf[i].rotatedInitialElements[w] - restElementCenter) * (1 - volumeRatio) * dt ;
@@ -1052,7 +1052,7 @@ void HexahedralElastoplasticFEMForceField<DataTypes>::accumulateForcePolar(WData
         }
 
         //Volume Constraint Projection
-        if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.01 || volumeRatio <= 0.99))
+        if (f_preserveElementVolume.getValue() && (volumeRatio >= 1.02 || volumeRatio <= 0.98))
         {
             if (!needsToUpdateRestMesh) needsToUpdateRestMesh = true;
             for (int w = 0; w < 8; ++w)
