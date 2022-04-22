@@ -231,6 +231,7 @@ void main()
 #ifdef FragmentShader //------------------------------------
 in T2G tedata;
 uniform sampler2D colorTexture2;
+const float PI = 3.14159265359;
 
 float basicNoise(vec2 co){
     return 0.5 + 0.5 * fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -273,13 +274,54 @@ float fnoise(vec3 x) {
 	return v;
 }
 
+/////PBR helper functions
+float DistributionGGX(vec3 N, vec3 H, float roughness)
+{
+    float a      = roughness*roughness;
+    float a2     = a*a;
+    float NdotH  = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH*NdotH;
+  
+    float num   = a2;
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom = PI * denom * denom;
+  
+    return num / denom;
+}
+
+float GeometrySchlickGGX(float NdotV, float roughness)
+{
+    float r = (roughness + 1.0);
+    float k = (r*r) / 8.0;
+
+    float num   = NdotV;
+    float denom = NdotV * (1.0 - k) + k;
+  
+    return num / denom;
+}
+
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
+{
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float ggx2  = GeometrySchlickGGX(NdotV, roughness);
+    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
+  
+    return ggx1 * ggx2;
+}
+
+
 void main() {
 	vec2 in_texcoord2 = tedata.texcoord2.xy;
 	vec4 color = texture2D(colorTexture2, in_texcoord2);
 
-	//Adapted from Ruiliang's Texture3D shader
 	vec4 pos = gl_ModelViewMatrix * vec4(tedata.position, 1);
-	vec3 mylightDir = normalize(vec3(0.1, 0.1, 0) - pos.xyz);//light position in ViewCoord
+	vec3 lightDir = normalize(vec3(0.0) - pos.xyz);//light position in ViewCoord
+
+  float distance = length(pos.xyz)/10; //camera = (0,0,0), and distance should be in 'meters'
+  float attenuation = 1.0 / (distance * distance);
+  vec3 radiance = vec3(1.0) * attenuation;
+  float roughness = 0.1;
 
   //Generating a bump map from noise
   float noiseVal = fnoise(vec3(in_texcoord2,1)) * 0.5 + 0.5;
@@ -298,20 +340,38 @@ void main() {
   vec3 pN = normalize(tedata.normal.xyz - grad);
 
   vec4 Nr = gl_ModelViewMatrixInverseTranspose * vec4(pN, 1);
-  vec3 myN = normalize(Nr.xyz);//This step is so important that the Rasteration step will use interpolattion to get N, which must be normalized.
-	vec3 ReflectedRay = reflect(mylightDir, myN );
-	vec3 CamDir = normalize(pos.xyz);//Cam position in ViewCoord is 0,0,0
+  vec3 myN = normalize(Nr.xyz);//This step is critical that the Rasteration step will use interpolattion to get N, which must be normalized.
+  //vec3 ReflectedRay = reflect(lightDir, myN );
+  //vec3 CamDir = normalize(pos.xyz);//Cam position in ViewCoord is 0,0,0
+  
+  vec3 V = normalize(vec3(0.0) - pos.xyz); //View dir
+  vec3 H = lightDir; //normalize(V + lightDir); //Halfway dir = View dir = Light Dir
 
-  //Fresnel Term
-  float F0 = 0.5;
-  vec3 h = normalize(CamDir + mylightDir);
-  float base = 1 - dot(CamDir, h);
+  //Fresnel Term = kS
+  // F0 set based on experience, 0.04 is a common number for water, plastic, etc.
+  vec3 F0 = vec3(0.5);
+  
+  //float base = 1 - dot(CamDir, h);
+  float base = 1 - dot(V, myN);
   float exponential = pow(base, 5.0);
-  float fresnel = exponential + F0 * (1.0 - exponential);
-  // color below = ambient + specular
-  gl_FragColor.xyz = vec3(0.10,0.05,0.0) + 0.4 * color.xyz
-                      + 1.0 * vec3(0.8, 0.8, 0.8) * pow(max(0.0, clamp(dot(CamDir,ReflectedRay),-0.2,1.0)), 200) * fresnel * basicNoise(in_texcoord2.xy) * 5
-                      + 0.4 * color.xyz * clamp(dot(mylightDir, myN), -0.2,1.0);
+  vec3 fresnel = exponential + F0 * (1.0 - exponential);
+  float denominator = max(4 * max(dot(myN, V), 0.0) * max(dot(myN, lightDir), 0.0), 0.001);
+  //Cook-Torrance BRDF
+  vec3 specular = fresnel * DistributionGGX(myN, H, roughness) * GeometrySmith(myN, V, lightDir, roughness) / denominator;
+
+  //kD = (1 - specular) * (1 - metallic)
+  vec3 kD = (vec3(1.0) - fresnel) * (1 - 0.05); 
+  vec3 diffuse = kD * color.xyz / PI;
+
+  // scale light by NdotL
+  float NdotL = max(dot(myN, lightDir), 0.0);
+
+  // color = ambient + diffuse + specular
+  gl_FragColor.xyz = 0.05 * color.xyz + (diffuse + specular) * radiance * NdotL; 
+  // HDR tonemapping
+  gl_FragColor.xyz = gl_FragColor.xyz / (gl_FragColor.xyz + vec3(1.0)); 
+  // Gamma correction
+  gl_FragColor.xyz = pow(gl_FragColor.xyz, vec3(1.0/2.2)); 
   gl_FragColor.a = 0.5;
 }
 #endif
